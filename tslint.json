@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json.schemastore.org/tslint",
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:latest",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "eofline": true,
+    "interface-name": false,
+    "max-line-length": [
+      true,
+      120
+    ],
+    "object-literal-key-quotes": [
+      true,
+      "consistent-as-needed"
+    ],
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "always",
+        "singleline": "never"
+      }
+    ]
+  }
+}

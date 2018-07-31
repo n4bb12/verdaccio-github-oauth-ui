@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "outDir": "dist/client",
+    "rootDir": "src/client",
+    "sourceMap": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "target": "es2015"
+  },
+  "include": [
+    "src/client/**/*"
+  ]
+}

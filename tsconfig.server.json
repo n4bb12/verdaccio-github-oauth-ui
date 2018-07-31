@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "declaration": true,
+    "inlineSources": false,
+    "lib": [
+      "es2018"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "outDir": "dist/server",
+    "rootDir": "src/server",
+    "sourceMap": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "target": "es2015"
+  },
+  "include": [
+    "src/server/**/*"
+  ]
+}

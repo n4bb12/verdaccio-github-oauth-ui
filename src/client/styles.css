@@ -1,0 +1,18 @@
+/**
+ * Hide the "To publish your first package just:" section
+ * since it shows commands that don't work with oauth.
+ */
+[class^='src-webui-components-Help-help__noPkgIntro'] {
+  display: none;
+}
+
+/**
+ * Limit width to prevent ugly push-out of login button
+ */
+[class^='src-webui-components-Header-header__headerWrap'] figure {
+  margin: 0 1rem;
+  max-width: 33vw;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-overflow: ellipsis;
+}

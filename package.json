@@ -1,0 +1,36 @@
+{
+  "name": "verdaccio-github-oauth-ui",
+  "version": "1.0.0",
+  "bugs": "https://github.com/n4bb12/verdaccio-github-oauth-ui/issues",
+  "repository": "git@github.com:n4bb12/verdaccio-github-oauth-ui.git",
+  "license": "MIT",
+  "author": "Abraham Schilling",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/server/index.js",
+  "types": "dist/server/index.d.ts",
+  "dependencies": {
+    "got": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.16.0",
+    "@types/got": "^8.3.3",
+    "@types/lodash": "^4.14.113",
+    "@types/node": "^10.5.3",
+    "nodemon": "^1.18.3",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.14.0",
+    "typescript": "^2.9.2",
+    "verdaccio": "^3.3.0"
+  },
+  "peerDependencies": {
+    "express": "^4.16.3",
+    "lodash": "^4.17.0",
+    "verdaccio": "^3.3.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "$schema": "http://json.schemastore.org/package"
+}
