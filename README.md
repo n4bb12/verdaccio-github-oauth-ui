@@ -32,3 +32,7 @@ auth:
 ```
 
 When creating the OAuth app at [github.com](https://github.com/settings/developers), use `REGISTRY_URL/-/oauth/callback` as the callback URL.
+
+## License
+
+MIT
