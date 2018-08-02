@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express"
 import * as querystring from "querystring"
 
-import { GithubClient } from "./github"
-import { Auth } from "./verdaccio"
+import { GithubClient } from "../github"
+import { Auth } from "../verdaccio"
 
-export class OAuthCallback {
+export class CallbackMiddleware {
 
   public static readonly path = "/-/oauth/callback"
 

@@ -2,9 +2,9 @@ import { Request, Response } from "express"
 import { get } from "lodash"
 import * as querystring from "querystring"
 
-import { OAuthCallback } from "./OAuthCallback"
+import { CallbackMiddleware } from "./CallbackMiddleware"
 
-export class OAuthAuthorize {
+export class AuthorizeMiddleware {
 
   public static readonly path = "/-/oauth/authorize/:id?"
 
@@ -34,7 +34,7 @@ export class OAuthAuthorize {
    * This is where GitHub should redirect back to.
    */
   public getRedirectUrl(req: Request): string {
-    return this.getRegistryUrl(req) + OAuthCallback.path
+    return this.getRegistryUrl(req) + CallbackMiddleware.path
   }
 
   /**

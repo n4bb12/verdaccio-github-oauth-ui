@@ -12,7 +12,7 @@ export class InjectHtml {
   /**
    * Serves the injected style and script imports.
    */
-  public serveMiddleware = serveStatic(__dirname + "/../client")
+  public serveMiddleware = serveStatic(__dirname + "/../../client")
 
   /**
    * Monkey-patches `res.send` in order to inject style and script imports.

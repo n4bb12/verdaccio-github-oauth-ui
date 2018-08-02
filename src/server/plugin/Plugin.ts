@@ -1,11 +1,12 @@
 import { Application } from "express"
 import { get } from "lodash"
 
-import { GithubClient } from "./github"
+import { GithubClient } from "../github"
+import { Auth, AuthCallback, AuthPlugin, MiddlewarePlugin } from "../verdaccio"
+
+import { AuthorizeMiddleware } from "./AuthorizeMiddleware"
+import { CallbackMiddleware } from "./CallbackMiddleware"
 import { InjectHtml } from "./InjectHtml"
-import { OAuthAuthorize } from "./OAuthAuthorize"
-import { OAuthCallback } from "./OAuthCallback"
-import { Auth, AuthCallback, AuthPlugin, MiddlewarePlugin } from "./verdaccio"
 
 interface UserDetails {
   authToken: string
@@ -36,11 +37,11 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
       app.use(InjectHtml.path, injectHtml.serveMiddleware)
     }
 
-    const oauthAuthorize = new OAuthAuthorize(this.config)
-    const oauthCallback = new OAuthCallback(this.config, auth)
+    const authorizeMiddleware = new AuthorizeMiddleware(this.config)
+    const callbackMiddleware = new CallbackMiddleware(this.config, auth)
 
-    app.use(OAuthAuthorize.path, oauthAuthorize.middleware)
-    app.use(OAuthCallback.path, oauthCallback.middleware)
+    app.use(AuthorizeMiddleware.path, authorizeMiddleware.middleware)
+    app.use(CallbackMiddleware.path, callbackMiddleware.middleware)
   }
 
   /**

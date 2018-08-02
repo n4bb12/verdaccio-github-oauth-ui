@@ -1,1 +1,1 @@
-export * from "./GithubOauthUiPlugin"
+export * from "./plugin/Plugin"
