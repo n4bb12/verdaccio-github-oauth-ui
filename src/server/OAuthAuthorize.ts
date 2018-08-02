@@ -6,21 +6,25 @@ import { OAuthCallback } from './OAuthCallback'
 
 export class OAuthAuthorize {
 
-  public static readonly path = '/-/oauth/authorize'
+  public static readonly path = '/-/oauth/authorize/:id?'
 
   constructor(
     private readonly config: any,
   ) { }
 
   /**
-   * This middleware is called when the user clicks the login button.
-   * To login we redirect to GitHub with a custom callback URL so that we can handle
-   * the response.
+   * Initiates the GitHub OAuth flow by redirecting to GitHub.
+   * The callback URL can be customized by subpathing the request.
+   * 
+   * Example:
+   *   A request to `/authorize/cheese-cake` will be called back at
+   *   `/callback/cheese-cake`.
    */
   public middleware = (req: Request, res: Response, next) => {
+    const id = (req.params.id || '')
     const url = 'https://github.com/login/oauth/authorize?' + querystring.stringify({
       client_id: this.config['client-id'],
-      redirect_uri: this.getRedirectUrl(req),
+      redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ''),
       scope: 'read:org',
     })
     res.redirect(url)

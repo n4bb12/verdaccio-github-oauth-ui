@@ -36,8 +36,8 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
       app.use(InjectHtml.path, injectHtml.serveMiddleware)
     }
 
-    const oauthCallback = new OAuthCallback(this.config, auth)
     const oauthAuthorize = new OAuthAuthorize(this.config)
+    const oauthCallback = new OAuthCallback(this.config, auth)
 
     app.use(OAuthAuthorize.path, oauthAuthorize.middleware)
     app.use(OAuthCallback.path, oauthCallback.middleware)
