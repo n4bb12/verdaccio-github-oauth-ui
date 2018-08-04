@@ -5,6 +5,8 @@ set -e
 # Helpers
 ##################################################
 
+export PATH="$PATH:./node_modules/.bin"
+
 red="\e[31m"
 reset="\e[39m"
 
@@ -29,10 +31,6 @@ env-subst() {
   run build-config sed "s|\$${name}|${!name}|g" -i ${file}
 }
 
-which() {
-  echo node_modules/.bin/$1
-}
-
 #
 # Commands
 ##################################################
@@ -55,7 +53,7 @@ build-config() {
 # Copy client sources to dist.
 #
 build-client() {
-  run build-client $(which tsc) -p tsconfig.client.json ${@}
+  run build-client tsc -p tsconfig.client.json ${@}
   run build-client cp -R src/client/*.css dist/client
 }
 
@@ -63,7 +61,7 @@ build-client() {
 # Compile server to dist.
 #
 build-server() {
-  run build-server $(which tsc) -p tsconfig.server.json ${@}
+  run build-server tsc -p tsconfig.server.json ${@}
 }
 
 #
@@ -143,7 +141,7 @@ update() {
 # Start verdaccio.
 #
 start() {
-  run start $(which verdaccio) -c $config ${@}
+  run start verdaccio -c $config ${@}
 }
 
 #
@@ -159,7 +157,7 @@ update-start-server() {
 #
 watch-client() {
   run watch-client \
-    $(which nodemon) --watch src/client --ext ts,css --exec bash run update-client
+    nodemon --watch src/client --ext ts,css --exec bash run update-client
 }
 
 #
@@ -167,7 +165,7 @@ watch-client() {
 #
 watch-server() {
   run watch-server \
-    $(which nodemon) --watch src/server --ext ts --exec bash run update-server
+    nodemon --watch src/server --ext ts --exec bash run update-server
 }
 
 #
@@ -183,8 +181,8 @@ watch() {
 # Run linters.
 #
 lint() {
-  run lint $(which tslint) -c tslint.json -p tsconfig.client.json --fix ${@} &
-  run lint $(which tslint) -c tslint.json -p tsconfig.server.json --fix ${@} &
+  run lint tslint -c tslint.json -p tsconfig.client.json --fix ${@} &
+  run lint tslint -c tslint.json -p tsconfig.server.json --fix ${@} &
   wait
 }
 
