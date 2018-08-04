@@ -1,12 +1,12 @@
-import { NextFunction, Request, Response } from 'express'
-import * as querystring from 'querystring'
+import { NextFunction, Request, Response } from "express"
+import * as querystring from "querystring"
 
-import { GithubClient } from './github'
-import { Auth } from './verdaccio'
+import { GithubClient } from "./github"
+import { Auth } from "./verdaccio"
 
 export class OAuthCallback {
 
-  public static readonly path = '/-/oauth/callback'
+  public static readonly path = "/-/oauth/callback"
 
   private readonly github = new GithubClient(this.config.user_agent)
 
@@ -30,18 +30,18 @@ export class OAuthCallback {
    */
   public middleware = async (req: Request, res: Response, next: NextFunction) => {
     const code = req.query.code
-    const clientId = this.config['client-id']
-    const clientSecret = this.config['client-secret']
+    const clientId = this.config["client-id"]
+    const clientSecret = this.config["client-secret"]
 
     try {
       const oauth = await this.github.requestAccessToken(code, clientId, clientSecret)
       const user = await this.github.requestUser(oauth.access_token)
 
-      const npmAuthPayload = user.login + ':' + oauth.access_token
-      const npmAuthToken = this.auth.aesEncrypt(new Buffer(npmAuthPayload)).toString('base64')
+      const npmAuthPayload = user.login + ":" + oauth.access_token
+      const npmAuthToken = this.auth.aesEncrypt(new Buffer(npmAuthPayload)).toString("base64")
 
       const frontendJwtToken = this.auth.issueUIjwt(user.login)
-      const frontendUrl = '/?' + querystring.stringify({
+      const frontendUrl = "/?" + querystring.stringify({
         jwtToken: frontendJwtToken,
         npmToken: npmAuthToken,
         username: user.login,

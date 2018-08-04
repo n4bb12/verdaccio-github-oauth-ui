@@ -1,15 +1,15 @@
-import * as got from 'got'
-import { merge as deepAssign } from 'lodash'
+import * as got from "got"
+import { merge as deepAssign } from "lodash"
 
-import { OAuth } from './OAuth'
-import { Organization } from './Organization'
-import { User } from './User'
+import { OAuth } from "./OAuth"
+import { Organization } from "./Organization"
+import { User } from "./User"
 
 export class GithubClient {
 
   private readonly defaultOptions = {
     headers: {
-      'User-Agent': this.userAgent,
+      "User-Agent": this.userAgent,
     },
     json: true,
   }
@@ -24,7 +24,7 @@ export class GithubClient {
    * [Web application flow](https://bit.ly/2mNSppX).
    */
   public requestAccessToken = async (code: string, clientId: string, clientSecret: string) => {
-    const url = 'https://github.com/login/oauth/access_token'
+    const url = "https://github.com/login/oauth/access_token"
     const options = {
       body: {
         client_id: clientId,
@@ -41,10 +41,10 @@ export class GithubClient {
    * [Get the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
    */
   public requestUser = async (accessToken: string) => {
-    const url = 'https://api.github.com/user'
+    const url = "https://api.github.com/user"
     const options = {
       headers: {
-        Authorization: 'Bearer ' + accessToken,
+        Authorization: "Bearer " + accessToken,
       },
     }
     return this.request<User>(url, options)
@@ -56,10 +56,10 @@ export class GithubClient {
    * [List your organizations](https://developer.github.com/v3/orgs/#list-your-organizations)
    */
   public requestUserOrgs = async (accessToken: string) => {
-    const url = 'https://api.github.com/user/orgs'
+    const url = "https://api.github.com/user/orgs"
     const options = {
       headers: {
-        Authorization: 'Bearer ' + accessToken,
+        Authorization: "Bearer " + accessToken,
       },
     };
     return this.request<Organization[]>(url, options)

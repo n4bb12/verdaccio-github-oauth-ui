@@ -1,18 +1,18 @@
-import { NextFunction, Response, static as serveStatic } from 'express'
+import { NextFunction, Response, static as serveStatic } from "express"
 
-const publicDir = '/-/static/github-oauth-ui'
+const publicDir = "/-/static/github-oauth-ui"
 const scriptTag = `<script src="${publicDir}/script.js"></script>`
 const styleTag = `<link href="${publicDir}/styles.css" rel="stylesheet">`
-const headWithStyle = [styleTag, '</head>'].join('')
-const bodyWithScript = [scriptTag, '</body>'].join('')
+const headWithStyle = [styleTag, "</head>"].join("")
+const bodyWithScript = [scriptTag, "</body>"].join("")
 
 export class InjectHtml {
-  public static readonly path = '/-/static/github-oauth-ui'
+  public static readonly path = "/-/static/github-oauth-ui"
 
   /**
    * Serves the injected style and script imports.
    */
-  public serveMiddleware = serveStatic(__dirname + '/../client')
+  public serveMiddleware = serveStatic(__dirname + "/../client")
 
   /**
    * Monkey-patches `res.send` in order to inject style and script imports.
@@ -27,7 +27,7 @@ export class InjectHtml {
   }
 
   private insertImportTags = (html: string): string => {
-    if (typeof html !== 'string' || !html.includes('VERDACCIO_API_URL')) {
+    if (typeof html !== "string" || !html.includes("VERDACCIO_API_URL")) {
       return html
     }
     return html

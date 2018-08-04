@@ -1,4 +1,4 @@
-import { Auth } from './Auth'
+import { Auth } from "./Auth"
 
 /**
  * https://verdaccio.org/docs/en/dev-plugins#middleware-plugin

@@ -1,12 +1,12 @@
-import { Request, Response } from 'express'
-import { get } from 'lodash'
-import * as querystring from 'querystring'
+import { Request, Response } from "express"
+import { get } from "lodash"
+import * as querystring from "querystring"
 
-import { OAuthCallback } from './OAuthCallback'
+import { OAuthCallback } from "./OAuthCallback"
 
 export class OAuthAuthorize {
 
-  public static readonly path = '/-/oauth/authorize/:id?'
+  public static readonly path = "/-/oauth/authorize/:id?"
 
   constructor(
     private readonly config: any,
@@ -21,11 +21,11 @@ export class OAuthAuthorize {
    *   `/callback/cheese-cake`.
    */
   public middleware = (req: Request, res: Response, next) => {
-    const id = (req.params.id || '')
-    const url = 'https://github.com/login/oauth/authorize?' + querystring.stringify({
-      client_id: this.config['client-id'],
-      redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ''),
-      scope: 'read:org',
+    const id = (req.params.id || "")
+    const url = "https://github.com/login/oauth/authorize?" + querystring.stringify({
+      client_id: this.config["client-id"],
+      redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ""),
+      scope: "read:org",
     })
     res.redirect(url)
   }
@@ -41,9 +41,9 @@ export class OAuthAuthorize {
    * This is the same as what `npm config get registry` returns.
    */
   public getRegistryUrl(req: Request): string {
-    const prefix = get(this.config, 'url_prefix', '')
-      .replace(/\/?$/, '') // Remove trailing slash if needed
-    return (req.protocol + '://' + req.get('host') + prefix)
+    const prefix = get(this.config, "url_prefix", "")
+      .replace(/\/?$/, "") // Remove trailing slash if needed
+    return (req.protocol + "://" + req.get("host") + prefix)
   }
 
 }

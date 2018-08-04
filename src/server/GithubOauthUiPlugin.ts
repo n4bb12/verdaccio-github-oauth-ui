@@ -1,11 +1,11 @@
-import { Application } from 'express'
-import { get } from 'lodash'
+import { Application } from "express"
+import { get } from "lodash"
 
-import { GithubClient } from './github'
-import { InjectHtml } from './InjectHtml'
-import { OAuthAuthorize } from './OAuthAuthorize'
-import { OAuthCallback } from './OAuthCallback'
-import { Auth, AuthCallback, AuthPlugin, MiddlewarePlugin } from './verdaccio'
+import { GithubClient } from "./github"
+import { InjectHtml } from "./InjectHtml"
+import { OAuthAuthorize } from "./OAuthAuthorize"
+import { OAuthCallback } from "./OAuthCallback"
+import { Auth, AuthCallback, AuthPlugin, MiddlewarePlugin } from "./verdaccio"
 
 interface UserDetails {
   authToken: string
@@ -29,7 +29,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
    * Implements the middleware plugin interface.
    */
   public register_middlewares(app: Application, auth: Auth, storage) {
-    if (get(this.config, 'web.enable', true)) {
+    if (get(this.config, "web.enable", true)) {
       const injectHtml = new InjectHtml()
 
       app.use(injectHtml.injectMiddleware)

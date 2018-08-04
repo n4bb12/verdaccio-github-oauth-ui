@@ -11,16 +11,16 @@ interface QueryParams {
 ; (() => {
   const interruptLoginButtonClick = (e) => {
     for (const element of e.path) {
-      if (element.classList && element.classList.contains('header-button-login')) {
+      if (element.classList && element.classList.contains("header-button-login")) {
         e.preventDefault()
         e.stopPropagation()
-        location.href = '/-/oauth/authorize'
+        location.href = "/-/oauth/authorize"
         return
       }
     }
   }
   const useCapture = true
-  document.addEventListener('click', interruptLoginButtonClick, useCapture)
+  document.addEventListener("click", interruptLoginButtonClick, useCapture)
 })();
 
 /**
@@ -33,26 +33,26 @@ interface QueryParams {
  */
 ; (() => {
   const saveCredentials = (query: QueryParams) => {
-    localStorage.setItem('username', query.username)
-    localStorage.setItem('token', query.jwtToken)
-    localStorage.setItem('npm', query.npmToken)
+    localStorage.setItem("username", query.username)
+    localStorage.setItem("token", query.jwtToken)
+    localStorage.setItem("npm", query.npmToken)
   }
 
   const credentialsAreSaved = () => {
-    return localStorage.getItem('username')
-      && !!localStorage.getItem('token')
-      && !!localStorage.getItem('npm')
+    return localStorage.getItem("username")
+      && !!localStorage.getItem("token")
+      && !!localStorage.getItem("npm")
   }
 
   /**
    * Returns `?a=b&c` as `{ a: b, c: true }`.
    */
   const parseQueryParams = () => {
-    return (location.search || '?')
+    return (location.search || "?")
       .substring(1)
-      .split('&')
+      .split("&")
       .filter(kv => kv)
-      .map(kv => [...kv.split('='), 'true'])
+      .map(kv => [...kv.split("="), "true"])
       .reduce((obj, pair) => {
         obj[pair[0]] = decodeURIComponent(pair[1])
         return obj
@@ -60,7 +60,7 @@ interface QueryParams {
   }
 
   const removeQueryParams = () => {
-    history.replaceState(null, '', location.pathname)
+    history.replaceState(null, "", location.pathname)
   }
 
   /**
@@ -80,11 +80,11 @@ interface QueryParams {
   }
 
   const getUsageInfo = () => {
-    const authToken = localStorage.getItem('npm')
+    const authToken = localStorage.getItem("npm")
     if (!authToken) {
       return []
     }
-    const configBase = '//' + location.host + location.pathname
+    const configBase = "//" + location.host + location.pathname
     return [
       `npm config set ${configBase}:_authToken "${authToken}"`,
       `npm config set ${configBase}:always-auth true`,
@@ -97,9 +97,9 @@ interface QueryParams {
    */
   const updateUsageInfo = () => {
     const info = getUsageInfo()
-    const element = document.querySelector('[class^=\'src-webui-components-Header-header\'] figure')
+    const element = document.querySelector("[class^='src-webui-components-Header-header'] figure")
     if (element) {
-      element.innerHTML = info.join('<br>')
+      element.innerHTML = info.join("<br>")
     } else {
       setTimeout(100, updateUsageInfo)
     }

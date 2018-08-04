@@ -1,6 +1,6 @@
-import { AuthCallback } from './AuthCallback'
-import { PackageAccess } from './PackageAccess'
-import { RemoteUser } from './RemoteUser'
+import { AuthCallback } from "./AuthCallback"
+import { PackageAccess } from "./PackageAccess"
+import { RemoteUser } from "./RemoteUser"
 
 /**
  * https://verdaccio.org/docs/en/dev-plugins#authentication-plugin
