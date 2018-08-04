@@ -1,6 +1,16 @@
 {
   "name": "verdaccio-github-oauth-ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "keywords": [
+    "github",
+    "login",
+    "npm",
+    "oauth",
+    "package",
+    "private",
+    "registry",
+    "verdaccio"
+  ],
   "bugs": "https://github.com/n4bb12/verdaccio-github-oauth-ui/issues",
   "repository": "git@github.com:n4bb12/verdaccio-github-oauth-ui.git",
   "license": "MIT",

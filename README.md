@@ -2,7 +2,7 @@
 
 ## About
 
-A [verdaccio plugin](https://github.com/verdaccio/verdaccio/blob/master/docs/dev-plugins.md#middleware-plugin) that uses GitHub OAuth.
+A [verdaccio plugin](https://verdaccio.org/docs/en/plugins) that uses GitHub OAuth.
 
 When clicking the login button, instead of filling in a login form, you are asked to log in with GitHub.
 
