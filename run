@@ -55,8 +55,7 @@ build-config() {
 # Copy client sources to dist.
 #
 build-client() {
-  run build-client \
-    $(which tsc) -p tsconfig.client.json ${@}
+  run build-client $(which tsc) -p tsconfig.client.json ${@}
   run build-client cp -R src/client/*.css dist/client
 }
 
@@ -64,8 +63,7 @@ build-client() {
 # Compile server to dist.
 #
 build-server() {
-  run build-server \
-    $(which tsc) -p tsconfig.server.json ${@}
+  run build-server $(which tsc) -p tsconfig.server.json ${@}
 }
 
 #
@@ -145,8 +143,7 @@ update() {
 # Start verdaccio.
 #
 start() {
-  run start \
-    $(which verdaccio) -c $config ${@}
+  run start $(which verdaccio) -c $config ${@}
 }
 
 #
@@ -186,8 +183,9 @@ watch() {
 # Run linters.
 #
 lint() {
-  run lint \
-    $(which tslint) -c tslint.json -p tsconfig.json --fix ${@}
+  run lint $(which tslint) -c tslint.json -p tsconfig.client.json --fix ${@} &
+  run lint $(which tslint) -c tslint.json -p tsconfig.server.json --fix ${@} &
+  wait
 }
 
 #
