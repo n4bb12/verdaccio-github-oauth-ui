@@ -1,6 +1,6 @@
 {
   "name": "verdaccio-github-oauth-ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "keywords": [
     "github",
     "login",
@@ -12,7 +12,7 @@
     "verdaccio"
   ],
   "bugs": "https://github.com/n4bb12/verdaccio-github-oauth-ui/issues",
-  "repository": "git@github.com:n4bb12/verdaccio-github-oauth-ui.git",
+  "repository": "github:n4bb12/verdaccio-github-oauth-ui",
   "license": "MIT",
   "author": "Abraham Schilling",
   "files": [
