@@ -1,5 +1,6 @@
 import { Application } from "express"
 import { get } from "lodash"
+import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 
 import { GithubClient } from "../github"
 import { Auth, AuthCallback, AuthPlugin, MiddlewarePlugin } from "../verdaccio"
@@ -20,16 +21,19 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
 
   private readonly github = new GithubClient(this.config.user_agent)
   private readonly cache: { [username: string]: UserDetails } = {}
+  private readonly cliSupport = new SinopiaGithubOAuthCliSupport(this.config, this.stuff)
 
   constructor(
-    private config,
-    private stuff,
+    private config: any,
+    private stuff: any,
   ) { }
 
   /**
    * Implements the middleware plugin interface.
    */
   public register_middlewares(app: Application, auth: Auth, storage) {
+    this.cliSupport.register_middlewares(app, auth, storage)
+
     if (get(this.config, "web.enable", true)) {
       const injectHtml = new InjectHtml()
 
