@@ -20,6 +20,9 @@
   ],
   "main": "dist/server/index.js",
   "types": "dist/server/index.d.ts",
+  "scripts": {
+    "prepublishOnly": "bash run build"
+  },
   "dependencies": {
     "got": "^8.3.2"
   },
