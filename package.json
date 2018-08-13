@@ -21,7 +21,8 @@
   "main": "dist/server/index.js",
   "types": "dist/server/index.d.ts",
   "scripts": {
-    "prepublishOnly": "bash run build"
+    "prepublishOnly": "bash run build",
+    "test": "echo Please fire up verdaccio and test changes manually. Try ./run update && ./run start"
   },
   "dependencies": {
     "got": "^8.3.2"
