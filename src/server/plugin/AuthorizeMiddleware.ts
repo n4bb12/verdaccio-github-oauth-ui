@@ -41,9 +41,9 @@ export class AuthorizeMiddleware {
    * This is the same as what `npm config get registry` returns.
    */
   public getRegistryUrl(req: Request): string {
-    const prefix = get(this.config, "url_prefix", "")
-      .replace(/\/?$/, "") // Remove trailing slash if needed
-    return (req.protocol + "://" + req.get("host") + prefix)
+    const prefix = get(this.config, "url_prefix", "").replace(/\/?$/, "") // Remove trailing slash if needed
+    const protocal = req.get("X-Forwarded-Proto") || req.protocol
+    return (protocal + "://" + req.get("host") + prefix)
   }
 
 }
