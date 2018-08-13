@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { Handler, Request, Response } from "express"
 import { get } from "lodash"
 import * as querystring from "querystring"
 
@@ -20,7 +20,7 @@ export class AuthorizeMiddleware {
    *   A request to `/-/oauth/authorize/cheese-cake` will be called back at
    *   `/-/oauth/callback/cheese-cake`.
    */
-  public middleware = (req: Request, res: Response, next) => {
+  public middleware: Handler = (req: Request, res: Response, next) => {
     const id = (req.params.id || "")
     const url = "https://github.com/login/oauth/authorize?" + querystring.stringify({
       client_id: this.config["client-id"],

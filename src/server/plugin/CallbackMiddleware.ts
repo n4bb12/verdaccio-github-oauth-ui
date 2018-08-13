@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express"
+import { Handler, NextFunction, Request, Response } from "express"
 import * as querystring from "querystring"
 
 import { GithubClient } from "../github"
@@ -28,7 +28,7 @@ export class CallbackMiddleware {
    * We then issue a JWT token using these values and pass them back to the frontend
    * as query parameters so they can be stored in the browser.
    */
-  public middleware = async (req: Request, res: Response, next: NextFunction) => {
+  public middleware: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const code = req.query.code
     const clientId = this.config["client-id"]
     const clientSecret = this.config["client-secret"]

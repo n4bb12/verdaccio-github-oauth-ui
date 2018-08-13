@@ -1,4 +1,9 @@
-import { NextFunction, Response, static as serveStatic } from "express"
+import {
+  Handler,
+  NextFunction,
+  Response,
+  static as expressServeStatic,
+} from "express"
 
 const publicDir = "/-/static/github-oauth-ui"
 const scriptTag = `<script src="${publicDir}/script.js"></script>`
@@ -12,12 +17,12 @@ export class InjectHtml {
   /**
    * Serves the injected style and script imports.
    */
-  public serveMiddleware = serveStatic(__dirname + "/../../client")
+  public serveMiddleware: Handler = expressServeStatic(__dirname + "/../../client")
 
   /**
    * Monkey-patches `res.send` in order to inject style and script imports.
    */
-  public injectMiddleware = (req, res: Response, next: NextFunction) => {
+  public injectMiddleware: Handler = (req, res: Response, next: NextFunction) => {
     const originalSend = res.send
     res.send = (html, ...args) => {
       html = this.insertImportTags(html)
