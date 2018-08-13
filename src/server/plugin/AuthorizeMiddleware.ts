@@ -1,8 +1,8 @@
-import { Request, Response } from "express"
-import { get } from "lodash"
-import * as querystring from "querystring"
+import { Request, Response } from 'express'
+import { get } from 'lodash'
+import * as querystring from 'querystring'
 
-import { CallbackMiddleware } from "./CallbackMiddleware"
+import { CallbackMiddleware } from './CallbackMiddleware'
 
 export class AuthorizeMiddleware {
 
@@ -41,9 +41,13 @@ export class AuthorizeMiddleware {
    * This is the same as what `npm config get registry` returns.
    */
   public getRegistryUrl(req: Request): string {
-    const prefix = get(this.config, "url_prefix", "").replace(/\/?$/, "") // Remove trailing slash if needed
+    const prefix = get(this.config, "url_prefix", "")
+    if (prefix) {
+      debugger
+      return prefix.replace(/\/?$/, "") // Remove potential trailing slash
+    }
     const protocal = req.get("X-Forwarded-Proto") || req.protocol
-    return (protocal + "://" + req.get("host") + prefix)
+    return (protocal + "://" + req.get("host"))
   }
 
 }

@@ -59,3 +59,5 @@ packages:
 logs:
   - {type: stdout, format: pretty, level: http}
   #- {type: file, path: verdaccio.log, level: info}
+
+url_prefix: http://localhost:4873/

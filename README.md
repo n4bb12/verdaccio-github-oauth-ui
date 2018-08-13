@@ -37,6 +37,8 @@ REGISTRY_URL/-/oauth/callback
 ```  
 as the callback URL.
 
+If `url_prefix` is specified in the config then it must be equal to the `REGISTRY_URL`.
+
 ## Usage
 
 - Click the login button and follow the OAuth flow.
