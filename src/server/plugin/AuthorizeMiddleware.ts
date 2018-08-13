@@ -1,8 +1,8 @@
-import { Request, Response } from 'express'
-import { get } from 'lodash'
-import * as querystring from 'querystring'
+import { Request, Response } from "express"
+import { get } from "lodash"
+import * as querystring from "querystring"
 
-import { CallbackMiddleware } from './CallbackMiddleware'
+import { CallbackMiddleware } from "./CallbackMiddleware"
 
 export class AuthorizeMiddleware {
 
@@ -17,8 +17,8 @@ export class AuthorizeMiddleware {
    * The callback URL can be customized by subpathing the request.
    * 
    * Example:
-   *   A request to `/authorize/cheese-cake` will be called back at
-   *   `/callback/cheese-cake`.
+   *   A request to `/-/oauth/authorize/cheese-cake` will be called back at
+   *   `/-/oauth/callback/cheese-cake`.
    */
   public middleware = (req: Request, res: Response, next) => {
     const id = (req.params.id || "")
