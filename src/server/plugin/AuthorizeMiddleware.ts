@@ -43,7 +43,6 @@ export class AuthorizeMiddleware {
   public getRegistryUrl(req: Request): string {
     const prefix = get(this.config, "url_prefix", "")
     if (prefix) {
-      debugger
       return prefix.replace(/\/?$/, "") // Remove potential trailing slash
     }
     const protocal = req.get("X-Forwarded-Proto") || req.protocol
