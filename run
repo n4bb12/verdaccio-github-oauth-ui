@@ -187,6 +187,14 @@ lint() {
 }
 
 #
+# Testing notice.
+#
+test() {
+  echo 'INFO: Please fire up verdaccio and test changes manually.'
+  echo 'INFO: Try ./run update && ./run start'
+}
+
+#
 # CLI
 ##################################################
 

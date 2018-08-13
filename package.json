@@ -22,7 +22,7 @@
   "types": "dist/server/index.d.ts",
   "scripts": {
     "prepublishOnly": "bash run build",
-    "test": "echo Please fire up verdaccio and test changes manually. Try ./run update && ./run start"
+    "test": "bash ./run test"
   },
   "dependencies": {
     "got": "^8.3.2"
