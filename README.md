@@ -31,7 +31,9 @@ auth:
     org: $GITHUB_OAUTH_ORG # required, people within this org will be able to auth
 ```
 
-When creating the OAuth app at [github.com](https://github.com/settings/developers), use  
+The values for `client-id` and `client-secret` can either be an environment variable where the value is stored, or the value itself.
+
+When creating the OAuth app at [github.com](https://github.com/settings/developers), use
 ```
 REGISTRY_URL/-/oauth/callback
 ```  

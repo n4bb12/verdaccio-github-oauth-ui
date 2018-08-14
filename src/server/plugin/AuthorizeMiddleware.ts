@@ -23,7 +23,7 @@ export class AuthorizeMiddleware {
   public middleware: Handler = (req: Request, res: Response, next) => {
     const id = (req.params.id || "")
     const url = "https://github.com/login/oauth/authorize?" + querystring.stringify({
-      client_id: this.config["client-id"],
+      client_id: process.env[this.config["client-id"]] || this.config["client-id"],
       redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ""),
       scope: "read:org",
     })
