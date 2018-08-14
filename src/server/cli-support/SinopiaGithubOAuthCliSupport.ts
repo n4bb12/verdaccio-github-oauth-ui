@@ -22,8 +22,8 @@ export class SinopiaGithubOAuthCliSupport implements MiddlewarePlugin {
 
     app.use("/-/oauth/callback/cli", async (req: Request, res: Response, next: NextFunction) => {
       const code = req.query.code
-      const clientId = this.config["client-id"]
-      const clientSecret = this.config["client-secret"]
+      const clientId = process.env[this.config["client-id"]] || this.config["client-id"]
+      const clientSecret = process.env[this.config["client-secret"]] || this.config["client-secret"]
 
       try {
         const oauth = await this.github.requestAccessToken(code, clientId, clientSecret)
