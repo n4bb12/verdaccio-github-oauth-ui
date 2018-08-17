@@ -10,7 +10,8 @@ interface QueryParams {
  */
 ; (() => {
   const interruptLoginButtonClick = (e) => {
-    for (const element of e.path) {
+    const path = e.path || (e.composedPath && e.composedPath())
+    for (const element of path) {
       if (element.classList && element.classList.contains("header-button-login")) {
         e.preventDefault()
         e.stopPropagation()
