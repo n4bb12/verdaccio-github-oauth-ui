@@ -1,4 +1,19 @@
-# verdaccio-github-oauth-ui
+<h1 align="center">
+  📦🔐 Verdaccio GitHub OAuth UI
+</h1>
+
+<p align="center">
+  A GitHub OAuth Plugin for Verdaccio – <a href="https://www.verdaccio.org">https://www.verdaccio.org</a>
+</p>
+
+<p align="center">
+  <a href="https://circleci.com/gh/n4bb12/verdaccio-github-oauth-ui">
+    <img alt="Build" src="https://img.shields.io/circleci/project/github/n4bb12/verdaccio-github-oauth-ui/master.svg?style=flat-square&label=Build&logo=circleci">
+  </a>
+  <a href="https://raw.githubusercontent.com/n4bb12/verdaccio-github-oauth-ui/master/LICENSE">
+    <img alt="License" src="https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat-square">
+  </a>
+</p>
 
 ## About
 
@@ -34,9 +49,11 @@ auth:
 The values for `client-id` and `client-secret` can either be an environment variable where the value is stored, or the value itself.
 
 When creating the OAuth app at [github.com](https://github.com/settings/developers), use
+
 ```
 REGISTRY_URL/-/oauth/callback
-```  
+```
+
 as the callback URL.
 
 If `url_prefix` is specified in the config then it must be equal to the `REGISTRY_URL`.
@@ -47,14 +64,12 @@ If `url_prefix` is specified in the config then it must be equal to the `REGISTR
 
 - After successful login, the npm config commands that set up authentication with the registry are shown at the top.
 
-- To verify that the authentication token is set up correctly, run  
+- To verify that the authentication token is set up correctly, run
+
   ```
   npm whoami --registry REGISTRY_URL
   ```
+
   If you see your GitHub username, you are ready to start publishing packages.
 
 - Unless the token is revoked on GitHub, it is infinitely valid.
-
-## License
-
-MIT
