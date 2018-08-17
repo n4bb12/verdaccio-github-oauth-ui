@@ -17,8 +17,6 @@
 
 ## About
 
-A [verdaccio plugin](https://verdaccio.org/docs/en/plugins) that uses GitHub OAuth.
-
 When clicking the login button, instead of filling in a login form, you are asked to log in with GitHub.
 
 The plugin is similar to [verdaccio-github-oauth](https://github.com/aroundus-inc/verdaccio-github-oauth) but also changes the UI login behaviour.
