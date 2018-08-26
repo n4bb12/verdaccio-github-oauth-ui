@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://circleci.com/gh/n4bb12/verdaccio-github-oauth-ui">
+  <a href="https://circleci.com/gh/n4bb12/workflows/verdaccio-github-oauth-ui">
     <img alt="Build" src="https://img.shields.io/circleci/project/github/n4bb12/verdaccio-github-oauth-ui/master.svg?style=flat-square&label=Build&logo=circleci">
   </a>
   <a href="https://raw.githubusercontent.com/n4bb12/verdaccio-github-oauth-ui/master/LICENSE">
