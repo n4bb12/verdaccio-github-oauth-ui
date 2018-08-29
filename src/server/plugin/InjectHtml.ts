@@ -6,8 +6,8 @@ import {
 } from "express"
 
 const publicDir = "/-/static/github-oauth-ui"
-const scriptTag = `<script src="${publicDir}/script.js"></script>`
-const styleTag = `<link href="${publicDir}/styles.css" rel="stylesheet">`
+const scriptTag = `<script src="${publicDir}/login-button.js"></script>`
+const styleTag = `<link href="${publicDir}/login-button.css" rel="stylesheet">`
 const headWithStyle = [styleTag, "</head>"].join("")
 const bodyWithScript = [scriptTag, "</body>"].join("")
 
