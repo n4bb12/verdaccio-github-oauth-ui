@@ -25,7 +25,7 @@
     "test": "bash ./run test"
   },
   "dependencies": {
-    "got": "^8.3.2"
+    "got": "^9.1.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
@@ -37,7 +37,7 @@
     "nodemon": "^1.18.3",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.14.0",
-    "typescript": "^2.9.2",
+    "typescript": "^3.0.1",
     "verdaccio": "^3.3.0"
   },
   "peerDependencies": {
