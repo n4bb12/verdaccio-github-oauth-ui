@@ -66,6 +66,8 @@ If `url_prefix` is specified in the config then it must be equal to the `REGISTR
 
 - Click the login button and follow the OAuth flow.
 
+  *When using a private GitHub org, make sure to click the [Request] button for org read access. See [#5](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/5#issuecomment-417371679).*
+
 - After successful login, the npm config commands that set up authentication with the registry are shown at the top.
 
 - To verify that the authentication token is set up correctly, run
