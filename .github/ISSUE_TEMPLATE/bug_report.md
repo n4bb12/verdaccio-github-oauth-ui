@@ -2,6 +2,13 @@
 
 ## Bug Report
 
+#### Versions
+
+|                           | Version |
+| ------------------------- | ------- |
+| verdaccio                 |         |
+| verdaccio-github-oauth-ui |         |
+
 #### Expected behavior
 <!-- A clear and concise description of what you expected to happen. -->
 
@@ -14,13 +21,6 @@
 2. Click on '....'
 3. Scroll down to '....'
 4. See error -->
-
-#### Versions
-
-|                           | Version |
-| ------------------------- | ------- |
-| verdaccio                 |         |
-| verdaccio-github-oauth-ui |         |
 
 #### Additional context
 <!-- Screenshots, terminal output or any other context about the problem. -->
