@@ -41,9 +41,9 @@
     "verdaccio": "^3.7.1"
   },
   "peerDependencies": {
-    "express": "^4.16.3",
+    "express": "^4.16.0",
     "lodash": "^4.17.0",
-    "verdaccio": "^3.3.0"
+    "verdaccio": "^3.7.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
