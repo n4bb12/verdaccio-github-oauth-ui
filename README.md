@@ -16,6 +16,9 @@
   <a href="https://raw.githubusercontent.com/n4bb12/verdaccio-github-oauth-ui/master/LICENSE">
     <img alt="License" src="https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat-square">
   </a>
+  <a href="https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/new?template=bug_report.md">
+    <img alt="License" src="https://img.shields.io/badge/Issues-Report a bug-red.svg?style=flat-square">
+  </a>
 </p>
 
 ## About
