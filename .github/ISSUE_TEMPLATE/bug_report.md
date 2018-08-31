@@ -1,4 +1,4 @@
-<!-- Feel free to remove any sections that don't apply. -->
+<!-- Please fill out the sections below. -->
 
 ## Bug Report
 
