@@ -107,8 +107,8 @@ interface QueryParams {
   }
 
   const removeQueryParams = () => {
+    history.replaceState(null, "", location.pathname)
     location.reload()
-    // history.replaceState(null, "", location.pathname)
   }
 
   /**
