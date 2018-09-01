@@ -17,14 +17,14 @@ export class CallbackMiddleware {
 
   /**
    * After a successful OAuth authentication, GitHub redirects back to us.
-   * We use the OAuth code to get an OAuth access token and the username associated 
+   * We use the OAuth code to get an OAuth access token and the username associated
    * with the GitHub account.
-   * 
+   *
    * The token and username are encryped and base64 encoded and configured as npm
    * credentials for this registry. There is no need to later decode and decrypt the token.
-   * This process is automatically reversed before the token is passed to the authenticate 
+   * This process is automatically reversed before the token is passed to the authenticate
    * middleware.
-   * 
+   *
    * We then issue a JWT token using these values and pass them back to the frontend
    * as query parameters so they can be stored in the browser.
    */
@@ -34,17 +34,18 @@ export class CallbackMiddleware {
     const clientSecret = process.env[this.config["client-secret"]] || this.config["client-secret"]
 
     try {
-      const oauth = await this.github.requestAccessToken(code, clientId, clientSecret)
-      const user = await this.github.requestUser(oauth.access_token)
+      const githubOauth = await this.github.requestAccessToken(code, clientId, clientSecret)
+      const githubUser = await this.github.requestUser(githubOauth.access_token)
 
-      const npmAuthPayload = user.login + ":" + oauth.access_token
-      const npmAuthToken = this.auth.aesEncrypt(new Buffer(npmAuthPayload)).toString("base64")
+      const npmAuth = githubUser.login + ":" + githubOauth.access_token
+      const npmAuthEncrypted = this.auth.aesEncrypt(new Buffer(npmAuth)).toString("base64")
 
-      const frontendJwtToken = this.auth.issueUIjwt(user.login)
+      const frontendUser = { name: githubUser.login }
+      const frontendToken = this.auth.issueUIjwt(frontendUser)
       const frontendUrl = "/?" + querystring.stringify({
-        jwtToken: frontendJwtToken,
-        npmToken: npmAuthToken,
-        username: user.login,
+        jwtToken: frontendToken,
+        npmToken: npmAuthEncrypted,
+        username: githubUser.login,
       })
 
       res.redirect(frontendUrl)
