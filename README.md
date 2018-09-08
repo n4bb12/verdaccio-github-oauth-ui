@@ -8,16 +8,19 @@
 
 <p align="center">
   <a href="https://circleci.com/gh/n4bb12/workflows/verdaccio-github-oauth-ui">
-    <img alt="Build" src="https://img.shields.io/circleci/project/github/n4bb12/verdaccio-github-oauth-ui/master.svg?style=flat-square&label=Build&logo=circleci">
+    <img alt="CircleCI" src="https://flat.badgen.net/circleci/github/n4bb12/verdaccio-github-oauth-ui?icon=circleci">
+  </a>
+  <a href="https://david-dm.org/n4bb12/verdaccio-github-oauth-ui">
+    <img alt="Dependencies" src="https://flat.badgen.net/david/dep/n4bb12/verdaccio-github-oauth-ui?icon=npm">
   </a>
   <a href="https://www.npmjs.com/package/verdaccio-github-oauth-ui">
-    <img alt="npm" src="https://img.shields.io/npm/v/verdaccio-github-oauth-ui.svg?style=flat-square">
+    <img alt="Version" src="https://flat.badgen.net/npm/v/verdaccio-github-oauth-ui?icon=npm">
   </a>
   <a href="https://raw.githubusercontent.com/n4bb12/verdaccio-github-oauth-ui/master/LICENSE">
-    <img alt="License" src="https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat-square">
+    <img alt="License" src="https://flat.badgen.net/github/license/n4bb12/verdaccio-github-oauth-ui?icon=github">
   </a>
-  <a href="https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/new?template=bug_report.md">
-    <img alt="License" src="https://img.shields.io/badge/Issues-Report a bug-red.svg?style=flat-square">
+  <a href="https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/new/choose">
+    <img alt="Issues" src="https://flat.badgen.net/badge/github/create issue/pink?icon=github">
   </a>
 </p>
 
