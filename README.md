@@ -10,6 +10,9 @@
   <a href="https://circleci.com/gh/n4bb12/workflows/verdaccio-github-oauth-ui">
     <img alt="CircleCI" src="https://flat.badgen.net/circleci/github/n4bb12/verdaccio-github-oauth-ui?icon=circleci">
   </a>
+  <a href="https://lgtm.com/projects/g/n4bb12/verdaccio-github-oauth-ui/alerts">
+    <img alt="LGTM" src="https://flat.badgen.net/lgtm/alerts/g/n4bb12/verdaccio-github-oauth-ui?icon=lgtm">
+  </a>
   <a href="https://david-dm.org/n4bb12/verdaccio-github-oauth-ui">
     <img alt="Dependencies" src="https://flat.badgen.net/david/dep/n4bb12/verdaccio-github-oauth-ui?icon=npm">
   </a>
