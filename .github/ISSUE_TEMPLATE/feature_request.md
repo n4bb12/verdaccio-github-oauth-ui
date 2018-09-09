@@ -1,3 +1,10 @@
+---
+name: Feature request
+about: Suggest an idea for this project
+---
+
+<!-- Please fill out the sections below. -->
+
 ## Feature Request
 
 #### Is your feature request related to a problem? Please describe.
