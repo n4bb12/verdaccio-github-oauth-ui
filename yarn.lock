@@ -847,42 +847,7 @@ expand-brackets@^2.1.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-express@4.16.3:
-  version "4.16.3"
-  resolved "https://registry.npmjs.org/express/-/express-4.16.3.tgz#6af8a502350db3246ecc4becf6b5a34d22f7ed53"
-  dependencies:
-    accepts "~1.3.5"
-    array-flatten "1.1.1"
-    body-parser "1.18.2"
-    content-disposition "0.5.2"
-    content-type "~1.0.4"
-    cookie "0.3.1"
-    cookie-signature "1.0.6"
-    debug "2.6.9"
-    depd "~1.1.2"
-    encodeurl "~1.0.2"
-    escape-html "~1.0.3"
-    etag "~1.8.1"
-    finalhandler "1.1.1"
-    fresh "0.5.2"
-    merge-descriptors "1.0.1"
-    methods "~1.1.2"
-    on-finished "~2.3.0"
-    parseurl "~1.3.2"
-    path-to-regexp "0.1.7"
-    proxy-addr "~2.0.3"
-    qs "6.5.1"
-    range-parser "~1.2.0"
-    safe-buffer "5.1.1"
-    send "0.16.2"
-    serve-static "1.13.2"
-    setprototypeof "1.1.0"
-    statuses "~1.4.0"
-    type-is "~1.6.16"
-    utils-merge "1.0.1"
-    vary "~1.1.2"
-
-express@^4.16.3:
+express@4.16.3, express@^4.16.3:
   version "4.16.3"
   resolved "http://registry.npmjs.org/express/-/express-4.16.3.tgz#6af8a502350db3246ecc4becf6b5a34d22f7ed53"
   dependencies:
@@ -1791,7 +1756,7 @@ ms@^2.1.1:
   version "2.1.1"
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
 
-mv@~2:
+mv@2.1.1, mv@~2:
   version "2.1.1"
   resolved "https://registry.npmjs.org/mv/-/mv-2.1.1.tgz#ae6ce0d6f6d5e0a4f7d893798d03c1ea9559b6a2"
   dependencies:
@@ -2779,9 +2744,9 @@ verdaccio-htpasswd@0.2.2:
     bcryptjs "2.4.3"
     unix-crypt-td-js "^1.0.0"
 
-verdaccio@^3.7.1:
-  version "3.7.1"
-  resolved "https://registry.npmjs.org/verdaccio/-/verdaccio-3.7.1.tgz#a2181fe1e093c3c7401c27acb77453029472f040"
+verdaccio@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/verdaccio/-/verdaccio-3.8.0.tgz#a06f46d90c55b3df5a8102aee10c0f2f802eabc7"
   dependencies:
     "@verdaccio/file-locking" "0.0.7"
     "@verdaccio/local-storage" "1.1.3"
@@ -2811,6 +2776,7 @@ verdaccio@^3.7.1:
     mime "2.3.1"
     minimatch "3.0.4"
     mkdirp "0.5.1"
+    mv "2.1.1"
     pkginfo "0.4.1"
     request "2.87.0"
     semver "5.5.0"
