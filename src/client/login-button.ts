@@ -28,7 +28,7 @@ interface QueryParams {
     if (element) {
       element.innerHTML = info.join("<br>")
     } else {
-      setTimeout(100, updateUsageInfo)
+      setTimeout(updateUsageInfo, 100)
     }
   }
 
