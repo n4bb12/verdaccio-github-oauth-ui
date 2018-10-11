@@ -53,7 +53,7 @@ build-config() {
 # Copy client sources to dist.
 #
 build-client() {
-  run build-client tsc -p tsconfig.client.json ${@}
+  run build-client tsc -p src/client/tsconfig.json ${@}
   run build-client cp -R src/client/*.css dist/client
 }
 
@@ -61,7 +61,7 @@ build-client() {
 # Compile server to dist.
 #
 build-server() {
-  run build-server tsc -p tsconfig.server.json ${@}
+  run build-server tsc -p src/server/tsconfig.json ${@}
 }
 
 #
@@ -181,8 +181,8 @@ watch() {
 # Run linters.
 #
 lint() {
-  run lint tslint -c tslint.json -p tsconfig.client.json --fix ${@} &
-  run lint tslint -c tslint.json -p tsconfig.server.json --fix ${@} &
+  run lint tslint -c tslint.json -p src/client/tsconfig.json --fix ${@} &
+  run lint tslint -c tslint.json -p src/server/tsconfig.json --fix ${@} &
   wait
 }
 

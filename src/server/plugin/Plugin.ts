@@ -1,9 +1,15 @@
 import { Application } from "express"
 import { get } from "lodash"
-import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 
+import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 import { GithubClient } from "../github"
-import { Auth, AuthCallback, AuthPlugin, MiddlewarePlugin } from "../verdaccio"
+import {
+  Auth,
+  AuthCallback,
+  AuthPlugin,
+  MiddlewarePlugin,
+  Storage,
+} from "../verdaccio"
 
 import { AuthorizeMiddleware } from "./AuthorizeMiddleware"
 import { CallbackMiddleware } from "./CallbackMiddleware"
@@ -31,7 +37,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   /**
    * Implements the middleware plugin interface.
    */
-  public register_middlewares(app: Application, auth: Auth, storage) {
+  public register_middlewares(app: Application, auth: Auth, storage: Storage) {
     this.cliSupport.register_middlewares(app, auth, storage)
 
     if (get(this.config, "web.enable", true)) {

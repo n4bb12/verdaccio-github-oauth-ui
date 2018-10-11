@@ -1,6 +1,7 @@
 import {
   Handler,
   NextFunction,
+  Request,
   Response,
   static as expressServeStatic,
 } from "express"
@@ -22,9 +23,9 @@ export class InjectHtml {
   /**
    * Monkey-patches `res.send` in order to inject style and script imports.
    */
-  public injectMiddleware: Handler = (req, res: Response, next: NextFunction) => {
+  public injectMiddleware: Handler = (req: Request, res: Response, next: NextFunction) => {
     const originalSend = res.send
-    res.send = (html, ...args) => {
+    res.send = (html: string, ...args: any[]) => {
       html = this.insertImportTags(html)
       return originalSend.call(res, html, ...args)
     }

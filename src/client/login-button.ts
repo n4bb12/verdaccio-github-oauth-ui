@@ -37,7 +37,7 @@ interface QueryParams {
    * We replace this behaviour and instead redirect to the route that handles OAuth.
    */
 
-  const clickTargetHasClassname = (classname: string, e): boolean => {
+  const clickTargetHasClassname = (classname: string, e: any): boolean => {
     const path = e.path || (e.composedPath && e.composedPath())
     for (const element of path) {
       if (element.classList && element.classList.contains(classname)) {
@@ -47,8 +47,8 @@ interface QueryParams {
     return false
   }
 
-  const interruptClick = (classname: string, callback: (e) => void) => {
-    const handleClick = (e) => {
+  const interruptClick = (classname: string, callback: (e: MouseEvent) => void) => {
+    const handleClick = (e: MouseEvent) => {
       if (clickTargetHasClassname(classname, e)) {
         callback(e)
       }
@@ -99,8 +99,8 @@ interface QueryParams {
       .substring(1)
       .split("&")
       .filter(kv => kv)
-      .map(kv => [...kv.split("="), "true"])
-      .reduce((obj, pair) => {
+      .map(kv => kv.split("=").concat(["true"]))
+      .reduce((obj: any, pair) => {
         obj[pair[0]] = decodeURIComponent(pair[1])
         return obj
       }, {}) as QueryParams

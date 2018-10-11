@@ -1,4 +1,4 @@
-import * as got from "got"
+import got, { GotJSONOptions } from "got"
 import { merge as deepAssign } from "lodash"
 
 import { OAuth } from "./OAuth"
@@ -25,12 +25,13 @@ export class GithubClient {
    */
   public requestAccessToken = async (code: string, clientId: string, clientSecret: string) => {
     const url = "https://github.com/login/oauth/access_token"
-    const options = {
+    const options: GotJSONOptions = {
       body: {
         client_id: clientId,
         client_secret: clientSecret,
         code,
       },
+      json: true,
     }
     return this.request<OAuth>(url, options)
   }
@@ -42,10 +43,11 @@ export class GithubClient {
    */
   public requestUser = async (accessToken: string) => {
     const url = "https://api.github.com/user"
-    const options = {
+    const options: GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
+      json: true,
     }
     return this.request<User>(url, options)
   }
@@ -57,15 +59,16 @@ export class GithubClient {
    */
   public requestUserOrgs = async (accessToken: string) => {
     const url = "https://api.github.com/user/orgs"
-    const options = {
+    const options: GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
+      json: true,
     };
     return this.request<Organization[]>(url, options)
   }
 
-  private async request<T>(url: string, options: any): Promise<T> {
+  private async request<T>(url: string, options: GotJSONOptions): Promise<T> {
     options = deepAssign({}, this.defaultOptions, options)
     const response = await got(url, options)
     return response.body

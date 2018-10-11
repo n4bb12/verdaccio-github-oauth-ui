@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "declaration": true,
+    "esModuleInterop": true,
+    "inlineSources": false,
+    "lib": ["es2018"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "../../dist/server",
+    "rootDir": ".",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2015",
+    "types": []
+  }
+}
