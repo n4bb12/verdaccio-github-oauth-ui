@@ -7,7 +7,6 @@ import {
   Auth,
   AuthCallback,
   AuthPlugin,
-  Config,
   MiddlewarePlugin,
   PackageAccess,
   RemoteUser,
@@ -17,6 +16,7 @@ import {
 import { AuthorizeMiddleware } from "./AuthorizeMiddleware"
 import { CallbackMiddleware } from "./CallbackMiddleware"
 import { InjectHtml } from "./InjectHtml"
+import { PluginConfig, pluginName } from "./PluginConfig"
 
 interface UserDetails {
   authToken: string
@@ -33,7 +33,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   private readonly cliSupport = new SinopiaGithubOAuthCliSupport(this.config, this.stuff)
 
   constructor(
-    private config: Config,
+    private config: PluginConfig,
     private stuff: any,
   ) { }
 

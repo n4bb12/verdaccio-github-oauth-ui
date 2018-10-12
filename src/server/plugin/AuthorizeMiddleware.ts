@@ -2,16 +2,15 @@ import { Handler, Request, Response } from "express"
 import { get } from "lodash"
 import * as querystring from "querystring"
 
-import { Config } from "../verdaccio"
-
 import { CallbackMiddleware } from "./CallbackMiddleware"
+import { PluginConfig } from "./PluginConfig"
 
 export class AuthorizeMiddleware {
 
   public static readonly path = "/-/oauth/authorize/:id?"
 
   constructor(
-    private readonly config: Config,
+    private readonly config: PluginConfig,
   ) { }
 
   /**

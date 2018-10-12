@@ -1,14 +1,15 @@
 import { Application, NextFunction, Request, Response } from "express"
 
 import { GithubClient } from "../github"
-import { Auth, Config, MiddlewarePlugin } from "../verdaccio"
+import { getConfig, PluginConfig } from "../plugin/PluginConfig"
+import { Auth, MiddlewarePlugin } from "../verdaccio"
 
 export class SinopiaGithubOAuthCliSupport implements MiddlewarePlugin {
 
   private readonly github = new GithubClient(this.config.user_agent)
 
   constructor(
-    private config: Config,
+    private config: PluginConfig,
     private stuff: any,
   ) { }
 
@@ -22,8 +23,8 @@ export class SinopiaGithubOAuthCliSupport implements MiddlewarePlugin {
 
     app.use("/-/oauth/callback/cli", async (req: Request, res: Response, next: NextFunction) => {
       const code = req.query.code
-      const clientId = process.env[this.config["client-id"]] || this.config["client-id"]
-      const clientSecret = process.env[this.config["client-secret"]] || this.config["client-secret"]
+      const clientId = getConfig(this.config, "client-id")
+      const clientSecret = getConfig(this.config, "client-secret")
 
       try {
         const oauth = await this.github.requestAccessToken(code, clientId, clientSecret)

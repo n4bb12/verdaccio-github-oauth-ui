@@ -17,3 +17,10 @@ export interface PluginConfig extends Config, MiddlewaresConfig, AuthConfig {
     "github-oauth-ui": AuthConfig,
   },
 }
+
+export const pluginName = "github-oauth-ui"
+
+export function getConfig<Key extends keyof MiddlewaresConfig>(config: PluginConfig, key: Key): string {
+  const value = config.middlewares[pluginName][key]
+  return process.env[value]! || value
+}

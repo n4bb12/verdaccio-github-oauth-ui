@@ -2,7 +2,9 @@ import { Handler, NextFunction, Request, Response } from "express"
 import * as querystring from "querystring"
 
 import { GithubClient } from "../github"
-import { Auth, Config, User } from "../verdaccio"
+import { Auth, User } from "../verdaccio"
+
+import { getConfig, PluginConfig } from "./PluginConfig"
 
 export class CallbackMiddleware {
 
@@ -11,7 +13,7 @@ export class CallbackMiddleware {
   private readonly github = new GithubClient(this.config.user_agent)
 
   constructor(
-    private readonly config: Config,
+    private readonly config: PluginConfig,
     private readonly auth: Auth,
   ) { }
 
@@ -29,11 +31,11 @@ export class CallbackMiddleware {
    * as query parameters so they can be stored in the browser.
    */
   public middleware: Handler = async (req: Request, res: Response, next: NextFunction) => {
-    const code = req.query.code
-    const clientId = process.env[this.config["client-id"]] || this.config["client-id"]
-    const clientSecret = process.env[this.config["client-secret"]] || this.config["client-secret"]
-
     try {
+      const code = req.query.code
+      const clientId = getConfig(this.config, "client-id")
+      const clientSecret = getConfig(this.config, "client-secret")
+
       const githubOauth = await this.github.requestAccessToken(code, clientId, clientSecret)
       const githubUser = await this.github.requestUser(githubOauth.access_token)
 
