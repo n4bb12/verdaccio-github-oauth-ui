@@ -1,5 +1,5 @@
 import { Application } from "express"
-import { get } from "lodash"
+import { get, intersection } from "lodash"
 
 import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 import { GithubClient } from "../github"
@@ -85,7 +85,10 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   }
 
   public allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): void {
-    if (user.groups.includes(this.config.org)) {
+    const requiredAccess = pkg.access || []
+    const grantedAccess = intersection(user.groups, requiredAccess)
+
+    if (grantedAccess.length === requiredAccess.length) {
       cb(null, user.groups)
     } else {
       cb(this.denied(user.name), false)
