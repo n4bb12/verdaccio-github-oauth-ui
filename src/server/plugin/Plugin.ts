@@ -86,7 +86,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   }
 
   public allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): void {
-    const requiredAccess = pkg.access || []
+    const requiredAccess = [...pkg.access || []]
     if (requiredAccess.includes("$authenticated")) {
       requiredAccess.push(this.config.auth[pluginName].org)
     }
