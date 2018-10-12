@@ -2,7 +2,7 @@ import { Handler, NextFunction, Request, Response } from "express"
 import * as querystring from "querystring"
 
 import { GithubClient } from "../github"
-import { Auth } from "../verdaccio"
+import { Auth, Config, User } from "../verdaccio"
 
 export class CallbackMiddleware {
 
@@ -11,7 +11,7 @@ export class CallbackMiddleware {
   private readonly github = new GithubClient(this.config.user_agent)
 
   constructor(
-    private readonly config: any,
+    private readonly config: Config,
     private readonly auth: Auth,
   ) { }
 

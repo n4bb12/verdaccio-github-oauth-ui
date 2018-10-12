@@ -1,14 +1,14 @@
 import { Application, NextFunction, Request, Response } from "express"
 
 import { GithubClient } from "../github"
-import { Auth, MiddlewarePlugin } from "../verdaccio"
+import { Auth, Config, MiddlewarePlugin } from "../verdaccio"
 
 export class SinopiaGithubOAuthCliSupport implements MiddlewarePlugin {
 
   private readonly github = new GithubClient(this.config.user_agent)
 
   constructor(
-    private config: any,
+    private config: Config,
     private stuff: any,
   ) { }
 

@@ -7,6 +7,7 @@ import {
   Auth,
   AuthCallback,
   AuthPlugin,
+  Config,
   MiddlewarePlugin,
   PackageAccess,
   RemoteUser,
@@ -23,7 +24,7 @@ interface UserDetails {
   expires: number
 }
 
-const cacheTTLms = 1000 * 30
+const cacheTTLms = 1000 * 30 // 30s
 
 export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin {
 
@@ -32,7 +33,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   private readonly cliSupport = new SinopiaGithubOAuthCliSupport(this.config, this.stuff)
 
   constructor(
-    private config: any,
+    private config: Config,
     private stuff: any,
   ) { }
 

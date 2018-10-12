@@ -2,6 +2,8 @@ import { Handler, Request, Response } from "express"
 import { get } from "lodash"
 import * as querystring from "querystring"
 
+import { Config } from "../verdaccio"
+
 import { CallbackMiddleware } from "./CallbackMiddleware"
 
 export class AuthorizeMiddleware {
@@ -9,13 +11,13 @@ export class AuthorizeMiddleware {
   public static readonly path = "/-/oauth/authorize/:id?"
 
   constructor(
-    private readonly config: any,
+    private readonly config: Config,
   ) { }
 
   /**
    * Initiates the GitHub OAuth flow by redirecting to GitHub.
    * The callback URL can be customized by subpathing the request.
-   * 
+   *
    * Example:
    *   A request to `/-/oauth/authorize/cheese-cake` will be called back at
    *   `/-/oauth/callback/cheese-cake`.
