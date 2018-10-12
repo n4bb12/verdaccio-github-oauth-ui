@@ -8,6 +8,8 @@ import {
   AuthCallback,
   AuthPlugin,
   MiddlewarePlugin,
+  PackageAccess,
+  RemoteUser,
   Storage,
 } from "../verdaccio"
 
@@ -78,8 +80,20 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
     if (details.orgNames.includes(this.config.org)) {
       cb(null, details.orgNames)
     } else {
-      cb(`User "${username}" is not a member of "${this.config.org}"`, false)
+      cb(this.denied(username), false)
     }
+  }
+
+  public allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): void {
+    if (user.groups.includes(this.config.org)) {
+      cb(null, user.groups)
+    } else {
+      cb(this.denied(user.name), false)
+    }
+  }
+
+  private denied(username?: string): string {
+    return `User "${username}" is not a member of "${this.config.org}"`
   }
 
 }
