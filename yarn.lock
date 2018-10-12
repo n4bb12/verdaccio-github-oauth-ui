@@ -3094,10 +3094,10 @@ type-is@~1.6.15, type-is@~1.6.16:
     media-typer "0.3.0"
     mime-types "~2.1.18"
 
-typescript@^3.0.3:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.2.tgz#c03a5d16f30bb60ad8bb6fe8e7cb212eedeec950"
-  integrity sha512-gOoGJWbNnFAfP9FlrSV63LYD5DJqYJHG5ky1kOXSl3pCImn4rqWy/flyq1BRd4iChQsoCqjbQaqtmXO4yCVPCA==
+typescript@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.3.tgz#01b70247a6d3c2467f70c45795ef5ea18ce191d5"
+  integrity sha512-+81MUSyX+BaSo+u2RbozuQk/UWx6hfG0a5gHu4ANEM4sU96XbuIyAB+rWBW1u70c6a5QuZfuYICn3s2UjuHUpA==
 
 uglify-js@^2.6:
   version "2.8.29"
@@ -3246,10 +3246,10 @@ verdaccio-htpasswd@0.2.2:
     bcryptjs "2.4.3"
     unix-crypt-td-js "^1.0.0"
 
-verdaccio@^3.8.0:
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/verdaccio/-/verdaccio-3.8.0.tgz#a06f46d90c55b3df5a8102aee10c0f2f802eabc7"
-  integrity sha512-fiZR9mw56lJjESIiZk1hk/u4XTX2Yh1hNniDGsJVX2W7op+kKl9Q7K0BUNGCqImylAc03Pz4+WdYHkhpfD3wIA==
+verdaccio@^3.8.3:
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/verdaccio/-/verdaccio-3.8.3.tgz#4a909f00ec924f859377b8835061329f44c1604c"
+  integrity sha512-FxmQbPXJZdHTJRBwUeV0m8mFhe19Y4vXLsKRPS/igVgVvw8lBvhEa0qTg4zeNwMeEFOlRfRyZeasp2vwNfCc+Q==
   dependencies:
     "@verdaccio/file-locking" "0.0.7"
     "@verdaccio/local-storage" "1.1.3"
