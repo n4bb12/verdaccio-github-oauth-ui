@@ -87,6 +87,10 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
 
   public allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): void {
     const requiredAccess = pkg.access || []
+    if (requiredAccess.includes("$authenticated")) {
+      requiredAccess.push(this.config.auth[pluginName].org)
+    }
+
     const grantedAccess = intersection(user.groups, requiredAccess)
 
     if (grantedAccess.length === requiredAccess.length) {
@@ -96,8 +100,8 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
     }
   }
 
-  private denied(username?: string): string {
-    return `User "${username}" is not a member of "${this.config.org}"`
+  private denied(name?: string): string {
+    return `user "${name}" is not a member of "${this.config.org}"`
   }
 
 }
