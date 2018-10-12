@@ -38,11 +38,16 @@ export class CallbackMiddleware {
 
       const githubOauth = await this.github.requestAccessToken(code, clientId, clientSecret)
       const githubUser = await this.github.requestUser(githubOauth.access_token)
+      const githubOrgs = await this.github.requestUserOrgs(githubOauth.access_token)
+      const githubOrgNames = githubOrgs.map(org => org.login)
 
       const npmAuth = githubUser.login + ":" + githubOauth.access_token
       const npmAuthEncrypted = this.auth.aesEncrypt(new Buffer(npmAuth)).toString("base64")
 
-      const frontendUser = { name: githubUser.login }
+      const frontendUser: User = {
+        name: githubUser.login,
+        real_groups: githubOrgNames,
+      }
       const frontendToken = this.auth.issueUIjwt(frontendUser)
       const frontendUrl = "/?" + querystring.stringify({
         jwtToken: frontendToken,
