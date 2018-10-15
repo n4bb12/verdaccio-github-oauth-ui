@@ -11,6 +11,7 @@
     "registry",
     "verdaccio"
   ],
+  "homepage": "https://github.com/n4bb12/verdaccio-github-oauth-ui/blob/master/README.md",
   "bugs": "https://github.com/n4bb12/verdaccio-github-oauth-ui/issues",
   "repository": "github:n4bb12/verdaccio-github-oauth-ui",
   "license": "MIT",
@@ -29,6 +30,7 @@
     "got": "^9.2.1"
   },
   "devDependencies": {
+    "@n4bb12/config-tslint": "^1.2.0",
     "@types/express": "^4.16.0",
     "@types/got": "^8.3.3",
     "@types/lodash": "^4.14.116",
