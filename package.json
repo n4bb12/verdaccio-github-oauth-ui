@@ -22,8 +22,9 @@
   "main": "dist/server/index.js",
   "types": "dist/server/index.d.ts",
   "scripts": {
+    "build": "bash run build-client && bash run build-server",
     "lint": "bash ./run lint",
-    "prepublishOnly": "bash run build-client && bash run build-server",
+    "prepack": "yarn build",
     "test": "bash ./run test"
   },
   "dependencies": {

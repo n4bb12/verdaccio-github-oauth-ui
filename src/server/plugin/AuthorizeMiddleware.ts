@@ -7,7 +7,7 @@ import { PluginConfig } from "./PluginConfig"
 
 export class AuthorizeMiddleware {
 
-  public static readonly path = "/-/oauth/authorize/:id?"
+  static readonly path = "/-/oauth/authorize/:id?"
 
   constructor(
     private readonly config: PluginConfig,
@@ -21,7 +21,7 @@ export class AuthorizeMiddleware {
    *   A request to `/-/oauth/authorize/cheese-cake` will be called back at
    *   `/-/oauth/callback/cheese-cake`.
    */
-  public middleware: Handler = (req: Request, res: Response, next) => {
+  middleware: Handler = (req: Request, res: Response, next) => {
     const id = (req.params.id || "")
     const url = "https://github.com/login/oauth/authorize?" + querystring.stringify({
       client_id: process.env[this.config["client-id"]] || this.config["client-id"],
@@ -34,14 +34,14 @@ export class AuthorizeMiddleware {
   /**
    * This is where GitHub should redirect back to.
    */
-  public getRedirectUrl(req: Request): string {
+  getRedirectUrl(req: Request): string {
     return this.getRegistryUrl(req) + CallbackMiddleware.path
   }
 
   /**
    * This is the same as what `npm config get registry` returns.
    */
-  public getRegistryUrl(req: Request): string {
+  getRegistryUrl(req: Request): string {
     const prefix = get(this.config, "url_prefix", "")
     if (prefix) {
       return prefix.replace(/\/?$/, "") // Remove potential trailing slash

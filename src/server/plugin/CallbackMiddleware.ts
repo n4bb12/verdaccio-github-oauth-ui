@@ -8,7 +8,7 @@ import { getConfig, PluginConfig } from "./PluginConfig"
 
 export class CallbackMiddleware {
 
-  public static readonly path = "/-/oauth/callback"
+  static readonly path = "/-/oauth/callback"
 
   private readonly github = new GithubClient(this.config.user_agent)
 
@@ -30,7 +30,7 @@ export class CallbackMiddleware {
    * We then issue a JWT token using these values and pass them back to the frontend
    * as query parameters so they can be stored in the browser.
    */
-  public middleware: Handler = async (req: Request, res: Response, next: NextFunction) => {
+  middleware: Handler = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const code = req.query.code
       const clientId = getConfig(this.config, "client-id")

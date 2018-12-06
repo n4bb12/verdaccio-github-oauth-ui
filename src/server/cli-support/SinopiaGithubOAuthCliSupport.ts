@@ -16,7 +16,7 @@ export class SinopiaGithubOAuthCliSupport implements MiddlewarePlugin {
   /**
    * Implements the middleware plugin interface.
    */
-  public register_middlewares(app: Application, auth: Auth, storage: any) {
+  register_middlewares(app: Application, auth: Auth, storage: any) {
     app.use("/oauth/authorize", (req: Request, res: Response) => {
       res.redirect("/-/oauth/authorize/cli")
     })

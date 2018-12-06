@@ -23,7 +23,7 @@ export class GithubClient {
    *
    * [Web application flow](https://bit.ly/2mNSppX).
    */
-  public requestAccessToken = async (code: string, clientId: string, clientSecret: string) => {
+  requestAccessToken = async (code: string, clientId: string, clientSecret: string) => {
     const url = "https://github.com/login/oauth/access_token"
     const options: GotJSONOptions = {
       body: {
@@ -41,7 +41,7 @@ export class GithubClient {
    *
    * [Get the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
    */
-  public requestUser = async (accessToken: string) => {
+  requestUser = async (accessToken: string) => {
     const url = "https://api.github.com/user"
     const options: GotJSONOptions = {
       headers: {
@@ -57,14 +57,14 @@ export class GithubClient {
    *
    * [List your organizations](https://developer.github.com/v3/orgs/#list-your-organizations)
    */
-  public requestUserOrgs = async (accessToken: string) => {
+  requestUserOrgs = async (accessToken: string) => {
     const url = "https://api.github.com/user/orgs"
     const options: GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
       json: true,
-    };
+    }
     return this.request<Organization[]>(url, options)
   }
 

@@ -13,21 +13,21 @@ const headWithStyle = [styleTag, "</head>"].join("")
 const bodyWithScript = [scriptTag, "</body>"].join("")
 
 export class InjectHtml {
-  public static readonly path = "/-/static/github-oauth-ui"
+  static readonly path = "/-/static/github-oauth-ui"
 
   /**
    * Serves the injected style and script imports.
    */
-  public serveMiddleware: Handler = expressServeStatic(__dirname + "/../../client")
+  serveMiddleware: Handler = expressServeStatic(__dirname + "/../../client")
 
   /**
    * Monkey-patches `res.send` in order to inject style and script imports.
    */
-  public injectMiddleware: Handler = (req: Request, res: Response, next: NextFunction) => {
+  injectMiddleware: Handler = (req: Request, res: Response, next: NextFunction) => {
     const originalSend = res.send
     res.send = (html: string, ...args: any[]) => {
       html = this.insertImportTags(html)
-      return originalSend.call(res, html, ...args)
+      return originalSend.call(res, [html, ...args])
     }
     next()
   }

@@ -40,7 +40,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   /**
    * Implements the middleware plugin interface.
    */
-  public register_middlewares(app: Application, auth: Auth, storage: Storage) {
+  register_middlewares(app: Application, auth: Auth, storage: Storage) {
     this.cliSupport.register_middlewares(app, auth, storage)
 
     if (get(this.config, "web.enable", true)) {
@@ -60,7 +60,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   /**
    * Implements the auth plugin interface.
    */
-  public async authenticate(username: string, authToken: string, cb: AuthCallback) {
+  async authenticate(username: string, authToken: string, cb: AuthCallback) {
     let details = this.cache[username]
 
     if (!details || details.authToken !== authToken || details.expires > Date.now()) {
@@ -85,7 +85,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
     }
   }
 
-  public allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): void {
+  allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): void {
     const requiredAccess = [...pkg.access || []]
     if (requiredAccess.includes("$authenticated")) {
       requiredAccess.push(this.config.auth[pluginName].org)
