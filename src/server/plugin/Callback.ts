@@ -6,7 +6,7 @@ import { Auth, User } from "../verdaccio-types"
 
 import { getConfig, PluginConfig } from "./PluginConfig"
 
-export class CallbackMiddleware {
+export class Callback {
 
   static readonly path = "/-/oauth/callback"
 

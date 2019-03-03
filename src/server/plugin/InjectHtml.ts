@@ -21,22 +21,23 @@ export class InjectHtml {
   /**
    * Serves the injected style and script imports.
    */
-  serveMiddleware: Handler = expressServeStatic(__dirname + "/../../client")
+  serveAssetsMiddleware: Handler = expressServeStatic(__dirname + "/../../client")
 
   /**
    * Monkey-patches `res.send` in order to inject style and script imports.
    */
-  injectMiddleware: Handler = (req: Request, res: Response, next: NextFunction) => {
-    const originalSend = res.send
-    res.send = (html: string, ...args: any[]) => {
+  injectAssetsMiddleware: Handler = (req: Request, res: Response, next: NextFunction) => {
+    const send = res.send
+    res.send = html => {
       html = this.insertImportTags(html)
-      return originalSend.call(res, [html, ...args])
+      return send.call(res, html)
     }
     next()
   }
 
-  private insertImportTags = (html: string): string => {
-    if (typeof html !== "string" || !html.includes("VERDACCIO_API_URL")) {
+  private insertImportTags = (html: string | Buffer): string => {
+    html = String(html)
+    if (!html.includes("VERDACCIO_API_URL")) {
       return html
     }
     return html

@@ -13,8 +13,8 @@ import {
   Storage,
 } from "../verdaccio-types"
 
-import { AuthorizeMiddleware } from "./AuthorizeMiddleware"
-import { CallbackMiddleware } from "./CallbackMiddleware"
+import { Authorization } from "./Authorization"
+import { Callback } from "./Callback"
 import { InjectHtml } from "./InjectHtml"
 import { PluginConfig, pluginName } from "./PluginConfig"
 
@@ -49,15 +49,15 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
     if (get(this.config, "web.enable", true)) {
       const injectHtml = new InjectHtml()
 
-      app.use(injectHtml.injectMiddleware)
-      app.use(InjectHtml.path, injectHtml.serveMiddleware)
+      app.use(injectHtml.injectAssetsMiddleware)
+      app.use(InjectHtml.path, injectHtml.serveAssetsMiddleware)
     }
 
-    const authorizeMiddleware = new AuthorizeMiddleware(this.config)
-    const callbackMiddleware = new CallbackMiddleware(this.config, auth)
+    const authorization = new Authorization(this.config)
+    const callback = new Callback(this.config, auth)
 
-    app.use(AuthorizeMiddleware.path, authorizeMiddleware.middleware)
-    app.use(CallbackMiddleware.path, callbackMiddleware.middleware)
+    app.use(Authorization.path, authorization.middleware)
+    app.use(Callback.path, callback.middleware)
   }
 
   /**
