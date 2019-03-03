@@ -26,6 +26,9 @@ interface UserDetails {
 
 const cacheTTLms = 1000 * 30 // 30s
 
+/**
+ * Implements the verdaccio plugin interfaces.
+ */
 export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin {
 
   private readonly github = new GithubClient(this.config.user_agent)

@@ -12,6 +12,9 @@ const styleTag = `<link href="${publicDir}/login-button.css" rel="stylesheet">`
 const headWithStyle = [styleTag, "</head>"].join("")
 const bodyWithScript = [scriptTag, "</body>"].join("")
 
+/**
+ * Injects additional tags into the DOM that modify the login button.
+ */
 export class InjectHtml {
   static readonly path = "/-/static/github-oauth-ui"
 
