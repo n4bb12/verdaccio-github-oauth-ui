@@ -24,18 +24,19 @@ interface QueryParams {
 
   const updateUsageInfo = () => {
     const info = getUsageInfo()
-    const element = document.querySelector("[class^='src-webui-components-Header-header'] figure")
+    const element = document.querySelector("[class^='src-webui-components-Header-header'] figure") as HTMLElement
+
     if (element) {
-      element.innerHTML = info.join("<br>")
+      element.innerText = info.join("\n")
     } else {
       setTimeout(updateUsageInfo, 100)
     }
   }
 
-  /**
-   * By default the login button opens a form that asks the user to submit credentials.
-   * We replace this behaviour and instead redirect to the route that handles OAuth.
-   */
+  //
+  // By default the login button opens a form that asks the user to submit credentials.
+  // We replace this behaviour and instead redirect to the route that handles OAuth.
+  //
 
   const clickTargetHasClassname = (classname: string, e: any): boolean => {
     const path = e.path || (e.composedPath && e.composedPath())

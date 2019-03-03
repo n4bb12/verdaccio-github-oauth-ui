@@ -1,18 +1,42 @@
 /**
  * Hide the "To publish your first package just:" section
- * since it shows commands that don't work with oauth.
+ * since it shows commands that don't make sense with OAuth.
  */
-[class^='src-webui-components-Help-help__noPkgIntro'] {
+[class*='help__noPkgIntro'] {
   display: none;
 }
 
 /**
- * Limit width to prevent ugly push-out of login button
+ * Increase the header width.
  */
-[class^='src-webui-components-Header-header__headerWrap'] figure {
+[class*='header__header'] [class*='header__headerWrap'] {
+  padding: 0 1rem;
+  max-width: 1240px;
+}
+
+/**
+ * Show ellipsis when token is too long.
+ */
+[class*='header__headerWrap'] figure {
   margin: 0 1rem;
-  max-width: 33vw;
   overflow-x: hidden;
   overflow-y: auto;
   text-overflow: ellipsis;
+}
+
+/**
+ * Prevent wrapping of the welcome text.
+ */
+.user-logged {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/**
+ * Prevent logo flicker while loading.
+ */
+[class*='header__logo'] {
+  width: 150.5px;
+  height: 50px;
 }
