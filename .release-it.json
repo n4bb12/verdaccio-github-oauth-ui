@@ -1,0 +1,6 @@
+{
+  "github": {
+    "release": true,
+    "tokenRef": "RELEASE_IT"
+  }
+}

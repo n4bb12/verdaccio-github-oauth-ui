@@ -4,7 +4,7 @@ interface QueryParams {
   username: string
 }
 
- (() => {
+(() => {
   /**
    * Displays what the user needs to run in order to authenticate using npm.
    */
@@ -57,13 +57,13 @@ interface QueryParams {
     document.addEventListener("click", handleClick, useCapture)
   }
 
-  interruptClick("header-button-login",e => {
+  interruptClick("header-button-login", e => {
     e.preventDefault()
     e.stopPropagation()
     location.href = "/-/oauth/authorize"
   })
 
-  interruptClick("header-button-logout",e => {
+  interruptClick("header-button-logout", e => {
     localStorage.removeItem("username")
     localStorage.removeItem("token")
     localStorage.removeItem("npm")

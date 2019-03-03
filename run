@@ -141,7 +141,7 @@ update() {
 # Start verdaccio.
 #
 start() {
-  run start verdaccio -c $config ${@}
+  run start yarn verdaccio -c $config ${@}
 }
 
 #
