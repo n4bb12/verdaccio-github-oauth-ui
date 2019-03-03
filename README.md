@@ -43,9 +43,7 @@ $ npm install verdaccio-github-oauth-ui
 
 ## Configuration
 
-The plugin requires the following additional configuration:
-
-```yaml
+```yml
 middlewares:
   github-oauth-ui:
     client-id: $GITHUB_OAUTH_CLIENT_ID # required
@@ -56,30 +54,30 @@ auth:
     org: $GITHUB_OAUTH_ORG # required, people within this org will be able to auth
 ```
 
-The values for `client-id` and `client-secret` can either be an environment variable where the value is stored, or the value itself.
+The values for `client-id` and `client-secret` can either be an environment variable name or the value itself.
 
-When creating the OAuth app at [github.com](https://github.com/settings/developers), use
+When creating the OAuth app at [https://github.com/settings/developers](https://github.com/settings/developers), the callback URL should be:
 
 ```
 REGISTRY_URL/-/oauth/callback
 ```
 
-as the callback URL.
-
 If `url_prefix` is specified in the config then it must be equal to the `REGISTRY_URL`.
 
-## Usage
+## How to Login
 
-- Click the login button and follow the OAuth flow.
-  *When using a private GitHub org, make sure to click the [Request] button for org read access. See [#5](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/5#issuecomment-417371679).*
+Click the login button and login at GitHub, if not already logged in.
 
-- After successful login, the npm config commands that set up authentication with the registry are shown at the top.
+Authorize the registry.
+**Important**: When using a private GitHub org, make sure to click the <kbd>Request</kbd> button for `read:org` access. See [#5](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/5#issuecomment-417371679).
 
-- To verify that the authentication token is set up correctly, run
-  ```
-  npm whoami --registry REGISTRY_URL
-  ```
+After successful login and authorization, you're redirected back to the verdaccio registry. To set up authentication with the registry in your npm CLI, you'll need to run the commands shown in the header.
+  
+![](screenshots/header.png)
 
-  If you see your GitHub username, you are ready to start publishing packages.
+To verify that the authentication token is set up correctly, run the following command. If you see your GitHub username, you are ready to start publishing packages.
+```
+npm whoami --registry REGISTRY_URL
+```
 
-- Unless the token is revoked on GitHub, it is infinitely valid.
+Unless the token is revoked by you in the GitHub settings, it never expires.
