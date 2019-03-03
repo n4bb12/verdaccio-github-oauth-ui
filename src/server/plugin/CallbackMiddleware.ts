@@ -2,7 +2,7 @@ import { Handler, NextFunction, Request, Response } from "express"
 import * as querystring from "querystring"
 
 import { GithubClient } from "../github"
-import { Auth, User } from "../verdaccio"
+import { Auth, User } from "../verdaccio-types"
 
 import { getConfig, PluginConfig } from "./PluginConfig"
 

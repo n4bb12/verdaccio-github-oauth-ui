@@ -11,7 +11,7 @@ import {
   PackageAccess,
   RemoteUser,
   Storage,
-} from "../verdaccio"
+} from "../verdaccio-types"
 
 import { AuthorizeMiddleware } from "./AuthorizeMiddleware"
 import { CallbackMiddleware } from "./CallbackMiddleware"

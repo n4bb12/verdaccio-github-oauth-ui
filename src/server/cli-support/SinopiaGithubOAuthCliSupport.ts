@@ -2,7 +2,7 @@ import { Application, NextFunction, Request, Response } from "express"
 
 import { GithubClient } from "../github"
 import { getConfig, PluginConfig } from "../plugin/PluginConfig"
-import { Auth, MiddlewarePlugin } from "../verdaccio"
+import { Auth, MiddlewarePlugin } from "../verdaccio-types"
 
 export class SinopiaGithubOAuthCliSupport implements MiddlewarePlugin {
 
