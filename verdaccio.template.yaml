@@ -1,7 +1,4 @@
 #
-# This is the default config file. It allows all users to do anything,
-# so don't use it on production systems.
-#
 # Look here for more config file examples:
 # https://github.com/verdaccio/verdaccio/tree/master/conf
 #
