@@ -29,9 +29,9 @@
 
 ## About
 
-When clicking the login button, instead of filling in a login form, you are asked to log in with GitHub.
+<img src="screenshots/authorize.png" align="right" width="270"/>
 
-The plugin is similar to [verdaccio-github-oauth](https://github.com/aroundus-inc/verdaccio-github-oauth) but also changes the UI login behaviour.
+The plugin is similar to [verdaccio-github-oauth](https://github.com/aroundus-inc/verdaccio-github-oauth), but also changes the UI login behaviour. When clicking the login button, instead of filling in a login form, you are asked to log in with GitHub.
 
 In case you need CLI support for automation purposes, the plugin is also compatible with [sinopia-github-oauth-cli](https://github.com/soundtrackyourbrand/sinopia-github-oauth-cli).
 
@@ -71,13 +71,11 @@ If `url_prefix` is specified in the config then it must be equal to the `REGISTR
 ## Usage
 
 - Click the login button and follow the OAuth flow.
-
   *When using a private GitHub org, make sure to click the [Request] button for org read access. See [#5](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/5#issuecomment-417371679).*
 
 - After successful login, the npm config commands that set up authentication with the registry are shown at the top.
 
 - To verify that the authentication token is set up correctly, run
-
   ```
   npm whoami --registry REGISTRY_URL
   ```
