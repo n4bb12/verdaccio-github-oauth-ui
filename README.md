@@ -43,6 +43,8 @@ $ npm install verdaccio-github-oauth-ui
 
 ## Configuration
 
+Merge the below options with your existing Verdaccio configuration:
+
 ```yml
 middlewares:
   github-oauth-ui:
