@@ -43,6 +43,8 @@ $ npm install verdaccio-github-oauth-ui
 
 ## Configuration
 
+#### Verdaccio Config
+
 Merge the below options with your existing Verdaccio configuration:
 
 ```yml
@@ -58,22 +60,30 @@ auth:
 
 The values for `client-id` and `client-secret` can either be an environment variable name or the value itself.
 
+#### GitHub Config
+
 When creating the OAuth app at [https://github.com/settings/developers](https://github.com/settings/developers), the callback URL should be:
 
 ```
 REGISTRY_URL/-/oauth/callback
 ```
 
-If `url_prefix` is specified in the config then it must be equal to the `REGISTRY_URL`.
+If `url_prefix` is specified in the Verdaccio config then it must match the `REGISTRY_URL`.
 
 ## How to Login
+
+#### Verdaccio
 
 Click the login button and login at GitHub, if not already logged in.
 
 Authorize the registry.
 **Important**: When using a private GitHub org, make sure to click the <kbd>Request</kbd> button for `read:org` access. See [#5](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/5#issuecomment-417371679).
 
-After successful login and authorization, you're redirected back to the verdaccio registry. To set up authentication with the registry in your npm CLI, you'll need to run the commands shown in the header.
+After successful login and authorization, you're redirected back to the verdaccio registry.
+
+#### Command Line
+
+To set up authentication with the registry in your npm CLI, you'll need to run the commands shown in the header:
   
 ![](screenshots/header.png)
 
