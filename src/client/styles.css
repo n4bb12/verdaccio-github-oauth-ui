@@ -9,7 +9,7 @@
 /**
  * Increase the header width.
  */
-[class*='header__header'] [class*='header__headerWrap'] {
+[class*='header__headerWrap'] {
   padding: 0 1rem;
   max-width: 1240px;
 }
@@ -18,10 +18,13 @@
  * Show ellipsis when token is too long.
  */
 [class*='header__headerWrap'] figure {
-  margin: 0 1rem;
+  margin: 0.25rem 0.5rem;
+  padding: 0.25rem 0.5rem;
+  max-height: 70px; /* header height */
   overflow-x: hidden;
   overflow-y: auto;
   text-overflow: ellipsis;
+  line-height: 1rem;
 }
 
 /**
