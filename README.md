@@ -7,15 +7,6 @@
 </p>
 
 <p align="center">
-  <a href="https://circleci.com/gh/n4bb12/workflows/verdaccio-github-oauth-ui">
-    <img alt="CircleCI" src="https://flat.badgen.net/circleci/github/n4bb12/verdaccio-github-oauth-ui?icon=circleci">
-  </a>
-  <a href="https://lgtm.com/projects/g/n4bb12/verdaccio-github-oauth-ui/alerts">
-    <img alt="LGTM" src="https://flat.badgen.net/lgtm/alerts/g/n4bb12/verdaccio-github-oauth-ui?icon=lgtm">
-  </a>
-  <a href="https://david-dm.org/n4bb12/verdaccio-github-oauth-ui">
-    <img alt="Dependencies" src="https://flat.badgen.net/david/dep/n4bb12/verdaccio-github-oauth-ui?icon=npm">
-  </a>
   <a href="https://www.npmjs.com/package/verdaccio-github-oauth-ui">
     <img alt="Version" src="https://flat.badgen.net/npm/v/verdaccio-github-oauth-ui?icon=npm">
   </a>
@@ -24,6 +15,15 @@
   </a>
   <a href="https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/new/choose">
     <img alt="Issues" src="https://flat.badgen.net/badge/github/create issue/pink?icon=github">
+  </a>
+  <a href="https://circleci.com/gh/n4bb12/workflows/verdaccio-github-oauth-ui">
+    <img alt="CircleCI" src="https://flat.badgen.net/circleci/github/n4bb12/verdaccio-github-oauth-ui?icon=circleci">
+  </a>
+  <a href="https://david-dm.org/n4bb12/verdaccio-github-oauth-ui">
+    <img alt="Dependencies" src="https://flat.badgen.net/david/dep/n4bb12/verdaccio-github-oauth-ui?icon=npm">
+  </a>
+  <a href="https://lgtm.com/projects/g/n4bb12/verdaccio-github-oauth-ui/alerts">
+    <img alt="LGTM" src="https://flat.badgen.net/lgtm/alerts/g/n4bb12/verdaccio-github-oauth-ui?icon=lgtm">
   </a>
 </p>
 
