@@ -65,10 +65,10 @@ The values for `client-id` and `client-secret` can either be an environment vari
 When creating the OAuth app at [https://github.com/settings/developers](https://github.com/settings/developers), the callback URL should be:
 
 ```
-REGISTRY_URL/-/oauth/callback
+YOUR_REGISTRY_URL/-/oauth/callback
 ```
 
-If `url_prefix` is specified in the Verdaccio config then it must match the `REGISTRY_URL`.
+If `url_prefix` is specified in the Verdaccio config then it must match the `YOUR_REGISTRY_URL`.
 
 ## How to Login
 
@@ -90,7 +90,7 @@ To set up authentication with the registry in your npm CLI, you'll need to run t
 To verify that the authentication token is set up correctly, run the following command:
 
 ```
-$ npm whoami --registry REGISTRY_URL
+$ npm whoami --registry YOUR_REGISTRY_URL
 n4bb12
 ```
 
