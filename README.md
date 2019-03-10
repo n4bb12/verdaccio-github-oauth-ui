@@ -87,9 +87,13 @@ To set up authentication with the registry in your npm CLI, you'll need to run t
   
 ![](screenshots/header.png)
 
-To verify that the authentication token is set up correctly, run the following command. If you see your GitHub username, you are ready to start publishing packages.
+To verify that the authentication token is set up correctly, run the following command:
+
 ```
-npm whoami --registry REGISTRY_URL
+$ npm whoami --registry REGISTRY_URL
+n4bb12
 ```
+
+If you see your **GitHub username**, you are ready to start publishing packages.
 
 Unless the token is revoked by you in the GitHub settings, it never expires.
