@@ -1,5 +1,7 @@
-import { User } from "./User"
+import { JWTSignOptions } from "./JWTSignOptions"
+import { RemoteUser } from "./RemoteUser"
 
 export interface AuthWebUI {
-  issueUIjwt(user: User, time?: string): string
+  jwtEncrypt(user: RemoteUser, signOptions: JWTSignOptions): string
+  aesEncrypt(buf: Buffer): Buffer
 }
