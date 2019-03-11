@@ -24,7 +24,7 @@ interface QueryParams {
 
   const updateUsageInfo = () => {
     const info = getUsageInfo()
-    const element = document.querySelector("[class*='header__headerWrap'] figure") as HTMLElement
+    const element = document.querySelector("#header--button-login") as HTMLElement
 
     if (element) {
       element.innerText = info.join("\n")

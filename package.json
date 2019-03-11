@@ -43,10 +43,10 @@
     "tslint": "^5.13.1",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.3.3333",
-    "verdaccio": "^3.11.6"
+    "verdaccio": "^4.0.0-alpha.5"
   },
   "peerDependencies": {
-    "verdaccio": "^3.11.6"
+    "verdaccio": "^4.0.0-alpha.5"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
