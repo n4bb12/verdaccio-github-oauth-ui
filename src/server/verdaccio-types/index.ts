@@ -1,10 +1,20 @@
+import {
+  IPluginAuth,
+  IPluginMiddleware,
+  IStorageManager,
+  PackageAccess,
+  RemoteUser,
+} from "@verdaccio/types"
+
 export * from "./Auth"
 export * from "./AuthCallback"
-export * from "./AuthPlugin"
-export * from "./BasicAuth"
 export * from "./Config"
-export * from "./MiddlewarePlugin"
-export * from "./PackageAccess"
-export * from "./RemoteUser"
 export * from "./Storage"
-export * from "./User"
+
+export type Callback = () => void
+
+export type AuthPlugin<T = any> = IPluginAuth<T>
+export type MiddlewarePlugin<T = any> = IPluginMiddleware<T>
+export type StorageManager<T = any> = IStorageManager<T>
+
+export { RemoteUser, PackageAccess }

@@ -10,7 +10,7 @@ import {
   MiddlewarePlugin,
   PackageAccess,
   RemoteUser,
-  Storage,
+  StorageManager,
 } from "../verdaccio-types"
 
 import { Authorization } from "./Authorization"
@@ -43,7 +43,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   /**
    * Implements the middleware plugin interface.
    */
-  register_middlewares(app: Application, auth: Auth, storage: Storage) {
+  register_middlewares(app: Application, auth: Auth, storage: StorageManager) {
     this.cliSupport.register_middlewares(app, auth, storage)
 
     if (get(this.config, "web.enable", true)) {
@@ -58,6 +58,14 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
 
     app.use(Authorization.path, authorization.middleware)
     app.use(Callback.path, callback.middleware)
+  }
+
+  adduser(user: string, password: string, cb: () => void): void {
+    // TODO
+  }
+
+  changePassword(user: string, password: string, newPassword: string, cb: () => void): void {
+    // TODO
   }
 
   /**
@@ -88,7 +96,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
     }
   }
 
-  allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): void {
+  allow_access(user: RemoteUser, pkg: PackageAccess, cb: any): void {
     const requiredAccess = [...pkg.access || []]
     if (requiredAccess.includes("$authenticated")) {
       requiredAccess.push(this.config.auth[pluginName].org)
@@ -103,7 +111,11 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
     }
   }
 
-  private denied(name?: string): string {
+  // allow_publish(user: RemoteUser, pkg: PackageAccess, cb: any): void {
+  //   // TODO
+  // }
+
+  private denied(name: RemoteUser["name"]): string {
     return `user "${name}" is not a member of "${this.config.org}"`
   }
 

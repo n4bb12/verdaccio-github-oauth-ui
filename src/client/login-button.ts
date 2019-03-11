@@ -1,5 +1,5 @@
 interface QueryParams {
-  jwtToken: string
+  token: string
   npmToken: string
   username: string
 }
@@ -83,7 +83,7 @@ interface QueryParams {
 
   const saveCredentials = (query: QueryParams) => {
     localStorage.setItem("username", query.username)
-    localStorage.setItem("token", query.jwtToken)
+    localStorage.setItem("token", query.token)
     localStorage.setItem("npm", query.npmToken)
   }
 
@@ -121,7 +121,7 @@ interface QueryParams {
       return
     }
     const query = parseQueryParams()
-    if (!query.username || !query.jwtToken) {
+    if (!query.username || !query.token) {
       return
     }
 
