@@ -24,7 +24,7 @@ interface QueryParams {
 
   const updateUsageInfo = () => {
     const info = getUsageInfo()
-    const element = document.querySelector("#header--button-login") as HTMLElement
+    const element = document.querySelector("TODO") as HTMLButtonElement
 
     if (element) {
       element.innerText = info.join("\n")
@@ -38,19 +38,20 @@ interface QueryParams {
   // We replace this behaviour and instead redirect to the route that handles OAuth.
   //
 
-  const clickTargetHasClassname = (classname: string, e: any): boolean => {
+  const clickTargetMatches = (selector: string, e: any): boolean => {
     const path = e.path || (e.composedPath && e.composedPath())
+    const target = document.querySelector(selector)
     for (const element of path) {
-      if (element.classList && element.classList.contains(classname)) {
+      if (element === target) {
         return true
       }
     }
     return false
   }
 
-  const interruptClick = (classname: string, callback: (e: MouseEvent) => void) => {
+  const interruptClick = (selector: string, callback: (e: MouseEvent) => void) => {
     const handleClick = (e: MouseEvent) => {
-      if (clickTargetHasClassname(classname, e)) {
+      if (clickTargetMatches(selector, e)) {
         callback(e)
       }
     }
@@ -58,13 +59,13 @@ interface QueryParams {
     document.addEventListener("click", handleClick, useCapture)
   }
 
-  interruptClick("header-button-login", e => {
+  interruptClick("#header--button-login", e => {
     e.preventDefault()
     e.stopPropagation()
     location.href = "/-/oauth/authorize"
   })
 
-  interruptClick("header-button-logout", e => {
+  interruptClick("#header--button-logout", e => {
     localStorage.removeItem("username")
     localStorage.removeItem("token")
     localStorage.removeItem("npm")
