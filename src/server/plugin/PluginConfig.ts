@@ -16,6 +16,7 @@ export interface PluginConfig extends Config, MiddlewaresConfig, AuthConfig {
   auth: {
     "github-oauth-ui": AuthConfig,
   },
+  [index: string]: any
 }
 
 export const pluginName = "github-oauth-ui"

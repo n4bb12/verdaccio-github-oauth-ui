@@ -1,6 +1,6 @@
+import chalk from "chalk"
 import { Application } from "express"
 import { get, intersection } from "lodash"
-
 import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 import { GithubClient } from "../github"
 import {
@@ -38,7 +38,9 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   constructor(
     private config: PluginConfig,
     private stuff: any,
-  ) { }
+  ) {
+    this.validateConfig(config)
+  }
 
   /**
    * Implements the middleware plugin interface.
@@ -105,6 +107,20 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
 
   private denied(name?: string): string {
     return `user "${name}" is not a member of "${this.config.org}"`
+  }
+
+  private validateConfig(config: PluginConfig) {
+    this.validateConfigProp(config, `auth.${pluginName}.org`)
+    this.validateConfigProp(config, `middlewares.${pluginName}.client-id`)
+    this.validateConfigProp(config, `middlewares.${pluginName}.client-secret`)
+  }
+
+  private validateConfigProp(config: PluginConfig, prop: string) {
+    if (!get(config, prop)) {
+      console.error(chalk.red(
+        `[${pluginName}] ERR: missing configuration "${prop}", please check your verdaccio config`))
+      process.exit(1)
+    }
   }
 
 }
