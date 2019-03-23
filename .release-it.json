@@ -1,4 +1,7 @@
 {
+  "git": {
+    "tagName": "${version}"
+  },
   "github": {
     "release": true,
     "tokenRef": "RELEASE_IT"
