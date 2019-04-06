@@ -1,19 +1,12 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "declaration": true,
-    "esModuleInterop": true,
     "lib": [
-      "es2015"
+      "es2016"
     ],
-    "module": "commonjs",
-    "moduleResolution": "node",
     "outDir": "../../dist/server",
     "rootDir": ".",
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "target": "es5",
-    "types": []
-  }
+    "target": "es2016"
+  },
+  "extends": "../../tsconfig.json"
 }
