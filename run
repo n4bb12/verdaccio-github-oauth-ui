@@ -5,8 +5,6 @@ set -e
 # Helpers
 ##################################################
 
-export PATH="$PATH:./node_modules/.bin"
-
 red="\e[31m"
 reset="\e[39m"
 
@@ -157,7 +155,7 @@ update-start-server() {
 #
 watch-client() {
   run watch-client \
-    nodemon --watch src/client --ext ts,css --exec bash run update-client
+    yarn nodemon --watch src/client --ext ts,css --exec bash run update-client
 }
 
 #
@@ -165,7 +163,7 @@ watch-client() {
 #
 watch-server() {
   run watch-server \
-    nodemon --watch src/server --ext ts --exec bash run update-server
+    yarn nodemon --watch src/server --ext ts --exec bash run update-server
 }
 
 #
@@ -181,8 +179,8 @@ watch() {
 # Run linters.
 #
 lint() {
-  run lint tslint -c tslint.json -p src/client/tsconfig.json --fix ${@} &
-  run lint tslint -c tslint.json -p src/server/tsconfig.json --fix ${@} &
+  run lint yarn tslint -c tslint.json -p src/client/tsconfig.json --fix ${@} &
+  run lint yarn tslint -c tslint.json -p src/server/tsconfig.json --fix ${@} &
   wait
 }
 
