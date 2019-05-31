@@ -194,6 +194,13 @@
     lockfile "1.0.4"
     lodash "4.17.11"
 
+"@verdaccio/file-locking@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@verdaccio/file-locking/-/file-locking-1.0.0.tgz#2f148612d9ce5c3c0dfd826151561b2aa887777d"
+  integrity sha512-FncTOEL01a8yd6xOcNX1TQgc3pRYxByAI2OaAJHjGu5xxcGoqTo6RrIDU3ILdW2ypjc9Ow/xJLarUkr6zDhyfQ==
+  dependencies:
+    lockfile "1.0.4"
+
 "@verdaccio/local-storage@1.1.7":
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/@verdaccio/local-storage/-/local-storage-1.1.7.tgz#63cc812ff0b5a3dd6e5918d239125888567330e9"
@@ -4206,6 +4213,17 @@ verdaccio-htpasswd@0.2.3:
     "@verdaccio/file-locking" "0.0.8"
     apache-md5 "1.1.2"
     bcryptjs "2.4.3"
+    unix-crypt-td-js "1.0.0"
+
+verdaccio-htpasswd@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/verdaccio-htpasswd/-/verdaccio-htpasswd-2.0.0.tgz#cd517dca1d3cee8a46e6ed59b9b9693acb6d9b1f"
+  integrity sha512-HI6AvstmpkyQp6mHHbCVrSu1rOFq/FND2V4gM7EhUtmOAoJjOmZENVGT87ZNf2mTQq8P4MRnfypBIjfutI3BAg==
+  dependencies:
+    "@verdaccio/file-locking" "1.0.0"
+    apache-md5 "1.1.2"
+    bcryptjs "2.4.3"
+    http-errors "1.7.2"
     unix-crypt-td-js "1.0.0"
 
 verdaccio@^3.11.6:

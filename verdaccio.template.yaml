@@ -24,6 +24,8 @@ middlewares:
 auth:
   github-oauth-ui:
     org: $GITHUB_OAUTH_ORG # required, people within this org will be able to auth
+  htpasswd:
+    file: ./htpasswd
 
 # a list of other known repositories we can talk to
 uplinks:
@@ -31,13 +33,13 @@ uplinks:
     url: https://registry.npmjs.org/
 
 packages:
-  '@*/*':
+  "@*/*":
     # scoped packages
     access: $authenticated
     publish: $authenticated
     proxy: npmjs
 
-  '**':
+  "**":
     # allow all users (including non-authenticated users) to read and
     # publish all packages
     #
@@ -54,7 +56,7 @@ packages:
 
 # log settings
 logs:
-  - {type: stdout, format: pretty, level: http}
+  - { type: stdout, format: pretty, level: http }
   #- {type: file, path: verdaccio.log, level: info}
 
 url_prefix: http://localhost:4873/
