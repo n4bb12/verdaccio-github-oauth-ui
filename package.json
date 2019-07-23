@@ -1,6 +1,6 @@
 {
   "name": "verdaccio-github-oauth-ui",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "keywords": [
     "github",
     "login",
@@ -32,7 +32,7 @@
     "chalk": "^2.4.2",
     "express": "^4.17.0",
     "got": "^9.6.0",
-    "lodash": "^4.17.5"
+    "lodash": "4.17.15"
   },
   "devDependencies": {
     "@n4bb12/config-tslint": "^1.4.1",
