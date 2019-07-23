@@ -37,20 +37,19 @@ interface QueryParams {
   // By default the login button opens a form that asks the user to submit credentials.
   // We replace this behaviour and instead redirect to the route that handles OAuth.
   //
-
-  const clickTargetHasClassname = (classname: string, e: any): boolean => {
+  const clickTargetHasID = (idValue: string, e: any): boolean => {
     const path = e.path || (e.composedPath && e.composedPath())
     for (const element of path) {
-      if (element.classList && element.classList.contains(classname)) {
+      if (element.id === idValue){
         return true
       }
     }
     return false
   }
 
-  const interruptClick = (classname: string, callback: (e: MouseEvent) => void) => {
+  const interruptClick = (idValue: string, callback: (e: MouseEvent) => void) => {
     const handleClick = (e: MouseEvent) => {
-      if (clickTargetHasClassname(classname, e)) {
+      if (clickTargetHasID(idValue, e)) {
         callback(e)
       }
     }
@@ -58,13 +57,13 @@ interface QueryParams {
     document.addEventListener("click", handleClick, useCapture)
   }
 
-  interruptClick("header-button-login", e => {
+  interruptClick("header--button-login", e => {
     e.preventDefault()
     e.stopPropagation()
     location.href = "/-/oauth/authorize"
   })
 
-  interruptClick("header-button-logout", e => {
+  interruptClick("header--button-logout", e => {
     localStorage.removeItem("username")
     localStorage.removeItem("token")
     localStorage.removeItem("npm")
