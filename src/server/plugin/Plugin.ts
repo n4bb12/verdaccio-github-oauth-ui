@@ -87,10 +87,12 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
       }
     }
 
-    if (details && details.orgNames.includes(this.config.org)) {
+    const org = process.env[this.config.org] || this.config.org
+
+    if (details && details.orgNames.includes(org)) {
       cb(null, details.orgNames)
     } else {
-      log(`Unauthenticated: user "${username}" is not a member of "${this.config.org}"`)
+      log(`Unauthenticated: user "${username}" is not a member of "${org}"`)
       cb(null, false)
     }
   }
