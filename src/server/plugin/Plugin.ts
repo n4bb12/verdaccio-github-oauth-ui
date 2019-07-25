@@ -35,7 +35,10 @@ function log(...args: any[]) {
  */
 export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin {
 
-  private readonly github = new GithubClient(this.config.user_agent)
+  private readonly github = new GithubClient(this.config.user_agent,
+    this.config["is-github-enterprise"],
+    this.config.org,
+  )
   private readonly cache: { [username: string]: UserDetails } = {}
   private readonly cliSupport = new SinopiaGithubOAuthCliSupport(this.config, this.stuff)
 
