@@ -42,9 +42,9 @@ export class GithubClient {
   }
 
   /**
-   * `get /user`
+   * `GET /user`
    *
-   * [get the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
+   * [GET the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
    */
   requestUser = async (accessToken: string) => {
     const url = `${this.constructGithubClientHostname(API_V3_PREFIX)}/user`
@@ -58,7 +58,7 @@ export class GithubClient {
   }
 
   /**
-   * `get /user/orgs`
+   * `GET /user/orgs`
    *
    * [List your organizations](https://developer.github.com/v3/orgs/#list-your-organizations)
    */
