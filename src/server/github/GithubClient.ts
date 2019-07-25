@@ -44,7 +44,7 @@ export class GithubClient {
   /**
    * `GET /user`
    *
-   * [GET the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
+   * [Get the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
    */
   requestUser = async (accessToken: string) => {
     const url = `${this.constructGithubClientHostname(API_V3_PREFIX)}/user`
