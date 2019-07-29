@@ -6,7 +6,11 @@ import { Auth, MiddlewarePlugin } from "../verdaccio-types"
 
 export class SinopiaGithubOAuthCliSupport implements MiddlewarePlugin {
 
-  private readonly github = new GithubClient(this.config.user_agent)
+  private readonly github = new GithubClient(
+    this.config.user_agent,
+    this.config["is-github-enterprise"],
+    this.config.org,
+  )
 
   constructor(
     private config: PluginConfig,

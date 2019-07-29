@@ -1,6 +1,6 @@
+import chalk from "chalk"
 import { Application } from "express"
 import { get, intersection } from "lodash"
-
 import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 import { GithubClient } from "../github"
 import {
@@ -26,19 +26,28 @@ interface UserDetails {
 
 const cacheTTLms = 1000 * 30 // 30s
 
+function log(...args: any[]) {
+  console.log("[github-oauth-ui]", ...args)
+}
+
 /**
  * Implements the verdaccio plugin interfaces.
  */
 export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin {
 
-  private readonly github = new GithubClient(this.config.user_agent)
+  private readonly github = new GithubClient(this.config.user_agent,
+    this.config["is-github-enterprise"],
+    this.config.org,
+  )
   private readonly cache: { [username: string]: UserDetails } = {}
   private readonly cliSupport = new SinopiaGithubOAuthCliSupport(this.config, this.stuff)
 
   constructor(
     private config: PluginConfig,
     private stuff: any,
-  ) { }
+  ) {
+    this.validateConfig(config)
+  }
 
   /**
    * Implements the middleware plugin interface.
@@ -85,14 +94,15 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
           orgNames,
         }
       } catch (error) {
-        cb(error, false)
+        log(error.message)
       }
     }
 
-    if (details.orgNames.includes(this.config.org)) {
+    if (details && details.orgNames.includes(this.config.org)) {
       cb(null, details.orgNames)
     } else {
-      cb(this.denied(username), false)
+      log(`Unauthenticated: user "${username}" is not a member of "${this.config.org}"`)
+      cb(null, false)
     }
   }
 
@@ -107,7 +117,8 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
     if (grantedAccess.length === requiredAccess.length) {
       cb(null, user.groups)
     } else {
-      cb(this.denied(user.name), false)
+      log(`Access denied: user "${user.name}" is not a member of "${this.config.org}"`)
+      cb(null, false)
     }
   }
 
@@ -117,6 +128,20 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
 
   private denied(name: RemoteUser["name"]): string {
     return `user "${name}" is not a member of "${this.config.org}"`
+  }
+
+  private validateConfig(config: PluginConfig) {
+    this.validateConfigProp(config, `auth.${pluginName}.org`)
+    this.validateConfigProp(config, `middlewares.${pluginName}.client-id`)
+    this.validateConfigProp(config, `middlewares.${pluginName}.client-secret`)
+  }
+
+  private validateConfigProp(config: PluginConfig, prop: string) {
+    if (!get(config, prop)) {
+      console.error(chalk.red(
+        `[${pluginName}] ERR: missing configuration "${prop}", please check your verdaccio config`))
+      process.exit(1)
+    }
   }
 
 }

@@ -1,5 +1,6 @@
 *.log
 dist
+htpasswd
 node_modules
 storage
 test
