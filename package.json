@@ -45,11 +45,11 @@
     "tslint": "^5.14.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.3.4000",
-    "verdaccio": "^3.11.6",
+    "verdaccio": "4.1.0",
     "verdaccio-htpasswd": "^2.0.0"
   },
   "peerDependencies": {
-    "verdaccio": "^3.11.6"
+    "verdaccio": "4.1.0"
   },
   "engines": {
     "node": ">= 6.5.0"
