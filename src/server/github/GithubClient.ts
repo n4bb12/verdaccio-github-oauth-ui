@@ -1,4 +1,4 @@
-import got, { GotJSONOptions } from "got"
+import * as got from "got"
 import { merge as deepAssign } from "lodash"
 
 import { OAuth } from "./OAuth"
@@ -30,7 +30,7 @@ export class GithubClient {
    */
   requestAccessToken = async (code: string, clientId: string, clientSecret: string) => {
     const url = `${this.constructGithubClientHostname()}/login/oauth/access_token`
-    const options: GotJSONOptions = {
+    const options: got.GotJSONOptions = {
       body: {
         client_id: clientId,
         client_secret: clientSecret,
@@ -48,7 +48,7 @@ export class GithubClient {
    */
   requestUser = async (accessToken: string) => {
     const url = `${this.constructGithubClientHostname(API_V3_PREFIX)}/user`
-    const options: GotJSONOptions = {
+    const options: got.GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
@@ -64,7 +64,7 @@ export class GithubClient {
    */
   requestUserOrgs = async (accessToken: string) => {
     const url = `${this.constructGithubClientHostname(API_V3_PREFIX)}/user/orgs`
-    const options: GotJSONOptions = {
+    const options: got.GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
@@ -77,7 +77,7 @@ export class GithubClient {
     return constructGithubHostname(this.isGithubEnterprise, this.org, routePrefix)
   }
 
-  private async request<T>(url: string, options: GotJSONOptions): Promise<T> {
+  private async request<T>(url: string, options: got.GotJSONOptions): Promise<T> {
     options = deepAssign({}, this.defaultOptions, options)
     const response = await got(url, options)
     return response.body
