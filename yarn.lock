@@ -244,10 +244,10 @@
   resolved "https://registry.yarnpkg.com/@verdaccio/streams/-/streams-2.0.0.tgz#27f51d0cb19d5e49248860942092646e9a357967"
   integrity sha512-QW1LsYir3wNnqhSznbJlt0iqkcgve0LpXI8RkoTTBPrq3M6ei3Ys4iw+JQKFve3gmYw9O+w8lBiOLc1qvvsoVQ==
 
-"@verdaccio/types@^6.1.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@verdaccio/types/-/types-6.2.0.tgz#0684fc8fc9178133ca7863feae6bd4e3e3010fca"
-  integrity sha512-ilmPVj7rSlZW+mfIVwLzKr8ERQrFK62bfdG3jYuJCbF5OJAGA07OSSjqltjFhejbkM7KKERX3YkRgX93L2PAGg==
+"@verdaccio/types@7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@verdaccio/types/-/types-7.0.0.tgz#2b0fb871c10b3b5beafefbb4973306e6217b5213"
+  integrity sha512-rSRQBeEeHc0pFcpwyVYfQLRQDvZykgXtVzx195W4JuHlZABhkGDqs42hPixMmPxXk1S7tmkIrX2pjRSDnAVzAw==
 
 "@verdaccio/ui-theme@0.1.11":
   version "0.1.11"
