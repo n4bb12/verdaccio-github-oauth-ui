@@ -112,7 +112,10 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
       requiredAccess.push(this.config.auth[pluginName].org)
     }
 
+    console.log('user ***JER', user)
+    console.log('requiredAccess ***JER', requiredAccess)
     const grantedAccess = intersection(user.groups, requiredAccess)
+    console.log('grantedAccess ***JER', grantedAccess)
 
     if (grantedAccess.length === requiredAccess.length) {
       cb(null, user.groups)
