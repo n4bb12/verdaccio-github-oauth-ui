@@ -4,15 +4,10 @@ import { get, intersection } from "lodash"
 import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 import { GithubClient } from "../github"
 import {
-  Auth,
-  AuthCallback,
-  AuthPlugin,
-  MiddlewarePlugin,
-  PackageAccess,
-  RemoteUser,
-  Storage,
+  AuthWebUI,
 } from "../verdaccio-types"
 
+import { Callback as AuthCallback, IPluginAuth, IStorageManager, PackageAccess, RemoteUser } from "@verdaccio/types"
 import { Authorization } from "./Authorization"
 import { Callback } from "./Callback"
 import { InjectHtml } from "./InjectHtml"
@@ -33,7 +28,7 @@ function log(...args: any[]) {
 /**
  * Implements the verdaccio plugin interfaces.
  */
-export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin {
+export default class GithubOauthUiPlugin implements IPluginAuth<any> {
 
   private readonly github = new GithubClient(this.config.user_agent)
   private readonly cache: { [username: string]: UserDetails } = {}
@@ -49,7 +44,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   /**
    * Implements the middleware plugin interface.
    */
-  register_middlewares(app: Application, auth: Auth, storage: Storage) {
+  register_middlewares(app: Application, auth: AuthWebUI, storage: IStorageManager<any>) {
     this.cliSupport.register_middlewares(app, auth, storage)
 
     if (get(this.config, "web.enable", true)) {
@@ -89,6 +84,8 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
 
     if (details && details.orgNames.includes(this.config.org)) {
       cb(null, details.orgNames)
+      console.log("authenticate *** username: ", username)
+      console.log("details ****", details)
     } else {
       log(`Unauthenticated: user "${username}" is not a member of "${this.config.org}"`)
       cb(null, false)
@@ -102,6 +99,11 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
     }
 
     const grantedAccess = intersection(user.groups, requiredAccess)
+
+    console.log("user ***", user)
+    console.log("pkg ***", pkg)
+    console.log("grantedAccess *** ", grantedAccess)
+    console.log("requiredAccess *** ", requiredAccess)
 
     if (grantedAccess.length === requiredAccess.length) {
       cb(null, user.groups)

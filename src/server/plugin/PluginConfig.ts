@@ -1,4 +1,4 @@
-import { Config } from "../verdaccio-types"
+import { Config } from "@verdaccio/types"
 
 export interface MiddlewaresConfig {
   "client-id": string,

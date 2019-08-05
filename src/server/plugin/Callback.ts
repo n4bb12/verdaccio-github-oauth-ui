@@ -1,8 +1,9 @@
 import { Handler, NextFunction, Request, Response } from "express"
 import * as querystring from "querystring"
 
+import { RemoteUser } from "@verdaccio/types"
 import { GithubClient } from "../github"
-import { Auth, User } from "../verdaccio-types"
+import { AuthWebUI } from "../verdaccio-types"
 
 import { getConfig, PluginConfig } from "./PluginConfig"
 
@@ -14,7 +15,7 @@ export class Callback {
 
   constructor(
     private readonly config: PluginConfig,
-    private readonly auth: Auth,
+    private readonly auth: AuthWebUI,
   ) { }
 
   /**
@@ -41,14 +42,21 @@ export class Callback {
       const githubOrgs = await this.github.requestUserOrgs(githubOauth.access_token)
       const githubOrgNames = githubOrgs.map(org => org.login)
 
+      console.log("githubOauth ***", githubOauth)
+      console.log("githubUser ***", githubUser)
+      console.log("githubOrgs ***", githubOrgs)
+      console.log("githubOrgNames ***", githubOrgNames)
+
       const npmAuth = githubUser.login + ":" + githubOauth.access_token
       const npmAuthEncrypted = this.auth.aesEncrypt(new Buffer(npmAuth)).toString("base64")
 
-      const frontendUser: User = {
+      const frontendUser: RemoteUser = {
         name: githubUser.login,
+        groups: githubOrgNames,
         real_groups: githubOrgNames,
       }
-      const frontendToken = this.auth.issueUIjwt(frontendUser)
+      console.log("frontendUser ***", frontendUser)
+      const frontendToken = this.auth.jwtEncrypt(frontendUser)
       const frontendUrl = "/?" + querystring.stringify({
         jwtToken: frontendToken,
         npmToken: npmAuthEncrypted,

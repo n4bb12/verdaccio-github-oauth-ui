@@ -24,7 +24,7 @@ export class GithubClient {
    * [Web application flow](https://bit.ly/2mNSppX).
    */
   requestAccessToken = async (code: string, clientId: string, clientSecret: string) => {
-    const url = "https://github.com/login/oauth/access_token"
+    const url = "https://git.blendlabs.com/login/oauth/access_token"
     const options: GotJSONOptions = {
       body: {
         client_id: clientId,
@@ -42,7 +42,7 @@ export class GithubClient {
    * [Get the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
    */
   requestUser = async (accessToken: string) => {
-    const url = "https://api.github.com/user"
+    const url = "https://git.blendlabs.com/api/v3/user"
     const options: GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
@@ -58,7 +58,7 @@ export class GithubClient {
    * [List your organizations](https://developer.github.com/v3/orgs/#list-your-organizations)
    */
   requestUserOrgs = async (accessToken: string) => {
-    const url = "https://api.github.com/user/orgs"
+    const url = "https://git.blendlabs.com/api/v3/user/orgs"
     const options: GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
