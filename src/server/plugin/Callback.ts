@@ -11,7 +11,11 @@ export class Callback {
 
   static readonly path = "/-/oauth/callback"
 
-  private readonly github = new GithubClient(this.config.user_agent)
+  private readonly github = new GithubClient(
+    this.config.user_agent,
+    this.config["is-github-enterprise"],
+    this.config.org,
+  )
 
   constructor(
     private readonly config: PluginConfig,

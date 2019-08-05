@@ -2,6 +2,7 @@ import { Handler, Request, Response } from "express"
 import { get } from "lodash"
 import * as querystring from "querystring"
 
+import { constructGithubHostname } from "../github/GithubClient"
 import { Callback } from "./Callback"
 import { PluginConfig } from "./PluginConfig"
 
@@ -23,11 +24,12 @@ export class Authorization {
    */
   middleware: Handler = (req: Request, res: Response, next) => {
     const id = (req.params.id || "")
-    const url = "https://git.blendlabs.com/login/oauth/authorize?" + querystring.stringify({
-      client_id: process.env[this.config["client-id"]] || this.config["client-id"],
-      redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ""),
-      scope: "read:org",
-    })
+    const url = `${constructGithubHostname(this.config.isGithubEnterprise, this.config.org)}/login/oauth/authorize?` +
+      querystring.stringify({
+        client_id: process.env[this.config["client-id"]] || this.config["client-id"],
+        redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ""),
+        scope: "read:org",
+      })
     res.redirect(url)
   }
 
