@@ -7,7 +7,7 @@ import {
   AuthWebUI,
 } from "../verdaccio-types"
 
-import { Callback as AuthCallback, IPluginAuth, IStorageManager, PackageAccess, RemoteUser } from "@verdaccio/types"
+import { Callback as AuthCallback, IPluginMiddleware, IStorageManager, PackageAccess, RemoteUser } from "@verdaccio/types"
 import { Authorization } from "./Authorization"
 import { Callback } from "./Callback"
 import { InjectHtml } from "./InjectHtml"
@@ -28,7 +28,7 @@ function log(...args: any[]) {
 /**
  * Implements the verdaccio plugin interfaces.
  */
-export default class GithubOauthUiPlugin implements IPluginAuth<any> {
+export default class GithubOauthUiPlugin implements IPluginMiddleware<any> {
 
   private readonly github = new GithubClient(this.config.user_agent,
     this.config["is-github-enterprise"],
@@ -96,6 +96,7 @@ export default class GithubOauthUiPlugin implements IPluginAuth<any> {
   }
 
   allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): void {
+    console.log("ALLOW ACCESS BEING USED")
     const requiredAccess = [...pkg.access || []]
     if (requiredAccess.includes("$authenticated")) {
       requiredAccess.push(this.config.auth[pluginName].org)

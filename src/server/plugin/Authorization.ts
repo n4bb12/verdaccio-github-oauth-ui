@@ -24,12 +24,16 @@ export class Authorization {
    */
   middleware: Handler = (req: Request, res: Response, next) => {
     const id = (req.params.id || "")
-    const url = `${constructGithubHostname(this.config.isGithubEnterprise, this.config.org)}/login/oauth/authorize?` +
-      querystring.stringify({
-        client_id: process.env[this.config["client-id"]] || this.config["client-id"],
-        redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ""),
-        scope: "read:org",
-      })
+    console.log('MIDDLEWARE AUTH.TS', req.params)
+    const qs = {
+      client_id: process.env[this.config["client-id"]] || this.config["client-id"],
+      // redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ""),
+      scope: "read:org",
+    }
+    console.log('AUTHORIZATION QUERY STRING ', qs);
+    const url = `https://github.com/login/oauth/authorize?` +
+      querystring.stringify(qs)
+    console.log('URL ', url)
     res.redirect(url)
   }
 

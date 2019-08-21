@@ -5,11 +5,10 @@ import { OAuth } from "./OAuth"
 import { Organization } from "./Organization"
 import { User } from "./User"
 
-export function constructGithubHostname(isGithubEnterprise: boolean, org: string, routePrefix = ""): string {
-  return `https://${isGithubEnterprise ? "git." + org : "github"}.com${isGithubEnterprise ? routePrefix : ""}`
+export function constructGithubHostname(isGithubEnterprise: boolean, org: string): string {
+  return `https://${isGithubEnterprise ? "git." + org : "api.github"}.com`
 }
 
-const API_V3_PREFIX = "/api/v3"
 export class GithubClient {
   private readonly defaultOptions = {
     headers: {
@@ -22,14 +21,17 @@ export class GithubClient {
     private readonly userAgent: string,
     private readonly isGithubEnterprise: boolean,
     private readonly org: string,
-  ) { }
+  ) {
+    console.log("JEREMY CONSTRUSCTOR")
+  }
   /**
    * `POST /login/oauth/access_token`
    *
    * [Web application flow](https://bit.ly/2mNSppX).
    */
   requestAccessToken = async (code: string, clientId: string, clientSecret: string) => {
-    const url = `${this.constructGithubClientHostname()}/login/oauth/access_token`
+    console.log("JEREMEY requestAccessToken ")
+    const url = `https://github.com/login/oauth/access_token`
     const options: GotJSONOptions = {
       body: {
         client_id: clientId,
@@ -38,7 +40,20 @@ export class GithubClient {
       },
       json: true,
     }
+    console.log("OPTIONS REQUEST ACCESS TOKEN", options)
+    // const { body } = await got.post(url, {
+    //   body: JSON.stringify({
+    //     client_id: clientId,
+    //     client_secret: clientSecret,
+    //     code,
+    //   }),
+    // });
+    // console.log("REQUEST ACCESS TOKEN body", body);
+
+    // const res = await got.post(url, options)
+    // console.log("REQUEST ACCESS TOKEN res", res);
     return this.request<OAuth>(url, options)
+    // return JSON.parse(body) as OAuth
   }
 
   /**
@@ -47,13 +62,14 @@ export class GithubClient {
    * [Get the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
    */
   requestUser = async (accessToken: string) => {
-    const url = `${this.constructGithubClientHostname(API_V3_PREFIX)}/user`
+    const url = this.constructGithubClientHostname() + `/user`
     const options: GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
       json: true,
     }
+    console.log('requestUser URL', url)
     return this.request<User>(url, options)
   }
 
@@ -63,7 +79,7 @@ export class GithubClient {
    * [List your organizations](https://developer.github.com/v3/orgs/#list-your-organizations)
    */
   requestUserOrgs = async (accessToken: string) => {
-    const url = `${this.constructGithubClientHostname(API_V3_PREFIX)}/user/orgs`
+    const url = this.constructGithubClientHostname() + `/user/orgs`
     const options: GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
@@ -73,8 +89,8 @@ export class GithubClient {
     return this.request<Organization[]>(url, options)
   }
 
-  private constructGithubClientHostname(routePrefix = "") {
-    return constructGithubHostname(this.isGithubEnterprise, this.org, routePrefix)
+  private constructGithubClientHostname() {
+    return constructGithubHostname(this.isGithubEnterprise, this.org)
   }
 
   private async request<T>(url: string, options: GotJSONOptions): Promise<T> {

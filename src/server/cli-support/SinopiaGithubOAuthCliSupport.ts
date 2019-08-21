@@ -26,6 +26,7 @@ export class SinopiaGithubOAuthCliSupport implements IPluginMiddleware<any> {
     })
 
     app.use("/-/oauth/callback/cli", async (req: Request, res: Response, next: NextFunction) => {
+      console.log('CLI BEING USED')
       const code = req.query.code
       const clientId = getConfig(this.config, "client-id")
       const clientSecret = getConfig(this.config, "client-secret")

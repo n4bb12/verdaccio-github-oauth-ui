@@ -25,7 +25,7 @@ export class Callback {
   /**
    * After a successful OAuth authentication, GitHub redirects back to us.
    * We use the OAuth code to get an OAuth access token and the username associated
-   * with the GitHub account.
+   * with the GitHub account./-/oauth/authorize
    *
    * The token and username are encryped and base64 encoded and configured as npm
    * credentials for this registry. There is no need to later decode and decrypt the token.
@@ -40,10 +40,15 @@ export class Callback {
       const code = req.query.code
       const clientId = getConfig(this.config, "client-id")
       const clientSecret = getConfig(this.config, "client-secret")
-
+      console.log('CALLBACK START, code', code);
       const githubOauth = await this.github.requestAccessToken(code, clientId, clientSecret)
+      console.log('CALLBACK MIDDLEWARE githubOauth', githubOauth);
       const githubUser = await this.github.requestUser(githubOauth.access_token)
+      console.log('CALLBACK MIDDLEWARE githubUser', githubUser);
+
       const githubOrgs = await this.github.requestUserOrgs(githubOauth.access_token)
+      console.log('CALLBACK MIDDLEWARE githubOrgs', githubOrgs);
+
       const githubOrgNames = githubOrgs.map(org => org.login)
 
       console.log("githubOauth ***", githubOauth)
@@ -57,15 +62,17 @@ export class Callback {
       const frontendUser: RemoteUser = {
         name: githubUser.login,
         groups: githubOrgNames,
-        real_groups: githubOrgNames,
+        real_groups: ['$authenticated'],
       }
       console.log("frontendUser ***", frontendUser)
-      const frontendToken = this.auth.jwtEncrypt(frontendUser)
+      const frontendToken = await this.auth.jwtEncrypt(frontendUser)
+      console.log('frontendToken *** ', frontendToken)
       const frontendUrl = "/?" + querystring.stringify({
         jwtToken: frontendToken,
         npmToken: npmAuthEncrypted,
         username: githubUser.login,
       })
+      console.log('frontendUrl ***', frontendUrl)
 
       res.redirect(frontendUrl)
     } catch (error) {
