@@ -73,7 +73,7 @@ export class Callback {
         npmToken: npmAuthEncrypted,
         username: githubUser.login,
       })
-      console.log('frontendUrl ***', frontendUrl)
+      console.log('frontendUrl ***', frontendUrl)      
       // this.auth.authenticate(githubUser.login, githubOauth.access_token, () => res.redirect(frontendUrl))
       res.redirect(frontendUrl)
       // console.log('REDIRECT WORKED', redirectRes)

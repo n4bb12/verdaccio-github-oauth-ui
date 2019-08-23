@@ -102,27 +102,27 @@ export default class GithubOauthUiPlugin implements IPluginMiddleware<any> {
     }
   }
 
-  // async allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): Promise<void> {
-  //   console.log("ALLOW ACCESS BEING USED")
-  //   const requiredAccess = [...pkg.access || []]
-  //   if (requiredAccess.includes("$authenticated")) {
-  //     requiredAccess.push(this.config.auth[pluginName].org)
-  //   }
+  async allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): Promise<void> {
+    console.log("ALLOW ACCESS BEING USED")
+    const requiredAccess = [...pkg.access || []]
+    if (requiredAccess.includes("$authenticated")) {
+      requiredAccess.push(this.config.auth[pluginName].org)
+    }
 
-  //   const grantedAccess = intersection(user.groups, requiredAccess)
+    const grantedAccess = intersection(user.groups, requiredAccess)
 
-  //   console.log("user ***", user)
-  //   console.log("pkg ***", pkg)
-  //   console.log("grantedAccess *** ", grantedAccess)
-  //   console.log("requiredAccess *** ", requiredAccess)
+    console.log("user ***", user)
+    console.log("pkg ***", pkg)
+    console.log("grantedAccess *** ", grantedAccess)
+    console.log("requiredAccess *** ", requiredAccess)
 
-  //   if (grantedAccess.length === requiredAccess.length) {
-  //     cb(null, user.groups)
-  //   } else {
-  //     log(`Access denied: user "${user.name}" is not a member of "${this.config.org}"`)
-  //     cb(null, false)
-  //   }
-  // }
+    if (grantedAccess.length === requiredAccess.length) {
+      cb(null, user.groups)
+    } else {
+      log(`Access denied: user "${user.name}" is not a member of "${this.config.org}"`)
+      cb(null, false)
+    }
+  }
 
   private validateConfig(config: PluginConfig) {
     this.validateConfigProp(config, `auth.${pluginName}.org`)

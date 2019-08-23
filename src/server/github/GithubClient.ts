@@ -20,7 +20,6 @@ export class GithubClient {
     private readonly isGithubEnterprise: boolean,
     private readonly org: string,
   ) {
-    console.log("JEREMY CONSTRUSCTOR")
   }
 
   constructGithubHostname(apiPrefix = false): string {
@@ -44,19 +43,7 @@ export class GithubClient {
       json: true,
     }
     console.log("OPTIONS REQUEST ACCESS TOKEN", options)
-    // const { body } = await got.post(url, {
-    //   body: JSON.stringify({
-    //     client_id: clientId,
-    //     client_secret: clientSecret,
-    //     code,
-    //   }),
-    // });
-    // console.log("REQUEST ACCESS TOKEN body", body);
-
-    // const res = await got.post(url, options)
-    // console.log("REQUEST ACCESS TOKEN res", res);
     return this.request<OAuth>(url, options)
-    // return JSON.parse(body) as OAuth
   }
 
   /**
