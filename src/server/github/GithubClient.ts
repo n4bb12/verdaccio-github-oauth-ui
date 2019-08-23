@@ -5,11 +5,9 @@ import { OAuth } from "./OAuth"
 import { Organization } from "./Organization"
 import { User } from "./User"
 
-export function constructGithubHostname(isGithubEnterprise: boolean, org: string): string {
-  return `https://${isGithubEnterprise ? "git." + org : "api.github"}.com`
-}
 
 export class GithubClient {
+
   private readonly defaultOptions = {
     headers: {
       "User-Agent": this.userAgent,
@@ -24,6 +22,11 @@ export class GithubClient {
   ) {
     console.log("JEREMY CONSTRUSCTOR")
   }
+
+  constructGithubHostname(apiPrefix = false): string {
+    console.log('IS GITHUB ENTER', this.isGithubEnterprise)
+    return `https://${this.isGithubEnterprise ? "git." + this.org : "api.github"}.com` + (apiPrefix ? '/api/v3' : '')
+  }
   /**
    * `POST /login/oauth/access_token`
    *
@@ -31,7 +34,7 @@ export class GithubClient {
    */
   requestAccessToken = async (code: string, clientId: string, clientSecret: string) => {
     console.log("JEREMEY requestAccessToken ")
-    const url = `https://github.com/login/oauth/access_token`
+    const url = "https://git.blendlabs.com" + `/login/oauth/access_token`
     const options: GotJSONOptions = {
       body: {
         client_id: clientId,
@@ -62,7 +65,7 @@ export class GithubClient {
    * [Get the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
    */
   requestUser = async (accessToken: string) => {
-    const url = this.constructGithubClientHostname() + `/user`
+    const url = 'https://git.blendlabs.com/api/v3' + `/user`
     const options: GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
@@ -79,7 +82,7 @@ export class GithubClient {
    * [List your organizations](https://developer.github.com/v3/orgs/#list-your-organizations)
    */
   requestUserOrgs = async (accessToken: string) => {
-    const url = this.constructGithubClientHostname() + `/user/orgs`
+    const url = 'https://git.blendlabs.com/api/v3' + `/user/orgs`
     const options: GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
@@ -87,10 +90,6 @@ export class GithubClient {
       json: true,
     }
     return this.request<Organization[]>(url, options)
-  }
-
-  private constructGithubClientHostname() {
-    return constructGithubHostname(this.isGithubEnterprise, this.org)
   }
 
   private async request<T>(url: string, options: GotJSONOptions): Promise<T> {

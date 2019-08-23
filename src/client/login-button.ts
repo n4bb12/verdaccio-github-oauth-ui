@@ -80,6 +80,7 @@ interface QueryParams {
    */
 
   const saveCredentials = (query: QueryParams) => {
+    console.log('QUERY PARAMS', query)
     localStorage.setItem("username", query.username)
     localStorage.setItem("token", query.jwtToken)
     localStorage.setItem("npm", query.npmToken)

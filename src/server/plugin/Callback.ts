@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import { Handler, NextFunction, Request, Response } from "express"
 import * as querystring from "querystring"
 
@@ -13,7 +14,7 @@ export class Callback {
 
   private readonly github = new GithubClient(
     this.config.user_agent,
-    this.config["is-github-enterprise"],
+    _.get(this.config, ['auth', "github-oauth-ui", "isGithubEnterprise"]),
     this.config.org,
   )
 
@@ -62,7 +63,7 @@ export class Callback {
       const frontendUser: RemoteUser = {
         name: githubUser.login,
         groups: githubOrgNames,
-        real_groups: ['$authenticated'],
+        real_groups: githubOrgNames,
       }
       console.log("frontendUser ***", frontendUser)
       const frontendToken = await this.auth.jwtEncrypt(frontendUser)
@@ -73,9 +74,12 @@ export class Callback {
         username: githubUser.login,
       })
       console.log('frontendUrl ***', frontendUrl)
-
+      // this.auth.authenticate(githubUser.login, githubOauth.access_token, () => res.redirect(frontendUrl))
       res.redirect(frontendUrl)
+      // console.log('REDIRECT WORKED', redirectRes)
     } catch (error) {
+      console.log('REDIRECT NOT WORKED')
+
       next(error)
     }
   }
