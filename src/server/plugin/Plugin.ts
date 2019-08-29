@@ -1,4 +1,5 @@
 import chalk from "chalk"
+import globalTunnel from "global-tunnel-ng"
 import { Application } from "express"
 import { get, intersection } from "lodash"
 import { SinopiaGithubOAuthCliSupport } from "../cli-support"
@@ -44,6 +45,8 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
     private stuff: any,
   ) {
     this.validateConfig(config)
+    globalTunnel.initialize()
+    console.log("[github-oauth-ui] Proxy config:", globalTunnel.proxyUrl)
   }
 
   /**

@@ -28,9 +28,11 @@
     "test": "bash ./run test"
   },
   "dependencies": {
+    "@types/global-tunnel-ng": "^2.1.0",
     "@verdaccio/types": "^6.1.0",
     "chalk": "^2.4.2",
     "express": "^4.17.0",
+    "global-tunnel-ng": "^2.7.1",
     "got": "^9.6.0",
     "lodash": "4.17.15"
   },
