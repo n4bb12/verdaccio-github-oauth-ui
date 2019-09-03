@@ -16,7 +16,7 @@ import {
 import { Authorization } from "./Authorization"
 import { Callback } from "./Callback"
 import { InjectHtml } from "./InjectHtml"
-import { PluginConfig, pluginName } from "./PluginConfig"
+import { getConfig, PluginConfig, pluginName } from "./PluginConfig"
 
 interface UserDetails {
   authToken: string
@@ -35,7 +35,9 @@ function log(...args: any[]) {
  */
 export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin {
 
-  private readonly github = new GithubClient(this.config.user_agent)
+  private readonly github = new GithubClient(this.config.user_agent,
+    getConfig(this.config, "github-enterprise-hostname"),
+  )
   private readonly cache: { [username: string]: UserDetails } = {}
   private readonly cliSupport = new SinopiaGithubOAuthCliSupport(this.config, this.stuff)
 
