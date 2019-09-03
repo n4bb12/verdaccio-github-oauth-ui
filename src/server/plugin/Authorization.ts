@@ -2,12 +2,18 @@ import { Handler, Request, Response } from "express"
 import { get } from "lodash"
 import * as querystring from "querystring"
 
+import { GithubClient } from "../github"
 import { Callback } from "./Callback"
-import { PluginConfig } from "./PluginConfig"
+import { getConfig, PluginConfig } from "./PluginConfig"
 
 export class Authorization {
 
   static readonly path = "/-/oauth/authorize/:id?"
+
+  private readonly github = new GithubClient(
+    this.config.user_agent,
+    getConfig(this.config, "github-enterprise-hostname"),
+  )
 
   constructor(
     private readonly config: PluginConfig,
@@ -23,11 +29,13 @@ export class Authorization {
    */
   middleware: Handler = (req: Request, res: Response, next) => {
     const id = (req.params.id || "")
-    const url = "https://github.com/login/oauth/authorize?" + querystring.stringify({
+    const qs = {
       client_id: process.env[this.config["client-id"]] || this.config["client-id"],
       redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ""),
       scope: "read:org",
-    })
+    }
+    const url = this.github.constructGithubUIHostname() + `/login/oauth/authorize?` +
+      querystring.stringify(qs)
     res.redirect(url)
   }
 

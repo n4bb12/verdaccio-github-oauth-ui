@@ -1,5 +1,5 @@
 import got, { GotJSONOptions } from "got"
-import { merge as deepAssign } from "lodash"
+import { merge as deepAssign, trimStart } from "lodash"
 
 import { OAuth } from "./OAuth"
 import { Organization } from "./Organization"
@@ -16,15 +16,30 @@ export class GithubClient {
 
   constructor(
     private readonly userAgent: string,
-  ) { }
+    private readonly githubEnterpriseHostname?: string,
+  ) {
+    this.githubEnterpriseHostname = trimStart(githubEnterpriseHostname, "https://")
+  }
 
+  constructGithubAPIHostname(): string {
+    return (
+      "https://"
+      + (this.githubEnterpriseHostname ? this.githubEnterpriseHostname : "api.github.com")
+      + (this.githubEnterpriseHostname ? "/api/v3" : "")
+    )
+  }
+
+  constructGithubUIHostname(): string {
+    return "https://"
+    + (this.githubEnterpriseHostname ? this.githubEnterpriseHostname : "github.com")
+  }
   /**
    * `POST /login/oauth/access_token`
    *
    * [Web application flow](https://bit.ly/2mNSppX).
    */
   requestAccessToken = async (code: string, clientId: string, clientSecret: string) => {
-    const url = "https://github.com/login/oauth/access_token"
+    const url = this.constructGithubUIHostname() + "/login/oauth/access_token"
     const options: GotJSONOptions = {
       body: {
         client_id: clientId,
@@ -42,7 +57,7 @@ export class GithubClient {
    * [Get the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
    */
   requestUser = async (accessToken: string) => {
-    const url = "https://api.github.com/user"
+    const url = this.constructGithubAPIHostname() + "/user"
     const options: GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
@@ -58,7 +73,7 @@ export class GithubClient {
    * [List your organizations](https://developer.github.com/v3/orgs/#list-your-organizations)
    */
   requestUserOrgs = async (accessToken: string) => {
-    const url = "https://api.github.com/user/orgs"
+    const url = this.constructGithubAPIHostname() + "/user/orgs"
     const options: GotJSONOptions = {
       headers: {
         Authorization: "Bearer " + accessToken,
