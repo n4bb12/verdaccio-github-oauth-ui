@@ -54,7 +54,7 @@
     "verdaccio": "^3.11.6"
   },
   "engines": {
-    "node": ">= 6.5.0"
+    "node": ">= 6.5.0 <11.0.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
