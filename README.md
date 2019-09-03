@@ -41,6 +41,11 @@ In case you need CLI support for automation purposes, the plugin is also compati
 $ npm install verdaccio-github-oauth-ui
 ```
 
+#### Compatibility
+
+This plugin is currently only compatible with Verdaccio 3.x.
+This plugin supports Node versions 6.5.x - 10.x.x
+
 ## Configuration
 
 #### Verdaccio Config
@@ -84,7 +89,7 @@ After successful login and authorization, you're redirected back to the verdacci
 #### Command Line
 
 To set up authentication with the registry in your npm CLI, you'll need to run the commands shown in the header:
-  
+
 ![](screenshots/header.png)
 
 To verify that the authentication token is set up correctly, run the following command:
