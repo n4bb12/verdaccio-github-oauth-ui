@@ -25,7 +25,7 @@
     "build": "bash run build-client && bash run build-server",
     "lint": "bash ./run lint",
     "prepack": "yarn build",
-    "test": "bash ./run test"
+    "test": "bash ./run update && bash ./run start"
   },
   "dependencies": {
     "@types/global-tunnel-ng": "^2.1.0",
@@ -54,7 +54,7 @@
     "verdaccio": "^3.11.6"
   },
   "engines": {
-    "node": ">= 6.5.0 <11.0.0"
+    "node": ">=6.5.0 <11.0.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"

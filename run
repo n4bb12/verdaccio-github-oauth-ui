@@ -44,6 +44,7 @@ build-config() {
 
   env-subst $config GITHUB_OAUTH_CLIENT_ID
   env-subst $config GITHUB_OAUTH_CLIENT_SECRET
+  env-subst $config GITHUB_OAUTH_GITHUB_ENTERPRISE_HOSTNAME
   env-subst $config GITHUB_OAUTH_ORG
 }
 

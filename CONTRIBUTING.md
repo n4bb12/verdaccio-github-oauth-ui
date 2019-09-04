@@ -1,6 +1,5 @@
 ## Contributing
 
-A bash script provides a series of development tasks:
-```
-./run <task>
-```
+PRs are welcome! ⚗
+
+Please see `package.scripts` for some handy development tasks.
