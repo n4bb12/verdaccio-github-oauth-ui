@@ -23,9 +23,12 @@ fail() {
 env-subst() {
   file=${1}
   name=${2}
-  if [ -z ${!name} ]; then
+  required=${3}
+
+  if [ -z ${!name} ] && [ ! -z ${required} ]; then
     fail "Environment variable $name must be set."
   fi
+
   run build-config sed "s|\$${name}|${!name}|g" -i ${file}
 }
 
@@ -42,10 +45,10 @@ config=verdaccio.yaml
 build-config() {
   run build-config cp verdaccio.template.yaml $config
 
-  env-subst $config GITHUB_OAUTH_CLIENT_ID
-  env-subst $config GITHUB_OAUTH_CLIENT_SECRET
+  env-subst $config GITHUB_OAUTH_CLIENT_ID "required"
+  env-subst $config GITHUB_OAUTH_CLIENT_SECRET "required"
   env-subst $config GITHUB_OAUTH_GITHUB_ENTERPRISE_HOSTNAME
-  env-subst $config GITHUB_OAUTH_ORG
+  env-subst $config GITHUB_OAUTH_ORG "required"
 }
 
 #
