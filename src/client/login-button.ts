@@ -69,6 +69,7 @@ interface QueryParams {
     localStorage.removeItem("token")
     localStorage.removeItem("npm")
     updateUsageInfo()
+    location.href = "/"
   })
 
   /**
