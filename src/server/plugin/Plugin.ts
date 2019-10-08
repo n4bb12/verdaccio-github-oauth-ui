@@ -1,6 +1,6 @@
 import chalk from "chalk"
-import globalTunnel from "global-tunnel-ng"
 import { Application } from "express"
+import globalTunnel from "global-tunnel-ng"
 import { get, intersection } from "lodash"
 import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 import { GithubClient } from "../github"
@@ -92,12 +92,12 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
       }
     }
 
-    const org = process.env[this.config.org] || this.config.org
+    const requiredOrg = process.env[this.config.org] || this.config.org
 
-    if (details && details.orgNames.includes(org)) {
+    if (details && details.orgNames.includes(requiredOrg)) {
       cb(null, details.orgNames)
     } else {
-      log(`Unauthenticated: user "${username}" is not a member of "${org}"`)
+      log(`Unauthenticated: user "${username}" is not a member of "${requiredOrg}"`)
       cb(null, false)
     }
   }

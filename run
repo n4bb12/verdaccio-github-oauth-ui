@@ -183,8 +183,8 @@ watch() {
 # Run linters.
 #
 lint() {
-  run lint yarn tslint -c tslint.json -p src/client/tsconfig.json --fix ${@} &
-  run lint yarn tslint -c tslint.json -p src/server/tsconfig.json --fix ${@} &
+  run lint yarn tslint -c tslint.json -p src/client/tsconfig.json ${@} &
+  run lint yarn tslint -c tslint.json -p src/server/tsconfig.json ${@} &
   wait
 }
 
