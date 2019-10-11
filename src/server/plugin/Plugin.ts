@@ -98,7 +98,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
       cb(null, details.orgNames)
     } else {
       log(`Unauthenticated: user "${username}" is not a member of "${requiredOrg}"`)
-      cb(null, false)
+      cb('Access denied!', false)
     }
   }
 
@@ -114,7 +114,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
       cb(null, user.groups)
     } else {
       log(`Access denied: user "${user.name}" is not a member of "${this.config.org}"`)
-      cb(null, false)
+      cb('Access denied!', false)
     }
   }
 
