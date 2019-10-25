@@ -36,13 +36,18 @@ export class Callback {
   middleware: Handler = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const code = req.query.code
+      const org = getConfig(this.config, "org")
       const clientId = getConfig(this.config, "client-id")
       const clientSecret = getConfig(this.config, "client-secret")
 
       const githubOauth = await this.github.requestAccessToken(code, clientId, clientSecret)
       const githubUser = await this.github.requestUser(githubOauth.access_token)
       const githubOrgs = await this.github.requestUserOrgs(githubOauth.access_token)
-      const githubOrgNames = githubOrgs.map(org => org.login)
+      const githubOrgNames = githubOrgs.map(ghOrg => ghOrg.login)
+
+      if (!githubOrgNames.includes(org)) {
+        res.send(`Access denied: you are not a member of "${org}"`)
+      }
 
       const npmAuth = githubUser.login + ":" + githubOauth.access_token
       const npmAuthEncrypted = this.auth.aesEncrypt(new Buffer(npmAuth)).toString("base64")
