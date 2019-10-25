@@ -28,5 +28,5 @@ export const pluginName = "github-oauth-ui"
 
 export function getConfig(config: PluginConfig, key: ConfigKey): string {
   const value = get(config, `middlewares[${pluginName}][${key}]`) || get(config, `auth[${pluginName}][${key}]`)
-  return process.env[value]! || value
+  return process.env[value] || value
 }

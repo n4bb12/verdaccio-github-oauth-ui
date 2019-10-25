@@ -30,7 +30,7 @@ export class Authorization {
   middleware: Handler = (req: Request, res: Response, next) => {
     const id = (req.params.id || "")
     const qs = {
-      client_id: process.env[this.config["client-id"]] || this.config["client-id"],
+      client_id: getConfig(this.config, "client-id"),
       redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ""),
       scope: "read:org",
     }

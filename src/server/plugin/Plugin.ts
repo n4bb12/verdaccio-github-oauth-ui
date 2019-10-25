@@ -92,7 +92,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
       }
     }
 
-    const requiredOrg = process.env[this.config.org] || this.config.org
+    const requiredOrg = getConfig(this.config, "org")
 
     if (details && details.orgNames.includes(requiredOrg)) {
       cb(null, details.orgNames)
