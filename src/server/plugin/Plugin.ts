@@ -25,7 +25,7 @@ interface UserDetails {
   expires: number
 }
 
-const cacheTTLms = 1000 * 30 // 30s
+const cacheTTLms = 1000 * 5 // 5s
 
 function log(...args: any[]) {
   console.log("[github-oauth-ui]", ...args)
@@ -75,27 +75,11 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
    * Implements the auth plugin interface.
    */
   async authenticate(username: string, authToken: string, cb: AuthCallback) {
-    let details = this.cache[username]
-
-    if (!details || details.authToken !== authToken || details.expires > Date.now()) {
-      try {
-        const orgs = await this.github.requestUserOrgs(authToken)
-        const orgNames = orgs.map(org => org.login)
-
-        details = this.cache[username] = {
-          authToken,
-          expires: Date.now() + cacheTTLms,
-          orgNames,
-        }
-      } catch (error) {
-        log(error.message)
-      }
-    }
-
+    const userOrgs = await this.getOrgNames(username, authToken)
     const requiredOrg = getConfig(this.config, "org")
 
-    if (details && details.orgNames.includes(requiredOrg)) {
-      cb(null, details.orgNames)
+    if (userOrgs.includes(requiredOrg)) {
+      cb(null, [requiredOrg])
     } else {
       log(`Unauthenticated: user "${username}" is not a member of "${requiredOrg}"`)
       cb(null, false)
@@ -104,6 +88,7 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
 
   allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): void {
     const requiredAccess = [...pkg.access || []]
+
     if (requiredAccess.includes("$authenticated")) {
       requiredAccess.push(this.config.auth[pluginName].org)
     }
@@ -116,6 +101,38 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
       log(`Access denied: user "${user.name}" is not a member of "${this.config.org}"`)
       cb(null, false)
     }
+  }
+
+  private async getOrgNames(username: string, authToken: string): Promise<string[]> {
+    const invalidate = () => delete this.cache[username]
+    const cached = () => this.cache[username] || {}
+    const nearFuture = () => Date.now() + cacheTTLms
+
+    if (cached().authToken !== authToken) {
+      invalidate()
+    }
+    if (cached().expires < Date.now()) {
+      invalidate()
+    } else {
+      cached().expires = nearFuture()
+    }
+
+    if (!cached().orgNames) {
+      try {
+        const orgs = await this.github.requestUserOrgs(authToken)
+        const orgNames = orgs.map(org => org.login)
+
+        this.cache[username] = {
+          authToken,
+          orgNames,
+          expires: nearFuture(),
+        }
+      } catch (error) {
+        log(error.message)
+      }
+    }
+
+    return cached().orgNames || []
   }
 
   private validateConfig(config: PluginConfig) {
