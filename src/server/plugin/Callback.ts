@@ -46,7 +46,10 @@ export class Callback {
       const githubOrgNames = githubOrgs.map(ghOrg => ghOrg.login)
 
       if (!githubOrgNames.includes(org)) {
-        res.send(`Access denied: you are not a member of "${org}"`)
+        res.send(`
+        Access denied: you are not a member of "${org}"<br>
+        <a href="/">Go back</a>
+        `)
       }
 
       const npmAuth = githubUser.login + ":" + githubOauth.access_token
