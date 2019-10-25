@@ -1,6 +1,7 @@
-import { AuthWebUI } from "./AuthWebUI"
-import { BasicAuth } from "./BasicAuth"
+import { IBasicAuth } from "@verdaccio/types"
 
-export interface Auth extends BasicAuth, AuthWebUI {
+import { AuthWebUI } from "./AuthWebUI"
+
+export interface Auth extends IBasicAuth<any>, AuthWebUI {
   secret: string
 }

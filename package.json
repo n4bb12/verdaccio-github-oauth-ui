@@ -28,7 +28,7 @@
     "test": "bash ./run update && bash ./run start"
   },
   "dependencies": {
-    "@verdaccio/types": "^6.1.0",
+    "@verdaccio/types": "^8.1.0",
     "chalk": "^2.4.2",
     "express": "^4.17.0",
     "global-tunnel-ng": "^2.7.1",

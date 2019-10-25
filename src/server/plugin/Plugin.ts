@@ -1,18 +1,17 @@
+import {
+  IPluginAuth,
+  IPluginMiddleware,
+  PackageAccess,
+  RemoteUser,
+} from "@verdaccio/types"
 import chalk from "chalk"
 import { Application } from "express"
 import globalTunnel from "global-tunnel-ng"
 import { get, intersection } from "lodash"
+
 import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 import { GithubClient } from "../github"
-import {
-  Auth,
-  AuthCallback,
-  AuthPlugin,
-  MiddlewarePlugin,
-  PackageAccess,
-  RemoteUser,
-  Storage,
-} from "../verdaccio-types"
+import { Auth, AuthCallback } from "../verdaccio-types"
 
 import { Authorization } from "./Authorization"
 import { Callback } from "./Callback"
@@ -34,18 +33,15 @@ function log(...args: any[]) {
 /**
  * Implements the verdaccio plugin interfaces.
  */
-export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin {
+export default class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<any> {
 
   private readonly github = new GithubClient(this.config.user_agent,
     getConfig(this.config, "github-enterprise-hostname"),
   )
   private readonly cache: { [username: string]: UserDetails } = {}
-  private readonly cliSupport = new SinopiaGithubOAuthCliSupport(this.config, this.stuff)
+  private readonly cliSupport = new SinopiaGithubOAuthCliSupport(this.config)
 
-  constructor(
-    private config: PluginConfig,
-    private stuff: any,
-  ) {
+  constructor(private readonly config: PluginConfig) {
     this.validateConfig(config)
     globalTunnel.initialize()
     console.log("[github-oauth-ui] Proxy config:", globalTunnel.proxyUrl)
@@ -54,8 +50,8 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   /**
    * Implements the middleware plugin interface.
    */
-  register_middlewares(app: Application, auth: Auth, storage: Storage) {
-    this.cliSupport.register_middlewares(app, auth, storage)
+  register_middlewares(app: Application, auth: Auth) {
+    this.cliSupport.register_middlewares(app, auth)
 
     if (get(this.config, "web.enable", true)) {
       const injectHtml = new InjectHtml()

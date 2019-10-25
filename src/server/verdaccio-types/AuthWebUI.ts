@@ -1,5 +1,5 @@
-import { User } from "./User"
+import { WebUIUser } from "./WebUIUser"
 
 export interface AuthWebUI {
-  issueUIjwt(user: User, time?: string): string
+  issueUIjwt(user: WebUIUser, time?: string): string
 }
