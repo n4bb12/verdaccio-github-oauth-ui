@@ -55,13 +55,14 @@ Merge the below options with your existing Verdaccio configuration:
 ```yml
 middlewares:
   github-oauth-ui:
-    client-id: $GITHUB_OAUTH_CLIENT_ID # required
-    client-secret: $GITHUB_OAUTH_CLIENT_SECRET # required
-    github-enterprise-hostname: $GITHUB_OAUTH_GITHUB_ENTERPRISE_HOSTNAME # optional, set this if you are using github enterprise
+    enabled: true
 
 auth:
   github-oauth-ui:
     org: $GITHUB_OAUTH_ORG # required, people within this org will be able to authenticate
+    client-id: $GITHUB_OAUTH_CLIENT_ID # required
+    client-secret: $GITHUB_OAUTH_CLIENT_SECRET # required
+    github-enterprise-hostname: $GITHUB_OAUTH_GITHUB_ENTERPRISE_HOSTNAME # optional, set this if you are using github enterprise
 ```
 
 The configured values can be either a value or the name of an environment variable that contains the value.

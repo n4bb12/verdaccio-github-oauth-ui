@@ -119,17 +119,22 @@ export default class GithubOauthUiPlugin implements MiddlewarePlugin, AuthPlugin
   }
 
   private validateConfig(config: PluginConfig) {
-    this.validateConfigProp(config, `auth.${pluginName}.org`)
-    this.validateConfigProp(config, `middlewares.${pluginName}.client-id`)
-    this.validateConfigProp(config, `middlewares.${pluginName}.client-secret`)
+    this.validateConfigProp(config, "org")
+    this.validateConfigProp(config, "client-id")
+    this.validateConfigProp(config, "client-secret")
   }
 
-  private validateConfigProp(config: PluginConfig, prop: string) {
-    if (!get(config, prop)) {
-      console.error(chalk.red(
-        `[${pluginName}] ERR: missing configuration "${prop}", please check your verdaccio config`))
-      process.exit(1)
+  private validateConfigProp(config: PluginConfig, name: string) {
+    const pathA = `auth.${pluginName}.${name}`
+    const pathB = `middlewares.${pluginName}.${name}`
+
+    if (get(config, pathA) || get(config, pathB)) {
+      return
     }
+
+    console.error(chalk.red(
+      `[${pluginName}] ERR: Missing configuration "${pathA}". Please check your verdaccio config.`))
+    process.exit(1)
   }
 
 }
