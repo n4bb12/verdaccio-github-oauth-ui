@@ -1,11 +1,12 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
-    "skipLibCheck": true,
-    "sourceMap": true,
+    "noImplicitAny": false,
+    "resolveJsonModule": true,
     "strict": true,
     "types": []
   }

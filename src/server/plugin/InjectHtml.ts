@@ -6,22 +6,26 @@ import {
   static as expressServeStatic,
 } from "express"
 
-const publicDir = "/-/static/github-oauth-ui"
-const scriptTag = `<script src="${publicDir}/login-button.js"></script>`
-const styleTag = `<link href="${publicDir}/styles.css" rel="stylesheet">`
-const headWithStyle = [styleTag, "</head>"].join("")
-const bodyWithScript = [scriptTag, "</body>"].join("")
+import { pluginName } from "./Config"
 
 /**
  * Injects additional tags into the DOM that modify the login button.
  */
 export class InjectHtml {
-  static readonly path = "/-/static/github-oauth-ui"
+
+  static readonly path = "/-/static/" + pluginName
+  static readonly fsRoot = __dirname + "/public"
 
   /**
    * Serves the injected style and script imports.
    */
-  serveAssetsMiddleware: Handler = expressServeStatic(__dirname + "/../../client")
+  readonly serveAssetsMiddleware = expressServeStatic(InjectHtml.fsRoot)
+
+
+  private readonly scriptTag = `<script src="${InjectHtml.path}/login-button.js"></script>`
+  private readonly styleTag = `<link href="${InjectHtml.path}/styles.css" rel="stylesheet">`
+  private readonly headWithStyle = [this.styleTag, "</head>"].join("")
+  private readonly bodyWithScript = [this.scriptTag, "</body>"].join("")
 
   /**
    * Monkey-patches `res.send` in order to inject style and script imports.
@@ -41,8 +45,8 @@ export class InjectHtml {
       return html
     }
     return html
-      .replace(/<\/head>/, headWithStyle)
-      .replace(/<\/body>/, bodyWithScript)
+      .replace(/<\/head>/, this.headWithStyle)
+      .replace(/<\/body>/, this.bodyWithScript)
   }
 
 }

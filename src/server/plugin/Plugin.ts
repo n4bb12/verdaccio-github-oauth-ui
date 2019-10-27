@@ -6,17 +6,16 @@ import {
 } from "@verdaccio/types"
 import chalk from "chalk"
 import { Application } from "express"
-import globalTunnel from "global-tunnel-ng"
+import { createGlobalProxyAgent } from "global-agent"
 import { get, intersection } from "lodash"
 
 import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 import { GithubClient } from "../github"
 import { Auth, AuthCallback } from "../verdaccio-types"
-
 import { Authorization } from "./Authorization"
 import { Callback } from "./Callback"
+import { getConfig, PluginConfig, pluginName } from "./Config"
 import { InjectHtml } from "./InjectHtml"
-import { getConfig, PluginConfig, pluginName } from "./PluginConfig"
 
 interface UserDetails {
   authToken: string
@@ -27,13 +26,13 @@ interface UserDetails {
 const cacheTTLms = 1000 * 5 // 5s
 
 function log(...args: any[]) {
-  console.log("[github-oauth-ui]", ...args)
+  console.log(`${[pluginName]}`, ...args)
 }
 
 /**
  * Implements the verdaccio plugin interfaces.
  */
-export default class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<any> {
+export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<any> {
 
   private readonly github = new GithubClient(this.config.user_agent,
     getConfig(this.config, "github-enterprise-hostname"),
@@ -43,8 +42,8 @@ export default class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPlu
 
   constructor(private readonly config: PluginConfig) {
     this.validateConfig(config)
-    globalTunnel.initialize()
-    console.log("[github-oauth-ui] Proxy config:", globalTunnel.proxyUrl)
+    const proxyAgent = createGlobalProxyAgent()
+    console.log(`${[pluginName]}] Proxy config:`, proxyAgent.GLOBAL_AGENT)
   }
 
   /**
@@ -54,7 +53,7 @@ export default class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPlu
     this.cliSupport.register_middlewares(app, auth)
 
     if (get(this.config, "web.enable", true)) {
-      const injectHtml = new InjectHtml()
+      const injectHtml = new InjectHtml(this.config)
 
       app.use(injectHtml.injectAssetsMiddleware)
       app.use(InjectHtml.path, injectHtml.serveAssetsMiddleware)
