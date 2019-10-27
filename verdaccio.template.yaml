@@ -22,10 +22,10 @@ middlewares:
 
 auth:
   github-oauth-ui:
-    org: $GITHUB_OAUTH_ORG # required, people within this org will be able to authenticate
-    client-id: $GITHUB_OAUTH_CLIENT_ID # required
-    client-secret: $GITHUB_OAUTH_CLIENT_SECRET # required
-    # github-enterprise-hostname: $GITHUB_OAUTH_GITHUB_ENTERPRISE_HOSTNAME # optional, set this if you are using github enterprise
+    org: GITHUB_ORG # required, people within this org will be able to authenticate
+    client-id: GITHUB_CLIENT_ID # required
+    client-secret: GITHUB_CLIENT_SECRET # required
+    # enterprise-origin: GITHUB_ENTERPRISE_ORIGIN # optional, set this if you are using github enterprise
   htpasswd:
     file: ./htpasswd
 
@@ -61,4 +61,4 @@ logs:
   - { type: stdout, format: pretty, level: http }
   #- {type: file, path: verdaccio.log, level: info}
 
-url_prefix: http://localhost:4873/
+url_prefix: http://localhost:4873

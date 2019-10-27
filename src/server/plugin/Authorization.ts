@@ -1,8 +1,8 @@
-import { Handler, Request, Response } from "express"
+import { Handler, NextFunction, Request, Response } from "express"
 import { get } from "lodash"
-import querystring from "querystring"
+import { stringify } from "querystring"
 
-import { GithubClient } from "../github"
+import { GitHubClient } from "../github"
 import { Callback } from "./Callback"
 import { getConfig, PluginConfig } from "./Config"
 
@@ -10,10 +10,9 @@ export class Authorization {
 
   static readonly path = "/-/oauth/authorize/:id?"
 
-  private readonly github = new GithubClient(
-    this.config.user_agent,
-    getConfig(this.config, "github-enterprise-hostname"),
-  )
+  private readonly clientId = getConfig(this.config, "client-id")
+  private readonly enterpriseOrigin = getConfig(this.config, "enterprise-origin")
+  private readonly github = new GitHubClient(this.config.user_agent, this.enterpriseOrigin)
 
   constructor(
     private readonly config: PluginConfig,
@@ -27,16 +26,19 @@ export class Authorization {
    *   A request to `/-/oauth/authorize/cheese-cake` will be called back at
    *   `/-/oauth/callback/cheese-cake`.
    */
-  middleware: Handler = (req: Request, res: Response, next) => {
-    const id = (req.params.id || "")
-    const qs = {
-      client_id: getConfig(this.config, "client-id"),
-      redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ""),
-      scope: "read:org",
+  middleware: Handler = (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = (req.params.id || "")
+      const query = {
+        client_id: this.clientId,
+        redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ""),
+        scope: "read:org",
+      }
+      const url = this.github.webBaseUrl + `/login/oauth/authorize?` + stringify(query)
+      res.redirect(url)
+    } catch (error) {
+      next(error)
     }
-    const url = this.github.constructGithubUIHostname() + `/login/oauth/authorize?` +
-      querystring.stringify(qs)
-    res.redirect(url)
   }
 
   /**

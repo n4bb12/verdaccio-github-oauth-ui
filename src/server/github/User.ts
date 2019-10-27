@@ -1,7 +1,7 @@
 /**
  * https://developer.github.com/v3/users/#response-with-public-and-private-profile-information
  */
-export interface User {
+export interface GitHubUser {
   login: string
   id: number
   node_id: string
@@ -39,13 +39,13 @@ export interface User {
   disk_usage: number
   collaborators: number
   two_factor_authentication: boolean
-  plan: Plan
+  plan: GitHubPlan
 }
 
 /**
  * https://developer.github.com/v3/users/#response-with-public-and-private-profile-information
  */
-export interface Plan {
+export interface GitHubPlan {
   name: string
   space: number
   private_repos: number

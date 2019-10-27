@@ -81,11 +81,10 @@ watch() {
 # Run linters
 #
 lint() {
-  run lint yarn tsc --project src/client/tsconfig.json --noEmit &
-  run lint yarn tsc --project src/server/tsconfig.json --noEmit &
-  run lint yarn tslint -c tslint.json -p src/client/tsconfig.json ${@} &
-  run lint yarn tslint -c tslint.json -p src/server/tsconfig.json ${@} &
-  wait
+  run lint yarn tsc --project src/client/tsconfig.json --noEmit
+  run lint yarn tsc --project src/server/tsconfig.json --noEmit
+  run lint yarn tslint -c tslint.json -p src/client/tsconfig.json ${@}
+  run lint yarn tslint -c tslint.json -p src/server/tsconfig.json ${@}
 }
 
 #

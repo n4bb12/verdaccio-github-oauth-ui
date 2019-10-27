@@ -1,6 +1,6 @@
 module.exports = api => {
   const env = api.env()
-  console.log(env)
+  console.log("[build]", env)
 
   return {
     plugins: [

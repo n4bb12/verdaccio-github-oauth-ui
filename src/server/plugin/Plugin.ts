@@ -1,21 +1,21 @@
 import {
+  AuthCallback,
   IPluginAuth,
   IPluginMiddleware,
   PackageAccess,
   RemoteUser,
 } from "@verdaccio/types"
-import chalk from "chalk"
 import { Application } from "express"
-import { createGlobalProxyAgent } from "global-agent"
 import { get, intersection } from "lodash"
 
 import { SinopiaGithubOAuthCliSupport } from "../cli-support"
-import { GithubClient } from "../github"
-import { Auth, AuthCallback } from "../verdaccio-types"
+import { GitHubClient } from "../github"
+import { Auth } from "../verdaccio"
 import { Authorization } from "./Authorization"
 import { Callback } from "./Callback"
-import { getConfig, PluginConfig, pluginName } from "./Config"
+import { getConfig, PluginConfig, pluginName, validateConfig } from "./Config"
 import { InjectHtml } from "./InjectHtml"
+import { registerGlobalProxyAgent } from "./ProxyAgent"
 
 interface UserDetails {
   authToken: string
@@ -34,24 +34,20 @@ function log(...args: any[]) {
  */
 export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<any> {
 
-  private readonly github = new GithubClient(this.config.user_agent,
-    getConfig(this.config, "github-enterprise-hostname"),
-  )
+  private readonly requiredOrg = getConfig(this.config, "org")
+  private readonly enterpriseOrigin = getConfig(this.config, "enterprise-origin")
+  private readonly github = new GitHubClient(this.config.user_agent, this.enterpriseOrigin)
   private readonly cache: { [username: string]: UserDetails } = {}
-  private readonly cliSupport = new SinopiaGithubOAuthCliSupport(this.config)
 
   constructor(private readonly config: PluginConfig) {
-    this.validateConfig(config)
-    const proxyAgent = createGlobalProxyAgent()
-    console.log(`${[pluginName]}] Proxy config:`, proxyAgent.GLOBAL_AGENT)
+    validateConfig(config)
+    registerGlobalProxyAgent()
   }
 
   /**
    * Implements the middleware plugin interface.
    */
   register_middlewares(app: Application, auth: Auth) {
-    this.cliSupport.register_middlewares(app, auth)
-
     if (get(this.config, "web.enable", true)) {
       const injectHtml = new InjectHtml(this.config)
 
@@ -59,11 +55,14 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
       app.use(InjectHtml.path, injectHtml.serveAssetsMiddleware)
     }
 
-    const authorization = new Authorization(this.config)
-    const callback = new Callback(this.config, auth)
+    const cliSupport = new SinopiaGithubOAuthCliSupport(this.config, auth)
+    cliSupport.register_middlewares(app)
 
-    app.use(Authorization.path, authorization.middleware)
-    app.use(Callback.path, callback.middleware)
+    const authorization = new Authorization(this.config)
+    app.get(Authorization.path, authorization.middleware)
+
+    const callback = new Callback(this.config, auth)
+    app.get(Callback.path, callback.middleware)
   }
 
   /**
@@ -71,12 +70,11 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
    */
   async authenticate(username: string, authToken: string, cb: AuthCallback) {
     const userOrgs = await this.getOrgNames(username, authToken)
-    const requiredOrg = getConfig(this.config, "org")
 
-    if (userOrgs.includes(requiredOrg)) {
-      cb(null, [requiredOrg])
+    if (userOrgs.includes(this.requiredOrg)) {
+      cb(null, [this.requiredOrg])
     } else {
-      log(`Unauthenticated: user "${username}" is not a member of "${requiredOrg}"`)
+      log(`Unauthenticated: user "${username}" is not a member of "${this.requiredOrg}"`)
       cb(null, false)
     }
   }
@@ -128,25 +126,6 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
     }
 
     return cached().orgNames || []
-  }
-
-  private validateConfig(config: PluginConfig) {
-    this.validateConfigProp(config, "org")
-    this.validateConfigProp(config, "client-id")
-    this.validateConfigProp(config, "client-secret")
-  }
-
-  private validateConfigProp(config: PluginConfig, name: string) {
-    const pathA = `auth.${pluginName}.${name}`
-    const pathB = `middlewares.${pluginName}.${name}`
-
-    if (get(config, pathA) || get(config, pathB)) {
-      return
-    }
-
-    console.error(chalk.red(
-      `[${pluginName}] ERR: Missing configuration "${pathA}". Please check your verdaccio config.`))
-    process.exit(1)
   }
 
 }

@@ -1,7 +1,7 @@
 /**
  * https://developer.github.com/v3/orgs/#response
  */
-export interface Organization {
+export interface GitHubOrganization {
   login: string
   id: number
   node_id: string
