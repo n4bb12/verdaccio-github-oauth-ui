@@ -4,4 +4,3 @@ htpasswd
 node_modules
 storage
 test
-verdaccio.yaml

@@ -31,7 +31,7 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: yarn pack
+      - run: yarn prepack
 
 workflows:
   version: 2

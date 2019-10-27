@@ -19,11 +19,11 @@
   "files": [
     "dist"
   ],
-  "main": "server.js",
+  "main": "dist/server.js",
   "scripts": {
     "build": "bash run build",
     "lint": "bash run lint",
-    "prepack": "yarn build",
+    "prepack": "bash run clear && bash run build",
     "start": "bash run start",
     "test": "yarn update && yarn start",
     "update": "bash run update",

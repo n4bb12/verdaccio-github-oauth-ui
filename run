@@ -48,10 +48,10 @@ clear() {
 # Copy the built plugin to node_modules
 #
 link() {
-  run link cp package.json dist/
-  run link cp verdaccio.yaml dist/
   run link mkdir -p $linkdir/
-  run link cp -R dist/* $linkdir/
+  run link cp -R dist $linkdir/
+  run link cp package.json $linkdir/
+  run link cp verdaccio.yaml $linkdir/
 }
 
 #
