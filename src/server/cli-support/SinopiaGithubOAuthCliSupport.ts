@@ -2,7 +2,7 @@ import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, NextFunction, Request, Response } from "express"
 
 import { GithubClient } from "../github"
-import { getConfig, PluginConfig } from "../plugin/PluginConfig"
+import { getConfig, PluginConfig } from "../plugin/Config"
 import { Auth } from "../verdaccio-types"
 
 export class SinopiaGithubOAuthCliSupport implements IPluginMiddleware<any> {

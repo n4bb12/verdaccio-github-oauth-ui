@@ -1,1 +1,2 @@
-export * from "./plugin/Plugin"
+import { GithubOauthUiPlugin } from "./plugin/Plugin"
+export default GithubOauthUiPlugin

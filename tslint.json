@@ -8,9 +8,7 @@
   ],
   "rules": {
     "interface-name": false,
-    "max-line-length": [
-      true,
-      120
-    ]
+    "max-line-length": [true, 120],
+    "no-implicit-dependencies": false
   }
 }

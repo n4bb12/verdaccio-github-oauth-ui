@@ -1,10 +1,10 @@
 import { Handler, Request, Response } from "express"
 import { get } from "lodash"
-import * as querystring from "querystring"
+import querystring from "querystring"
 
 import { GithubClient } from "../github"
 import { Callback } from "./Callback"
-import { getConfig, PluginConfig } from "./PluginConfig"
+import { getConfig, PluginConfig } from "./Config"
 
 export class Authorization {
 
@@ -55,7 +55,7 @@ export class Authorization {
       return prefix.replace(/\/?$/, "") // Remove potential trailing slash
     }
     const protocal = req.get("X-Forwarded-Proto") || req.protocol
-    return (protocal + "://" + req.get("host"))
+    return protocal + "://" + req.get("host")
   }
 
 }

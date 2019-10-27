@@ -41,14 +41,15 @@ In case you need CLI support for automation purposes, the plugin is also compati
 $ npm install verdaccio-github-oauth-ui
 ```
 
-#### Compatibility
+### Compatibility
 
-- This plugin is currently only compatible with Verdaccio 3.x.
-- This plugin supports Node versions 6.5.x - 10.x.x
+- Verdaccio >=3
+- Node >=10
+- Chrome, Firefox, Firefox ESR, Edge, Safari, IE 11
 
 ## Configuration
 
-#### Verdaccio Config
+### Verdaccio Config
 
 Merge the below options with your existing Verdaccio configuration:
 
@@ -67,7 +68,7 @@ auth:
 
 The configured values can be either a value or the name of an environment variable that contains the value.
 
-#### GitHub Config
+### GitHub Config
 
 When creating the OAuth app at [https://github.com/settings/developers](https://github.com/settings/developers), the callback URL should be:
 
@@ -77,9 +78,22 @@ YOUR_REGISTRY_URL/-/oauth/callback
 
 If `url_prefix` is specified in the Verdaccio config then it must match the `YOUR_REGISTRY_URL`.
 
+### Proxy Config
+
+If you are behind a proxy server, the plugin needs to know the proxy in order to make GitHub requests.
+
+Example:
+
+```
+$ export GLOBAL_AGENT_HTTP_PROXY=http://127.0.0.1:8080
+```
+
+See [global-agent](https://github.com/gajus/global-agent#environment-variables) for more configuration options.
+
+
 ## How to Login
 
-#### Verdaccio
+### Verdaccio
 
 Click the login button and login at GitHub, if not already logged in.
 
@@ -88,7 +102,7 @@ Authorize the registry.
 
 After successful login and authorization, you're redirected back to the verdaccio registry.
 
-#### Command Line
+### Command Line
 
 To set up authentication with the registry in your npm CLI, you'll need to run the commands shown in the header:
 

@@ -1,10 +1,9 @@
 import { Handler, NextFunction, Request, Response } from "express"
-import * as querystring from "querystring"
+import querystring from "querystring"
 
 import { GithubClient } from "../github"
 import { Auth, WebUIUser } from "../verdaccio-types"
-
-import { getConfig, PluginConfig } from "./PluginConfig"
+import { getConfig, PluginConfig } from "./Config"
 
 export class Callback {
 
