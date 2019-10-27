@@ -5,8 +5,11 @@ import {
   Response,
   static as expressServeStatic,
 } from "express"
+import { readFileSync } from "fs"
 
-import { pluginName } from "./Config"
+import { getMajorVersion, PluginConfig, pluginName } from "./Config"
+
+const publicRoot = __dirname + "/public"
 
 /**
  * Injects additional tags into the DOM that modify the login button.
@@ -14,18 +17,21 @@ import { pluginName } from "./Config"
 export class InjectHtml {
 
   static readonly path = "/-/static/" + pluginName
-  static readonly fsRoot = __dirname + "/public"
 
   /**
    * Serves the injected style and script imports.
    */
-  readonly serveAssetsMiddleware = expressServeStatic(InjectHtml.fsRoot)
+  readonly serveAssetsMiddleware = expressServeStatic(publicRoot)
 
-
-  private readonly scriptTag = `<script src="${InjectHtml.path}/login-button.js"></script>`
-  private readonly styleTag = `<link href="${InjectHtml.path}/styles.css" rel="stylesheet">`
+  private readonly version = getMajorVersion(this.config)
+  private readonly scriptTag = `<script src="${InjectHtml.path}/verdaccio-${this.version}.js"></script>`
+  private readonly styleTag = `<style>${readFileSync(`${publicRoot}/verdaccio-${this.version}.css`)}</style>`
   private readonly headWithStyle = [this.styleTag, "</head>"].join("")
   private readonly bodyWithScript = [this.scriptTag, "</body>"].join("")
+
+  constructor(
+    private readonly config: PluginConfig,
+  ) { }
 
   /**
    * Monkey-patches `res.send` in order to inject style and script imports.

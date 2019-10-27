@@ -1,11 +1,11 @@
 import got, { GotJSONOptions } from "got"
-import { merge as deepAssign, trimStart } from "lodash"
+import { merge } from "lodash"
 
-import { OAuth } from "./OAuth"
-import { Organization } from "./Organization"
-import { User } from "./User"
+import { GitHubOAuth } from "./OAuth"
+import { GitHubOrganization } from "./Organization"
+import { GitHubUser } from "./User"
 
-export class GithubClient {
+export class GitHubClient {
 
   private readonly defaultOptions = {
     headers: {
@@ -16,39 +16,34 @@ export class GithubClient {
 
   constructor(
     private readonly userAgent: string,
-    private readonly githubEnterpriseHostname?: string,
-  ) {
-    this.githubEnterpriseHostname = trimStart(githubEnterpriseHostname, "https://")
+    private readonly enterpriseOrigin?: string,
+  ) { }
+
+  get webBaseUrl(): string {
+    return this.enterpriseOrigin || "https://github.com"
   }
 
-  constructGithubAPIHostname(): string {
-    return (
-      "https://"
-      + (this.githubEnterpriseHostname ? this.githubEnterpriseHostname : "api.github.com")
-      + (this.githubEnterpriseHostname ? "/api/v3" : "")
-    )
+  get apiBaseUrl(): string {
+    return this.enterpriseOrigin
+      ? this.enterpriseOrigin.replace(/\/?$/, "") + "/api/v3"
+      : "https://api.github.com"
   }
 
-  constructGithubUIHostname(): string {
-    return "https://"
-    + (this.githubEnterpriseHostname ? this.githubEnterpriseHostname : "github.com")
-  }
-  /**
+  /**a
    * `POST /login/oauth/access_token`
    *
-   * [Web application flow](https://bit.ly/2mNSppX).
+   * [Web application flow](bit.ly/2mNSppX).
    */
   requestAccessToken = async (code: string, clientId: string, clientSecret: string) => {
-    const url = this.constructGithubUIHostname() + "/login/oauth/access_token"
-    const options: GotJSONOptions = {
+    const url = this.webBaseUrl + "/login/oauth/access_token"
+    const options = {
       body: {
         client_id: clientId,
         client_secret: clientSecret,
         code,
       },
-      json: true,
     }
-    return this.request<OAuth>(url, options)
+    return this.request<GitHubOAuth>(url, options)
   }
 
   /**
@@ -57,14 +52,13 @@ export class GithubClient {
    * [Get the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
    */
   requestUser = async (accessToken: string) => {
-    const url = this.constructGithubAPIHostname() + "/user"
-    const options: GotJSONOptions = {
+    const url = this.apiBaseUrl + "/user"
+    const options = {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
-      json: true,
     }
-    return this.request<User>(url, options)
+    return this.request<GitHubUser>(url, options)
   }
 
   /**
@@ -73,18 +67,17 @@ export class GithubClient {
    * [List your organizations](https://developer.github.com/v3/orgs/#list-your-organizations)
    */
   requestUserOrgs = async (accessToken: string) => {
-    const url = this.constructGithubAPIHostname() + "/user/orgs"
-    const options: GotJSONOptions = {
+    const url = this.apiBaseUrl + "/user/orgs"
+    const options = {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
-      json: true,
     }
-    return this.request<Organization[]>(url, options)
+    return this.request<GitHubOrganization[]>(url, options)
   }
 
-  private async request<T>(url: string, options: GotJSONOptions): Promise<T> {
-    options = deepAssign({}, this.defaultOptions, options)
+  private async request<T>(url: string, additionalOptions: Partial<GotJSONOptions>): Promise<T> {
+    const options = merge({}, this.defaultOptions, additionalOptions)
     const response = await got(url, options)
     return response.body
   }

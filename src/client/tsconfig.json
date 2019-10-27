@@ -4,6 +4,7 @@
     "lib": ["esnext", "dom"],
     "outDir": "../../dist/client",
     "rootDir": ".",
+    "target": "es5",
     "types": []
   },
   "extends": "../../tsconfig.json"

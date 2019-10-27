@@ -4,6 +4,7 @@
     "lib": ["esnext"],
     "outDir": "../../dist/server",
     "rootDir": ".",
+    "target": "es2018",
     "types": ["node"]
   },
   "extends": "../../tsconfig.json"
