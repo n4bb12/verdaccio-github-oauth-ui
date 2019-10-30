@@ -1,4 +1,4 @@
-import { formatUsageInfo, init } from "./gitlab-oauth-ui"
+import { formatUsageInfo, init } from "./gitlab-oauth"
 
 function updateUsageInfo() {
   const info = formatUsageInfo()

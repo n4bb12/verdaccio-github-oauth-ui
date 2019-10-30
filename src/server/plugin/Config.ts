@@ -2,7 +2,7 @@ import { Config } from "@verdaccio/types"
 import chalk from "chalk"
 import { get } from "lodash"
 
-export const pluginName = "gitlab-oauth-ui"
+export const pluginName = "gitlab-oauth"
 
 export interface PluginConfigProps {
   "group": string,

@@ -1,5 +1,5 @@
 {
-  "name": "@bizneo/verdaccio-gitlab-oauth-ui",
+  "name": "verdaccio-gitlab-oauth",
   "version": "1.0.0",
   "keywords": [
     "gitlab",
@@ -11,9 +11,9 @@
     "registry",
     "verdaccio"
   ],
-  "homepage": "https://github.com/bizneo/verdaccio-gitlab-oauth-ui/blob/master/README.md",
-  "bugs": "https://github.com/bizneo/verdaccio-gitlab-oauth-ui/issues",
-  "repository": "github:bizneo/verdaccio-gitlab-oauth-ui",
+  "homepage": "https://github.com/bizneo/verdaccio-gitlab-oauth/blob/master/README.md",
+  "bugs": "https://github.com/bizneo/verdaccio-gitlab-oauth/issues",
+  "repository": "github:bizneo/verdaccio-gitlab-oauth",
   "license": "MIT",
   "author": "Oscar de Arriba",
   "files": [

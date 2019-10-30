@@ -7,20 +7,20 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@bizneo/verdaccio-gitlab-oauth-ui">
-    <img alt="Version" src="https://flat.badgen.net/npm/v/@bizneo/verdaccio-gitlab-oauth-ui?icon=npm">
+  <a href="https://www.npmjs.com/package/verdaccio-gitlab-oauth">
+    <img alt="Version" src="https://flat.badgen.net/npm/v/verdaccio-gitlab-oauth?icon=npm">
   </a>
-  <a href="https://raw.githubusercontent.com/bizneo/verdaccio-gitlab-oauth-ui/master/LICENSE">
-    <img alt="License" src="https://flat.badgen.net/github/license/bizneo/verdaccio-gitlab-oauth-ui?icon=github">
+  <a href="https://raw.githubusercontent.com/bizneo/verdaccio-gitlab-oauth/master/LICENSE">
+    <img alt="License" src="https://flat.badgen.net/github/license/bizneo/verdaccio-gitlab-oauth?icon=github">
   </a>
-  <a href="https://github.com/bizneo/verdaccio-gitlab-oauth-ui/issues/new/choose">
+  <a href="https://github.com/bizneo/verdaccio-gitlab-oauth/issues/new/choose">
     <img alt="Issues" src="https://flat.badgen.net/badge/github/create issue/pink?icon=github">
   </a>
 </p>
 
 ## About
 
-The plugin is similar to [verdaccio-github-oauth-ui](https://github.com/n4bb12/verdaccio-github-oauth-ui), but adapted to use GitLab APIs. When clicking the login button, instead of filling in a login form, you are asked to log in with itLab.
+The plugin is similar to [verdaccio-github-oauth](https://github.com/n4bb12/verdaccio-github-oauth), but adapted to use GitLab APIs. When clicking the login button, instead of filling in a login form, you are asked to log in with itLab.
 
 In case you need CLI support for automation purposes, the plugin is also compatible with it, adapting the functionality from [sinopia-github-oauth-cli](https://github.com/soundtrackyourbrand/sinopia-github-oauth-cli) to work with GitLab.
 
@@ -35,7 +35,7 @@ In case you need CLI support for automation purposes, the plugin is also compati
 ### Install
 
 ```
-$ npm install @bizneo/verdaccio-gitlab-oauth-ui
+$ npm install verdaccio-gitlab-oauth
 ```
 
 ### GitLab Config
@@ -50,11 +50,11 @@ Merge the below options with your existing Verdaccio config:
 
 ```yml
 middlewares:
-  gitlab-oauth-ui:
+  gitlab-oauth:
     enabled: true
 
 auth:
-  gitlab-oauth-ui:
+  gitlab-oauth:
     group: GITLAB_GROUP_PATH
     client-id: GITLAB_CLIENT_ID
     client-secret: GITLAB_CLIENT_SECRET
