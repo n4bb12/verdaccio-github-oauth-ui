@@ -1,9 +1,8 @@
 import got, { GotJSONOptions } from "got"
 import { merge } from "lodash"
-import { stringify } from "query-string"
+import { stringify } from "querystring"
 
 import { GitLabOAuth } from "./OAuth"
-import { GitLabGroup } from "./Group"
 import { GitLabUser } from "./User"
 
 export class GitLabClient {
