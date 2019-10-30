@@ -56,26 +56,13 @@ export class GitLabClient {
    * `GET /user`
    */
   requestUser = async (accessToken: string) => {
-    const url = this.apiBaseUrl + "/user"
+    const url = this.webBaseUrl + "/oauth/userinfo"
     const options = {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
     }
     return this.request<GitLabUser>(url, options)
-  }
-
-  /**
-   * `GET /groups`
-   */
-  requestUserGroups = async (accessToken: string) => {
-    const url = this.apiBaseUrl + "/groups"
-    const options = {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-    }
-    return this.request<GitLabGroup[]>(url, options)
   }
 
   private async request<T>(url: string, additionalOptions: Partial<GotJSONOptions>): Promise<T> {

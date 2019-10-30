@@ -43,7 +43,7 @@ export class GitlabOAuthCliSupport implements IPluginMiddleware<any> {
         const gitlabOauth = await this.gitlab.requestAccessToken(code, this.clientId, this.clientSecret, callbackUrl)
         const gitlabUser = await this.gitlab.requestUser(gitlabOauth.access_token)
 
-        const npmAuth = gitlabUser.username + ":" + gitlabOauth.access_token
+        const npmAuth = gitlabUser.nickname + ":" + gitlabOauth.access_token
         const encryptedNpmToken = this.encrypt(npmAuth)
 
         const query = { token: encodeURIComponent(encryptedNpmToken) }

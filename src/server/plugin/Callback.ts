@@ -40,16 +40,12 @@ export class Callback {
       const code = req.query.code
       const callbackUrl = Callback.getCallbackUrl(req, this.config)
 
-      console.log("Hola 1")
       const gitlabOauth = await this.gitlab.requestAccessToken(code, this.clientId, this.clientSecret, callbackUrl)
-      console.log("Hola 2")
       const gitlabUser = await this.gitlab.requestUser(gitlabOauth.access_token)
-      console.log("Hola 3")
-      const gitlabGroups = await this.gitlab.requestUserGroups(gitlabOauth.access_token)
-      console.log("Hola 4")
-      const gitlabGroupNames = gitlabGroups.map(gitlabOrg => gitlabOrg.path)
 
-      if (gitlabGroupNames.includes(this.requiredGroup)) {
+      console.log(gitlabUser)
+
+      if (gitlabUser.groups.includes(this.requiredGroup)) {
         await this.grantAccess(res, gitlabOauth, gitlabUser)
       } else {
         await this.denyAccess(res)
@@ -79,11 +75,11 @@ export class Callback {
   }
 
   private async grantAccess(res: Response, gitlabOauth: GitLabOAuth, gitlabUser: GitLabUser) {
-    const npmAuth = gitlabUser.username + ":" + gitlabOauth.access_token
+    const npmAuth = gitlabUser.nickname + ":" + gitlabOauth.access_token
     const encryptedNpmToken = this.encrypt(npmAuth)
 
     const user: User = {
-      name: gitlabUser.username,
+      name: gitlabUser.nickname,
       groups: [this.requiredGroup],
       real_groups: [this.requiredGroup],
     }
@@ -93,7 +89,7 @@ export class Callback {
       : await this.issueJWTVerdaccio4(user)
 
     const frontendUrl = "/?" + stringify({
-      username: gitlabUser.username,
+      username: gitlabUser.nickname,
       jwtToken: encryptedJWT,
       npmToken: encryptedNpmToken,
     })

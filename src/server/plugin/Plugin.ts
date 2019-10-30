@@ -111,12 +111,11 @@ export class GitlabOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
 
     if (!cached().groupNames) {
       try {
-        let groups = await this.gitlab.requestUserGroups(authToken)
-        let groupNames = groups.map(group => group.path)
+        let user = await this.gitlab.requestUser(authToken)
 
         this.cache[username] = {
           authToken,
-          groupNames,
+          groupNames: user.groups,
           expires: nearFuture(),
         }
       } catch (error) {
