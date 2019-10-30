@@ -1,22 +1,16 @@
-<h1 align="center">
-  📦🔐 Verdaccio GitLab OAuth UI
-</h1>
+# 📦🔐 Verdaccio GitLab OAuth plugin
 
-<p align="center">
-  A GitLab OAuth Plugin for Verdaccio – <a href="https://www.verdaccio.org">https://www.verdaccio.org</a>
-</p>
+A GitLab OAuth Plugin for Verdaccio – <a href="https://www.verdaccio.org">https://www.verdaccio.org</a>
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/verdaccio-gitlab-oauth">
-    <img alt="Version" src="https://flat.badgen.net/npm/v/verdaccio-gitlab-oauth?icon=npm">
-  </a>
-  <a href="https://raw.githubusercontent.com/bizneo/verdaccio-gitlab-oauth/master/LICENSE">
-    <img alt="License" src="https://flat.badgen.net/github/license/bizneo/verdaccio-gitlab-oauth?icon=github">
-  </a>
-  <a href="https://github.com/bizneo/verdaccio-gitlab-oauth/issues/new/choose">
-    <img alt="Issues" src="https://flat.badgen.net/badge/github/create issue/pink?icon=github">
-  </a>
-</p>
+<a href="https://www.npmjs.com/package/verdaccio-gitlab-oauth">
+  <img alt="Version" src="https://flat.badgen.net/npm/v/verdaccio-gitlab-oauth?icon=npm">
+</a>
+<a href="https://raw.githubusercontent.com/bizneo/verdaccio-gitlab-oauth/master/LICENSE">
+  <img alt="License" src="https://flat.badgen.net/github/license/bizneo/verdaccio-gitlab-oauth?icon=github">
+</a>
+<a href="https://github.com/bizneo/verdaccio-gitlab-oauth/issues/new/choose">
+  <img alt="Issues" src="https://flat.badgen.net/badge/github/create issue/pink?icon=github">
+</a>
 
 ## About
 
