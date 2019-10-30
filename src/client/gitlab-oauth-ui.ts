@@ -34,7 +34,7 @@ function interruptClick(selector: string, callback: () => void) {
 }
 
 //
-// After a successful login we are redirected to the UI with our GitHub username
+// After a successful login we are redirected to the UI with our GitLab username
 // and a JWT token. We need to save these in local storage in order for Verdaccio
 // to remember that we are logged in.
 //
@@ -95,7 +95,7 @@ function updateUsageInfoWithRetry(updateUsageInfo: () => void) {
 export function formatUsageInfo() {
   const username = localStorage.getItem("username")
   if (!username) {
-    return "Click the login button to authenticate with GitHub."
+    return "Click the login button to authenticate with GitLab."
   }
 
   const configBase = "//" + location.host + location.pathname
