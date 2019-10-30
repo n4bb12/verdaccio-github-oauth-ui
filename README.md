@@ -1,6 +1,6 @@
 # 📦🔐 Verdaccio GitLab OAuth plugin
 
-A GitLab OAuth Plugin for Verdaccio – <a href="https://www.verdaccio.org">https://www.verdaccio.org</a>
+A GitLab OAuth Plugin for [Verdaccio](https://www.verdaccio.org)
 
 <a href="https://www.npmjs.com/package/verdaccio-gitlab-oauth">
   <img alt="Version" src="https://flat.badgen.net/npm/v/verdaccio-gitlab-oauth?icon=npm">
@@ -14,7 +14,7 @@ A GitLab OAuth Plugin for Verdaccio – <a href="https://www.verdaccio.org">http
 
 ## About
 
-The plugin is similar to [verdaccio-github-oauth](https://github.com/n4bb12/verdaccio-github-oauth), but adapted to use GitLab APIs. When clicking the login button, instead of filling in a login form, you are asked to log in with itLab.
+The plugin is similar to [verdaccio-github-oauth-ui](https://github.com/n4bb12/verdaccio-github-oauth-ui), but adapted to use GitLab APIs. When clicking the login button, instead of filling in a login form, you are asked to log in with itLab.
 
 In case you need CLI support for automation purposes, the plugin is also compatible with it, adapting the functionality from [sinopia-github-oauth-cli](https://github.com/soundtrackyourbrand/sinopia-github-oauth-cli) to work with GitLab.
 
