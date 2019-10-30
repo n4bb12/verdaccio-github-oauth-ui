@@ -7,8 +7,8 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/verdaccio-gitlab-oauth-ui">
-    <img alt="Version" src="https://flat.badgen.net/npm/v/verdaccio-gitlab-oauth-ui?icon=npm">
+  <a href="https://www.npmjs.com/package/@bizneo/verdaccio-gitlab-oauth-ui">
+    <img alt="Version" src="https://flat.badgen.net/npm/v/@bizneo/verdaccio-gitlab-oauth-ui?icon=npm">
   </a>
   <a href="https://raw.githubusercontent.com/bizneo/verdaccio-gitlab-oauth-ui/master/LICENSE">
     <img alt="License" src="https://flat.badgen.net/github/license/bizneo/verdaccio-gitlab-oauth-ui?icon=github">
