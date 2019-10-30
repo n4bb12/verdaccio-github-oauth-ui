@@ -83,7 +83,7 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
     const requiredAccess = [...pkg.access || []]
 
     if (requiredAccess.includes("$authenticated")) {
-      requiredAccess.push(this.config.auth[pluginName].org)
+      requiredAccess.push(this.requiredOrg)
     }
 
     const grantedAccess = intersection(user.groups, requiredAccess)
