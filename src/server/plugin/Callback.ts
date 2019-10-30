@@ -1,7 +1,8 @@
 import { Handler, NextFunction, Request, Response } from "express"
+import { get } from "lodash"
 import { stringify } from "querystring"
 
-import { GitHubClient, GitHubOAuth, GitHubUser } from "../github"
+import { GitLabClient, GitLabOAuth, GitLabUser } from "../gitlab"
 import { Auth, getSecurity, User } from "../verdaccio"
 import { getConfig, getMajorVersion, PluginConfig } from "./Config"
 
@@ -9,11 +10,11 @@ export class Callback {
 
   static readonly path = "/-/oauth/callback"
 
-  private readonly requiredOrg = getConfig(this.config, "org")
+  private readonly requiredGroup = getConfig(this.config, "group")
   private readonly clientId = getConfig(this.config, "client-id")
   private readonly clientSecret = getConfig(this.config, "client-secret")
-  private readonly enterpriseOrigin = getConfig(this.config, "enterprise-origin")
-  private readonly github = new GitHubClient(this.config.user_agent, this.enterpriseOrigin)
+  private readonly gitlabHost = getConfig(this.config, "gitlab-host")
+  private readonly gitlab = new GitLabClient(this.gitlabHost)
   private readonly version = getMajorVersion(this.config)
 
   constructor(
@@ -22,9 +23,9 @@ export class Callback {
   ) { }
 
   /**
-   * After a successful OAuth authentication, GitHub redirects back to us.
+   * After a successful OAuth authentication, gitLab redirects back to us.
    * We use the OAuth code to get an OAuth access token and the username associated
-   * with the GitHub account.
+   * with the GitLab account.
    *
    * The token and username are encryped and base64 encoded and configured as npm
    * credentials for this registry. There is no need to later decode and decrypt the token.
@@ -37,14 +38,19 @@ export class Callback {
   middleware: Handler = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const code = req.query.code
+      const callbackUrl = Callback.getCallbackUrl(req, this.config)
 
-      const githubOauth = await this.github.requestAccessToken(code, this.clientId, this.clientSecret)
-      const githubUser = await this.github.requestUser(githubOauth.access_token)
-      const githubOrgs = await this.github.requestUserOrgs(githubOauth.access_token)
-      const githubOrgNames = githubOrgs.map(ghOrg => ghOrg.login)
+      console.log("Hola 1")
+      const gitlabOauth = await this.gitlab.requestAccessToken(code, this.clientId, this.clientSecret, callbackUrl)
+      console.log("Hola 2")
+      const gitlabUser = await this.gitlab.requestUser(gitlabOauth.access_token)
+      console.log("Hola 3")
+      const gitlabGroups = await this.gitlab.requestUserGroups(gitlabOauth.access_token)
+      console.log("Hola 4")
+      const gitlabGroupNames = gitlabGroups.map(gitlabOrg => gitlabOrg.path)
 
-      if (githubOrgNames.includes(this.requiredOrg)) {
-        await this.grantAccess(res, githubOauth, githubUser)
+      if (gitlabGroupNames.includes(this.requiredGroup)) {
+        await this.grantAccess(res, gitlabOauth, gitlabUser)
       } else {
         await this.denyAccess(res)
       }
@@ -53,14 +59,33 @@ export class Callback {
     }
   }
 
-  private async grantAccess(res: Response, githubOauth: GitHubOAuth, githubUser: GitHubUser) {
-    const npmAuth = githubUser.login + ":" + githubOauth.access_token
+  /**
+   * This is where itLab should redirect back to.
+   */
+  static getCallbackUrl(req: Request, config: PluginConfig): string {
+    return Callback.getRegistryUrl(req, config) + Callback.path
+  }
+
+  /**
+   * This is the same as what `npm config get registry` returns.
+   */
+  static getRegistryUrl(req: Request, config: PluginConfig): string {
+    const prefix = get(config, "url_prefix", "")
+    if (prefix) {
+      return prefix.replace(/\/?$/, "") // Remove potential trailing slash
+    }
+    const protocal = req.get("X-Forwarded-Proto") || req.protocol
+    return protocal + "://" + req.get("host")
+  }
+
+  private async grantAccess(res: Response, gitlabOauth: GitLabOAuth, gitlabUser: GitLabUser) {
+    const npmAuth = gitlabUser.username + ":" + gitlabOauth.access_token
     const encryptedNpmToken = this.encrypt(npmAuth)
 
     const user: User = {
-      name: githubUser.login,
-      groups: [this.requiredOrg],
-      real_groups: [this.requiredOrg],
+      name: gitlabUser.username,
+      groups: [this.requiredGroup],
+      real_groups: [this.requiredGroup],
     }
 
     const encryptedJWT = this.version === 3
@@ -68,19 +93,17 @@ export class Callback {
       : await this.issueJWTVerdaccio4(user)
 
     const frontendUrl = "/?" + stringify({
-      username: githubUser.login,
+      username: gitlabUser.username,
       jwtToken: encryptedJWT,
       npmToken: encryptedNpmToken,
     })
-
-    console.log(frontendUrl)
 
     res.redirect(frontendUrl)
   }
 
   private denyAccess(res: Response) {
     res.send(`
-      Access denied: you are not a member of "${this.requiredOrg}"<br>
+      Access denied: you are not a member of "${this.requiredGroup}"<br>
       <a href="/">Go back</a>
     `)
   }

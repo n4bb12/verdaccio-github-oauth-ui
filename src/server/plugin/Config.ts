@@ -2,13 +2,13 @@ import { Config } from "@verdaccio/types"
 import chalk from "chalk"
 import { get } from "lodash"
 
-export const pluginName = "github-oauth-ui"
+export const pluginName = "gitlab-oauth-ui"
 
 export interface PluginConfigProps {
-  "org": string,
+  "group": string,
   "client-id": string,
   "client-secret": string,
-  "enterprise-origin": string,
+  "gitlab-host": string,
 }
 
 export type PluginConfigKey = keyof PluginConfigProps
@@ -44,7 +44,7 @@ function ensurePropExists(config: PluginConfig, key: PluginConfigKey) {
 }
 
 export function validateConfig(config: PluginConfig) {
-  ensurePropExists(config, "org")
+  ensurePropExists(config, "group")
   ensurePropExists(config, "client-id")
   ensurePropExists(config, "client-secret")
 }

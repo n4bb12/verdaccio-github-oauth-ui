@@ -8,8 +8,8 @@ import {
 import { Application } from "express"
 import { get, intersection } from "lodash"
 
-import { SinopiaGithubOAuthCliSupport } from "../cli-support"
-import { GitHubClient } from "../github"
+import { GitlabOAuthCliSupport } from "../cli-support"
+import { GitLabClient } from "../gitlab"
 import { Auth } from "../verdaccio"
 import { Authorization } from "./Authorization"
 import { Callback } from "./Callback"
@@ -19,7 +19,7 @@ import { registerGlobalProxyAgent } from "./ProxyAgent"
 
 interface UserDetails {
   authToken: string
-  orgNames: string[]
+  groupNames: string[]
   expires: number
 }
 
@@ -32,11 +32,11 @@ function log(...args: any[]) {
 /**
  * Implements the verdaccio plugin interfaces.
  */
-export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<any> {
+export class GitlabOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<any> {
 
-  private readonly requiredOrg = getConfig(this.config, "org")
-  private readonly enterpriseOrigin = getConfig(this.config, "enterprise-origin")
-  private readonly github = new GitHubClient(this.config.user_agent, this.enterpriseOrigin)
+  private readonly requiredGroup = getConfig(this.config, "group")
+  private readonly gitlabHost = getConfig(this.config, "gitlab-host")
+  private readonly gitlab = new GitLabClient(this.gitlabHost)
   private readonly cache: { [username: string]: UserDetails } = {}
 
   constructor(private readonly config: PluginConfig) {
@@ -55,9 +55,8 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
       app.use(InjectHtml.path, injectHtml.serveAssetsMiddleware)
     }
 
-    const cliSupport = new SinopiaGithubOAuthCliSupport(this.config, auth)
+    const cliSupport = new GitlabOAuthCliSupport(this.config, auth)
     cliSupport.register_middlewares(app)
-
     const authorization = new Authorization(this.config)
     app.get(Authorization.path, authorization.middleware)
 
@@ -69,12 +68,12 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
    * Implements the auth plugin interface.
    */
   async authenticate(username: string, authToken: string, cb: AuthCallback) {
-    const userOrgs = await this.getOrgNames(username, authToken)
+    const userOrgs = await this.getGroupNames(username, authToken)
 
-    if (userOrgs.includes(this.requiredOrg)) {
-      cb(null, [this.requiredOrg])
+    if (userOrgs.includes(this.requiredGroup)) {
+      cb(null, [this.requiredGroup])
     } else {
-      log(`Unauthenticated: user "${username}" is not a member of "${this.requiredOrg}"`)
+      log(`Unauthenticated: user "${username}" is not a member of "${this.requiredGroup}"`)
       cb(null, false)
     }
   }
@@ -83,7 +82,7 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
     const requiredAccess = [...pkg.access || []]
 
     if (requiredAccess.includes("$authenticated")) {
-      requiredAccess.push(this.config.auth[pluginName].org)
+      requiredAccess.push(this.config.auth[pluginName].group)
     }
 
     const grantedAccess = intersection(user.groups, requiredAccess)
@@ -91,12 +90,12 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
     if (grantedAccess.length === requiredAccess.length) {
       cb(null, user.groups)
     } else {
-      log(`Access denied: user "${user.name}" is not a member of "${this.config.org}"`)
+      log(`Access denied: user "${user.name}" is not a member of "${this.config.group}"`)
       cb(null, false)
     }
   }
 
-  private async getOrgNames(username: string, authToken: string): Promise<string[]> {
+  private async getGroupNames(username: string, authToken: string): Promise<string[]> {
     const invalidate = () => delete this.cache[username]
     const cached = () => this.cache[username] || {}
     const nearFuture = () => Date.now() + cacheTTLms
@@ -110,14 +109,14 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
       cached().expires = nearFuture()
     }
 
-    if (!cached().orgNames) {
+    if (!cached().groupNames) {
       try {
-        const orgs = await this.github.requestUserOrgs(authToken)
-        const orgNames = orgs.map(org => org.login)
+        let groups = await this.gitlab.requestUserGroups(authToken)
+        let groupNames = groups.map(group => group.path)
 
         this.cache[username] = {
           authToken,
-          orgNames,
+          groupNames,
           expires: nearFuture(),
         }
       } catch (error) {
@@ -125,7 +124,7 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
       }
     }
 
-    return cached().orgNames || []
+    return cached().groupNames || []
   }
 
 }
