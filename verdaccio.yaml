@@ -17,14 +17,15 @@ web:
 middlewares:
   audit:
     enabled: true
-  github-oauth-ui:
+  gitlab-oauth-ui:
     enabled: true
 
 auth:
   gitlab-oauth-ui:
+    group: GITLAB_GROUP # required
     client-id: GITLAB_CLIENT_ID # required
     client-secret: GITLAB_CLIENT_SECRET # required
-    gitlab_host: GITLAB_HOST # optional, set this if you are using self hosted gitlab
+    gitlab-host: GITLAB_HOST # optional, set this if you are using self hosted gitlab
 
 # a list of other known repositories we can talk to
 uplinks:
