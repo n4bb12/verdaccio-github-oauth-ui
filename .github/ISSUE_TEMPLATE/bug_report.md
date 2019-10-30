@@ -12,7 +12,7 @@ about: Create a report to help us improve
 |                           | Version |
 | ------------------------- | ------- |
 | verdaccio                 |         |
-| verdaccio-github-oauth-ui |         |
+| verdaccio-gitlab-oauth-ui |         |
 
 #### Expected behavior
 <!-- A clear and concise description of what you expected to happen. -->

@@ -1,8 +1,8 @@
 {
-  "name": "verdaccio-github-oauth-ui",
+  "name": "verdaccio-gitlab-oauth-ui",
   "version": "2.0.1",
   "keywords": [
-    "github",
+    "gitlab",
     "login",
     "npm",
     "oauth",
@@ -11,11 +11,11 @@
     "registry",
     "verdaccio"
   ],
-  "homepage": "https://github.com/n4bb12/verdaccio-github-oauth-ui/blob/master/README.md",
-  "bugs": "https://github.com/n4bb12/verdaccio-github-oauth-ui/issues",
-  "repository": "github:n4bb12/verdaccio-github-oauth-ui",
+  "homepage": "https://github.com/bizneo/verdaccio-gitlab-oauth-ui/blob/master/README.md",
+  "bugs": "https://github.com/bizneo/verdaccio-gitlab-oauth-ui/issues",
+  "repository": "github:bizneo/verdaccio-gitlab-oauth-ui",
   "license": "MIT",
-  "author": "Abraham Schilling",
+  "author": "Oscar de Arriba",
   "files": [
     "dist"
   ],
@@ -58,7 +58,6 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.1.2",
-    "sinopia-github-oauth-cli": "^1.1.0",
     "tslint": "^5.14.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.6.4",
