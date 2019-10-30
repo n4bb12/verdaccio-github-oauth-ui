@@ -24,10 +24,10 @@
     "build": "bash run build",
     "lint": "bash run lint",
     "prepack": "bash run clear && bash run build",
-    "start": "bash run start",
     "test": "yarn update && yarn start",
-    "update": "bash run update",
-    "watch": "bash run watch"
+    "start": "verdaccio -c verdaccio.yaml",
+    "update": "bash run clean && bash run build && bash run link",
+    "watch": "nodemon --watch src --ext ts,css --exec \"yarn update\""
   },
   "dependencies": {
     "chalk": "^2.4.2",

@@ -25,7 +25,6 @@ fail() {
 ##################################################
 
 linkdir=node_modules/verdaccio-github-oauth-ui
-config=verdaccio.yaml
 
 #
 # Build server, config and client
@@ -38,9 +37,9 @@ build() {
 #
 # Remove the plugin from node_modules
 #
-clear() {
-  run clear rm -rf dist
-  run clear rm -rf $linkdir
+clean() {
+  run clean rm -rf dist
+  run clean rm -rf $linkdir
 }
 
 
@@ -55,36 +54,13 @@ link() {
 }
 
 #
-# Update client and server
-#
-update() {
-  clear
-  build
-  link
-}
-
-#
-# Start verdaccio
-#
-start() {
-  run start yarn verdaccio -c $config ${@}
-}
-
-#
-# Watch for changes, rebuild and update
-#
-watch() {
-  run watch yarn nodemon --watch src --ext ts,css --exec bash run update
-}
-
-#
 # Run linters
 #
 lint() {
-  run lint yarn tsc --project src/client/tsconfig.json --noEmit
-  run lint yarn tsc --project src/server/tsconfig.json --noEmit
-  run lint yarn tslint -c tslint.json -p src/client/tsconfig.json ${@}
-  run lint yarn tslint -c tslint.json -p src/server/tsconfig.json ${@}
+  yarn tsc -p src/client/tsconfig.json
+  yarn tsc -p src/server/tsconfig.json
+  yarn tslint -c tslint.json -p src/client/tsconfig.json ${@}
+  yarn tslint -c tslint.json -p src/server/tsconfig.json ${@}
 }
 
 #
