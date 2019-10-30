@@ -1,6 +1,6 @@
 {
-  "name": "verdaccio-gitlab-oauth-ui",
-  "version": "2.0.1",
+  "name": "@bizneo/verdaccio-gitlab-oauth-ui",
+  "version": "1.0.0",
   "keywords": [
     "gitlab",
     "login",
