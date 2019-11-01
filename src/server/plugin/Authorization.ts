@@ -1,5 +1,4 @@
 import { Handler, NextFunction, Request, Response } from "express"
-import { get } from "lodash"
 
 import { AuthProvider } from "./AuthProvider"
 import { Callback } from "./Callback"
@@ -44,7 +43,7 @@ export class Authorization {
    * This is the same as what `npm config get registry` returns.
    */
   getRegistryUrl(req: Request): string {
-    const prefix = get(this.config, "url_prefix", "")
+    const prefix = this.config.url_prefix || ""
     if (prefix) {
       return prefix.replace(/\/?$/, "") // Remove potential trailing slash
     }
