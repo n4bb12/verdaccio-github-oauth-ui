@@ -1,8 +1,13 @@
-version: 2
-jobs:
-  install:
+version: 2.1
+
+executors:
+  node:
     docker:
       - image: circleci/node:10
+
+jobs:
+  install:
+    executor: node
     steps:
       - checkout
       - restore_cache:
@@ -18,19 +23,21 @@ jobs:
           paths: .
 
   lint:
-    docker:
-      - image: circleci/node:10
+    executor: node
     steps:
-      - attach_workspace:
-          at: .
+      - attach_workspace: { "at": "." }
       - run: yarn lint
 
-  prepublish:
-    docker:
-      - image: circleci/node:10
+  test:
+    executor: node
     steps:
-      - attach_workspace:
-          at: .
+      - attach_workspace: { "at": "." }
+      - run: yarn test
+
+  prepack:
+    executor: node
+    steps:
+      - attach_workspace: { "at": "." }
       - run: yarn prepack
 
 workflows:
@@ -41,6 +48,9 @@ workflows:
       - lint:
           requires:
             - install
-      - prepublish:
+      - test:
+          requires:
+            - install
+      - prepack:
           requires:
             - install
