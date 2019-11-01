@@ -6,7 +6,7 @@ import {
   RemoteUser,
 } from "@verdaccio/types"
 import { Application } from "express"
-import { get, intersection } from "lodash"
+import { intersection } from "lodash"
 
 import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 import { GitHubAuthProvider } from "../github"
@@ -14,8 +14,9 @@ import { Auth } from "../verdaccio"
 import { Authorization } from "./Authorization"
 import { Callback } from "./Callback"
 import { getConfig, PluginConfig, pluginName, validateConfig } from "./Config"
-import { InjectHtml } from "./InjectHtml"
+import { PatchHtml } from "./PatchHtml"
 import { registerGlobalProxyAgent } from "./ProxyAgent"
+import { ServeStatic } from "./ServeStatic"
 
 interface UserDetails {
   token: string
@@ -47,15 +48,12 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
    * Implements the middleware plugin interface.
    */
   register_middlewares(app: Application, auth: Auth) {
-    if (get(this.config, "web.enable", true)) {
-      const injectHtml = new InjectHtml(this.config)
-
-      app.use(injectHtml.injectAssetsMiddleware)
-      app.use(InjectHtml.path, injectHtml.serveAssetsMiddleware)
-    }
-
-    const cliSupport = new SinopiaGithubOAuthCliSupport(this.config, auth)
-    cliSupport.register_middlewares(app)
+    const plugins = [
+      new ServeStatic(),
+      new PatchHtml(this.config),
+      new SinopiaGithubOAuthCliSupport(this.config, auth),
+    ]
+    plugins.forEach(plugin => plugin.register_middlewares(app))
 
     const authorization = new Authorization(this.config, this.provider)
     app.get(Authorization.path(), authorization.middleware)
