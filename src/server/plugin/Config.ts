@@ -2,6 +2,8 @@ import { Config } from "@verdaccio/types"
 import chalk from "chalk"
 import { get } from "lodash"
 
+import { logger } from "./logger"
+
 export const pluginName = "github-oauth-ui"
 export const publicRoot = __dirname + "/public"
 
@@ -45,7 +47,7 @@ function ensurePropExists(config: PluginConfig, key: PluginConfigKey) {
   const value = getConfig(config, key)
 
   if (!value) {
-    console.error(chalk.red(
+    logger.error(chalk.red(
       `[${pluginName}] ERR: Missing configuration "auth.${pluginName}.${key}"`))
     throw new Error("Please check your verdaccio config.")
   }
