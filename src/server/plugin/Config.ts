@@ -3,6 +3,7 @@ import chalk from "chalk"
 import { get } from "lodash"
 
 export const pluginName = "github-oauth-ui"
+export const publicRoot = __dirname + "/public"
 
 export interface PluginConfigProps {
   "org": string,
