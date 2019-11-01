@@ -8,7 +8,9 @@ import { getConfig, getMajorVersion, PluginConfig } from "./Config"
 
 export class Callback {
 
-  static readonly path = "/-/oauth/callback"
+  static path(id?: string) {
+    return "/-/oauth/callback" + (id ? "/" + id : "")
+  }
 
   private readonly version = getMajorVersion(this.config)
   private readonly requiredGroup = getConfig(this.config, "org")

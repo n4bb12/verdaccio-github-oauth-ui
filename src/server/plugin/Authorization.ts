@@ -6,7 +6,9 @@ import { getBaseUrl, PluginConfig } from "./Config"
 
 export class Authorization {
 
-  static readonly path = "/-/oauth/authorize/:id?"
+  static path(id?: string) {
+    return "/-/oauth/authorize/" + (id || ":id?")
+  }
 
   constructor(
     private readonly config: PluginConfig,
@@ -35,11 +37,10 @@ export class Authorization {
    * This is where the auth provider should redirect back to.
    */
   getRedirectUrl(req: Request): string {
-    const id = (req.params.id || "")
     const baseUrl = getBaseUrl(this.config) || this.getRequestOrigin(req)
-    const subPath = (id ? `/${id}` : "")
+    const path = Callback.path(req.params.id)
 
-    return baseUrl + Callback.path + subPath
+    return baseUrl + path
   }
 
   /**
