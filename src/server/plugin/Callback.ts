@@ -71,8 +71,6 @@ export class Callback {
       npmToken: encryptedNpmToken,
     })
 
-    console.log(frontendUrl)
-
     res.redirect(frontendUrl)
   }
 

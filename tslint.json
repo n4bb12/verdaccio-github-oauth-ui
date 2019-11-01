@@ -4,6 +4,7 @@
   "extends": ["tslint:latest", "tslint-config-prettier", "@n4bb12/config-tslint"],
   "rules": {
     "interface-name": false,
+    "no-console": true,
     "max-line-length": [true, 120],
     "arrow-parens": false,
     "no-implicit-dependencies": false

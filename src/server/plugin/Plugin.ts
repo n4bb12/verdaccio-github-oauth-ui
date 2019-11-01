@@ -14,14 +14,11 @@ import { Auth } from "../verdaccio"
 import { Authorization } from "./Authorization"
 import { Cache } from "./Cache"
 import { Callback } from "./Callback"
-import { getConfig, PluginConfig, pluginName, validateConfig } from "./Config"
+import { getConfig, PluginConfig, validateConfig } from "./Config"
+import { logger } from "./logger"
 import { PatchHtml } from "./PatchHtml"
 import { registerGlobalProxyAgent } from "./ProxyAgent"
 import { ServeStatic } from "./ServeStatic"
-
-function log(...args: any[]) {
-  console.log(`${[pluginName]}`, ...args)
-}
 
 /**
  * Implements the verdaccio plugin interfaces.
@@ -64,7 +61,7 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
     if (groups.includes(this.requiredGroup)) {
       callback(null, [this.requiredGroup])
     } else {
-      log(`Unauthenticated: user "${username}" is not a member of "${this.requiredGroup}"`)
+      logger.error(`Unauthenticated: user "${username}" is not a member of "${this.requiredGroup}"`)
       callback(null, false)
     }
   }
@@ -81,7 +78,7 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
     if (grantedAccess.length === requiredAccess.length) {
       callback(null, user.groups)
     } else {
-      log(`Access denied: user "${user.name}" is not a member of "${this.config.org}"`)
+      logger.error(`Access denied: user "${user.name}" is not a member of "${this.config.org}"`)
       callback(null, false)
     }
   }

@@ -1,13 +1,9 @@
 import { AuthProvider } from "./AuthProvider"
-import { pluginName } from "./Config"
+import { logger } from "./logger"
 
 interface CachedGroups {
   groups: string[]
   expires: number
-}
-
-function log(...args: any[]) {
-  console.log(`${[pluginName]}`, ...args)
 }
 
 export class Cache {
@@ -39,7 +35,7 @@ export class Cache {
           expires: nearFuture(),
         }
       } catch (error) {
-        log(error.message)
+        logger.error(error.message)
       }
     }
 
