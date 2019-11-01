@@ -1,7 +1,7 @@
-import { formatUsageInfo, init } from "./github-oauth-ui"
+import { getUsageInfo, init } from "./plugin"
 
 function updateUsageInfo() {
-  const info = formatUsageInfo()
+  const info = getUsageInfo()
   const element = document.querySelector("[class*='header__headerWrap'] figure") as HTMLElement
 
   if (element) {
