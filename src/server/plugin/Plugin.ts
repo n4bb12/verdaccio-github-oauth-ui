@@ -57,7 +57,7 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
     const cliSupport = new SinopiaGithubOAuthCliSupport(this.config, auth)
     cliSupport.register_middlewares(app)
 
-    const authorization = new Authorization(this.config)
+    const authorization = new Authorization(this.config, this.provider)
     app.get(Authorization.path, authorization.middleware)
 
     const callback = new Callback(this.config, auth)

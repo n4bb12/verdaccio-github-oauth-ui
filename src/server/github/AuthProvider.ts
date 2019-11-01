@@ -1,3 +1,5 @@
+import { stringify } from "querystring"
+
 import { AuthProvider } from "../plugin/AuthProvider"
 import { getConfig, PluginConfig } from "../plugin/Config"
 import { GitHubClient } from "./Client"
@@ -36,6 +38,15 @@ export class GitHubAuthProvider implements AuthProvider {
   async getGroups(token: string) {
     const orgs = await this.client.requestUserOrgs(token)
     return orgs.map(org => org.login)
+  }
+
+  async getLoginUrl(redirectUrl: string) {
+    const queryParams = stringify({
+      client_id: this.clientId,
+      redirect_uri: redirectUrl,
+      scope: "read:org",
+    })
+    return this.webBaseUrl + `/login/oauth/authorize?` + queryParams
   }
 
 }
