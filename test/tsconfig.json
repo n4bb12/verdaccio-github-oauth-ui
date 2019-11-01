@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "rootDir": ".",
+    "baseUrl": "..",
+    "target": "es2018",
+    "types": ["node", "jest"]
+  },
+  "extends": "../tsconfig.json"
+}
