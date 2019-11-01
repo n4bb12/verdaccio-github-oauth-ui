@@ -50,6 +50,7 @@ async function build() {
       output: {
         file: `dist/public/verdaccio-${version}.js`,
         format: "umd",
+        name: `verdaccio-${version}`,
       },
     }),
   )
