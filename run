@@ -59,8 +59,10 @@ link() {
 lint() {
   yarn tsc -p src/client/tsconfig.json
   yarn tsc -p src/server/tsconfig.json
-  yarn tslint -c tslint.json -p src/client/tsconfig.json ${@}
-  yarn tslint -c tslint.json -p src/server/tsconfig.json ${@}
+  yarn tsc -p test/tsconfig.json
+  yarn tslint -p src/client/tsconfig.json ${@}
+  yarn tslint -p src/server/tsconfig.json ${@}
+  yarn tslint -p test/tsconfig.json ${@}
 }
 
 #
