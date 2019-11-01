@@ -2,7 +2,7 @@ import { Handler, NextFunction, Request, Response } from "express"
 
 import { AuthProvider } from "./AuthProvider"
 import { Callback } from "./Callback"
-import { getBaseUrl, PluginConfig } from "./Config"
+import { Config, getBaseUrl } from "./Config"
 
 export class Authorization {
 
@@ -11,7 +11,7 @@ export class Authorization {
   }
 
   constructor(
-    private readonly config: PluginConfig,
+    private readonly config: Config,
     private readonly provider: AuthProvider,
   ) { }
 

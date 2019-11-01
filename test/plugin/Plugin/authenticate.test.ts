@@ -1,6 +1,6 @@
 import { GitHubAuthProvider } from "src/server/github/AuthProvider"
-import { PluginConfigProps } from "src/server/plugin/Config"
-import { GithubOauthUiPlugin } from "src/server/plugin/Plugin"
+import { PluginConfig } from "src/server/plugin/Config"
+import { Plugin } from "src/server/plugin/Plugin"
 
 import { createTestConfig, createTestPlugin } from "../test-utils"
 
@@ -15,8 +15,8 @@ describe("Plugin", () => {
     const testUsername = "turtle"
     const testToken = "eltrut"
 
-    let config: PluginConfigProps
-    let plugin: GithubOauthUiPlugin
+    let config: PluginConfig
+    let plugin: Plugin
 
     beforeEach(() => {
       config = createTestConfig()

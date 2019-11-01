@@ -4,7 +4,7 @@ import { URL } from "url"
 
 import { Auth, getSecurity, User } from "../verdaccio"
 import { AuthProvider } from "./AuthProvider"
-import { getConfig, getMajorVersion, PluginConfig } from "./Config"
+import { Config, getConfig, getMajorVersion } from "./Config"
 
 export class Callback {
 
@@ -16,7 +16,7 @@ export class Callback {
   private readonly requiredGroup = getConfig(this.config, "org")
 
   constructor(
-    private readonly config: PluginConfig,
+    private readonly config: Config,
     private readonly verdaccioAuth: Auth,
     private readonly provider: AuthProvider,
   ) { }

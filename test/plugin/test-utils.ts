@@ -1,5 +1,5 @@
 import { pluginName } from "src/server/plugin/Config"
-import { GithubOauthUiPlugin } from "src/server/plugin/Plugin"
+import { Plugin } from "src/server/plugin/Plugin"
 
 export function createTestConfig() {
   return {
@@ -10,7 +10,7 @@ export function createTestConfig() {
 }
 
 export function createTestPlugin() {
-  return new GithubOauthUiPlugin({
+  return new Plugin({
     auth: {
       [pluginName]: createTestConfig(),
     },

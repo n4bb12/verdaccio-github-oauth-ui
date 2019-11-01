@@ -2,7 +2,7 @@ import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler, NextFunction, Request, Response } from "express"
 import { readFileSync } from "fs"
 
-import { getMajorVersion, PluginConfig, publicRoot } from "./Config"
+import { Config, getMajorVersion, publicRoot } from "./Config"
 import { ServeStatic } from "./ServeStatic"
 
 /**
@@ -17,7 +17,7 @@ export class PatchHtml implements IPluginMiddleware<any> {
   private readonly bodyWithScript = [this.scriptTag, "</body>"].join("")
 
   constructor(
-    private readonly config: PluginConfig,
+    private readonly config: Config,
   ) { }
 
   /**

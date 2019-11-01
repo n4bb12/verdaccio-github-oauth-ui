@@ -1,4 +1,4 @@
-import { Config } from "@verdaccio/types"
+import { Config as VerdaccioConfig } from "@verdaccio/types"
 import chalk from "chalk"
 import { get } from "lodash"
 
@@ -7,21 +7,21 @@ import { logger } from "./logger"
 export const pluginName = "github-oauth-ui"
 export const publicRoot = __dirname + "/public"
 
-export interface PluginConfigProps {
+export interface PluginConfig {
   "org": string,
   "client-id": string,
   "client-secret": string,
   "enterprise-origin"?: string,
 }
 
-export type PluginConfigKey = keyof PluginConfigProps
+export type PluginConfigKey = keyof PluginConfig
 
-export interface PluginConfig extends Config, PluginConfigProps {
-  middlewares: { [pluginName]: PluginConfigProps }
-  auth: { [pluginName]: PluginConfigProps },
+export interface Config extends VerdaccioConfig, PluginConfig {
+  middlewares: { [pluginName]: PluginConfig }
+  auth: { [pluginName]: PluginConfig },
 }
 
-export function getConfig(config: PluginConfig, key: PluginConfigKey): string {
+export function getConfig(config: Config, key: PluginConfigKey): string {
   const value = null
     || get(config, `middlewares[${pluginName}][${key}]`)
     || get(config, `auth[${pluginName}][${key}]`)
@@ -32,18 +32,18 @@ export function getConfig(config: PluginConfig, key: PluginConfigKey): string {
 /**
  * user_agent: e.g. "verdaccio/4.3.4" --> 4
  */
-export function getMajorVersion(config: PluginConfig) {
+export function getMajorVersion(config: Config) {
   return +config.user_agent[10]
 }
 
-export function getBaseUrl(config: PluginConfig) {
+export function getBaseUrl(config: Config) {
   const prefix = config.url_prefix
   if (prefix) {
     return prefix.replace(/\/?$/, "") // Remove potential trailing slash
   }
 }
 
-function ensurePropExists(config: PluginConfig, key: PluginConfigKey) {
+function ensurePropExists(config: Config, key: PluginConfigKey) {
   const value = getConfig(config, key)
 
   if (!value) {
@@ -53,7 +53,7 @@ function ensurePropExists(config: PluginConfig, key: PluginConfigKey) {
   }
 }
 
-function ensureNodeIsNotEmpty(config: PluginConfig, node: keyof PluginConfig) {
+function ensureNodeIsNotEmpty(config: Config, node: keyof Config) {
   const path = `[${node}][${pluginName}]`
   const obj = get(config, path, {})
 
@@ -62,7 +62,7 @@ function ensureNodeIsNotEmpty(config: PluginConfig, node: keyof PluginConfig) {
   }
 }
 
-export function validateConfig(config: PluginConfig) {
+export function validateConfig(config: Config) {
   ensureNodeIsNotEmpty(config, "auth")
   ensureNodeIsNotEmpty(config, "middlewares")
 

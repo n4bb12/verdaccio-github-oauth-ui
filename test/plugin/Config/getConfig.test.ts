@@ -1,9 +1,9 @@
-import { getConfig, PluginConfig, pluginName } from "src/server/plugin/Config"
+import { Config, getConfig, pluginName } from "src/server/plugin/Config"
 
 describe("Config", () => {
   describe("getConfig", () => {
 
-    const authConfig: PluginConfig = {
+    const authConfig: Config = {
       auth: {
         [pluginName]: { org: "TEST_ORG" },
       },
@@ -12,7 +12,7 @@ describe("Config", () => {
       },
     } as any
 
-    const middlewaresConfig: PluginConfig = {
+    const middlewaresConfig: Config = {
       auth: {
         [pluginName]: { enabled: true },
       },

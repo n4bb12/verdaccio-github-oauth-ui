@@ -8,13 +8,13 @@ import {
 import { Application } from "express"
 import { intersection } from "lodash"
 
-import { SinopiaGithubOAuthCliSupport } from "../cli-support"
+import { CliSupport } from "../cli-support"
 import { GitHubAuthProvider } from "../github"
 import { Auth } from "../verdaccio"
 import { Authorization } from "./Authorization"
 import { Cache } from "./Cache"
 import { Callback } from "./Callback"
-import { getConfig, PluginConfig, validateConfig } from "./Config"
+import { Config, getConfig, validateConfig } from "./Config"
 import { logger } from "./logger"
 import { PatchHtml } from "./PatchHtml"
 import { registerGlobalProxyAgent } from "./ProxyAgent"
@@ -23,13 +23,13 @@ import { ServeStatic } from "./ServeStatic"
 /**
  * Implements the verdaccio plugin interfaces.
  */
-export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<any> {
+export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
 
   private readonly requiredGroup = getConfig(this.config, "org")
   private readonly provider = new GitHubAuthProvider(this.config)
   private readonly cache = new Cache(this.provider)
 
-  constructor(private readonly config: PluginConfig) {
+  constructor(private readonly config: Config) {
     validateConfig(config)
     registerGlobalProxyAgent()
   }
@@ -41,7 +41,7 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
     const plugins = [
       new ServeStatic(),
       new PatchHtml(this.config),
-      new SinopiaGithubOAuthCliSupport(this.config, auth),
+      new CliSupport(this.config, auth),
     ]
     plugins.forEach(plugin => plugin.register_middlewares(app))
 
