@@ -1,10 +1,11 @@
-import { Handler, NextFunction, Request, Response } from "express"
+import { IPluginMiddleware } from "@verdaccio/types"
+import { Application, Handler, NextFunction, Request, Response } from "express"
 
 import { AuthProvider } from "./AuthProvider"
 import { Callback } from "./Callback"
 import { Config, getBaseUrl } from "./Config"
 
-export class Authorization {
+export class Authorization implements IPluginMiddleware<any> {
 
   static path(id?: string) {
     return "/-/oauth/authorize/" + (id || ":id?")
@@ -14,6 +15,13 @@ export class Authorization {
     private readonly config: Config,
     private readonly provider: AuthProvider,
   ) { }
+
+  /**
+   * Implements the middleware plugin interface.
+   */
+  register_middlewares(app: Application) {
+    app.get(Authorization.path(), this.middleware)
+  }
 
   /**
    * Initiates the OAuth flow by redirecting to the auth provider's login URL.
