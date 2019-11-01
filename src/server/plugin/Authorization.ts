@@ -2,7 +2,7 @@ import { Handler, NextFunction, Request, Response } from "express"
 
 import { AuthProvider } from "./AuthProvider"
 import { Callback } from "./Callback"
-import { PluginConfig } from "./Config"
+import { getBaseUrl, PluginConfig } from "./Config"
 
 export class Authorization {
 
@@ -36,17 +36,16 @@ export class Authorization {
    */
   getRedirectUrl(req: Request): string {
     const id = (req.params.id || "")
-    return this.getRegistryUrl(req) + Callback.path + (id ? `/${id}` : "")
+    const baseUrl = getBaseUrl(this.config) || this.getRequestOrigin(req)
+    const subPath = (id ? `/${id}` : "")
+
+    return baseUrl + Callback.path + subPath
   }
 
   /**
    * This is the same as what `npm config get registry` returns.
    */
-  getRegistryUrl(req: Request): string {
-    const prefix = this.config.url_prefix || ""
-    if (prefix) {
-      return prefix.replace(/\/?$/, "") // Remove potential trailing slash
-    }
+  getRequestOrigin(req: Request) {
     const protocal = req.get("X-Forwarded-Proto") || req.protocol
     return protocal + "://" + req.get("host")
   }
