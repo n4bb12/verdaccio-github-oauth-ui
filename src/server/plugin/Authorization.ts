@@ -1,39 +1,31 @@
 import { Handler, NextFunction, Request, Response } from "express"
 import { get } from "lodash"
-import { stringify } from "querystring"
 
-import { GitHubAuthProvider } from "../github"
+import { AuthProvider } from "./AuthProvider"
 import { Callback } from "./Callback"
-import { getConfig, PluginConfig } from "./Config"
+import { PluginConfig } from "./Config"
 
 export class Authorization {
 
   static readonly path = "/-/oauth/authorize/:id?"
 
-  private readonly clientId = getConfig(this.config, "client-id")
-  private readonly provider = new GitHubAuthProvider(this.config)
-
   constructor(
     private readonly config: PluginConfig,
+    private readonly provider: AuthProvider,
   ) { }
 
   /**
-   * Initiates the GitHub OAuth flow by redirecting to GitHub.
+   * Initiates the OAuth flow by redirecting to the auth provider's login URL.
    * The callback URL can be customized by subpathing the request.
    *
    * Example:
    *   A request to `/-/oauth/authorize/cheese-cake` will be called back at
    *   `/-/oauth/callback/cheese-cake`.
    */
-  middleware: Handler = (req: Request, res: Response, next: NextFunction) => {
+  middleware: Handler = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = (req.params.id || "")
-      const query = {
-        client_id: this.clientId,
-        redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ""),
-        scope: "read:org",
-      }
-      const url = this.provider.webBaseUrl + `/login/oauth/authorize?` + stringify(query)
+      const redirectUrl = this.getRedirectUrl(req)
+      const url = await this.provider.getLoginUrl(redirectUrl)
       res.redirect(url)
     } catch (error) {
       next(error)
@@ -41,10 +33,11 @@ export class Authorization {
   }
 
   /**
-   * This is where GitHub should redirect back to.
+   * This is where the auth provider should redirect back to.
    */
   getRedirectUrl(req: Request): string {
-    return this.getRegistryUrl(req) + Callback.path
+    const id = (req.params.id || "")
+    return this.getRegistryUrl(req) + Callback.path + (id ? `/${id}` : "")
   }
 
   /**
