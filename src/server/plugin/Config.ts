@@ -8,7 +8,7 @@ export interface PluginConfigProps {
   "org": string,
   "client-id": string,
   "client-secret": string,
-  "enterprise-origin": string,
+  "enterprise-origin"?: string,
 }
 
 export type PluginConfigKey = keyof PluginConfigProps

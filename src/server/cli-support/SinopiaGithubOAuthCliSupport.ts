@@ -2,10 +2,10 @@ import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, NextFunction, Request, Response } from "express"
 import { stringify } from "querystring"
 
-import { GitHubClient } from "../github"
+import { GitHubAuthProvider } from "../github"
 import { Authorization } from "../plugin/Authorization"
 import { Callback } from "../plugin/Callback"
-import { getConfig, PluginConfig } from "../plugin/Config"
+import { PluginConfig } from "../plugin/Config"
 import { Auth } from "../verdaccio"
 
 const cliAuthorizeUrl = "/oauth/authorize"
@@ -14,10 +14,7 @@ const pluginOAuthId = "/sinopia-github-oauth-cli"
 
 export class SinopiaGithubOAuthCliSupport implements IPluginMiddleware<any> {
 
-  private readonly clientId = getConfig(this.config, "client-id")
-  private readonly clientSecret = getConfig(this.config, "client-secret")
-  private readonly enterpriseOrigin = getConfig(this.config, "enterprise-origin")
-  private readonly github = new GitHubClient(this.config.user_agent, this.enterpriseOrigin)
+  private readonly provider = new GitHubAuthProvider(this.config)
 
   constructor(
     private readonly config: PluginConfig,
@@ -36,10 +33,10 @@ export class SinopiaGithubOAuthCliSupport implements IPluginMiddleware<any> {
       try {
         const code = req.query.code
 
-        const githubOauth = await this.github.requestAccessToken(code, this.clientId, this.clientSecret)
-        const githubUser = await this.github.requestUser(githubOauth.access_token)
+        const token = await this.provider.getToken(code)
+        const username = await this.provider.getUsername(token)
 
-        const npmAuth = githubUser.login + ":" + githubOauth.access_token
+        const npmAuth = username + ":" + token
         const encryptedNpmToken = this.encrypt(npmAuth)
 
         const query = { token: encodeURIComponent(encryptedNpmToken) }

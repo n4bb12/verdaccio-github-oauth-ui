@@ -1,0 +1,41 @@
+import { AuthProvider } from "../plugin/AuthProvider"
+import { getConfig, PluginConfig } from "../plugin/Config"
+import { GitHubClient } from "./Client"
+
+export class GitHubAuthProvider implements AuthProvider {
+
+  private readonly clientId = getConfig(this.config, "client-id")
+  private readonly clientSecret = getConfig(this.config, "client-secret")
+  private readonly enterpriseOrigin = getConfig(this.config, "enterprise-origin")
+  private readonly client = new GitHubClient(this.webBaseUrl, this.apiBaseUrl)
+
+  get webBaseUrl(): string {
+    return this.enterpriseOrigin || "https://github.com"
+  }
+
+  get apiBaseUrl(): string {
+    return this.enterpriseOrigin
+      ? this.enterpriseOrigin.replace(/\/?$/, "") + "/api/v3"
+      : "https://api.github.com"
+  }
+
+  constructor(
+    private readonly config: PluginConfig,
+  ) { }
+
+  async getToken(code: string) {
+    const auth = await this.client.requestAccessToken(code, this.clientId, this.clientSecret)
+    return auth.access_token
+  }
+
+  async getUsername(token: string) {
+    const user = await this.client.requestUser(token)
+    return user.login
+  }
+
+  async getGroups(token: string) {
+    const orgs = await this.client.requestUserOrgs(token)
+    return orgs.map(org => org.login)
+  }
+
+}

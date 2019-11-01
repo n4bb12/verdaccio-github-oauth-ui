@@ -1,7 +1,7 @@
 import { Handler, NextFunction, Request, Response } from "express"
 import { stringify } from "querystring"
 
-import { GitHubClient, GitHubOAuth, GitHubUser } from "../github"
+import { GitHubAuthProvider } from "../github"
 import { Auth, getSecurity, User } from "../verdaccio"
 import { getConfig, getMajorVersion, PluginConfig } from "./Config"
 
@@ -9,11 +9,8 @@ export class Callback {
 
   static readonly path = "/-/oauth/callback"
 
-  private readonly requiredOrg = getConfig(this.config, "org")
-  private readonly clientId = getConfig(this.config, "client-id")
-  private readonly clientSecret = getConfig(this.config, "client-secret")
-  private readonly enterpriseOrigin = getConfig(this.config, "enterprise-origin")
-  private readonly github = new GitHubClient(this.config.user_agent, this.enterpriseOrigin)
+  private readonly requiredGroup = getConfig(this.config, "org")
+  private readonly provider = new GitHubAuthProvider(this.config)
   private readonly version = getMajorVersion(this.config)
 
   constructor(
@@ -38,13 +35,12 @@ export class Callback {
     try {
       const code = req.query.code
 
-      const githubOauth = await this.github.requestAccessToken(code, this.clientId, this.clientSecret)
-      const githubUser = await this.github.requestUser(githubOauth.access_token)
-      const githubOrgs = await this.github.requestUserOrgs(githubOauth.access_token)
-      const githubOrgNames = githubOrgs.map(ghOrg => ghOrg.login)
+      const token = await this.provider.getToken(code)
+      const username = await this.provider.getUsername(token)
+      const groups = await this.provider.getGroups(token)
 
-      if (githubOrgNames.includes(this.requiredOrg)) {
-        await this.grantAccess(res, githubOauth, githubUser)
+      if (groups.includes(this.requiredGroup)) {
+        await this.grantAccess(res, token, username)
       } else {
         await this.denyAccess(res)
       }
@@ -53,14 +49,14 @@ export class Callback {
     }
   }
 
-  private async grantAccess(res: Response, githubOauth: GitHubOAuth, githubUser: GitHubUser) {
-    const npmAuth = githubUser.login + ":" + githubOauth.access_token
+  private async grantAccess(res: Response, token: string, username: string) {
+    const npmAuth = username + ":" + token
     const encryptedNpmToken = this.encrypt(npmAuth)
 
     const user: User = {
-      name: githubUser.login,
-      groups: [this.requiredOrg],
-      real_groups: [this.requiredOrg],
+      name: username,
+      groups: [this.requiredGroup],
+      real_groups: [this.requiredGroup],
     }
 
     const encryptedJWT = this.version === 3
@@ -68,7 +64,7 @@ export class Callback {
       : await this.issueJWTVerdaccio4(user)
 
     const frontendUrl = "/?" + stringify({
-      username: githubUser.login,
+      username,
       jwtToken: encryptedJWT,
       npmToken: encryptedNpmToken,
     })
@@ -80,7 +76,7 @@ export class Callback {
 
   private denyAccess(res: Response) {
     res.send(`
-      Access denied: you are not a member of "${this.requiredOrg}"<br>
+      Access denied: you are not a member of "${this.requiredGroup}"<br>
       <a href="/">Go back</a>
     `)
   }
