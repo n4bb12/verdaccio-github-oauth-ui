@@ -1036,9 +1036,9 @@
     "@types/node" "*"
 
 "@types/got@^9.4.1":
-  version "9.6.7"
-  resolved "https://registry.yarnpkg.com/@types/got/-/got-9.6.7.tgz#33d84c60cba83e3c904634a1ea7ea81d1549bea6"
-  integrity sha512-LMc2ja42bQorKpBxf38ZBPdT3FhYL0lyAqnZBo5vAPCtobYa8AiHwSLH5zDvR19r2Pr5Ojar3hT/QLLb2SoPYA==
+  version "9.6.8"
+  resolved "https://registry.yarnpkg.com/@types/got/-/got-9.6.8.tgz#c4353d64e03649a9e69c8e5be1ce3d3ed416be9e"
+  integrity sha512-XEgrUTgNYuFVYpM8lXtZfOearvZRgmrLzksN+27YeDfqHt8NgXoi0uDWx4JXYojS1piedTvVFjOzjak5m1x2mw==
   dependencies:
     "@types/node" "*"
     "@types/tough-cookie" "*"
@@ -1091,7 +1091,12 @@
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
-"@types/node@*", "@types/node@^12.0.4", "@types/node@^12.11.1":
+"@types/node@*", "@types/node@^12.0.4":
+  version "12.12.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.4.tgz#8ed27dba0a83b020fca035f003ffe21f70207a9c"
+  integrity sha512-tJUH7//zNZ/539DH4cgZS3NsmW0b9ShDeRBzoCEMCEAlHn5WHUghOfHdycvpo4RCxxEPmQ3WfjDogh+DCCvuSg==
+
+"@types/node@^12.11.1":
   version "12.11.7"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.11.7.tgz#57682a9771a3f7b09c2497f28129a0462966524a"
   integrity sha512-JNbGaHFCLwgHn/iCckiGSOZ1XYHsKFwREtzPwSGCVld1SGhOlmZw2D4ZI94HQCrBHbADzW9m4LER/8olJTRGHA==
@@ -2083,10 +2088,15 @@ core-js-compat@^3.1.1:
     browserslist "^4.7.2"
     semver "^6.3.0"
 
-core-js@^3.3.3, core-js@^3.3.4:
+core-js@^3.3.3:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.3.4.tgz#6b0a23392958317bfb46e40b090529a923add669"
   integrity sha512-BtibooaAmSOptGLRccsuX/dqgPtXwNgqcvYA6kOTTMzonRxZ+pJS4e+6mvVutESfXMeTnK8m3M+aBu3bkJbR+w==
+
+core-js@^3.3.4:
+  version "3.3.6"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.3.6.tgz#6ad1650323c441f45379e176ed175c0d021eac92"
+  integrity sha512-u4oM8SHwmDuh5mWZdDg9UwNVq5s1uqq6ZDLLIs07VY+VJU91i3h4f3K/pgFvtUQPGdeStrZ+odKyfyt4EnKHfA==
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -5984,9 +5994,9 @@ rollup-pluginutils@^2.5.0, rollup-pluginutils@^2.8.1:
     estree-walker "^0.6.1"
 
 rollup@^1.25.2:
-  version "1.25.2"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.25.2.tgz#739f508bd8f7ece52bb6c1fcda83466af82b7f6d"
-  integrity sha512-+7z6Wab/L45QCPcfpuTZKwKiB0tynj05s/+s2U3F2Bi7rOLPr9UcjUwO7/xpjlPNXA/hwnth6jBExFRGyf3tMg==
+  version "1.26.2"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.26.2.tgz#33d1ad23ee94aff1057448bae267be51dab4bdc1"
+  integrity sha512-TLM8hlYP85TFFptYlXmr2VnhCLA8GaYXG4LBdWsHu9oBH/Wm5MMPAE9wsAnohfV21Dqq0ZvRHdmsKXomshaDSg==
   dependencies:
     "@types/estree" "*"
     "@types/node" "*"
@@ -6953,10 +6963,21 @@ verdaccio-audit@8.1.4:
     express "4.17.1"
     request "2.88.0"
 
-verdaccio-htpasswd@8.2.0, verdaccio-htpasswd@^8.2.0:
+verdaccio-htpasswd@8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/verdaccio-htpasswd/-/verdaccio-htpasswd-8.2.0.tgz#fc942bf1e5aab698782b704a6494fc62ef311954"
   integrity sha512-ukbKWzH4DtsNH9NF9wKo0axU/uupudANcuG7Hc1FL/PopOq7Z1rLRF7MgA+P8BJGnwaZRB4pq32hblM931AEWg==
+  dependencies:
+    "@verdaccio/file-locking" "1.0.0"
+    apache-md5 "1.1.2"
+    bcryptjs "2.4.3"
+    http-errors "1.7.3"
+    unix-crypt-td-js "1.0.0"
+
+verdaccio-htpasswd@^8.2.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/verdaccio-htpasswd/-/verdaccio-htpasswd-8.3.0.tgz#dcc1031e5f54130e287b0f847ab0690f9ed5bdc3"
+  integrity sha512-a/bBi+YK1e/qbkk5PIZzRbeHblHjZw0UylNEdSjdCzdEaq38jWlsqVCxGU5eLdCteqXh7+khCGDgnvGK6WDEpg==
   dependencies:
     "@verdaccio/file-locking" "1.0.0"
     apache-md5 "1.1.2"
