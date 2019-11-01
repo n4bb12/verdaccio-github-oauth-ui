@@ -1,27 +1,28 @@
 import { Handler, NextFunction, Request, Response } from "express"
 import { stringify } from "querystring"
+import { URL } from "url"
 
-import { GitHubAuthProvider } from "../github"
 import { Auth, getSecurity, User } from "../verdaccio"
+import { AuthProvider } from "./AuthProvider"
 import { getConfig, getMajorVersion, PluginConfig } from "./Config"
 
 export class Callback {
 
   static readonly path = "/-/oauth/callback"
 
-  private readonly requiredGroup = getConfig(this.config, "org")
-  private readonly provider = new GitHubAuthProvider(this.config)
   private readonly version = getMajorVersion(this.config)
+  private readonly requiredGroup = getConfig(this.config, "org")
 
   constructor(
     private readonly config: PluginConfig,
-    private readonly auth: Auth,
+    private readonly verdaccioAuth: Auth,
+    private readonly provider: AuthProvider,
   ) { }
 
   /**
-   * After a successful OAuth authentication, GitHub redirects back to us.
-   * We use the OAuth code to get an OAuth access token and the username associated
-   * with the GitHub account.
+   * After a successful OAuth authentication, the auth provider redirects back to us.
+   * We use the code in the query params to get an access token and the username associated
+   * with the account.
    *
    * The token and username are encryped and base64 encoded and configured as npm
    * credentials for this registry. There is no need to later decode and decrypt the token.
@@ -33,8 +34,7 @@ export class Callback {
    */
   middleware: Handler = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const code = req.query.code
-
+      const code = await this.provider.getCode(req)
       const token = await this.provider.getToken(code)
       const username = await this.provider.getUsername(token)
       const groups = await this.provider.getGroups(token)
@@ -83,17 +83,17 @@ export class Callback {
 
   // https://github.com/verdaccio/verdaccio/blob/3.x/src/api/web/endpoint/user.js#L15
   private async issueJWTVerdaccio3(user: User) {
-    return this.auth.issueUIjwt(user, "24h")
+    return this.verdaccioAuth.issueUIjwt(user, "24h")
   }
 
   // https://github.com/verdaccio/verdaccio/blob/master/src/api/web/endpoint/user.ts#L31
   private async issueJWTVerdaccio4(user: User) {
     const jWTSignOptions = getSecurity(this.config).web.sign
-    return this.auth.jwtEncrypt(user, jWTSignOptions)
+    return this.verdaccioAuth.jwtEncrypt(user, jWTSignOptions)
   }
 
   private encrypt(text: string) {
-    return this.auth.aesEncrypt(new Buffer(text)).toString("base64")
+    return this.verdaccioAuth.aesEncrypt(new Buffer(text)).toString("base64")
   }
 
 }
