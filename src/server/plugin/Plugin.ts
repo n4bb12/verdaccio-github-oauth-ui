@@ -9,7 +9,7 @@ import { Application } from "express"
 import { get, intersection } from "lodash"
 
 import { SinopiaGithubOAuthCliSupport } from "../cli-support"
-import { GitHubClient } from "../github"
+import { GitHubAuthProvider } from "../github"
 import { Auth } from "../verdaccio"
 import { Authorization } from "./Authorization"
 import { Callback } from "./Callback"
@@ -18,8 +18,8 @@ import { InjectHtml } from "./InjectHtml"
 import { registerGlobalProxyAgent } from "./ProxyAgent"
 
 interface UserDetails {
-  authToken: string
-  orgNames: string[]
+  token: string
+  groups: string[]
   expires: number
 }
 
@@ -34,9 +34,8 @@ function log(...args: any[]) {
  */
 export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<any> {
 
-  private readonly requiredOrg = getConfig(this.config, "org")
-  private readonly enterpriseOrigin = getConfig(this.config, "enterprise-origin")
-  private readonly github = new GitHubClient(this.config.user_agent, this.enterpriseOrigin)
+  private readonly requiredGroup = getConfig(this.config, "org")
+  private readonly provider = new GitHubAuthProvider(this.config)
   private readonly cache: { [username: string]: UserDetails } = {}
 
   constructor(private readonly config: PluginConfig) {
@@ -68,40 +67,40 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
   /**
    * Implements the auth plugin interface.
    */
-  async authenticate(username: string, authToken: string, cb: AuthCallback) {
-    const userOrgs = await this.getOrgNames(username, authToken)
+  async authenticate(username: string, authToken: string, callback: AuthCallback) {
+    const groups = await this.getGroups(username, authToken)
 
-    if (userOrgs.includes(this.requiredOrg)) {
-      cb(null, [this.requiredOrg])
+    if (groups.includes(this.requiredGroup)) {
+      callback(null, [this.requiredGroup])
     } else {
-      log(`Unauthenticated: user "${username}" is not a member of "${this.requiredOrg}"`)
-      cb(null, false)
+      log(`Unauthenticated: user "${username}" is not a member of "${this.requiredGroup}"`)
+      callback(null, false)
     }
   }
 
-  allow_access(user: RemoteUser, pkg: PackageAccess, cb: AuthCallback): void {
+  allow_access(user: RemoteUser, pkg: PackageAccess, callback: AuthCallback): void {
     const requiredAccess = [...pkg.access || []]
 
     if (requiredAccess.includes("$authenticated")) {
-      requiredAccess.push(this.requiredOrg)
+      requiredAccess.push(this.requiredGroup)
     }
 
     const grantedAccess = intersection(user.groups, requiredAccess)
 
     if (grantedAccess.length === requiredAccess.length) {
-      cb(null, user.groups)
+      callback(null, user.groups)
     } else {
       log(`Access denied: user "${user.name}" is not a member of "${this.config.org}"`)
-      cb(null, false)
+      callback(null, false)
     }
   }
 
-  private async getOrgNames(username: string, authToken: string): Promise<string[]> {
+  private async getGroups(username: string, token: string): Promise<string[]> {
     const invalidate = () => delete this.cache[username]
     const cached = () => this.cache[username] || {}
     const nearFuture = () => Date.now() + cacheTTLms
 
-    if (cached().authToken !== authToken) {
+    if (cached().token !== token) {
       invalidate()
     }
     if (cached().expires < Date.now()) {
@@ -110,14 +109,11 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
       cached().expires = nearFuture()
     }
 
-    if (!cached().orgNames) {
+    if (!cached().groups) {
       try {
-        const orgs = await this.github.requestUserOrgs(authToken)
-        const orgNames = orgs.map(org => org.login)
-
         this.cache[username] = {
-          authToken,
-          orgNames,
+          token,
+          groups: await this.provider.getGroups(token),
           expires: nearFuture(),
         }
       } catch (error) {
@@ -125,7 +121,7 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
       }
     }
 
-    return cached().orgNames || []
+    return cached().groups || []
   }
 
 }

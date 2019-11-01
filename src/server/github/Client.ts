@@ -7,27 +7,10 @@ import { GitHubUser } from "./User"
 
 export class GitHubClient {
 
-  private readonly defaultOptions = {
-    headers: {
-      "User-Agent": this.userAgent,
-    },
-    json: true,
-  }
-
   constructor(
-    private readonly userAgent: string,
-    private readonly enterpriseOrigin?: string,
+    private readonly webBaseUrl: string,
+    private readonly apiBaseUrl: string,
   ) { }
-
-  get webBaseUrl(): string {
-    return this.enterpriseOrigin || "https://github.com"
-  }
-
-  get apiBaseUrl(): string {
-    return this.enterpriseOrigin
-      ? this.enterpriseOrigin.replace(/\/?$/, "") + "/api/v3"
-      : "https://api.github.com"
-  }
 
   /**a
    * `POST /login/oauth/access_token`
@@ -77,7 +60,7 @@ export class GitHubClient {
   }
 
   private async request<T>(url: string, additionalOptions: Partial<GotJSONOptions>): Promise<T> {
-    const options = merge({}, this.defaultOptions, additionalOptions)
+    const options = merge({ json: true }, additionalOptions)
     const response = await got(url, options)
     return response.body
   }

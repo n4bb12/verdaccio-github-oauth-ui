@@ -2,7 +2,7 @@ import { Handler, NextFunction, Request, Response } from "express"
 import { get } from "lodash"
 import { stringify } from "querystring"
 
-import { GitHubClient } from "../github"
+import { GitHubAuthProvider } from "../github"
 import { Callback } from "./Callback"
 import { getConfig, PluginConfig } from "./Config"
 
@@ -11,8 +11,7 @@ export class Authorization {
   static readonly path = "/-/oauth/authorize/:id?"
 
   private readonly clientId = getConfig(this.config, "client-id")
-  private readonly enterpriseOrigin = getConfig(this.config, "enterprise-origin")
-  private readonly github = new GitHubClient(this.config.user_agent, this.enterpriseOrigin)
+  private readonly provider = new GitHubAuthProvider(this.config)
 
   constructor(
     private readonly config: PluginConfig,
@@ -34,7 +33,7 @@ export class Authorization {
         redirect_uri: this.getRedirectUrl(req) + (id ? `/${id}` : ""),
         scope: "read:org",
       }
-      const url = this.github.webBaseUrl + `/login/oauth/authorize?` + stringify(query)
+      const url = this.provider.webBaseUrl + `/login/oauth/authorize?` + stringify(query)
       res.redirect(url)
     } catch (error) {
       next(error)
