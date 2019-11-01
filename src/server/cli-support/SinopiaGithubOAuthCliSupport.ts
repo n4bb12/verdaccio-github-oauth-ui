@@ -10,7 +10,7 @@ import { Auth } from "../verdaccio"
 
 const cliAuthorizeUrl = "/oauth/authorize"
 const cliCallbackUrl = "http://localhost:8239"
-const pluginOAuthId = "/sinopia-github-oauth-cli"
+const pluginOAuthId = "sinopia-github-oauth-cli"
 
 export class SinopiaGithubOAuthCliSupport implements IPluginMiddleware<any> {
 
@@ -26,10 +26,10 @@ export class SinopiaGithubOAuthCliSupport implements IPluginMiddleware<any> {
    */
   register_middlewares(app: Application) {
     app.get(cliAuthorizeUrl, (req: Request, res: Response) => {
-      res.redirect(Authorization.path.replace("/:id?", pluginOAuthId))
+      res.redirect(Authorization.path(pluginOAuthId))
     })
 
-    app.get(Callback.path + pluginOAuthId, async (req: Request, res: Response, next: NextFunction) => {
+    app.get(Callback.path(pluginOAuthId), async (req: Request, res: Response, next: NextFunction) => {
       try {
         const code = req.query.code
 
