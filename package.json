@@ -26,6 +26,8 @@
     "prepack": "bash run clear && bash run build",
     "start": "verdaccio -c verdaccio.yaml",
     "test": "jest",
+    "test:manual": "yarn update && yarn start",
+    "test:watch": "jest --watch",
     "update": "bash run clean && bash run build && bash run link",
     "watch": "nodemon --watch src --ext ts,css --exec \"yarn update\""
   },
