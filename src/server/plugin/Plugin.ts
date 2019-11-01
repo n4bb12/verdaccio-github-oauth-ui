@@ -12,19 +12,12 @@ import { SinopiaGithubOAuthCliSupport } from "../cli-support"
 import { GitHubAuthProvider } from "../github"
 import { Auth } from "../verdaccio"
 import { Authorization } from "./Authorization"
+import { Cache } from "./Cache"
 import { Callback } from "./Callback"
 import { getConfig, PluginConfig, pluginName, validateConfig } from "./Config"
 import { PatchHtml } from "./PatchHtml"
 import { registerGlobalProxyAgent } from "./ProxyAgent"
 import { ServeStatic } from "./ServeStatic"
-
-interface UserDetails {
-  token: string
-  groups: string[]
-  expires: number
-}
-
-const cacheTTLms = 1000 * 5 // 5s
 
 function log(...args: any[]) {
   console.log(`${[pluginName]}`, ...args)
@@ -37,7 +30,7 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
 
   private readonly requiredGroup = getConfig(this.config, "org")
   private readonly provider = new GitHubAuthProvider(this.config)
-  private readonly cache: { [username: string]: UserDetails } = {}
+  private readonly cache = new Cache(this.provider)
 
   constructor(private readonly config: PluginConfig) {
     validateConfig(config)
@@ -66,7 +59,7 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
    * Implements the auth plugin interface.
    */
   async authenticate(username: string, authToken: string, callback: AuthCallback) {
-    const groups = await this.getGroups(username, authToken)
+    const groups = await this.cache.getGroups(username, authToken)
 
     if (groups.includes(this.requiredGroup)) {
       callback(null, [this.requiredGroup])
@@ -91,35 +84,6 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
       log(`Access denied: user "${user.name}" is not a member of "${this.config.org}"`)
       callback(null, false)
     }
-  }
-
-  private async getGroups(username: string, token: string): Promise<string[]> {
-    const invalidate = () => delete this.cache[username]
-    const cached = () => this.cache[username] || {}
-    const nearFuture = () => Date.now() + cacheTTLms
-
-    if (cached().token !== token) {
-      invalidate()
-    }
-    if (cached().expires < Date.now()) {
-      invalidate()
-    } else {
-      cached().expires = nearFuture()
-    }
-
-    if (!cached().groups) {
-      try {
-        this.cache[username] = {
-          token,
-          groups: await this.provider.getGroups(token),
-          expires: nearFuture(),
-        }
-      } catch (error) {
-        log(error.message)
-      }
-    }
-
-    return cached().groups || []
   }
 
 }
