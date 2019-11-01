@@ -33,6 +33,13 @@ export function getMajorVersion(config: PluginConfig) {
   return +config.user_agent[10]
 }
 
+export function getBaseUrl(config: PluginConfig) {
+  const prefix = config.url_prefix
+  if (prefix) {
+    return prefix.replace(/\/?$/, "") // Remove potential trailing slash
+  }
+}
+
 function ensurePropExists(config: PluginConfig, key: PluginConfigKey) {
   const value = getConfig(config, key)
 
