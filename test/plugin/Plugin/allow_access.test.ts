@@ -1,6 +1,6 @@
 import { PackageAccess, RemoteUser } from "@verdaccio/types"
-import { PluginConfigProps } from "src/server/plugin/Config"
-import { GithubOauthUiPlugin } from "src/server/plugin/Plugin"
+import { PluginConfig } from "src/server/plugin/Config"
+import { Plugin } from "src/server/plugin/Plugin"
 
 import { createTestConfig, createTestPlugin } from "../test-utils"
 
@@ -9,8 +9,8 @@ const authenticated = "$authenticated"
 describe("Plugin", () => {
   describe("allow_access", () => {
 
-    let config: PluginConfigProps
-    let plugin: GithubOauthUiPlugin
+    let config: PluginConfig
+    let plugin: Plugin
 
     beforeEach(() => {
       config = createTestConfig()

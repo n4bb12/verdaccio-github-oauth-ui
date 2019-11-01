@@ -2,7 +2,7 @@ import { Request } from "express"
 import { stringify } from "querystring"
 
 import { AuthProvider } from "../plugin/AuthProvider"
-import { getConfig, PluginConfig } from "../plugin/Config"
+import { Config, getConfig } from "../plugin/Config"
 import { GitHubClient } from "./Client"
 
 export class GitHubAuthProvider implements AuthProvider {
@@ -23,7 +23,7 @@ export class GitHubAuthProvider implements AuthProvider {
   }
 
   constructor(
-    private readonly config: PluginConfig,
+    private readonly config: Config,
   ) { }
 
   getId() {
