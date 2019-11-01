@@ -38,12 +38,24 @@ function ensurePropExists(config: PluginConfig, key: PluginConfigKey) {
 
   if (!value) {
     console.error(chalk.red(
-      `[${pluginName}] ERR: Missing configuration "auth[${pluginName}][${key}]". Please check your verdaccio config.`))
-    process.exit(1)
+      `[${pluginName}] ERR: Missing configuration "auth.${pluginName}.${key}"`))
+    throw new Error("Please check your verdaccio config.")
+  }
+}
+
+function ensureNodeIsNotEmpty(config: PluginConfig, node: keyof PluginConfig) {
+  const path = `[${node}][${pluginName}]`
+  const obj = get(config, path, {})
+
+  if (!Object.keys(obj).length) {
+    throw new Error(`"${node}.${pluginName}" must be enabled`)
   }
 }
 
 export function validateConfig(config: PluginConfig) {
+  ensureNodeIsNotEmpty(config, "auth")
+  ensureNodeIsNotEmpty(config, "middlewares")
+
   ensurePropExists(config, "org")
   ensurePropExists(config, "client-id")
   ensurePropExists(config, "client-secret")
