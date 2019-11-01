@@ -1,3 +1,4 @@
+import { Request } from "express"
 import { stringify } from "querystring"
 
 import { AuthProvider } from "../plugin/AuthProvider"
@@ -28,6 +29,10 @@ export class GitHubAuthProvider implements AuthProvider {
   async getToken(code: string) {
     const auth = await this.client.requestAccessToken(code, this.clientId, this.clientSecret)
     return auth.access_token
+  }
+
+  async getCode(req: Request) {
+    return req.query.code
   }
 
   async getUsername(token: string) {

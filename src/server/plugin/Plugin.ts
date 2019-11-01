@@ -60,7 +60,7 @@ export class GithubOauthUiPlugin implements IPluginMiddleware<any>, IPluginAuth<
     const authorization = new Authorization(this.config, this.provider)
     app.get(Authorization.path, authorization.middleware)
 
-    const callback = new Callback(this.config, auth)
+    const callback = new Callback(this.config, auth, this.provider)
     app.get(Callback.path, callback.middleware)
   }
 
