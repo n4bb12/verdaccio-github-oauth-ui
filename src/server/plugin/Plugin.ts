@@ -38,18 +38,17 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
    * Implements the middleware plugin interface.
    */
   register_middlewares(app: Application, auth: Auth) {
-    const plugins = [
+    const children = [
       new ServeStatic(),
       new PatchHtml(this.config),
+      new Authorization(this.config, this.provider),
+      new Callback(this.config, auth, this.provider),
       new CliSupport(this.config, auth),
     ]
-    plugins.forEach(plugin => plugin.register_middlewares(app))
 
-    const authorization = new Authorization(this.config, this.provider)
-    app.get(Authorization.path(), authorization.middleware)
-
-    const callback = new Callback(this.config, auth, this.provider)
-    app.get(Callback.path(), callback.middleware)
+    for (const child of children) {
+      child.register_middlewares(app)
+    }
   }
 
   /**

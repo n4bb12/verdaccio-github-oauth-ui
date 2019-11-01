@@ -1,18 +1,18 @@
-import { Handler, NextFunction, Request, Response } from "express"
+import { IPluginMiddleware } from "@verdaccio/types"
+import { Application, Handler, NextFunction, Request, Response } from "express"
 import { stringify } from "querystring"
-import { URL } from "url"
 
 import { Auth, getSecurity, User } from "../verdaccio"
 import { AuthProvider } from "./AuthProvider"
 import { Config, getConfig, getMajorVersion } from "./Config"
 
-export class Callback {
+export class Callback implements IPluginMiddleware<any> {
 
   static path(id?: string) {
     return "/-/oauth/callback" + (id ? "/" + id : "")
   }
 
-  private readonly version = getMajorVersion(this.config)
+  private readonly majorVersion = getMajorVersion(this.config)
   private readonly requiredGroup = getConfig(this.config, "org")
 
   constructor(
@@ -20,6 +20,13 @@ export class Callback {
     private readonly verdaccioAuth: Auth,
     private readonly provider: AuthProvider,
   ) { }
+
+  /**
+   * Implements the middleware plugin interface.
+   */
+  register_middlewares(app: Application) {
+    app.get(Callback.path(), this.receiveOAuthCode)
+  }
 
   /**
    * After a successful OAuth authentication, the auth provider redirects back to us.
@@ -34,7 +41,7 @@ export class Callback {
    * We then issue a JWT token using these values and pass them back to the frontend
    * as query parameters so they can be stored in the browser.
    */
-  middleware: Handler = async (req: Request, res: Response, next: NextFunction) => {
+  receiveOAuthCode: Handler = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const code = await this.provider.getCode(req)
       const token = await this.provider.getToken(code)
@@ -61,7 +68,7 @@ export class Callback {
       real_groups: [this.requiredGroup],
     }
 
-    const encryptedJWT = this.version === 3
+    const encryptedJWT = this.majorVersion === 3
       ? await this.issueJWTVerdaccio3(user)
       : await this.issueJWTVerdaccio4(user)
 
