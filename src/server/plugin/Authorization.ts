@@ -3,13 +3,13 @@ import { Application, Handler, Request } from "express"
 
 import { AuthProvider } from "./AuthProvider"
 import { Callback } from "./Callback"
-import { Config, getBaseUrl } from "./Config"
+import { authorizePath, Config, getBaseUrl } from "./Config"
 import { logger } from "./logger"
 
 export class Authorization implements IPluginMiddleware<any> {
 
   static path(id?: string) {
-    return "/-/oauth/authorize/" + (id || ":id?")
+    return authorizePath + "/" + (id || ":id?")
   }
 
   constructor(

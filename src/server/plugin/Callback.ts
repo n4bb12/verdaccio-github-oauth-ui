@@ -1,16 +1,16 @@
 import { IPluginMiddleware } from "@verdaccio/types"
-import { Application, Handler, Response } from "express"
+import { Application, Handler, Request, Response } from "express"
 import { stringify } from "querystring"
 
 import { Auth, getSecurity, User } from "../verdaccio"
 import { AuthProvider } from "./AuthProvider"
-import { Config, getConfig, getMajorVersion } from "./Config"
+import { callbackPath, Config, getConfig, getMajorVersion } from "./Config"
 import { logger } from "./logger"
 
 export class Callback implements IPluginMiddleware<any> {
 
   static path(id?: string) {
-    return "/-/oauth/callback" + (id ? "/" + id : "")
+    return callbackPath + (id ? "/" + id : "")
   }
 
   private readonly majorVersion = getMajorVersion(this.config)

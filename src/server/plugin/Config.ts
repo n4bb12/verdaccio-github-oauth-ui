@@ -4,8 +4,19 @@ import { get } from "lodash"
 
 import { logger } from "./logger"
 
+//
+// Constants
+//
+
 export const pluginName = "github-oauth-ui"
+export const staticPath = "/-/static/" + pluginName
 export const publicRoot = __dirname + "/public"
+export const authorizePath = "/-/oauth/authorize"
+export const callbackPath = "/-/oauth/callback"
+
+//
+// Types
+//
 
 export interface PluginConfig {
   "org": string,
@@ -21,6 +32,10 @@ export interface Config extends VerdaccioConfig, PluginConfig {
   auth: { [pluginName]: PluginConfig },
 }
 
+//
+// Access
+//
+
 export function getConfig(config: Config, key: PluginConfigKey): string {
   const value = null
     || get(config, `middlewares[${pluginName}][${key}]`)
@@ -28,6 +43,10 @@ export function getConfig(config: Config, key: PluginConfigKey): string {
 
   return process.env[value] || value
 }
+
+//
+// Parsing
+//
 
 /**
  * user_agent: e.g. "verdaccio/4.3.4" --> 4
@@ -42,6 +61,10 @@ export function getBaseUrl(config: Config) {
     return prefix.replace(/\/?$/, "") // Remove potential trailing slash
   }
 }
+
+//
+// Validation
+//
 
 function ensurePropExists(config: Config, key: PluginConfigKey) {
   const value = getConfig(config, key)

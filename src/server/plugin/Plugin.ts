@@ -60,7 +60,7 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
     if (groups.includes(this.requiredGroup)) {
       callback(null, [this.requiredGroup])
     } else {
-      logger.error(`Unauthenticated: user "${username}" is not a member of "${this.requiredGroup}"`)
+      logger.error(`Access denied: user "${username}" is not a member of "${this.requiredGroup}"`)
       callback(null, false)
     }
   }
