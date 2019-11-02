@@ -2,7 +2,7 @@ import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler } from "express"
 import { readFileSync } from "fs"
 
-import { AuthCore } from "./AuthCore"
+import { Verdaccio } from "../verdaccio"
 import { publicRoot, staticPath } from "./Config"
 
 /**
@@ -11,13 +11,13 @@ import { publicRoot, staticPath } from "./Config"
  */
 export class PatchHtml implements IPluginMiddleware<any> {
 
-  private readonly scriptTag = `<script src="${staticPath}/verdaccio-${this.core.getMajorVersion()}.js"></script>`
-  private readonly styleTag = `<style>${readFileSync(`${publicRoot}/verdaccio-${this.core.getMajorVersion()}.css`)}</style>`
+  private readonly scriptTag = `<script src="${staticPath}/verdaccio-${this.verdaccio.majorVersion}.js"></script>`
+  private readonly styleTag = `<style>${readFileSync(`${publicRoot}/verdaccio-${this.verdaccio.majorVersion}.css`)}</style>`
   private readonly headWithStyle = [this.styleTag, "</head>"].join("")
   private readonly bodyWithScript = [this.scriptTag, "</body>"].join("")
 
   constructor(
-    private readonly core: AuthCore,
+    private readonly verdaccio: Verdaccio,
   ) { }
 
   /**

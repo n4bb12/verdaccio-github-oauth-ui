@@ -6,7 +6,7 @@ import {
 } from "./verdaccio-3-internal-types"
 import { IAuth, IAuthWebUI } from "./verdaccio-4-internal-types"
 
-export { getSecurity } from "./verdaccio-4-auth-utils"
+export { Verdaccio } from "./Verdaccio"
 
 export type Auth = Verdaccio3IAuthWebUI & IAuth
 export type AuthWebUI = IAuthWebUI

@@ -2,7 +2,7 @@ import { GitHubAuthProvider } from "src/server/github/AuthProvider"
 import { PluginConfig } from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
 
-import { createTestConfig, createTestPlugin } from "../test-utils"
+import { createTestPlugin, createTestPluginConfig } from "../test-utils"
 
 jest.mock("src/server/github/AuthProvider")
 
@@ -19,7 +19,7 @@ describe("Plugin", () => {
     let plugin: Plugin
 
     beforeEach(() => {
-      config = createTestConfig()
+      config = createTestPluginConfig()
       AuthProvider.mockImplementation(() => {
         return {
           async getId() {

@@ -1,19 +1,17 @@
 import { intersection } from "lodash"
 import { stringify } from "querystring"
 
-import { Auth, getSecurity, User } from "../verdaccio"
-import { Config, getBaseUrl, getConfig, getMajorVersion } from "./Config"
-import { accessDeniedMessage, logger } from "./logger"
+import { User, Verdaccio } from "../verdaccio"
+import { Config, getConfig } from "./Config"
+import { logger } from "./logger"
 
 export class AuthCore {
 
-  private readonly baseUrl = getBaseUrl(this.config)
-  private readonly majorVersion = getMajorVersion(this.config)
   private readonly requiredGroup = getConfig(this.config, "org")
 
   constructor(
+    private readonly verdaccio: Verdaccio,
     private readonly config: Config,
-    private readonly verdaccio: Auth,
   ) { }
 
   async getFrontendUrl(username: string, token: string) {
@@ -23,11 +21,8 @@ export class AuthCore {
       real_groups: [this.requiredGroup],
     }
 
-    const uiToken = this.majorVersion === 3
-      ? await this.issueJWTVerdaccio3(user)
-      : await this.issueJWTVerdaccio4(user)
-
-    const npmToken = this.getNpmToken(username, token)
+    const uiToken = await this.verdaccio.issueUiToken(user)
+    const npmToken = await this.verdaccio.issueNpmToken(username, token)
 
     const query = { username, uiToken, npmToken }
     const frontendUrl = "/?" + stringify(query)
@@ -36,25 +31,13 @@ export class AuthCore {
   }
 
   getErrorPage(username: string) {
-    return `${accessDeniedMessage(username, this.requiredGroup)}<br><a href="/">Go back</a>`
-  }
-
-  getNpmToken(username: string, token: string) {
-    return this.encrypt(username + ":" + token)
-  }
-
-  getBaseUrl() {
-    return this.baseUrl
-  }
-
-  getMajorVersion() {
-    return this.majorVersion
+    return `${this.deniedMessage(username)}<br><a href="/">Go back</a>`
   }
 
   canAuthenticate(username: string, groups: string[]) {
     const allow = groups.includes(this.requiredGroup)
     if (!allow) {
-      logger.error(accessDeniedMessage(username, this.requiredGroup))
+      logger.error(this.deniedMessage(username))
     }
     return allow
   }
@@ -63,29 +46,17 @@ export class AuthCore {
     if (requiredAccess.includes("$authenticated")) {
       requiredAccess.push(this.requiredGroup)
     }
-
     const grantedAccess = intersection(groups, requiredAccess)
 
     const allow = grantedAccess.length === requiredAccess.length
     if (!allow) {
-      logger.error(accessDeniedMessage(username, this.requiredGroup))
+      logger.error(this.deniedMessage(username))
     }
     return allow
   }
 
-  private encrypt(text: string) {
-    return this.verdaccio.aesEncrypt(new Buffer(text)).toString("base64")
-  }
-
-  // https://github.com/verdaccio/verdaccio/blob/3.x/src/api/web/endpoint/user.js#L15
-  private async issueJWTVerdaccio3(user: User) {
-    return this.verdaccio.issueUIjwt(user, "24h")
-  }
-
-  // https://github.com/verdaccio/verdaccio/blob/master/src/api/web/endpoint/user.ts#L31
-  private async issueJWTVerdaccio4(user: User) {
-    const jWTSignOptions = getSecurity(this.config).web.sign
-    return this.verdaccio.jwtEncrypt(user, jWTSignOptions)
+  private deniedMessage(username: string) {
+    return `Access denied: user "${username}" is not a member of "${this.requiredGroup}"`
   }
 
 }

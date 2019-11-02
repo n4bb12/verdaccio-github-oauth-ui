@@ -2,9 +2,10 @@ import { PackageAccess, RemoteUser } from "@verdaccio/types"
 import { PluginConfig } from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
 
-import { createTestConfig, createTestPlugin } from "../test-utils"
+import { createTestPlugin, createTestPluginConfig } from "../test-utils"
 
 const authenticated = "$authenticated"
+const username = "test-user"
 
 describe("Plugin", () => {
   describe("allow_access", () => {
@@ -13,7 +14,7 @@ describe("Plugin", () => {
     let plugin: Plugin
 
     beforeEach(() => {
-      config = createTestConfig()
+      config = createTestPluginConfig()
       plugin = createTestPlugin()
     })
 
@@ -21,7 +22,7 @@ describe("Plugin", () => {
       const user: RemoteUser = {
         real_groups: [],
         groups: [],
-        name: "test-package",
+        name: username,
       }
       const pkg: PackageAccess = {
         access: [authenticated],
@@ -39,7 +40,7 @@ describe("Plugin", () => {
       const user: RemoteUser = {
         real_groups: userGroups,
         groups: userGroups,
-        name: "test-package",
+        name: username,
       }
       const pkg: PackageAccess = {
         access: [authenticated],
@@ -57,7 +58,7 @@ describe("Plugin", () => {
       const user: RemoteUser = {
         real_groups: userGroups,
         groups: userGroups,
-        name: "test-package",
+        name: username,
       }
       const pkg: PackageAccess = {
         access: [authenticated],
@@ -70,11 +71,11 @@ describe("Plugin", () => {
       })
     })
 
-    it("authenticated user has access if authentication is not required", (done) => {
+    it("unauthenticated user has access if authentication is not required", (done) => {
       const user: RemoteUser = {
         real_groups: [],
         groups: [],
-        name: "test-package",
+        name: username,
       }
       const pkg: PackageAccess = {
         access: [],
@@ -83,6 +84,23 @@ describe("Plugin", () => {
       plugin.allow_access(user, pkg, (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toEqual([])
+        done()
+      })
+    })
+
+    it("authenticated user has access if authentication is not required", (done) => {
+      const user: RemoteUser = {
+        real_groups: [authenticated],
+        groups: [authenticated],
+        name: username,
+      }
+      const pkg: PackageAccess = {
+        access: [],
+      }
+
+      plugin.allow_access(user, pkg, (err, groups) => {
+        expect(err).toBeNull()
+        expect(groups).toEqual([authenticated])
         done()
       })
     })

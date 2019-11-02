@@ -9,7 +9,7 @@ import { Application } from "express"
 
 import { CliFlow } from "../cli/CliFlow"
 import { GitHubAuthProvider } from "../github"
-import { Auth } from "../verdaccio"
+import { Auth, Verdaccio } from "../verdaccio"
 import { AuthCore } from "./AuthCore"
 import { Cache } from "./Cache"
 import { Config, getConfig, validateConfig } from "./Config"
@@ -26,7 +26,8 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   private readonly requiredGroup = getConfig(this.config, "org")
   private readonly provider = new GitHubAuthProvider(this.config)
   private readonly cache = new Cache(this.provider)
-  private core!: AuthCore
+  private readonly verdaccio = new Verdaccio(this.config)
+  private readonly core = new AuthCore(this.verdaccio, this.config)
 
   constructor(private readonly config: Config) {
     validateConfig(config)
@@ -36,14 +37,14 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   /**
    * IPluginMiddleware
    */
-  register_middlewares(app: Application, verdaccio: Auth) {
-    this.core = new AuthCore(this.config, verdaccio)
+  register_middlewares(app: Application, auth: Auth) {
+    this.verdaccio.setAuth(auth)
 
     const children = [
       new ServeStatic(),
-      new PatchHtml(this.core),
-      new WebFlow(this.core, this.provider),
-      new CliFlow(this.core, this.provider),
+      new PatchHtml(this.verdaccio),
+      new WebFlow(this.verdaccio, this.core, this.provider),
+      new CliFlow(this.verdaccio, this.core, this.provider),
     ]
 
     for (const child of children) {
