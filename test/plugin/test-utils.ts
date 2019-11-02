@@ -11,7 +11,6 @@ jest.mock("src/server/verdaccio/Verdaccio")
 const VerdaccioMock: Verdaccio & jest.MockInstance<any, any> = Verdaccio as any
 // tslint:enable
 
-
 export const authenticated = "$authenticated"
 export const testRequiredGroup = "TEST_ORG"
 export const testClientId = "TEST_CLIENT_ID"
