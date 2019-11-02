@@ -6,9 +6,6 @@ interface CachedGroups {
   expires: number
 }
 
-const cacheTTLms = 1000 * 5 // 5s
-const cache: { [username: string]: CachedGroups } = {}
-
 /**
  * When installing packages, the CLI makes a burst of package requests.
  *
@@ -21,12 +18,16 @@ const cache: { [username: string]: CachedGroups } = {}
  */
 export class Cache {
 
+  private readonly cache: { [cacheId: string]: CachedGroups } = {}
+
   constructor(
     private readonly provider: AuthProvider,
+    private readonly cacheTTLms = 1000 * 5, // 5s
   ) { }
 
   async getGroups(token: string): Promise<string[]> {
-    const cacheId = [this.provider.getId(), token].join("_")
+    const { cache, provider, cacheTTLms } = this
+    const cacheId = [provider.getId(), token].join("_")
 
     const invalidate = () => delete cache[cacheId]
     const cached = () => cache[cacheId] || {}
@@ -40,7 +41,7 @@ export class Cache {
 
     if (!cached().groups) {
       try {
-        const groups = await this.provider.getGroups(token)
+        const groups = await provider.getGroups(token)
         cache[cacheId] = {
           groups,
           expires: nearFuture(),

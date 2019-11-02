@@ -3,10 +3,11 @@
   "defaultSeverity": "error",
   "extends": ["tslint:latest", "tslint-config-prettier", "@n4bb12/config-tslint"],
   "rules": {
-    "interface-name": false,
-    "no-console": true,
-    "max-line-length": [true, 120],
     "arrow-parens": false,
-    "no-implicit-dependencies": false
+    "interface-name": false,
+    "max-line-length": [true, 120],
+    "no-console": true,
+    "no-implicit-dependencies": false,
+    "no-this-assignment": false
   }
 }
