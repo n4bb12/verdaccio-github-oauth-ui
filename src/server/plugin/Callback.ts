@@ -52,7 +52,7 @@ export class Callback implements IPluginMiddleware<any> {
       if (groups.includes(this.requiredGroup)) {
         await this.grantAccess(res, token, username)
       } else {
-        await this.denyAccess(res)
+        await this.denyAccess(res, username)
       }
     } catch (error) {
       logger.error(error)
@@ -80,11 +80,9 @@ export class Callback implements IPluginMiddleware<any> {
     res.redirect(frontendUrl)
   }
 
-  private denyAccess(res: Response) {
-    res.send(`
-      Access denied: you are not a member of "${this.requiredGroup}"<br>
-      <a href="/">Go back</a>
-    `)
+  private denyAccess(res: Response, username: string) {
+    logger.error(`Access denied: user "${username}" is not a member of "${this.requiredGroup}"`)
+    res.send(`Access denied: you are not a member of "${this.requiredGroup}"<br><a href="/">Go back</a>`)
   }
 
   private encrypt(text: string) {
