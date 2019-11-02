@@ -26,6 +26,7 @@
     "prepack": "bash run clean && bash run build",
     "start": "verdaccio -c verdaccio.yaml",
     "test": "jest",
+    "test:cli": "bash run oauth-cli-test",
     "test:manual": "yarn update && yarn start",
     "test:watch": "jest --watch",
     "update": "yarn prepack && bash run link",
