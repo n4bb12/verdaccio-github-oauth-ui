@@ -4,4 +4,5 @@ module.exports = {
   },
   moduleFileExtensions: ["ts", "js"],
   modulePaths: ["<rootDir>"],
+  coveragePathIgnorePatterns: ["/node_modules/", "/test/"],
 }
