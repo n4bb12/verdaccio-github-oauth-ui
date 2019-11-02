@@ -45,24 +45,6 @@ export function getConfig(config: Config, key: PluginConfigKey): string {
 }
 
 //
-// Parsing
-//
-
-/**
- * user_agent: e.g. "verdaccio/4.3.4" --> 4
- */
-export function getMajorVersion(config: Config) {
-  return +config.user_agent[10]
-}
-
-export function getBaseUrl(config: Config) {
-  const prefix = config.url_prefix
-  if (prefix) {
-    return prefix.replace(/\/?$/, "") // Remove potential trailing slash
-  }
-}
-
-//
 // Validation
 //
 

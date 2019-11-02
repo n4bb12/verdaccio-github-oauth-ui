@@ -1,6 +1,7 @@
 import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler, Request } from "express"
 
+import { Verdaccio } from "../verdaccio"
 import { AuthCore } from "./AuthCore"
 import { AuthProvider } from "./AuthProvider"
 import { authorizePath, callbackPath } from "./Config"
@@ -17,6 +18,7 @@ export class WebFlow implements IPluginMiddleware<any> {
   }
 
   constructor(
+    private readonly verdaccio: Verdaccio,
     private readonly core: AuthCore,
     private readonly provider: AuthProvider,
   ) { }
@@ -64,7 +66,7 @@ export class WebFlow implements IPluginMiddleware<any> {
       const username = await this.provider.getUsername(token)
       const groups = await this.provider.getGroups(token)
 
-      if (this.core.shouldAllowAccess(username, groups)) {
+      if (this.core.canAuthenticate(username, groups)) {
         const frontendUrl = await this.core.getFrontendUrl(username, token)
         res.redirect(frontendUrl)
       } else {
@@ -78,7 +80,7 @@ export class WebFlow implements IPluginMiddleware<any> {
   }
 
   private getRedirectUrl(req: Request): string {
-    const baseUrl = this.core.getBaseUrl() || this.getRequestOrigin(req)
+    const baseUrl = this.verdaccio.baseUrl || this.getRequestOrigin(req)
     const path = WebFlow.getCallbackPath(req.params.id)
     return baseUrl + path
   }

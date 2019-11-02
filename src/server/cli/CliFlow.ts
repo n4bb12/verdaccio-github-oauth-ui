@@ -5,6 +5,7 @@ import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { logger } from "../plugin/logger"
 import { WebFlow } from "../plugin/WebFlow"
+import { Verdaccio } from "../verdaccio"
 
 const cliAuthorizeUrl = "/oauth/authorize"
 const cliCallbackUrl = "http://localhost:8239?token="
@@ -16,6 +17,7 @@ const pluginCallbackeUrl = WebFlow.getCallbackPath(providerId)
 export class CliFlow implements IPluginMiddleware<any> {
 
   constructor(
+    private readonly verdaccio: Verdaccio,
     private readonly core: AuthCore,
     private readonly provider: AuthProvider,
   ) { }
@@ -28,7 +30,7 @@ export class CliFlow implements IPluginMiddleware<any> {
     app.get(pluginCallbackeUrl, this.callback)
   }
 
-  authorize: Handler = (req, res) => {
+  authorize: Handler = async (req, res) => {
     res.redirect(pluginAuthorizeUrl)
   }
 
@@ -40,7 +42,7 @@ export class CliFlow implements IPluginMiddleware<any> {
       const groups = await this.provider.getGroups(token)
 
       if (this.core.canAuthenticate(username, groups)) {
-        const npmToken = this.core.getNpmToken(username, token)
+        const npmToken = await this.verdaccio.issueNpmToken(username, token)
         const frontendUrl = cliCallbackUrl + encodeURIComponent(npmToken)
         res.redirect(frontendUrl)
       } else {
