@@ -4,6 +4,7 @@ import { Application, Handler, Request } from "express"
 import { AuthProvider } from "./AuthProvider"
 import { Callback } from "./Callback"
 import { Config, getBaseUrl } from "./Config"
+import { logger } from "./logger"
 
 export class Authorization implements IPluginMiddleware<any> {
 
@@ -37,6 +38,7 @@ export class Authorization implements IPluginMiddleware<any> {
       const url = await this.provider.getLoginUrl(redirectUrl)
       res.redirect(url)
     } catch (error) {
+      logger.error(error)
       next(error)
     }
   }

@@ -5,6 +5,7 @@ import { stringify } from "querystring"
 import { Auth, getSecurity, User } from "../verdaccio"
 import { AuthProvider } from "./AuthProvider"
 import { Config, getConfig, getMajorVersion } from "./Config"
+import { logger } from "./logger"
 
 export class Callback implements IPluginMiddleware<any> {
 
@@ -54,6 +55,7 @@ export class Callback implements IPluginMiddleware<any> {
         await this.denyAccess(res)
       }
     } catch (error) {
+      logger.error(error)
       next(error)
     }
   }
