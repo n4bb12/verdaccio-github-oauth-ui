@@ -1,5 +1,6 @@
 *.log
-dist
+coverage/
+dist/
 htpasswd
-node_modules
-storage
+node_modules/
+storage/
