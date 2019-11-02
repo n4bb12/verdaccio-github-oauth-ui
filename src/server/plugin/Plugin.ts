@@ -42,8 +42,8 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
       new ServeStatic(),
       new PatchHtml(this.config),
       new Authorization(this.config, this.provider),
-      new Callback(this.config, auth, this.provider),
-      new CliSupport(this.config, auth),
+      new Callback(this.config, this.provider, auth),
+      new CliSupport(this.config, this.provider, auth),
     ]
 
     for (const child of children) {

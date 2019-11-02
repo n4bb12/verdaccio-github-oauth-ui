@@ -17,8 +17,8 @@ export class Callback implements IPluginMiddleware<any> {
 
   constructor(
     private readonly config: Config,
-    private readonly verdaccioAuth: Auth,
     private readonly provider: AuthProvider,
+    private readonly verdaccioAuth: Auth,
   ) { }
 
   /**
@@ -60,7 +60,7 @@ export class Callback implements IPluginMiddleware<any> {
 
   private async grantAccess(res: Response, token: string, username: string) {
     const npmAuth = username + ":" + token
-    const encryptedNpmToken = this.encrypt(npmAuth)
+    const npmToken = this.encrypt(npmAuth)
 
     const user: User = {
       name: username,
@@ -68,15 +68,12 @@ export class Callback implements IPluginMiddleware<any> {
       real_groups: [this.requiredGroup],
     }
 
-    const encryptedJWT = this.majorVersion === 3
+    const uiToken = this.majorVersion === 3
       ? await this.issueJWTVerdaccio3(user)
       : await this.issueJWTVerdaccio4(user)
 
-    const frontendUrl = "/?" + stringify({
-      username,
-      jwtToken: encryptedJWT,
-      npmToken: encryptedNpmToken,
-    })
+    const query = { username, uiToken, npmToken }
+    const frontendUrl = "/?" + stringify(query)
 
     res.redirect(frontendUrl)
   }
@@ -88,6 +85,10 @@ export class Callback implements IPluginMiddleware<any> {
     `)
   }
 
+  private encrypt(text: string) {
+    return this.verdaccioAuth.aesEncrypt(new Buffer(text)).toString("base64")
+  }
+
   // https://github.com/verdaccio/verdaccio/blob/3.x/src/api/web/endpoint/user.js#L15
   private async issueJWTVerdaccio3(user: User) {
     return this.verdaccioAuth.issueUIjwt(user, "24h")
@@ -97,10 +98,6 @@ export class Callback implements IPluginMiddleware<any> {
   private async issueJWTVerdaccio4(user: User) {
     const jWTSignOptions = getSecurity(this.config).web.sign
     return this.verdaccioAuth.jwtEncrypt(user, jWTSignOptions)
-  }
-
-  private encrypt(text: string) {
-    return this.verdaccioAuth.aesEncrypt(new Buffer(text)).toString("base64")
   }
 
 }

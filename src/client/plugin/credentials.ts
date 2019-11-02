@@ -6,13 +6,13 @@
 
 export interface Credentials {
   username: string
-  jwtToken: string
+  uiToken: string
   npmToken: string
 }
 
 export function saveCredentials(credentials: Credentials) {
   localStorage.setItem("username", credentials.username)
-  localStorage.setItem("token", credentials.jwtToken)
+  localStorage.setItem("token", credentials.uiToken)
   localStorage.setItem("npm", credentials.npmToken)
 }
 
@@ -32,6 +32,6 @@ export function isLoggedIn() {
 export function validateCredentials(credentials: Credentials) {
   return true
     && credentials.username
-    && credentials.jwtToken
+    && credentials.uiToken
     && credentials.npmToken
 }
