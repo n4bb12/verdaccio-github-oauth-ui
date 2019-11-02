@@ -6,5 +6,6 @@ declare const GLOBAL_AGENT: any
 
 export function registerGlobalProxyAgent() {
   bootstrap()
-  logger.log("Proxy config:", JSON.stringify(GLOBAL_AGENT || {}))
+  const config = JSON.stringify(GLOBAL_AGENT || {})
+  logger.log("Proxy config:", config)
 }

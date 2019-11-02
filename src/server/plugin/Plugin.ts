@@ -35,7 +35,7 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   }
 
   /**
-   * Implements the middleware plugin interface.
+   * IPluginMiddleware
    */
   register_middlewares(app: Application, auth: Auth) {
     const children = [
@@ -52,7 +52,7 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   }
 
   /**
-   * Implements the auth plugin interface.
+   * IPluginAuth
    */
   async authenticate(username: string, authToken: string, callback: AuthCallback) {
     const groups = await this.cache.getGroups(username, authToken)
@@ -65,6 +65,9 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
     }
   }
 
+  /**
+   * IPluginAuth
+   */
   allow_access(user: RemoteUser, pkg: PackageAccess, callback: AuthCallback): void {
     const requiredAccess = [...pkg.access || []]
 

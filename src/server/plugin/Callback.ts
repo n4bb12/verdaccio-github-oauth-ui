@@ -23,24 +23,25 @@ export class Callback implements IPluginMiddleware<any> {
   ) { }
 
   /**
-   * Implements the middleware plugin interface.
+   * IPluginMiddleware
    */
   register_middlewares(app: Application) {
     app.get(Callback.path(), this.receiveOAuthCode)
   }
 
   /**
-   * After a successful OAuth authentication, the auth provider redirects back to us.
-   * We use the code in the query params to get an access token and the username associated
-   * with the account.
+   * After successful authentication, the auth provider redirects back to us.
+   * We use the code in the query params to get an access token and the username
+   * associated with the account.
    *
-   * The token and username are encryped and base64 encoded and configured as npm
-   * credentials for this registry. There is no need to later decode and decrypt the token.
-   * This process is automatically reversed before the token is passed to the authenticate
-   * middleware.
+   * We issue a JWT using these values and pass them back to the frontend as
+   * query parameters so they can be stored in the browser.
    *
-   * We then issue a JWT token using these values and pass them back to the frontend
-   * as query parameters so they can be stored in the browser.
+   * The username and token are encryped and base64 encoded to form a token for
+   * the npm CLI.
+   *
+   * There is no need to later decode and decrypt the token. This process is
+   * automatically reversed by verdaccio before passing it to the plugin.
    */
   receiveOAuthCode: Handler = async (req, res, next) => {
     try {
