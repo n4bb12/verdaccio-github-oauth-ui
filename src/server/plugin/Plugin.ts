@@ -6,19 +6,17 @@ import {
   RemoteUser,
 } from "@verdaccio/types"
 import { Application } from "express"
-import { intersection } from "lodash"
 
-import { CliSupport } from "../cli-support"
+import { CliFlow } from "../cli/CliFlow"
 import { GitHubAuthProvider } from "../github"
 import { Auth } from "../verdaccio"
-import { Authorization } from "./Authorization"
+import { AuthCore } from "./AuthCore"
 import { Cache } from "./Cache"
-import { Callback } from "./Callback"
 import { Config, getConfig, validateConfig } from "./Config"
-import { logger } from "./logger"
 import { PatchHtml } from "./PatchHtml"
 import { registerGlobalProxyAgent } from "./ProxyAgent"
 import { ServeStatic } from "./ServeStatic"
+import { WebFlow } from "./WebFlow"
 
 /**
  * Implements the verdaccio plugin interfaces.
@@ -28,6 +26,7 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   private readonly requiredGroup = getConfig(this.config, "org")
   private readonly provider = new GitHubAuthProvider(this.config)
   private readonly cache = new Cache(this.provider)
+  private core!: AuthCore
 
   constructor(private readonly config: Config) {
     validateConfig(config)
@@ -37,13 +36,14 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   /**
    * IPluginMiddleware
    */
-  register_middlewares(app: Application, auth: Auth) {
+  register_middlewares(app: Application, verdaccio: Auth) {
+    this.core = new AuthCore(this.config, verdaccio)
+
     const children = [
       new ServeStatic(),
-      new PatchHtml(this.config),
-      new Authorization(this.config, this.provider),
-      new Callback(this.config, this.provider, auth),
-      new CliSupport(this.config, this.provider, auth),
+      new PatchHtml(this.core),
+      new WebFlow(this.core, this.provider),
+      new CliFlow(this.core, this.provider),
     ]
 
     for (const child of children) {
@@ -57,10 +57,9 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   async authenticate(username: string, authToken: string, callback: AuthCallback) {
     const groups = await this.cache.getGroups(username, authToken)
 
-    if (groups.includes(this.requiredGroup)) {
+    if (this.core.canAuthenticate(username, groups)) {
       callback(null, [this.requiredGroup])
     } else {
-      logger.error(`Access denied: user "${username}" is not a member of "${this.requiredGroup}"`)
       callback(null, false)
     }
   }
@@ -71,16 +70,9 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   allow_access(user: RemoteUser, pkg: PackageAccess, callback: AuthCallback): void {
     const requiredAccess = [...pkg.access || []]
 
-    if (requiredAccess.includes("$authenticated")) {
-      requiredAccess.push(this.requiredGroup)
-    }
-
-    const grantedAccess = intersection(user.groups, requiredAccess)
-
-    if (grantedAccess.length === requiredAccess.length) {
+    if (this.core.canAccess(user.name || "anonymous", user.groups, requiredAccess)) {
       callback(null, user.groups)
     } else {
-      logger.error(`Access denied: user "${user.name}" is not a member of "${this.requiredGroup}"`)
       callback(null, false)
     }
   }
