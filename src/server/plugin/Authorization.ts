@@ -1,5 +1,5 @@
 import { IPluginMiddleware } from "@verdaccio/types"
-import { Application, Handler, NextFunction, Request, Response } from "express"
+import { Application, Handler, Request } from "express"
 
 import { AuthProvider } from "./AuthProvider"
 import { Callback } from "./Callback"
@@ -31,7 +31,7 @@ export class Authorization implements IPluginMiddleware<any> {
    *   A request to `/-/oauth/authorize/cheese-cake` will be called back at
    *   `/-/oauth/callback/cheese-cake`.
    */
-  authorize: Handler = async (req: Request, res: Response, next: NextFunction) => {
+  authorize: Handler = async (req, res, next) => {
     try {
       const redirectUrl = this.getRedirectUrl(req)
       const url = await this.provider.getLoginUrl(redirectUrl)

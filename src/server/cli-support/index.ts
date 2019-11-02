@@ -1,5 +1,5 @@
 import { IPluginMiddleware } from "@verdaccio/types"
-import { Application, Handler, NextFunction, Request, Response } from "express"
+import { Application, Handler, Response } from "express"
 
 import { Authorization } from "../plugin/Authorization"
 import { AuthProvider } from "../plugin/AuthProvider"
@@ -32,11 +32,11 @@ export class CliSupport implements IPluginMiddleware<any> {
     app.get(pluginCallbackeUrl, this.receiveOAuthCode)
   }
 
-  authorize: Handler = (req: Request, res: Response) => {
+  authorize: Handler = (req, res) => {
     res.redirect(pluginAuthorizeUrl)
   }
 
-  receiveOAuthCode: Handler = async (req: Request, res: Response, next: NextFunction) => {
+  receiveOAuthCode: Handler = async (req, res, next) => {
     try {
       const code = await this.provider.getCode(req)
       const token = await this.provider.getToken(code)

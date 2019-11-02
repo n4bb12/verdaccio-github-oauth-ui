@@ -1,5 +1,5 @@
 import { IPluginMiddleware } from "@verdaccio/types"
-import { Application, Handler, NextFunction, Request, Response } from "express"
+import { Application, Handler } from "express"
 import { readFileSync } from "fs"
 
 import { Config, getMajorVersion, publicRoot } from "./Config"
@@ -30,7 +30,7 @@ export class PatchHtml implements IPluginMiddleware<any> {
   /**
    * Monkey-patches `res.send` in order to inject style and script imports.
    */
-  patchResponse: Handler = (req: Request, res: Response, next: NextFunction) => {
+  patchResponse: Handler = (req, res, next) => {
     const send = res.send
     res.send = html => {
       html = this.insertAssetTags(html)
