@@ -29,6 +29,7 @@
     "test:cli": "bash run oauth-cli-test",
     "test:manual": "yarn update && yarn start",
     "test:watch": "jest --watch",
+    "test:whoami": "bash run whoami",
     "update": "yarn prepack && bash run link",
     "watch": "nodemon --watch src --ext ts,css --exec \"yarn update\""
   },
