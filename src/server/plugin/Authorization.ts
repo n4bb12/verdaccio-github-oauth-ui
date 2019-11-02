@@ -20,7 +20,7 @@ export class Authorization implements IPluginMiddleware<any> {
    * Implements the middleware plugin interface.
    */
   register_middlewares(app: Application) {
-    app.get(Authorization.path(), this.middleware)
+    app.get(Authorization.path(), this.authorize)
   }
 
   /**
@@ -31,7 +31,7 @@ export class Authorization implements IPluginMiddleware<any> {
    *   A request to `/-/oauth/authorize/cheese-cake` will be called back at
    *   `/-/oauth/callback/cheese-cake`.
    */
-  middleware: Handler = async (req: Request, res: Response, next: NextFunction) => {
+  authorize: Handler = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const redirectUrl = this.getRedirectUrl(req)
       const url = await this.provider.getLoginUrl(redirectUrl)
@@ -44,7 +44,7 @@ export class Authorization implements IPluginMiddleware<any> {
   /**
    * This is where the auth provider should redirect back to.
    */
-  getRedirectUrl(req: Request): string {
+  private getRedirectUrl(req: Request): string {
     const baseUrl = getBaseUrl(this.config) || this.getRequestOrigin(req)
     const path = Callback.path(req.params.id)
 
@@ -54,7 +54,7 @@ export class Authorization implements IPluginMiddleware<any> {
   /**
    * This is the same as what `npm config get registry` returns.
    */
-  getRequestOrigin(req: Request) {
+  private getRequestOrigin(req: Request) {
     const protocal = req.get("X-Forwarded-Proto") || req.protocol
     return protocal + "://" + req.get("host")
   }

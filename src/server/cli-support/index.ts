@@ -1,56 +1,76 @@
 import { IPluginMiddleware } from "@verdaccio/types"
-import { Application, NextFunction, Request, Response } from "express"
-import { stringify } from "querystring"
+import { Application, Handler, NextFunction, Request, Response } from "express"
 
-import { GitHubAuthProvider } from "../github"
 import { Authorization } from "../plugin/Authorization"
+import { AuthProvider } from "../plugin/AuthProvider"
 import { Callback } from "../plugin/Callback"
-import { Config } from "../plugin/Config"
+import { Config, getConfig } from "../plugin/Config"
 import { Auth } from "../verdaccio"
 
 const cliAuthorizeUrl = "/oauth/authorize"
-const cliCallbackUrl = "http://localhost:8239"
+const cliCallbackUrl = "http://localhost:8239?token="
 const pluginOAuthId = "sinopia-github-oauth-cli"
+
+const pluginAuthorizeUrl = Authorization.path(pluginOAuthId)
+const pluginCallbackeUrl = Callback.path(pluginOAuthId)
 
 export class CliSupport implements IPluginMiddleware<any> {
 
-  private readonly provider = new GitHubAuthProvider(this.config)
+  private readonly requiredGroup = getConfig(this.config, "org")
 
   constructor(
     private readonly config: Config,
-    private readonly auth: Auth,
+    private readonly provider: AuthProvider,
+    private readonly verdaccioAuth: Auth,
   ) { }
 
   /**
    * Implements the middleware plugin interface.
    */
   register_middlewares(app: Application) {
-    app.get(cliAuthorizeUrl, (req: Request, res: Response) => {
-      res.redirect(Authorization.path(pluginOAuthId))
-    })
+    app.get(cliAuthorizeUrl, this.authorize)
+    app.get(pluginCallbackeUrl, this.receiveOAuthCode)
+  }
 
-    app.get(Callback.path(pluginOAuthId), async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const code = req.query.code
+  authorize: Handler = (req: Request, res: Response) => {
+    res.redirect(pluginAuthorizeUrl)
+  }
 
-        const token = await this.provider.getToken(code)
-        const username = await this.provider.getUsername(token)
+  receiveOAuthCode: Handler = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const code = await this.provider.getCode(req)
+      const token = await this.provider.getToken(code)
+      const username = await this.provider.getUsername(token)
+      const groups = await this.provider.getGroups(token)
 
-        const npmAuth = username + ":" + token
-        const encryptedNpmToken = this.encrypt(npmAuth)
-
-        const query = { token: encodeURIComponent(encryptedNpmToken) }
-        const url = cliCallbackUrl + "?" + stringify(query)
-
-        res.redirect(url)
-      } catch (error) {
-        next(error)
+      if (groups.includes(this.requiredGroup)) {
+        await this.grantAccess(res, token, username)
+      } else {
+        await this.denyAccess(res)
       }
-    })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  private async grantAccess(res: Response, token: string, username: string) {
+    const npmAuth = username + ":" + token
+    const npmToken = this.encrypt(npmAuth)
+
+    const frontendUrl = cliCallbackUrl + encodeURIComponent(npmToken)
+
+    res.redirect(frontendUrl)
+  }
+
+  private denyAccess(res: Response) {
+    res.send(`
+      Access denied: you are not a member of "${this.requiredGroup}"<br>
+      <a href="/">Go back</a>
+    `)
   }
 
   private encrypt(text: string) {
-    return this.auth.aesEncrypt(new Buffer(text)).toString("base64")
+    return this.verdaccioAuth.aesEncrypt(new Buffer(text)).toString("base64")
   }
 
 }
