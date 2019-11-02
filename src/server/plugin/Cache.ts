@@ -1,10 +1,7 @@
+import { Cache as MemoryCache } from "memory-cache"
+
 import { AuthProvider } from "./AuthProvider"
 import { logger } from "./logger"
-
-interface CachedGroups {
-  groups: string[]
-  expires: number
-}
 
 /**
  * When installing packages, the CLI makes a burst of package requests.
@@ -18,40 +15,34 @@ interface CachedGroups {
  */
 export class Cache {
 
-  private readonly cache: { [cacheId: string]: CachedGroups } = {}
+  private readonly cache = new MemoryCache()
+  private readonly namespace = this.authProvider.getId()
 
   constructor(
-    private readonly provider: AuthProvider,
+    private readonly authProvider: AuthProvider,
     private readonly cacheTTLms = 1000, // 1s
   ) { }
 
   async getGroups(token: string): Promise<string[]> {
-    const { cache, provider, cacheTTLms } = this
-    const key = [provider.getId(), token].join("_")
+    let groups: string[] | undefined
 
-    const invalidate = () => delete cache[key]
-    const cached = () => cache[key] || {}
-    const nearFuture = () => Date.now() + cacheTTLms
+    try {
+      const key = [this.namespace, token].join("_")
 
-    if (cached().expires < Date.now()) {
-      invalidate()
-    } else {
-      cached().expires = nearFuture()
-    }
+      groups = this.cache.get(key)
 
-    if (!cached().groups) {
-      try {
-        const groups = await provider.getGroups(token)
-        cache[key] = {
-          groups,
-          expires: nearFuture(),
-        }
-      } catch (error) {
-        logger.error(error.message)
+      if (!groups) {
+        groups = await this.authProvider.getGroups(token)
       }
+
+      if (groups) {
+        this.cache.put(key, groups, this.cacheTTLms)
+      }
+    } catch (error) {
+      logger.error(error)
     }
 
-    return cached().groups || []
+    return groups || []
   }
 
 }
