@@ -1,5 +1,5 @@
 import { IPluginMiddleware } from "@verdaccio/types"
-import { Application, Handler, NextFunction, Request, Response } from "express"
+import { Application, Handler, Response } from "express"
 import { stringify } from "querystring"
 
 import { Auth, getSecurity, User } from "../verdaccio"
@@ -41,7 +41,7 @@ export class Callback implements IPluginMiddleware<any> {
    * We then issue a JWT token using these values and pass them back to the frontend
    * as query parameters so they can be stored in the browser.
    */
-  receiveOAuthCode: Handler = async (req: Request, res: Response, next: NextFunction) => {
+  receiveOAuthCode: Handler = async (req, res, next) => {
     try {
       const code = await this.provider.getCode(req)
       const token = await this.provider.getToken(code)
