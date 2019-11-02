@@ -25,8 +25,8 @@ export class Cache {
     private readonly provider: AuthProvider,
   ) { }
 
-  async getGroups(username: string, token: string): Promise<string[]> {
-    const cacheId = [this.provider.getId(), username, token].join("_")
+  async getGroups(token: string): Promise<string[]> {
+    const cacheId = [this.provider.getId(), token].join("_")
 
     const invalidate = () => delete cache[cacheId]
     const cached = () => cache[cacheId] || {}
