@@ -22,16 +22,16 @@ export class AuthCore {
     }
   }
 
-  async getFrontendUrl(username: string, token: string) {
+  async createUiCallbackUrl(username: string, token: string) {
     const user: User = this.createUser(username)
 
     const uiToken = await this.verdaccio.issueUiToken(user)
     const npmToken = await this.verdaccio.issueNpmToken(username, token)
 
     const query = { username, uiToken, npmToken }
-    const frontendUrl = "/?" + stringify(query)
+    const url = "/?" + stringify(query)
 
-    return frontendUrl
+    return url
   }
 
   getErrorPage(username: string) {

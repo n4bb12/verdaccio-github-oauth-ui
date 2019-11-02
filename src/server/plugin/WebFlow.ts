@@ -67,11 +67,11 @@ export class WebFlow implements IPluginMiddleware<any> {
       const groups = await this.provider.getGroups(token)
 
       if (this.core.canAuthenticate(username, groups)) {
-        const frontendUrl = await this.core.getFrontendUrl(username, token)
-        res.redirect(frontendUrl)
+        const ui = await this.core.createUiCallbackUrl(username, token)
+        res.redirect(ui)
       } else {
-        const errorPage = this.core.getErrorPage(username)
-        res.send(errorPage)
+        const error = this.core.getErrorPage(username)
+        res.send(error)
       }
     } catch (error) {
       logger.error(error)
