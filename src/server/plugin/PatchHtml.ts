@@ -2,7 +2,8 @@ import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler } from "express"
 import { readFileSync } from "fs"
 
-import { Config, getMajorVersion, publicRoot, staticPath } from "./Config"
+import { AuthCore } from "./AuthCore"
+import { publicRoot, staticPath } from "./Config"
 
 /**
  * Injects additional static imports into the DOM with code from the client folder
@@ -10,14 +11,13 @@ import { Config, getMajorVersion, publicRoot, staticPath } from "./Config"
  */
 export class PatchHtml implements IPluginMiddleware<any> {
 
-  private readonly majorVersion = getMajorVersion(this.config)
-  private readonly scriptTag = `<script src="${staticPath}/verdaccio-${this.majorVersion}.js"></script>`
-  private readonly styleTag = `<style>${readFileSync(`${publicRoot}/verdaccio-${this.majorVersion}.css`)}</style>`
+  private readonly scriptTag = `<script src="${staticPath}/verdaccio-${this.core.getMajorVersion()}.js"></script>`
+  private readonly styleTag = `<style>${readFileSync(`${publicRoot}/verdaccio-${this.core.getMajorVersion()}.css`)}</style>`
   private readonly headWithStyle = [this.styleTag, "</head>"].join("")
   private readonly bodyWithScript = [this.scriptTag, "</body>"].join("")
 
   constructor(
-    private readonly config: Config,
+    private readonly core: AuthCore,
   ) { }
 
   /**
