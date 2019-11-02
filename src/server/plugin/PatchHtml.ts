@@ -5,7 +5,8 @@ import { readFileSync } from "fs"
 import { Config, getMajorVersion, publicRoot, staticPath } from "./Config"
 
 /**
- * Injects additional tags into the DOM that modify the login button.
+ * Injects additional static imports into the DOM with code from the client folder
+ * that modifies the login button.
  */
 export class PatchHtml implements IPluginMiddleware<any> {
 
@@ -20,25 +21,25 @@ export class PatchHtml implements IPluginMiddleware<any> {
   ) { }
 
   /**
-   * Implements the middleware plugin interface.
+   * IPluginMiddleware
    */
   register_middlewares(app: Application) {
     app.use(this.patchResponse)
   }
 
   /**
-   * Monkey-patches `res.send` in order to inject style and script imports.
+   * Patches `res.send` in order to inject style and script tags.
    */
   patchResponse: Handler = (req, res, next) => {
     const send = res.send
     res.send = html => {
-      html = this.insertAssetTags(html)
+      html = this.insertTags(html)
       return send.call(res, html)
     }
     next()
   }
 
-  private insertAssetTags = (html: string | Buffer): string => {
+  private insertTags = (html: string | Buffer): string => {
     html = String(html)
     if (!html.includes("VERDACCIO_API_URL")) {
       return html

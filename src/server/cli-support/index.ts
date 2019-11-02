@@ -26,7 +26,7 @@ export class CliSupport implements IPluginMiddleware<any> {
   ) { }
 
   /**
-   * Implements the middleware plugin interface.
+   * IPluginMiddleware
    */
   register_middlewares(app: Application) {
     app.get(cliAuthorizeUrl, this.authorize)

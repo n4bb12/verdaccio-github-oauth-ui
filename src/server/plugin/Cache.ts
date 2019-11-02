@@ -9,6 +9,16 @@ interface CachedGroups {
 const cacheTTLms = 1000 * 5 // 5s
 const cache: { [username: string]: CachedGroups } = {}
 
+/**
+ * When installing packages, the CLI makes a burst of package requests.
+ *
+ * If we were to perform a full authentication check and fetch the provider groups
+ * on each package request, this would slow down the process a lot and we would
+ * likely hit a request limit with the auth provider.
+ *
+ * Therefore authentication is only performed once and is cached until no request
+ * has been made for a few seconds.
+ */
 export class Cache {
 
   constructor(
