@@ -1,10 +1,8 @@
 import { AuthCore } from "src/server/plugin/AuthCore"
 
-import { createTestAuthCore } from "../test-utils"
+import { createTestAuthCore, testUsername } from "../test-utils"
 
-const username = "test-user"
-
-describe("Plugin", () => {
+describe("AuthCore", () => {
   describe("canAccess", () => {
 
     let core: AuthCore
@@ -14,12 +12,12 @@ describe("Plugin", () => {
     })
 
     function expectTrue(groups: string[], requiredGroups: string[]) {
-      const result = core.canAccess(username, groups, requiredGroups)
+      const result = core.canAccess(testUsername, groups, requiredGroups)
       return expect(result).toBe(true)
     }
 
     function expectFalse(groups: string[], requiredGroups: string[]) {
-      const result = core.canAccess(username, groups, requiredGroups)
+      const result = core.canAccess(testUsername, groups, requiredGroups)
       return expect(result).toBe(false)
     }
 
