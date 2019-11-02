@@ -65,12 +65,16 @@ lint() {
   yarn tslint -p test/tsconfig.json ${@}
 }
 
+whoami() {
+  npm whoami --registry http://localhost:4873
+}
+
 #
 # Sinopia CLI test
 #
 oauth-cli-test() {
   npx sinopia-github-oauth-cli --registry http://localhost:4873
-  npm whoami --registry http://localhost:4873
+  whoami
 }
 
 #
