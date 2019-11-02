@@ -1,20 +1,19 @@
 import { PackageAccess, RemoteUser } from "@verdaccio/types"
-import { PluginConfig } from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
 
-import { createTestPlugin, createTestPluginConfig } from "../test-utils"
-
-const authenticated = "$authenticated"
-const username = "test-user"
+import {
+  authenticated,
+  createTestPlugin,
+  testRequiredGroup,
+  testUsername,
+} from "../test-utils"
 
 describe("Plugin", () => {
   describe("allow_access", () => {
 
-    let config: PluginConfig
     let plugin: Plugin
 
     beforeEach(() => {
-      config = createTestPluginConfig()
       plugin = createTestPlugin()
     })
 
@@ -22,7 +21,7 @@ describe("Plugin", () => {
       const user: RemoteUser = {
         real_groups: [],
         groups: [],
-        name: username,
+        name: testUsername,
       }
       const pkg: PackageAccess = {
         access: [authenticated],
@@ -40,7 +39,7 @@ describe("Plugin", () => {
       const user: RemoteUser = {
         real_groups: userGroups,
         groups: userGroups,
-        name: username,
+        name: testUsername,
       }
       const pkg: PackageAccess = {
         access: [authenticated],
@@ -54,11 +53,11 @@ describe("Plugin", () => {
     })
 
     it("authenticated user in org has access", (done) => {
-      const userGroups = [authenticated, config.org]
+      const userGroups = [authenticated, testRequiredGroup]
       const user: RemoteUser = {
         real_groups: userGroups,
         groups: userGroups,
-        name: username,
+        name: testUsername,
       }
       const pkg: PackageAccess = {
         access: [authenticated],
@@ -75,7 +74,7 @@ describe("Plugin", () => {
       const user: RemoteUser = {
         real_groups: [],
         groups: [],
-        name: username,
+        name: testUsername,
       }
       const pkg: PackageAccess = {
         access: [],
@@ -92,7 +91,7 @@ describe("Plugin", () => {
       const user: RemoteUser = {
         real_groups: [authenticated],
         groups: [authenticated],
-        name: username,
+        name: testUsername,
       }
       const pkg: PackageAccess = {
         access: [],

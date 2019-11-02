@@ -1,8 +1,7 @@
 import { GitHubAuthProvider } from "src/server/github/AuthProvider"
-import { PluginConfig } from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
 
-import { createTestPlugin, createTestPluginConfig } from "../test-utils"
+import { createTestPlugin, testRequiredGroup } from "../test-utils"
 
 jest.mock("src/server/github/AuthProvider")
 
@@ -15,11 +14,9 @@ describe("Plugin", () => {
     const testUsername = "turtle"
     const testToken = "eltrut"
 
-    let config: PluginConfig
     let plugin: Plugin
 
     beforeEach(() => {
-      config = createTestPluginConfig()
       AuthProvider.mockImplementation(() => {
         return {
           async getId() {
@@ -29,7 +26,7 @@ describe("Plugin", () => {
             return token === testToken ? testUsername : ""
           },
           async getGroups(token: string) {
-            return token === testToken ? [config.org] : []
+            return token === testToken ? [testRequiredGroup] : []
           },
         }
       })
@@ -47,7 +44,7 @@ describe("Plugin", () => {
     it("user with valid token can authenticate", (done) => {
       plugin.authenticate(testUsername, testToken, (err, groups) => {
         expect(err).toBeNull()
-        expect(groups).toEqual([config.org])
+        expect(groups).toEqual([testRequiredGroup])
         done()
       })
     })
