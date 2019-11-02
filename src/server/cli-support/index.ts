@@ -45,9 +45,9 @@ export class CliSupport implements IPluginMiddleware<any> {
       const groups = await this.provider.getGroups(token)
 
       if (groups.includes(this.requiredGroup)) {
-        await this.grantAccess(res, token, username)
+        this.grantAccess(res, token, username)
       } else {
-        await this.denyAccess(res, username)
+        this.denyAccess(res, username)
       }
     } catch (error) {
       logger.error(error)
@@ -55,7 +55,7 @@ export class CliSupport implements IPluginMiddleware<any> {
     }
   }
 
-  private async grantAccess(res: Response, token: string, username: string) {
+  private grantAccess(res: Response, token: string, username: string) {
     const npmAuth = username + ":" + token
     const npmToken = this.encrypt(npmAuth)
 

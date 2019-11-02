@@ -52,7 +52,7 @@ export class Callback implements IPluginMiddleware<any> {
       if (groups.includes(this.requiredGroup)) {
         await this.grantAccess(res, token, username)
       } else {
-        await this.denyAccess(res, username)
+        this.denyAccess(res, username)
       }
     } catch (error) {
       logger.error(error)
