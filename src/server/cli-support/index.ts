@@ -5,6 +5,7 @@ import { Authorization } from "../plugin/Authorization"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { Callback } from "../plugin/Callback"
 import { Config, getConfig } from "../plugin/Config"
+import { logger } from "../plugin/logger"
 import { Auth } from "../verdaccio"
 
 const cliAuthorizeUrl = "/oauth/authorize"
@@ -49,6 +50,7 @@ export class CliSupport implements IPluginMiddleware<any> {
         await this.denyAccess(res)
       }
     } catch (error) {
+      logger.error(error)
       next(error)
     }
   }
