@@ -43,11 +43,11 @@ export class CliFlow implements IPluginMiddleware<any> {
 
       if (this.core.canAuthenticate(username, groups)) {
         const npmToken = await this.verdaccio.issueNpmToken(username, token)
-        const frontendUrl = cliCallbackUrl + encodeURIComponent(npmToken)
-        res.redirect(frontendUrl)
+        const cli = cliCallbackUrl + encodeURIComponent(npmToken)
+        res.redirect(cli)
       } else {
-        const errorPage = this.core.getErrorPage(username)
-        res.send(errorPage)
+        const error = this.core.getErrorPage(username)
+        res.send(error)
       }
     } catch (error) {
       logger.error(error)
