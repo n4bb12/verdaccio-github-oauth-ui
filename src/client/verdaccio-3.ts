@@ -4,10 +4,8 @@ function updateUsageInfo() {
   const info = getUsageInfo()
   const element = document.querySelector("[class*='header__headerWrap'] figure") as HTMLElement
 
-  if (element) {
+  if (element && element.innerText !== info) {
     element.innerText = info
-  } else {
-    setTimeout(updateUsageInfo, 0)
   }
 }
 
