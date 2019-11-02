@@ -55,8 +55,8 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   /**
    * IPluginAuth
    */
-  async authenticate(username: string, authToken: string, callback: AuthCallback) {
-    const groups = await this.cache.getGroups(username, authToken)
+  async authenticate(username: string, token: string, callback: AuthCallback) {
+    const groups = await this.cache.getGroups(username, token)
 
     if (this.core.canAuthenticate(username, groups)) {
       callback(null, [this.requiredGroup])
@@ -69,9 +69,9 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
    * IPluginAuth
    */
   allow_access(user: RemoteUser, pkg: PackageAccess, callback: AuthCallback): void {
-    const requiredAccess = [...pkg.access || []]
+    const requiredGroups = [...pkg.access || []]
 
-    if (this.core.canAccess(user.name || "anonymous", user.groups, requiredAccess)) {
+    if (this.core.canAccess(user.name || "anonymous", user.groups, requiredGroups)) {
       callback(null, user.groups)
     } else {
       callback(null, false)
