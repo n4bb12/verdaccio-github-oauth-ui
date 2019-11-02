@@ -2,8 +2,7 @@ import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler } from "express"
 import { readFileSync } from "fs"
 
-import { Config, getMajorVersion, publicRoot } from "./Config"
-import { ServeStatic } from "./ServeStatic"
+import { Config, getMajorVersion, publicRoot, staticPath } from "./Config"
 
 /**
  * Injects additional tags into the DOM that modify the login button.
@@ -11,7 +10,7 @@ import { ServeStatic } from "./ServeStatic"
 export class PatchHtml implements IPluginMiddleware<any> {
 
   private readonly majorVersion = getMajorVersion(this.config)
-  private readonly scriptTag = `<script src="${ServeStatic.path}/verdaccio-${this.majorVersion}.js"></script>`
+  private readonly scriptTag = `<script src="${staticPath}/verdaccio-${this.majorVersion}.js"></script>`
   private readonly styleTag = `<style>${readFileSync(`${publicRoot}/verdaccio-${this.majorVersion}.css`)}</style>`
   private readonly headWithStyle = [this.styleTag, "</head>"].join("")
   private readonly bodyWithScript = [this.scriptTag, "</body>"].join("")

@@ -30,10 +30,10 @@ export class GitHubAuthProvider implements AuthProvider {
     return "github"
   }
 
-  getLoginUrl(redirectUrl: string) {
+  getLoginUrl(callbackUrl: string) {
     const queryParams = stringify({
       client_id: this.clientId,
-      redirect_uri: redirectUrl,
+      redirect_uri: callbackUrl,
       scope: "read:org",
     })
     return this.webBaseUrl + `/login/oauth/authorize?` + queryParams
