@@ -52,6 +52,18 @@ describe("Cache", () => {
       expect(provider.getGroups).toHaveBeenCalledTimes(2)
     })
 
+    it("automatically extends the cache ttl on access", async () => {
+      configureProvider(() => [])
+
+      await cache.getGroups(testOAuthToken)
+      for (let i = 0; i < 3; i++) {
+        await delay(cacheTTLms / 2)
+        await cache.getGroups(testOAuthToken)
+      }
+
+      expect(provider.getGroups).toHaveBeenCalledTimes(1)
+    })
+
     it("returns empty groups when an error occurs", async () => {
       configureErrorProvider()
 
