@@ -14,7 +14,7 @@ interface CachedGroups {
  * likely hit a request limit with the auth provider.
  *
  * Therefore authentication is only performed once and is cached until no request
- * has been made for a few seconds.
+ * has been made for a short period.
  */
 export class Cache {
 
@@ -22,15 +22,15 @@ export class Cache {
 
   constructor(
     private readonly provider: AuthProvider,
-    private readonly cacheTTLms = 1000 * 5, // 5s
+    private readonly cacheTTLms = 1000, // 1s
   ) { }
 
   async getGroups(token: string): Promise<string[]> {
     const { cache, provider, cacheTTLms } = this
-    const cacheId = [provider.getId(), token].join("_")
+    const key = [provider.getId(), token].join("_")
 
-    const invalidate = () => delete cache[cacheId]
-    const cached = () => cache[cacheId] || {}
+    const invalidate = () => delete cache[key]
+    const cached = () => cache[key] || {}
     const nearFuture = () => Date.now() + cacheTTLms
 
     if (cached().expires < Date.now()) {
@@ -42,7 +42,7 @@ export class Cache {
     if (!cached().groups) {
       try {
         const groups = await provider.getGroups(token)
-        cache[cacheId] = {
+        cache[key] = {
           groups,
           expires: nearFuture(),
         }
