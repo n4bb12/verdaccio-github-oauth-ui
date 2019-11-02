@@ -77,7 +77,7 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
     if (grantedAccess.length === requiredAccess.length) {
       callback(null, user.groups)
     } else {
-      logger.error(`Access denied: user "${user.name}" is not a member of "${this.config.org}"`)
+      logger.error(`Access denied: user "${user.name}" is not a member of "${this.requiredGroup}"`)
       callback(null, false)
     }
   }
