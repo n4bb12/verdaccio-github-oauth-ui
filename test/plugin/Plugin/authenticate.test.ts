@@ -22,6 +22,9 @@ describe("Plugin", () => {
       config = createTestConfig()
       AuthProvider.mockImplementation(() => {
         return {
+          async getId() {
+            return "test"
+          },
           async getUsername(token: string) {
             return token === testToken ? testUsername : ""
           },

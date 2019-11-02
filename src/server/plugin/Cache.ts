@@ -6,20 +6,21 @@ interface CachedGroups {
   expires: number
 }
 
-export class Cache {
+const cacheTTLms = 1000 * 5 // 5s
+const cache: { [username: string]: CachedGroups } = {}
 
-  private readonly cacheTTLms = 1000 * 5 // 5s
-  private readonly cache: { [username: string]: CachedGroups } = {}
+export class Cache {
 
   constructor(
     private readonly provider: AuthProvider,
   ) { }
 
   async getGroups(username: string, token: string): Promise<string[]> {
-    const cacheId = username + token
-    const invalidate = () => delete this.cache[cacheId]
-    const cached = () => this.cache[cacheId] || {}
-    const nearFuture = () => Date.now() + this.cacheTTLms
+    const cacheId = [this.provider.getId(), username, token].join("_")
+
+    const invalidate = () => delete cache[cacheId]
+    const cached = () => cache[cacheId] || {}
+    const nearFuture = () => Date.now() + cacheTTLms
 
     if (cached().expires < Date.now()) {
       invalidate()
@@ -30,7 +31,7 @@ export class Cache {
     if (!cached().groups) {
       try {
         const groups = await this.provider.getGroups(token)
-        this.cache[cacheId] = {
+        cache[cacheId] = {
           groups,
           expires: nearFuture(),
         }
