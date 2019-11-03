@@ -1,6 +1,6 @@
 import { bootstrap } from "global-agent"
 
-import { logger } from "./logger"
+import { logger } from "../../logger"
 
 declare const GLOBAL_AGENT: any
 

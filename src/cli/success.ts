@@ -1,4 +1,4 @@
-import { pluginName } from "../server/plugin/Config"
+import { pluginName } from "../constants"
 import { npmConfig } from "./npm"
 
 export const successPage = `<!DOCTYPE html>

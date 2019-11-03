@@ -1,4 +1,6 @@
-import { Config, getConfig, pluginName, validateConfig } from "src/server/plugin/Config"
+import { pluginName } from "src/constants"
+import { validateConfig } from "src/server/plugin/Config"
+
 import { createTestPluginConfig } from "../test-utils"
 
 describe("Config", () => {

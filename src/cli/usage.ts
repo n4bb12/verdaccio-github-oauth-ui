@@ -1,5 +1,5 @@
-import { pluginName } from "../server/plugin/Config"
-import { logger } from "../server/plugin/logger"
+import { pluginName } from "../constants"
+import { logger } from "../logger"
 
 export function printUsage() {
   logger.log("It seems you are using the default npm repository.")

@@ -1,7 +1,8 @@
 import { Request } from "express"
+import { pluginName } from "src/constants"
 import { AuthCore } from "src/server/plugin/AuthCore"
 import { AuthProvider } from "src/server/plugin/AuthProvider"
-import { Config, pluginName } from "src/server/plugin/Config"
+import { Config } from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
 import { Verdaccio } from "src/server/verdaccio/Verdaccio"
 
