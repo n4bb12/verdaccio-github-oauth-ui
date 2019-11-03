@@ -1,13 +1,19 @@
 import { pluginName } from "../constants"
 import { logger } from "../logger"
 
+export function getUsageInfo() {
+  return [
+    "It seems you are using the default npm registry.",
+    "Please update it to your Verdaccio URL by either running:",
+    "",
+    "npm config set registry <URL>",
+    "",
+    "or by using the registry argument",
+    "",
+    `npx verdaccio-${pluginName} --registry <URL>`,
+  ]
+}
+
 export function printUsage() {
-  logger.log("It seems you are using the default npm repository.")
-  logger.log("Please update it to your verdaccio url by either running:")
-  logger.log("")
-  logger.log("npm config set registry <url>")
-  logger.log("")
-  logger.log("or by using the registry argument")
-  logger.log("")
-  logger.log(`verdaccio-${pluginName} --registry <url>`)
+  getUsageInfo().forEach(line => logger.log(line))
 }

@@ -1,10 +1,5 @@
 import { AuthCore } from "src/server/plugin/AuthCore"
-
-import {
-  createTestAuthCore,
-  testRequiredGroup,
-  testUsername,
-} from "../test-utils"
+import { createTestAuthCore, testRequiredGroup, testUsername } from "test/utils"
 
 describe("AuthCore", () => {
   describe("createUser", () => {
