@@ -5,32 +5,31 @@ import { Config, pluginName } from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
 import { Verdaccio } from "src/server/verdaccio/Verdaccio"
 
-jest.mock("src/server/verdaccio/Verdaccio")
-
-// tslint:disable variable-name
-const VerdaccioMock: Verdaccio & jest.MockInstance<any, any> = Verdaccio as any
-// tslint:enable
-
 export const authenticated = "$authenticated"
 export const testRequiredGroup = "TEST_ORG"
 export const testClientId = "TEST_CLIENT_ID"
 export const testClientSecret = "TEST_CLIENT_SECRET"
 export const testUsername = "test-username"
+export const testProviderId = "test-auth-provider"
+export const testLoginUrl = "test-login-url"
+export const testOAuthCode = "test-code"
 export const testOAuthToken = "test-token"
 export const testMajorVersion = 4
 export const testBaseUrl = "http://localhost:4873"
 export const testUIToken = "test-ui-token"
 export const testNPMToken = "test-npm-token"
+export const testErrorMessage = "test-error"
 
-export function createTestPluginConfig() {
+export function createTestPluginConfig(config?: any) {
   return {
     "org": testRequiredGroup,
     "client-id": testClientId,
     "client-secret": testClientSecret,
+    ...config,
   }
 }
 
-export function createTestVerdaccioConfig() {
+export function createTestConfig(config?: any) {
   return {
     auth: {
       [pluginName]: createTestPluginConfig(),
@@ -40,36 +39,28 @@ export function createTestVerdaccioConfig() {
         enabled: true,
       },
     },
+    user_agent: "verdaccio/4.3.4",
+    ...config,
   } as any as Config
 }
 
-export function createTestVerdaccio() {
-  VerdaccioMock.mockImplementation(() => {
-    return {
-      majorVersion: testMajorVersion,
-      baseUrl: testBaseUrl,
-      async issueUiToken() {
-        return testUIToken
-      },
-      async issueNpmToken() {
-        return testNPMToken
-      },
-    }
-  })
-  return new Verdaccio(createTestVerdaccioConfig())
+export function createTestVerdaccio(config?: any) {
+  const verdaccio = new Verdaccio(createTestConfig(config))
+  verdaccio.issueUiToken = jest.fn(() => Promise.resolve(testUIToken))
+  verdaccio.issueNpmToken = jest.fn(() => Promise.resolve(testNPMToken))
+  return verdaccio
 }
 
 export function createTestAuthProvider() {
-  const config = createTestPluginConfig()
   const provider: AuthProvider = {
     getId() {
-      return "test"
+      return testProviderId
     },
     getLoginUrl() {
-      return "test-login-url"
+      return testLoginUrl
     },
     getCode(req: Request) {
-      return "test-code"
+      return testOAuthCode
     },
     async getToken(code: string) {
       return testOAuthToken
@@ -78,18 +69,18 @@ export function createTestAuthProvider() {
       return testUsername
     },
     async getGroups(token: string) {
-      return [config.org]
+      return [testRequiredGroup]
     },
   }
   return provider
 }
 
-export function createTestAuthCore() {
-  return new AuthCore(createTestVerdaccio(), createTestVerdaccioConfig())
+export function createTestAuthCore(config?: any) {
+  return new AuthCore(createTestVerdaccio(config), createTestConfig(config))
 }
 
-export function createTestPlugin() {
-  return new Plugin(createTestVerdaccioConfig())
+export function createTestPlugin(config?: any) {
+  return new Plugin(createTestConfig(config))
 }
 
 export function delay(ms: number) {

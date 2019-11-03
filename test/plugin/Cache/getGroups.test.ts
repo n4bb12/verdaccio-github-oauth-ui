@@ -1,7 +1,12 @@
 import { AuthProvider } from "src/server/plugin/AuthProvider"
 import { Cache } from "src/server/plugin/Cache"
 
-import { createTestAuthProvider, delay, testOAuthToken } from "../test-utils"
+import {
+  createTestAuthProvider,
+  delay,
+  testErrorMessage,
+  testOAuthToken,
+} from "../test-utils"
 
 describe("Cache", () => {
   describe("getGroups", () => {
@@ -12,15 +17,13 @@ describe("Cache", () => {
 
     function configureProvider(getGroups: (token: string) => string[]) {
       provider = createTestAuthProvider()
-      jest.spyOn(provider, "getGroups").mockImplementation(
-        (token) => Promise.resolve(getGroups(token)),
-      )
+      provider.getGroups = jest.fn((token) => Promise.resolve(getGroups(token)))
       cache = new Cache(provider, cacheTTLms)
     }
 
     function configureErrorProvider() {
       provider = createTestAuthProvider()
-      jest.spyOn(provider, "getGroups").mockRejectedValue(new Error())
+      jest.spyOn(provider, "getGroups").mockRejectedValue(new Error(testErrorMessage))
       cache = new Cache(provider, cacheTTLms)
     }
 

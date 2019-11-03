@@ -15,6 +15,7 @@ function getBaseUrl(config: Config) {
   if (prefix) {
     return prefix.replace(/\/?$/, "") // Remove potential trailing slash
   }
+  return ""
 }
 
 /**
