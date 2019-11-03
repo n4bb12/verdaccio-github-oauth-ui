@@ -1,4 +1,4 @@
-import { createTestVerdaccio, testBaseUrl } from "../test-utils"
+import { createTestVerdaccio, testBaseUrl } from "test/utils"
 
 describe("Verdaccio", () => {
   describe("getBaseUrl", () => {

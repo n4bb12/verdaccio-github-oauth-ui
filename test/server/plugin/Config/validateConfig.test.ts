@@ -1,7 +1,6 @@
 import { pluginName } from "src/constants"
 import { validateConfig } from "src/server/plugin/Config"
-
-import { createTestPluginConfig } from "../test-utils"
+import { createTestPluginConfig } from "test/utils"
 
 describe("Config", () => {
   describe("validateConfig", () => {

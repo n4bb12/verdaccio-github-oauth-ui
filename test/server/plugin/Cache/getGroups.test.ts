@@ -1,12 +1,11 @@
 import { AuthProvider } from "src/server/plugin/AuthProvider"
 import { Cache } from "src/server/plugin/Cache"
-
 import {
   createTestAuthProvider,
   delay,
   testErrorMessage,
   testOAuthToken,
-} from "../test-utils"
+} from "test/utils"
 
 describe("Cache", () => {
   describe("getGroups", () => {

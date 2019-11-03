@@ -1,12 +1,11 @@
 import { PackageAccess, RemoteUser } from "@verdaccio/types"
 import { Plugin } from "src/server/plugin/Plugin"
-
 import {
   authenticated,
   createTestPlugin,
   testRequiredGroup,
   testUsername,
-} from "../test-utils"
+} from "test/utils"
 
 describe("Plugin", () => {
   describe("allow_access", () => {

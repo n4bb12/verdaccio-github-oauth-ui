@@ -2,14 +2,27 @@ import { execSync } from "child_process"
 import minimist from "minimist"
 import { URL } from "url"
 
-export const npmConfig = JSON.parse(execSync("npm config list --json").toString())
-const args = minimist(process.argv.slice(2))
+const npmConfig = JSON.parse(execSync("npm config list --json").toString())
 
-export const registry = (args.registry || npmConfig.registry).trim()
-  .replace(/\/?$/, "") // Remove potential trailing slash
+export function getRegistry() {
+  const args = minimist(process.argv.slice(2))
+  return (args.registry || npmConfig.registry).trim()
+    .replace(/\/?$/, "") // Remove potential trailing slash
+}
 
-export function saveToken(token: string) {
+export function getConfigFile() {
+  return npmConfig.userconfig
+}
+
+export function getSaveCommands(registry: string, token: string) {
   const url = new URL(registry)
-  execSync(`npm config set //${url.host + url.pathname}:_authToken "${token}"`) // lgtm [js/command-line-injection]
-  execSync(`npm config set //${url.host + url.pathname}:always-auth true`)
+  const baseUrl = url.host + url.pathname
+  return [
+    `npm config set //${baseUrl}:_authToken "${token}"`, // lgtm [js/command-line-injection]
+    `npm config set //${baseUrl}:always-auth true`,
+  ]
+}
+
+export function save(registry: string, token: string) {
+  getSaveCommands(registry, token).forEach(command => execSync(command))
 }

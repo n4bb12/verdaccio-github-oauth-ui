@@ -1,4 +1,4 @@
-import { createTestVerdaccio } from "../test-utils"
+import { createTestVerdaccio } from "test/utils"
 
 describe("Verdaccio", () => {
   describe("getMajorVersion", () => {
