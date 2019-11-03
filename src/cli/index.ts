@@ -5,7 +5,7 @@ import { buildStatusPage } from "../statusPage"
 import { npmConfig, registry, saveToken } from "./npm"
 import { printUsage } from "./usage"
 
-if (registry.includes("registry.npmjs.org")) {
+if (registry.includes("registry.npmjs.org")) { // lgtm [js/incomplete-url-substring-sanitization]
   printUsage()
   process.exit(1)
 }
