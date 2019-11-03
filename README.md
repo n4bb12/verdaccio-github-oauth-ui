@@ -1,5 +1,5 @@
 <h1 align="center">
-  📦🔐 Verdaccio GitHub OAuth UI
+  📦🔐 Verdaccio GitHub OAuth - With UI Support
 </h1>
 
 <p align="center">
@@ -34,9 +34,13 @@
 
 <img src="screenshots/authorize.png" align="right" width="270"/>
 
-The plugin is similar to [verdaccio-github-oauth](https://github.com/aroundus-inc/verdaccio-github-oauth), but also changes the UI login behaviour. When clicking the login button, instead of filling in a login form, you are asked to log in with GitHub.
+This is a Verdaccio plugin that offers GitHub OAuth integragtion for both the browser and the command line.
 
-In case you need CLI support for automation purposes, the plugin is also compatible with [sinopia-github-oauth-cli](https://github.com/soundtrackyourbrand/sinopia-github-oauth-cli).
+### Features
+
+- UI integration with fully functional login and logout. When clicking the login button the user is redirected to GitHub and returns with a working session.
+- Updated usage info and working copy-to-clipboard for setup commands. 
+- A small CLI for quick-and-easy configuration.
 
 ### Compatibility
 
@@ -44,7 +48,7 @@ In case you need CLI support for automation purposes, the plugin is also compati
 - Node >=10
 - Chrome, Firefox, Firefox ESR, Edge, Safari, IE 11
 
-## Setup Instructions
+## Setup
 
 ### Install
 
@@ -97,7 +101,7 @@ Set this if you are using GitHub Enterprise. Example: `https://hostname`
 
 If configured, it must match `YOUR_REGISTRY_URL`. See [GitHub Config](#GitHub-Config).
 
-### Proxy Agent
+### Proxy Config
 
 If you are behind a proxy server, the plugin needs to know the proxy server in order to make GitHub requests.
 
@@ -113,27 +117,40 @@ See the [global-agent](https://github.com/gajus/global-agent#environment-variabl
 
 ### Verdaccio UI
 
-- Click the login button and login via GitHub, if not logged in already.
-- Authorize the registry - this needs to be done only once.
-- After authorizing the registry with GitHub, you'll be redirected back to the Verdaccio registry.
+- Click the login button and get redirected to GitHub.
+- Authorize the registry for your user and the configured GitHub org - this only needs to be done once.
+- When completed, you'll be redirected back to the Verdaccio registry.
 
 You are now logged in.
 
-**Important**: Make sure to click the <kbd>Request</kbd> button for `read:org` access when prompted. If you accidentally skipped this step, go to https://github.com/settings/applications, find the Verdaccio registry and add `read:org` access from there.
+**Important**: Make sure to click the <kbd>Request</kbd> or <kbd>Grant</kbd> button for `read:org` access when prompted to authorize.
+If you accidentally skipped this step, go to https://github.com/settings/applications, find the Verdaccio registry and grant `read:org` access from there.
 
 ### Command Line
 
-To set up authentication with the registry in your npm CLI, you'll need to run the commands shown on the UI.
+#### Option A) Use the built-in CLI
 
-- Verdaccio 4: open the "Register Info" dialog and klick "Copy to clipboard":
+The easiest way to configure npm is to use this short command:
+
+```
+$ npx verdaccio-github-oauth-ui --registry http://localhost:4873
+```
+
+#### Option B) Copy commands from the UI
+
+- Verdaccio 4:
+
+Open the "Register Info" dialog and klick "Copy to clipboard":
 
 ![](screenshots/register-info.png)
 
-- Verdaccio 3: Select the text in the header and copy it. In case the text is too long, you can double-click it. The invisible part will still be selected and copied.
+- Verdaccio 3:
+
+Select the text in the header and copy it. In case the text is too long, you can double-click it. The invisible part will still be selected and copied.
 
 ![](screenshots/header.png)
 
-- Run the copied commands on your terminal.
+- Run the copied commands on your terminal:
 
 ```
 $ npm config set //localhost:4873:_authToken "SECRET_TOKEN"
@@ -147,7 +164,7 @@ $ npm whoami --registry http://localhost:4873
 n4bb12
 ```
 
-If you see your GitHub username, you are ready to start publishing packages.
+If you see your GitHub username, you are ready to start installing and publishing packages.
 
 ## Logout
 

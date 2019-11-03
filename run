@@ -31,7 +31,7 @@ linkdir=node_modules/verdaccio-github-oauth-ui
 #
 build() {
   run build node rollup.js
-  run build cp -R src/client/*.css dist/public
+  run build cp -R src/client/*.css dist/public/
 }
 
 #
@@ -57,9 +57,11 @@ link() {
 # Run linters
 #
 lint() {
+  yarn tsc -p src/cli/tsconfig.json
   yarn tsc -p src/client/tsconfig.json
   yarn tsc -p src/server/tsconfig.json
   yarn tsc -p test/tsconfig.json
+  yarn tslint -p src/cli/tsconfig.json ${@}
   yarn tslint -p src/client/tsconfig.json ${@}
   yarn tslint -p src/server/tsconfig.json ${@}
   yarn tslint -p test/tsconfig.json ${@}
@@ -73,7 +75,8 @@ whoami() {
 # Sinopia CLI test
 #
 oauth-cli-test() {
-  npx sinopia-github-oauth-cli --registry http://localhost:4873
+  # npx verdaccio-github-oauth-ui --registry http://localhost:4873
+  ./dist/cli.js --registry http://localhost:4873
   whoami
 }
 

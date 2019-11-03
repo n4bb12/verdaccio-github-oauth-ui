@@ -1,5 +1,5 @@
-import { parse } from "querystring"
 import { AuthCore } from "src/server/plugin/AuthCore"
+import { parse } from "url"
 
 import {
   createTestAuthCore,
@@ -20,11 +20,11 @@ describe("AuthCore", () => {
 
     it("contains username, uiToken and npmToken", async () => {
       const url = await core.createUiCallbackUrl(testUsername, testOAuthToken)
-      const credentials = parse(url.substr(url.indexOf("?") + 1))
+      const { username, uiToken, npmToken } = parse(url, true).query
 
-      expect(credentials.username).toBe(testUsername)
-      expect(credentials.uiToken).toBe(testUIToken)
-      expect(credentials.npmToken).toBe(testNPMToken)
+      expect(username).toBe(testUsername)
+      expect(uiToken).toBe(testUIToken)
+      expect(npmToken).toBe(testNPMToken)
     })
 
   })

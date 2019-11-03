@@ -7,7 +7,7 @@ import {
 } from "@verdaccio/types"
 import { Application } from "express"
 
-import { CliFlow } from "../cli/CliFlow"
+import { CliFlow, WebFlow } from "../flows"
 import { GitHubAuthProvider } from "../github"
 import { Auth, Verdaccio } from "../verdaccio"
 import { AuthCore } from "./AuthCore"
@@ -16,7 +16,6 @@ import { Config, getConfig, validateConfig } from "./Config"
 import { PatchHtml } from "./PatchHtml"
 import { registerGlobalProxyAgent } from "./ProxyAgent"
 import { ServeStatic } from "./ServeStatic"
-import { WebFlow } from "./WebFlow"
 
 /**
  * Implements the verdaccio plugin interfaces.

@@ -4,12 +4,12 @@ import { Application, Handler } from "express"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { logger } from "../plugin/logger"
-import { WebFlow } from "../plugin/WebFlow"
 import { Verdaccio } from "../verdaccio"
+import { WebFlow } from "./WebFlow"
 
 const cliAuthorizeUrl = "/oauth/authorize"
 const cliCallbackUrl = "http://localhost:8239?token="
-const providerId = "sinopia-github-oauth-cli"
+const providerId = "cli"
 
 const pluginAuthorizeUrl = WebFlow.getAuthorizePath(providerId)
 const pluginCallbackeUrl = WebFlow.getCallbackPath(providerId)

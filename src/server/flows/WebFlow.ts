@@ -1,11 +1,11 @@
 import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler, Request } from "express"
 
+import { AuthCore } from "../plugin/AuthCore"
+import { AuthProvider } from "../plugin/AuthProvider"
+import { authorizePath, callbackPath } from "../plugin/Config"
+import { logger } from "../plugin/logger"
 import { Verdaccio } from "../verdaccio"
-import { AuthCore } from "./AuthCore"
-import { AuthProvider } from "./AuthProvider"
-import { authorizePath, callbackPath } from "./Config"
-import { logger } from "./logger"
 
 export class WebFlow implements IPluginMiddleware<any> {
 
