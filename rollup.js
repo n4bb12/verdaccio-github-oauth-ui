@@ -66,10 +66,22 @@ async function build() {
       },
     })
 
+  const cliBundle = () =>
+    createBundle({
+      target: "server",
+      input: "src/cli/index.ts",
+      output: {
+        file: "dist/cli.js",
+        format: "cjs",
+        exports: "named",
+        banner: "#!/usr/bin/env node",
+      },
+    })
+
   // FIXME:
   // Do this synchronously until this PR is merged and we can use `forwardEnv`.
   // https://github.com/babel/babel/pull/9161
-  for (const bundle of [...clientBundles, serverBundle]) {
+  for (const bundle of [...clientBundles, serverBundle, cliBundle]) {
     await bundle()
   }
 }
