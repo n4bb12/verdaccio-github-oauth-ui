@@ -34,14 +34,10 @@ export class AuthCore {
     return url
   }
 
-  getErrorPage(username: string) {
-    return `${this.deniedMessage(username)}<br><a href="/">Go back</a>`
-  }
-
   canAuthenticate(username: string, groups: string[]) {
     const allow = groups.includes(this.requiredGroup)
     if (!allow) {
-      logger.error(this.deniedMessage(username))
+      logger.error(this.getDeniedMessage(username))
     }
     return allow
   }
@@ -54,13 +50,13 @@ export class AuthCore {
 
     const allow = grantedAccess.length === requiredGroups.length
     if (!allow) {
-      logger.error(this.deniedMessage(username))
+      logger.error(this.getDeniedMessage(username))
     }
     return allow
   }
 
-  private deniedMessage(username: string) {
-    return `Access denied: user "${username}" is not a member of "${this.requiredGroup}"`
+  getDeniedMessage(username: string) {
+    return `Access denied: User "${username}" is not a member of "${this.requiredGroup}"`
   }
 
 }

@@ -5,7 +5,7 @@ import { logger } from "../../logger"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { Verdaccio } from "../verdaccio"
-import { WebFlow } from "./WebFlow"
+import { errorPage, WebFlow } from "./WebFlow"
 
 const cliAuthorizeUrl = "/oauth/authorize"
 const cliCallbackUrl = "http://localhost:8239?token="
@@ -46,8 +46,7 @@ export class CliFlow implements IPluginMiddleware<any> {
         const cli = cliCallbackUrl + encodeURIComponent(npmToken)
         res.redirect(cli)
       } else {
-        const error = this.core.getErrorPage(username)
-        res.send(error)
+        res.send(errorPage)
       }
     } catch (error) {
       logger.error(error)
