@@ -1,4 +1,5 @@
-import { Config, getConfig, pluginName } from "src/server/plugin/Config"
+import { pluginName } from "src/constants"
+import { Config, getConfig } from "src/server/plugin/Config"
 
 describe("Config", () => {
   describe("getConfig", () => {

@@ -1,9 +1,9 @@
 import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler } from "express"
 
+import { logger } from "../../logger"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
-import { logger } from "../plugin/logger"
 import { Verdaccio } from "../verdaccio"
 import { WebFlow } from "./WebFlow"
 

@@ -2,17 +2,8 @@ import { Config as VerdaccioConfig } from "@verdaccio/types"
 import chalk from "chalk"
 import { get } from "lodash"
 
-import { logger } from "./logger"
-
-//
-// Constants
-//
-
-export const pluginName = "github-oauth-ui"
-export const staticPath = "/-/static/" + pluginName
-export const publicRoot = __dirname + "/public"
-export const authorizePath = "/-/oauth/authorize"
-export const callbackPath = "/-/oauth/callback"
+import { pluginName } from "../../constants"
+import { logger } from "../../logger"
 
 //
 // Types

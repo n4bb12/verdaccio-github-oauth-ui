@@ -1,6 +1,8 @@
 import chalk from "chalk"
 
-const prefix = chalk.blue("[github-oauth-ui]")
+import { pluginName } from "./constants"
+
+const prefix = chalk.blue(`[${pluginName}]`)
 
 // tslint:disable: no-console
 export const logger = {

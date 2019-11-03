@@ -1,9 +1,9 @@
 import { intersection } from "lodash"
 import { stringify } from "querystring"
 
+import { logger } from "../../logger"
 import { User, Verdaccio } from "../verdaccio"
 import { Config, getConfig } from "./Config"
-import { logger } from "./logger"
 
 export class AuthCore {
 

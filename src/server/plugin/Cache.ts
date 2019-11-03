@@ -1,7 +1,7 @@
 import { Cache as MemoryCache } from "memory-cache"
 
+import { logger } from "../../logger"
 import { AuthProvider } from "./AuthProvider"
-import { logger } from "./logger"
 
 /**
  * When installing packages, the CLI makes a burst of package requests.
