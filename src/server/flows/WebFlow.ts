@@ -3,9 +3,16 @@ import { Application, Handler, Request } from "express"
 
 import { authorizePath, callbackPath } from "../../constants"
 import { logger } from "../../logger"
+import { buildStatusPage } from "../../statusPage"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { Verdaccio } from "../verdaccio"
+
+export const errorPage = buildStatusPage(`
+  <h1>Access Denied</h1>
+  <p>You are not a member of the required org.</p>
+  <p><a href="/">Go back</a></p>
+`)
 
 export class WebFlow implements IPluginMiddleware<any> {
 
@@ -70,8 +77,7 @@ export class WebFlow implements IPluginMiddleware<any> {
         const ui = await this.core.createUiCallbackUrl(username, token)
         res.redirect(ui)
       } else {
-        const error = this.core.getErrorPage(username)
-        res.send(error)
+        res.send(errorPage)
       }
     } catch (error) {
       logger.error(error)

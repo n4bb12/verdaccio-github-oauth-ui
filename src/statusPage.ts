@@ -1,7 +1,7 @@
-import { pluginName } from "../constants"
-import { npmConfig } from "./npm"
+import { pluginName } from "./constants"
 
-export const successPage = `<!DOCTYPE html>
+export function buildStatusPage(body: string) {
+  return `<!DOCTYPE html>
 <html>
   <head>
     <title>${pluginName}</title>
@@ -23,6 +23,10 @@ export const successPage = `<!DOCTYPE html>
         left: 50%;
         transform: translate(-50%, -50%);
       }
+      a {
+        color: #3f51b5;
+        text-transform: uppercase;
+      }
       img {
         filter: drop-shadow(0 0.5rem 0.5rem #24292F80);
       }
@@ -31,10 +35,8 @@ export const successPage = `<!DOCTYPE html>
   <body>
     <div class="wrap">
       <img src="https://verdaccio.org/docs/assets/logo/symbol/svg/verdaccio-blackwhite.svg" alt="verdaccio-blackwhite.svg" />
-      <h1>All done!</h1>
-      <p>We've updated your npm configuration.</p>
-      <p><code>${npmConfig.userconfig}</code></p>
+      ${body}
     </div>
   </body>
-</html>
-`
+</html>`
+}

@@ -1,8 +1,8 @@
 import express from "express"
 import open from "open"
 
-import { registry, saveToken } from "./npm"
-import { successPage } from "./success"
+import { buildStatusPage } from "../statusPage"
+import { npmConfig, registry, saveToken } from "./npm"
 import { printUsage } from "./usage"
 
 if (registry.includes("registry.npmjs.org")) {
@@ -11,6 +11,12 @@ if (registry.includes("registry.npmjs.org")) {
 }
 
 open(registry + "/oauth/authorize")
+
+const successPage = buildStatusPage(`
+  <h1>All done!</h1>
+  <p>We've updated your npm configuration.</p>
+  <p><code>${npmConfig.userconfig}</code></p>
+`)
 
 const server = express()
   .get("/", (req, res) => {
