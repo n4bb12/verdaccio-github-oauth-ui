@@ -60,7 +60,7 @@ export class WebFlow implements IPluginMiddleware<any> {
    * We issue a JWT using these values and pass them back to the frontend as
    * query parameters so they can be stored in the browser.
    *
-   * The username and token are encryped and base64 encoded to form a token for
+   * The username and token are encrypted and base64 encoded to form a token for
    * the npm CLI.
    *
    * There is no need to later decode and decrypt the token. This process is
