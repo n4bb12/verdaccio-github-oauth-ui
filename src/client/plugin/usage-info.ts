@@ -9,7 +9,11 @@ export function getUsageInfo() {
     return "Click the login button to authenticate with GitHub."
   }
 
-  const configBase = "//" + location.host + location.pathname
+  const configBase = (window as any).VERDACCIO_API_URL
+    ? (window as any).VERDACCIO_API_URL
+      .replace(/^https?/, "")
+      .replace(/\/-\/verdaccio\//, "")
+    : `//${location.host}${location.pathname}`
   const authToken = localStorage.getItem("npm")
   return [
     `npm config set ${configBase}:_authToken "${authToken}"`,
