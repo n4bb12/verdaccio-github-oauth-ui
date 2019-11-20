@@ -22,18 +22,10 @@ function modifyUsageInfoNodes() {
   const loggedIn = isLoggedIn()
 
   const infoElements = document.querySelectorAll(usageInfoSelector)
-  let packageManager: "npm" | "pnpm" | "yarn" | undefined
-  const cachedParent = Array.prototype.find.call(infoElements, node => {
-    const match = node.innerText.match(
-      // This checks for an element showing instructions to set the registry URL
-      /((npm|pnpm) set|(yarn) config set)/,
-    )
-    // When it matches, it can either be:
-    // 1. The second capture group: npm/pnpm
-    // 2. The third capture group: yarn
-    packageManager = match ? (match[1] || match[2]) : undefined
-    return !!match
-  }).parentElement as HTMLDivElement
+  const cachedParent = Array.prototype.find.call(infoElements, node => node.innerText.match(
+    // This checks for an element showing instructions to set the registry URL
+    /((npm|pnpm) set|(yarn) config set)/,
+  )).parentElement as HTMLDivElement
 
   infoElements.forEach((node => {
     const infoEl = node as HTMLSpanElement
@@ -53,10 +45,9 @@ function modifyUsageInfoNodes() {
       const textElem = clonedNode.querySelector("span") as HTMLSpanElement
       const copyEl = clonedNode.querySelector("button") as HTMLButtonElement
 
-      // If cachedParent is defined, packageManager should be defined
-      textElem.innerText = packageManager ? info.replace(/^npm/, packageManager) : info
+      textElem.innerText = info
 
-      copyEl.style.visibility = loggedIn ? "visible" : "hidden"
+      copyEl.style.display = loggedIn ? "block" : "none"
       copyEl.onclick = e => {
         e.preventDefault()
         e.stopPropagation()
