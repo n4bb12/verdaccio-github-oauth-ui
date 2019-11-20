@@ -22,10 +22,17 @@ function modifyUsageInfoNodes() {
   const loggedIn = isLoggedIn()
 
   const infoElements = document.querySelectorAll(usageInfoSelector)
-  const cachedParent = Array.prototype.find.call(infoElements, node => node.innerText.match(
+  const firstUsageInfoEl = Array.prototype.find.call(infoElements, node => node.innerText.match(
     // This checks for an element showing instructions to set the registry URL
     /((npm|pnpm) set|(yarn) config set)/,
-  )).parentElement as HTMLDivElement
+  ))
+
+  // We can't find any element related to usage instructions
+  if (!firstUsageInfoEl) {
+    return
+  }
+
+  const cachedParent = firstUsageInfoEl.parentElement as HTMLDivElement
 
   infoElements.forEach((node => {
     const infoEl = node as HTMLSpanElement
