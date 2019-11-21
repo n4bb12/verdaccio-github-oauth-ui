@@ -1,6 +1,8 @@
 import { getUsageInfo, init, isLoggedIn } from "./plugin"
 
-const usageInfoSelector = "#help-card .MuiCardContent-root span, .MuiDialogContent-root .MuiTypography-root span"
+const helpCardUsageInfoSelector = "#help-card .MuiCardContent-root span"
+const dialogUsageInfoSelector = "#registryInfo--dialog-container .MuiDialogContent-root .MuiTypography-root span"
+const randomClass = "Os1waV6BSoZQKfFwNlIwS"
 
 // copied from here as it needs to be the same behaviour
 // https://github.com/verdaccio/ui/blob/master/src/utils/cli-utils.ts
@@ -17,55 +19,67 @@ export function copyToClipboard(text: string) {
   document.body.removeChild(node)
 }
 
-function modifyUsageInfoNodes() {
+function modifyUsageInfoNodes(
+  selector: string,
+  findPredicate: (node: HTMLElement) => boolean,
+): void {
   const usageInfo = getUsageInfo()
   const loggedIn = isLoggedIn()
 
-  const infoElements = document.querySelectorAll(usageInfoSelector)
-  const firstUsageInfoEl = Array.prototype.find.call(infoElements, node => node.innerText.match(
-    // This checks for an element showing instructions to set the registry URL
-    /((npm|pnpm) set|(yarn) config set)/,
-  ))
+  const infoElements: NodeListOf<HTMLSpanElement> = document.querySelectorAll(selector)
+  const firstUsageInfoEl = Array.prototype.find.call(infoElements, findPredicate)
+  const hasInjectedElement = !!Array.prototype.find.call(
+    infoElements,
+    (node: HTMLElement) => node.parentElement!.classList.contains(randomClass),
+  )
 
-  // We can't find any element related to usage instructions
-  if (!firstUsageInfoEl) {
+  // We can't find any element related to usage instructions,
+  // or we have already injected elements
+  if (!firstUsageInfoEl || hasInjectedElement) {
     return
   }
 
-  const cachedParent = firstUsageInfoEl.parentElement as HTMLDivElement
-
-  infoElements.forEach((node => {
-    const infoEl = node as HTMLSpanElement
-    if (
-      // We only match lines related to bundler commands
-      infoEl.innerText.match(/^(npm|pnpm|yarn)/) &&
-      // And only commands that are shown in the popup overlay, to prevent overriding the help box
-      (infoEl.innerText.includes("adduser") || infoEl.innerText.includes("set password"))
-    ) {
-      infoEl.parentElement!.parentElement!.removeChild(node.parentElement as HTMLDivElement)
-    }
-  }))
-
+  const cachedParent: HTMLDivElement | null = firstUsageInfoEl.parentElement
   if (cachedParent) {
-    usageInfo.split("\n").forEach(info => {
+    usageInfo.split("\n").reverse().forEach(info => {
       const clonedNode = cachedParent.cloneNode(true) as HTMLDivElement
-      const textElem = clonedNode.querySelector("span") as HTMLSpanElement
-      const copyEl = clonedNode.querySelector("button") as HTMLButtonElement
+      const textElem = clonedNode.querySelector("span")!
+      const copyEl = clonedNode.querySelector("button")!
 
+      clonedNode.classList.add(randomClass)
       textElem.innerText = info
-
-      copyEl.style.display = loggedIn ? "block" : "none"
+      copyEl.style.visibility = loggedIn ? "visible" : "hidden"
       copyEl.onclick = e => {
         e.preventDefault()
         e.stopPropagation()
         copyToClipboard(info)
       }
+
+      cachedParent.insertAdjacentElement("afterend", clonedNode)
     })
   }
+
+  infoElements.forEach((node => {
+    if (
+      // We only match lines related to bundler commands
+      !!node.innerText.match(/^(npm|pnpm|yarn)/) &&
+      // And only commands that we want to remove
+      (node.innerText.includes("adduser") || node.innerText.includes("set password"))
+    ) {
+      node.parentElement!.parentElement!.removeChild(node.parentElement!)
+    }
+  }))
 }
 
 function updateUsageInfo() {
-  modifyUsageInfoNodes()
+  modifyUsageInfoNodes(helpCardUsageInfoSelector, node => node.innerText.includes("adduser"))
+  modifyUsageInfoNodes(
+    dialogUsageInfoSelector,
+    node => !!node.innerText.match(
+      // This checks for an element showing instructions to set the registry URL
+      /((npm|pnpm) set|(yarn) config set)/,
+    )
+  )
 }
 
 init({
