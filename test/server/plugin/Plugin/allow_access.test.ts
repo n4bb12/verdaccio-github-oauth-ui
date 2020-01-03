@@ -62,9 +62,9 @@ describe("Plugin", () => {
         access: [authenticated],
       }
 
-      plugin.allow_access(user, pkg, (err, groups) => {
+      plugin.allow_access(user, pkg, (err, allowed) => {
         expect(err).toBeNull()
-        expect(groups).toEqual(userGroups)
+        expect(allowed).toBe(true)
         done()
       })
     })
@@ -79,9 +79,9 @@ describe("Plugin", () => {
         access: [],
       }
 
-      plugin.allow_access(user, pkg, (err, groups) => {
+      plugin.allow_access(user, pkg, (err, allowed) => {
         expect(err).toBeNull()
-        expect(groups).toEqual([])
+        expect(allowed).toBe(true)
         done()
       })
     })
@@ -96,9 +96,9 @@ describe("Plugin", () => {
         access: [],
       }
 
-      plugin.allow_access(user, pkg, (err, groups) => {
+      plugin.allow_access(user, pkg, (err, allowed) => {
         expect(err).toBeNull()
-        expect(groups).toEqual([authenticated])
+        expect(allowed).toBe(true)
         done()
       })
     })
