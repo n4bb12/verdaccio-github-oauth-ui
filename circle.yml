@@ -32,7 +32,7 @@ jobs:
     executor: node
     steps:
       - attach_workspace: { "at": "." }
-      - run: yarn test
+      - run: yarn test:coverage
 
   prepack:
     executor: node
