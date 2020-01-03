@@ -78,7 +78,7 @@ function updateUsageInfo() {
     node => !!node.innerText.match(
       // This checks for an element showing instructions to set the registry URL
       /((npm|pnpm) set|(yarn) config set)/,
-    )
+    ),
   )
 }
 
