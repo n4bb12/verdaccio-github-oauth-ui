@@ -1,4 +1,5 @@
 import {
+  AuthAccessCallback,
   AuthCallback,
   IPluginAuth,
   IPluginMiddleware,
@@ -67,11 +68,11 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   /**
    * IPluginAuth
    */
-  allow_access(user: RemoteUser, pkg: PackageAccess, callback: AuthCallback): void {
+  allow_access(user: RemoteUser, pkg: PackageAccess, callback: AuthAccessCallback): void {
     const requiredGroups = [...pkg.access || []]
 
     if (this.core.canAccess(user.name || "anonymous", user.groups, requiredGroups)) {
-      callback(null, user.groups)
+      callback(null, true)
     } else {
       callback(null, false)
     }
