@@ -39,7 +39,7 @@ function updateUsageInfo() {
 }
 
 init({
-  loginButton: "#header--button-login",
-  logoutButton: "#header--button-logout",
+  loginButton: "#header--button-login, [data-testid='header--button-login']",
+  logoutButton: "#header--button-logout, [data-testid='header--button-logout']",
   updateUsageInfo,
 })
