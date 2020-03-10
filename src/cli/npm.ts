@@ -16,7 +16,8 @@ export function getConfigFile() {
 
 export function getSaveCommands(registry: string, token: string) {
   const url = new URL(registry)
-  const baseUrl = url.host + (url.pathname.endsWith('/') ? url.pathname : `${url.pathname}/`) // restore trailing slash if missing
+  const pathname = url.pathname.endsWith("/") ? url.pathname : `${url.pathname}/`
+  const baseUrl = url.host +  pathname // restore trailing slash if missing
   return [
     `npm config set //${baseUrl}:_authToken "${token}"`, // lgtm [js/command-line-injection]
     `npm config set //${baseUrl}:always-auth true`,
