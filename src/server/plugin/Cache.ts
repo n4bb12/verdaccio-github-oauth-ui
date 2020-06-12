@@ -14,14 +14,13 @@ import { AuthProvider } from "./AuthProvider"
  * has been made for a short period.
  */
 export class Cache {
-
   private readonly cache = new MemoryCache()
   private readonly namespace = this.authProvider.getId()
 
   constructor(
     private readonly authProvider: AuthProvider,
     private readonly cacheTTLms = 1000, // 1s
-  ) { }
+  ) {}
 
   async getGroups(token: string): Promise<string[]> {
     let groups: string[] | undefined
@@ -44,5 +43,4 @@ export class Cache {
 
     return groups || []
   }
-
 }

@@ -23,15 +23,16 @@ export function clearCredentials() {
 }
 
 export function isLoggedIn() {
-  return true
-    && !!localStorage.getItem("username")
-    && !!localStorage.getItem("token")
-    && !!localStorage.getItem("npm")
+  return (
+    true &&
+    !!localStorage.getItem("username") &&
+    !!localStorage.getItem("token") &&
+    !!localStorage.getItem("npm")
+  )
 }
 
 export function validateCredentials(credentials: Credentials) {
-  return true
-    && credentials.username
-    && credentials.uiToken
-    && credentials.npmToken
+  return (
+    true && credentials.username && credentials.uiToken && credentials.npmToken
+  )
 }

@@ -23,7 +23,7 @@ export const testErrorMessage = "test-error"
 
 export function createTestPluginConfig(config?: any) {
   return {
-    "org": testRequiredGroup,
+    org: testRequiredGroup,
     "client-id": testClientId,
     "client-secret": testClientSecret,
     ...config,
@@ -31,7 +31,7 @@ export function createTestPluginConfig(config?: any) {
 }
 
 export function createTestConfig(config?: any) {
-  return {
+  return ({
     auth: {
       [pluginName]: createTestPluginConfig(),
     },
@@ -42,7 +42,7 @@ export function createTestConfig(config?: any) {
     },
     user_agent: "verdaccio/4.3.4",
     ...config,
-  } as any as Config
+  } as any) as Config
 }
 
 export function createTestVerdaccio(config?: any) {

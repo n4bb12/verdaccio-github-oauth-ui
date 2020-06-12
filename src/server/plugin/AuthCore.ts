@@ -6,13 +6,12 @@ import { User, Verdaccio } from "../verdaccio"
 import { Config, getConfig } from "./Config"
 
 export class AuthCore {
-
   private readonly requiredGroup = getConfig(this.config, "org")
 
   constructor(
     private readonly verdaccio: Verdaccio,
     private readonly config: Config,
-  ) { }
+  ) {}
 
   createUser(username: string) {
     return {
@@ -58,5 +57,4 @@ export class AuthCore {
   getDeniedMessage(username: string) {
     return `Access denied: User "${username}" is not a member of "${this.requiredGroup}"`
   }
-
 }

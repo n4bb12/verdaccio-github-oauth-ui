@@ -22,15 +22,12 @@ function getBaseUrl(config: Config) {
  * Abstract Verdaccio version differences and usage of all Verdaccio objects.
  */
 export class Verdaccio {
-
   readonly majorVersion = getMajorVersion(this.config)
   readonly baseUrl = getBaseUrl(this.config)
 
   private auth!: Auth
 
-  constructor(
-    private readonly config: Config,
-  ) { }
+  constructor(private readonly config: Config) {}
 
   setAuth(auth: Auth) {
     this.auth = auth
@@ -60,5 +57,4 @@ export class Verdaccio {
   private encrypt(text: string) {
     return this.auth.aesEncrypt(new Buffer(text)).toString("base64")
   }
-
 }

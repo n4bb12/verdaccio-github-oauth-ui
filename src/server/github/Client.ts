@@ -5,18 +5,21 @@ import { GitHubOrganization } from "./Organization"
 import { GitHubUser } from "./User"
 
 export class GitHubClient {
-
   constructor(
     private readonly webBaseUrl: string,
     private readonly apiBaseUrl: string,
-  ) { }
+  ) {}
 
   /**a
    * `POST /login/oauth/access_token`
    *
    * [Web application flow](bit.ly/2mNSppX).
    */
-  requestAccessToken = async (code: string, clientId: string, clientSecret: string): Promise<GitHubOAuth> => {
+  requestAccessToken = async (
+    code: string,
+    clientId: string,
+    clientSecret: string,
+  ): Promise<GitHubOAuth> => {
     const url = this.webBaseUrl + "/login/oauth/access_token"
     const options = {
       method: "POST",
@@ -49,7 +52,9 @@ export class GitHubClient {
    *
    * [List your organizations](https://developer.github.com/v3/orgs/#list-your-organizations)
    */
-  requestUserOrgs = async (accessToken: string): Promise<GitHubOrganization[]> => {
+  requestUserOrgs = async (
+    accessToken: string,
+  ): Promise<GitHubOrganization[]> => {
     const url = this.apiBaseUrl + "/user/orgs"
     const options = {
       headers: {
@@ -58,5 +63,4 @@ export class GitHubClient {
     } as const
     return got(url, options).json()
   }
-
 }

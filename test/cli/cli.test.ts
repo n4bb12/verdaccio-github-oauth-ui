@@ -3,7 +3,6 @@ import { getUsageInfo, printUsage } from "src/cli/usage"
 import { testBaseUrl, testNPMToken } from "test/utils"
 
 describe("CLI", () => {
-
   const argv = process.argv
 
   describe("usage", () => {
@@ -42,5 +41,4 @@ describe("CLI", () => {
       expect(getSaveCommands(testBaseUrl, testNPMToken)).toMatchSnapshot()
     })
   })
-
 })

@@ -9,7 +9,6 @@ import {
 
 describe("Cache", () => {
   describe("getGroups", () => {
-
     const cacheTTLms = 20
     let provider: AuthProvider
     let cache: Cache
@@ -22,7 +21,9 @@ describe("Cache", () => {
 
     function configureErrorProvider() {
       provider = createTestAuthProvider()
-      jest.spyOn(provider, "getGroups").mockRejectedValue(new Error(testErrorMessage))
+      jest
+        .spyOn(provider, "getGroups")
+        .mockRejectedValue(new Error(testErrorMessage))
       cache = new Cache(provider, cacheTTLms)
     }
 
@@ -85,6 +86,5 @@ describe("Cache", () => {
       expect(aGroups).toEqual(["goat"])
       expect(bGroups).toEqual(["cheese"])
     })
-
   })
 })

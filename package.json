@@ -16,15 +16,16 @@
   "repository": "github:n4bb12/verdaccio-github-oauth-ui",
   "license": "MIT",
   "author": "Abraham Schilling",
-  "files": [
-    "dist"
-  ],
   "main": "dist/server.js",
   "bin": {
     "verdaccio-github-oauth-ui": "dist/cli.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "bash run build",
+    "format": "prettier --write \"**/*.{ts,js,css,scss,html,json}\"",
     "lint": "bash run lint",
     "prepack": "bash run clean && bash run build",
     "start": "verdaccio -c verdaccio.yaml",
@@ -66,6 +67,7 @@
     "jest": "^26.0.1",
     "lodash": "4.17.15",
     "nodemon": "^2.0.2",
+    "prettier": "^2.0.5",
     "release-it": "^13.0.2",
     "rollup": "^2.0.4",
     "rollup-plugin-babel": "^4.3.3",

@@ -3,7 +3,6 @@ import { createTestAuthCore, testRequiredGroup, testUsername } from "test/utils"
 
 describe("AuthCore", () => {
   describe("createUser", () => {
-
     let core: AuthCore
 
     beforeEach(() => {
@@ -20,6 +19,5 @@ describe("AuthCore", () => {
       expect(user.groups).toContain(testRequiredGroup)
       expect(user.real_groups).toContain(testRequiredGroup)
     })
-
   })
 })

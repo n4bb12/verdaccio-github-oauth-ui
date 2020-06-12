@@ -3,7 +3,6 @@ import { createTestAuthCore, testUsername } from "test/utils"
 
 describe("AuthCore", () => {
   describe("canAccess", () => {
-
     let core: AuthCore
 
     beforeEach(() => {
@@ -37,6 +36,5 @@ describe("AuthCore", () => {
       expectFalse(["A"], ["B"])
       expectFalse(["B"], ["A"])
     })
-
   })
 })

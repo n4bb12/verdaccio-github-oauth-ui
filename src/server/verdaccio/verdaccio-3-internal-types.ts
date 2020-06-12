@@ -5,15 +5,15 @@
 import { NextFunction as $NextFunctionVer } from "express"
 
 export interface IUser {
-  real_groups: Array<string>;
-  name: string;
+  real_groups: Array<string>
+  name: string
 }
 
 export interface IAuthWebUI {
-  issueUIjwt(user: IUser, time: string): string;
+  issueUIjwt(user: IUser, time: string): string
 }
 
 export interface IAuthMiddleware {
-  apiJWTmiddleware(): $NextFunctionVer;
-  webUIJWTmiddleware(): $NextFunctionVer;
+  apiJWTmiddleware(): $NextFunctionVer
+  webUIJWTmiddleware(): $NextFunctionVer
 }

@@ -3,7 +3,6 @@ import { Config, getConfig } from "src/server/plugin/Config"
 
 describe("Config", () => {
   describe("getConfig", () => {
-
     const authConfig: Config = {
       auth: {
         [pluginName]: { org: "TEST_ORG" },
@@ -49,6 +48,5 @@ describe("Config", () => {
       const value = getConfig(middlewaresConfig, "org")
       expect(value).toBe("test-org")
     })
-
   })
 })

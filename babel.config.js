@@ -1,4 +1,4 @@
-module.exports = api => {
+module.exports = (api) => {
   const env = api.env()
   const isTest = env === "test"
   console.log("[build]", env)

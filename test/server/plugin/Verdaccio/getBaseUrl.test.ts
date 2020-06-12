@@ -2,7 +2,6 @@ import { createTestVerdaccio, testBaseUrl } from "test/utils"
 
 describe("Verdaccio", () => {
   describe("getBaseUrl", () => {
-
     function withConfig(config: any) {
       return createTestVerdaccio(config).baseUrl
     }
@@ -17,7 +16,5 @@ describe("Verdaccio", () => {
       expect(withConfig({ url_prefix: "/verdaccio/" })).toBe("/verdaccio")
       expect(withConfig({ url_prefix: testBaseUrl })).toBe(testBaseUrl)
     })
-
   })
-
 })

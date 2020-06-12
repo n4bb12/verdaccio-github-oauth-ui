@@ -22,7 +22,6 @@ import { ServeStatic } from "./ServeStatic"
  * Implements the verdaccio plugin interfaces.
  */
 export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
-
   private readonly requiredGroup = getConfig(this.config, "org")
   private readonly provider = new GitHubAuthProvider(this.config)
   private readonly cache = new Cache(this.provider)
@@ -68,14 +67,19 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   /**
    * IPluginAuth
    */
-  allow_access(user: RemoteUser, pkg: PackageAccess, callback: AuthAccessCallback): void {
-    const requiredGroups = [...pkg.access || []]
+  allow_access(
+    user: RemoteUser,
+    pkg: PackageAccess,
+    callback: AuthAccessCallback,
+  ): void {
+    const requiredGroups = [...(pkg.access || [])]
 
-    if (this.core.canAccess(user.name || "anonymous", user.groups, requiredGroups)) {
+    if (
+      this.core.canAccess(user.name || "anonymous", user.groups, requiredGroups)
+    ) {
       callback(null, true)
     } else {
       callback(null, false)
     }
   }
-
 }

@@ -15,5 +15,5 @@ export function getUsageInfo() {
 }
 
 export function printUsage() {
-  getUsageInfo().forEach(line => logger.log(line))
+  getUsageInfo().forEach((line) => logger.log(line))
 }

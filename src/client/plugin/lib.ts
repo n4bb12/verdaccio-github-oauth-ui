@@ -5,8 +5,8 @@ export function parseQueryParams() {
   return (location.search || "?")
     .substring(1)
     .split("&")
-    .filter(kv => kv)
-    .map(kv => kv.split("=").concat(["true"]))
+    .filter((kv) => kv)
+    .map((kv) => kv.split("=").concat(["true"]))
     .reduce((obj: any, pair) => {
       obj[pair[0]] = decodeURIComponent(pair[1])
       return obj

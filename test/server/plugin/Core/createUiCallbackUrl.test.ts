@@ -10,7 +10,6 @@ import { parse } from "url"
 
 describe("AuthCore", () => {
   describe("createUiCallbackUrl", () => {
-
     let core: AuthCore
 
     beforeEach(() => {
@@ -25,6 +24,5 @@ describe("AuthCore", () => {
       expect(uiToken).toBe(testUIToken)
       expect(npmToken).toBe(testNPMToken)
     })
-
   })
 })

@@ -1,7 +1,11 @@
 {
   "$schema": "http://json.schemastore.org/tslint",
   "defaultSeverity": "error",
-  "extends": ["tslint:latest", "tslint-config-prettier", "@n4bb12/config-tslint"],
+  "extends": [
+    "tslint:latest",
+    "tslint-config-prettier",
+    "@n4bb12/config-tslint"
+  ],
   "rules": {
     "arrow-parens": false,
     "interface-name": false,

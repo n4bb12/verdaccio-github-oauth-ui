@@ -15,12 +15,11 @@ const pluginAuthorizeUrl = WebFlow.getAuthorizePath(providerId)
 const pluginCallbackeUrl = WebFlow.getCallbackPath(providerId)
 
 export class CliFlow implements IPluginMiddleware<any> {
-
   constructor(
     private readonly verdaccio: Verdaccio,
     private readonly core: AuthCore,
     private readonly provider: AuthProvider,
-  ) { }
+  ) {}
 
   /**
    * IPluginMiddleware
@@ -53,5 +52,4 @@ export class CliFlow implements IPluginMiddleware<any> {
       next(error)
     }
   }
-
 }

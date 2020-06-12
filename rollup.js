@@ -43,7 +43,7 @@ async function createBundle(options) {
 }
 
 async function build() {
-  const clientBundles = [3, 4].map(version => () =>
+  const clientBundles = [3, 4].map((version) => () =>
     createBundle({
       target: "client",
       input: `src/client/verdaccio-${version}.ts`,

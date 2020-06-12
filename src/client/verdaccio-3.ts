@@ -2,7 +2,9 @@ import { getUsageInfo, init } from "./plugin"
 
 function updateUsageInfo() {
   const info = getUsageInfo()
-  const element = document.querySelector("[class*='header__headerWrap'] figure") as HTMLElement
+  const element = document.querySelector(
+    "[class*='header__headerWrap'] figure",
+  ) as HTMLElement
 
   if (element && element.innerText !== info) {
     element.innerText = info

@@ -15,7 +15,6 @@ export const errorPage = buildStatusPage(`
 `)
 
 export class WebFlow implements IPluginMiddleware<any> {
-
   static getAuthorizePath(id?: string) {
     return authorizePath + "/" + (id || ":id?")
   }
@@ -28,7 +27,7 @@ export class WebFlow implements IPluginMiddleware<any> {
     private readonly verdaccio: Verdaccio,
     private readonly core: AuthCore,
     private readonly provider: AuthProvider,
-  ) { }
+  ) {}
 
   /**
    * IPluginMiddleware
@@ -95,5 +94,4 @@ export class WebFlow implements IPluginMiddleware<any> {
     const protocal = req.get("X-Forwarded-Proto") || req.protocol
     return protocal + "://" + req.get("host")
   }
-
 }

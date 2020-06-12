@@ -10,15 +10,14 @@ import { Verdaccio } from "../verdaccio"
  * that modifies the login button.
  */
 export class PatchHtml implements IPluginMiddleware<any> {
-
   private readonly scriptTag = `<script src="${staticPath}/verdaccio-${this.verdaccio.majorVersion}.js"></script>`
-  private readonly styleTag = `<style>${readFileSync(`${publicRoot}/verdaccio-${this.verdaccio.majorVersion}.css`)}</style>`
+  private readonly styleTag = `<style>${readFileSync(
+    `${publicRoot}/verdaccio-${this.verdaccio.majorVersion}.css`,
+  )}</style>`
   private readonly headWithStyle = [this.styleTag, "</head>"].join("")
   private readonly bodyWithScript = [this.scriptTag, "</body>"].join("")
 
-  constructor(
-    private readonly verdaccio: Verdaccio,
-  ) { }
+  constructor(private readonly verdaccio: Verdaccio) {}
 
   /**
    * IPluginMiddleware
@@ -32,7 +31,7 @@ export class PatchHtml implements IPluginMiddleware<any> {
    */
   patchResponse: Handler = (req, res, next) => {
     const send = res.send
-    res.send = html => {
+    res.send = (html) => {
       html = this.insertTags(html)
       return send.call(res, html)
     }
@@ -48,5 +47,4 @@ export class PatchHtml implements IPluginMiddleware<any> {
       .replace(/<\/head>/, this.headWithStyle)
       .replace(/<\/body>/, this.bodyWithScript)
   }
-
 }

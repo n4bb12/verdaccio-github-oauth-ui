@@ -9,7 +9,6 @@ import {
 
 describe("Plugin", () => {
   describe("allow_access", () => {
-
     let plugin: Plugin
 
     beforeEach(() => {
@@ -102,6 +101,5 @@ describe("Plugin", () => {
         done()
       })
     })
-
   })
 })

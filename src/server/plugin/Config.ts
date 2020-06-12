@@ -10,17 +10,17 @@ import { logger } from "../../logger"
 //
 
 export interface PluginConfig {
-  "org": string,
-  "client-id": string,
-  "client-secret": string,
-  "enterprise-origin"?: string,
+  org: string
+  "client-id": string
+  "client-secret": string
+  "enterprise-origin"?: string
 }
 
 export type PluginConfigKey = keyof PluginConfig
 
 export interface Config extends VerdaccioConfig, PluginConfig {
   middlewares: { [pluginName]: PluginConfig }
-  auth: { [pluginName]: PluginConfig },
+  auth: { [pluginName]: PluginConfig }
 }
 
 //
@@ -28,9 +28,10 @@ export interface Config extends VerdaccioConfig, PluginConfig {
 //
 
 export function getConfig(config: Config, key: PluginConfigKey): string {
-  const value = null
-    || get(config, `middlewares[${pluginName}][${key}]`)
-    || get(config, `auth[${pluginName}][${key}]`)
+  const value =
+    null ||
+    get(config, `middlewares[${pluginName}][${key}]`) ||
+    get(config, `auth[${pluginName}][${key}]`)
 
   return process.env[value] || value
 }
@@ -43,8 +44,11 @@ function ensurePropExists(config: Config, key: PluginConfigKey) {
   const value = getConfig(config, key)
 
   if (!value) {
-    logger.error(chalk.red(
-      `[${pluginName}] ERR: Missing configuration "auth.${pluginName}.${key}"`))
+    logger.error(
+      chalk.red(
+        `[${pluginName}] ERR: Missing configuration "auth.${pluginName}.${key}"`,
+      ),
+    )
     throw new Error("Please check your verdaccio config.")
   }
 }

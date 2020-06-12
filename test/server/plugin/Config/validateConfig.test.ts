@@ -4,7 +4,6 @@ import { createTestPluginConfig } from "test/utils"
 
 describe("Config", () => {
   describe("validateConfig", () => {
-
     function shouldSucceed(config: any) {
       validateConfig(config)
     }
@@ -34,7 +33,10 @@ describe("Config", () => {
     it("treats 'enterprise-origin' as optional", () => {
       shouldSucceed({
         auth: {
-          [pluginName]: { ...createTestPluginConfig(), ["'enterprise-origin'"]: null },
+          [pluginName]: {
+            ...createTestPluginConfig(),
+            ["'enterprise-origin'"]: null,
+          },
         },
         middlewares: {
           [pluginName]: { enabled: true },
@@ -92,13 +94,15 @@ describe("Config", () => {
     it("throws an error if 'client-secret' is missing", () => {
       shouldFail({
         auth: {
-          [pluginName]: { ...createTestPluginConfig(), ["client-secret"]: null },
+          [pluginName]: {
+            ...createTestPluginConfig(),
+            ["client-secret"]: null,
+          },
         },
         middlewares: {
           [pluginName]: { enabled: true },
         },
       })
     })
-
   })
 })

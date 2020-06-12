@@ -6,10 +6,12 @@ import { Config, getConfig } from "../plugin/Config"
 import { GitHubClient } from "./Client"
 
 export class GitHubAuthProvider implements AuthProvider {
-
   private readonly clientId = getConfig(this.config, "client-id")
   private readonly clientSecret = getConfig(this.config, "client-secret")
-  private readonly enterpriseOrigin = getConfig(this.config, "enterprise-origin")
+  private readonly enterpriseOrigin = getConfig(
+    this.config,
+    "enterprise-origin",
+  )
   private readonly client = new GitHubClient(this.webBaseUrl, this.apiBaseUrl)
 
   get webBaseUrl(): string {
@@ -22,9 +24,7 @@ export class GitHubAuthProvider implements AuthProvider {
       : "https://api.github.com"
   }
 
-  constructor(
-    private readonly config: Config,
-  ) { }
+  constructor(private readonly config: Config) {}
 
   getId() {
     return "github"
@@ -44,7 +44,11 @@ export class GitHubAuthProvider implements AuthProvider {
   }
 
   async getToken(code: string) {
-    const auth = await this.client.requestAccessToken(code, this.clientId, this.clientSecret)
+    const auth = await this.client.requestAccessToken(
+      code,
+      this.clientId,
+      this.clientSecret,
+    )
     return auth.access_token
   }
 
@@ -55,7 +59,6 @@ export class GitHubAuthProvider implements AuthProvider {
 
   async getGroups(token: string) {
     const orgs = await this.client.requestUserOrgs(token)
-    return orgs.map(org => org.login)
+    return orgs.map((org) => org.login)
   }
-
 }
