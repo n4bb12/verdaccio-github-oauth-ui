@@ -25,7 +25,6 @@ export function buildStatusPage(body: string) {
       }
       a {
         color: #3f51b5;
-        text-transform: uppercase;
       }
       img {
         filter: drop-shadow(0 0.5rem 0.5rem #24292F80);
