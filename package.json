@@ -38,7 +38,7 @@
     "watch": "nodemon --watch src --ext ts,css --exec \"yarn update\""
   },
   "dependencies": {
-    "chalk": "^3.0.0",
+    "chalk": "^4.1.0",
     "express": "^4.17.0",
     "global-agent": "^2.1.5",
     "got": "^10.4.0",
