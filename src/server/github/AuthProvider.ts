@@ -40,7 +40,7 @@ export class GitHubAuthProvider implements AuthProvider {
   }
 
   getCode(req: Request) {
-    return req.query.code
+    return req.query.code as string
   }
 
   async getToken(code: string) {
