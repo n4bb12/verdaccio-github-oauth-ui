@@ -3,8 +3,8 @@
   "defaultSeverity": "error",
   "extends": [
     "tslint:latest",
-    "tslint-config-prettier",
-    "@n4bb12/config-tslint"
+    "@n4bb12/config-tslint",
+    "tslint-config-prettier"
   ],
   "rules": {
     "arrow-parens": false,
