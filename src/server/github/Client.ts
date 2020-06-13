@@ -1,5 +1,6 @@
 import got from "got"
 
+import { logger } from "../../logger"
 import { GitHubOAuth } from "./OAuth"
 import { GitHubOrganization } from "./Organization"
 import { GitHubUser } from "./User"
@@ -29,7 +30,12 @@ export class GitHubClient {
         code,
       },
     } as const
-    return got(url, options).json()
+
+    try {
+      return await got(url, options).json()
+    } catch (error) {
+      throw new Error("Failed requesting GitHub access token: " + error.message)
+    }
   }
 
   /**
@@ -44,7 +50,12 @@ export class GitHubClient {
         Authorization: "Bearer " + accessToken,
       },
     } as const
-    return got(url, options).json()
+
+    try {
+      return await got(url, options).json()
+    } catch (error) {
+      throw new Error("Failed requesting GitHub user info: " + error.message)
+    }
   }
 
   /**
@@ -61,6 +72,11 @@ export class GitHubClient {
         Authorization: "Bearer " + accessToken,
       },
     } as const
-    return got(url, options).json()
+
+    try {
+      return await got(url, options).json()
+    } catch (error) {
+      throw new Error("Failed requesting GitHub user orgs: " + error.message)
+    }
   }
 }
