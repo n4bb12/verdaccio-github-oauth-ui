@@ -14,7 +14,7 @@ import { AuthProvider } from "./AuthProvider"
  * has been made for a short period.
  */
 export class Cache {
-  private readonly cache = new MemoryCache()
+  private readonly cache = new MemoryCache<string, string[]>()
   private readonly namespace = this.authProvider.getId()
 
   constructor(
@@ -23,7 +23,7 @@ export class Cache {
   ) {}
 
   async getGroups(token: string): Promise<string[]> {
-    let groups: string[] | undefined
+    let groups: string[] | null = null
 
     try {
       const key = [this.namespace, token].join("_")
