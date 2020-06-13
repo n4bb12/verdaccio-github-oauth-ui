@@ -123,7 +123,9 @@ See the [global-agent](https://github.com/gajus/global-agent#environment-variabl
 
 You are now logged in.
 
-**Important**: Make sure to click the <kbd>Request</kbd> or <kbd>Grant</kbd> button for `read:org` access when prompted to authorize.
+<h4 style="color: red">Important</h4>
+
+Make sure to click the <kbd>Request</kbd> or <kbd>Grant</kbd> button for `read:org` access when prompted to authorize.
 If you accidentally skipped this step, go to https://github.com/settings/applications, find the Verdaccio registry and grant `read:org` access from there.
 
 ### Command Line
