@@ -118,15 +118,10 @@ See the [global-agent](https://github.com/gajus/global-agent#environment-variabl
 ### Verdaccio UI
 
 - Click the login button and get redirected to GitHub.
-- Authorize the registry for your user and the configured GitHub org - this only needs to be done once.
-- When completed, you'll be redirected back to the Verdaccio registry.
+- Authorize the registry to access your GitHub user and org info. You only need to do this once. If your org is private, make sure to click the <kbd>Request</kbd> or <kbd>Grant</kbd> button to get `read:org` access when prompted to authorize.
+- Once completed, you'll be redirected back to the Verdaccio registry.
 
 You are now logged in.
-
-<h4 style="color: red">Important</h4>
-
-Make sure to click the <kbd>Request</kbd> or <kbd>Grant</kbd> button for `read:org` access when prompted to authorize.
-If you accidentally skipped this step, go to https://github.com/settings/applications, find the Verdaccio registry and grant `read:org` access from there.
 
 ### Command Line
 
@@ -194,3 +189,26 @@ If you have created the GitHub OAuth app, you can also revoke access for all use
 - Find your Verdaccio app
 - Click the app name
 - On the app detail page click the <kbd>Revoke all user tokens</kbd> button
+
+
+## Troubleshooting
+
+### "Failed requesting GitHub user info"
+
+- Double-check your configured client id and client secret are correct.
+- If you are behind a proxy, make sure you are also passing through the query parameters to Verdaccio, see https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/47#issuecomment-643814163 for an nginx example.
+
+### Plugin not detected when installed globally
+
+Verdaccio loads plugins by requiring them but global `node_modules` are NOT searched by the node resolve algorithm. Despite what examples or documentation might be suggesting, globally installed plugins are not supported. Some solutions that worked for others:
+
+- If you are using npm, switch to yarn. yarn installs modules a bit differently, such that globally installed plugins are found.
+- Create a `package.json` and install verdaccio + plugins locally.
+- Add your global `node_modules` folder to the `NODE_PATH` environment variable to give node a hint to search for modules here, too.
+- Extend the official docker image. See this `docker.sh` and `Dockerfile` in this [example](https://gist.github.com/n4bb12/523e8347a580f596cbf14d0d791b5927).
+
+More info: https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/13#issuecomment-435296117
+
+### "Your auth token is no longer valid. Please log in again."
+
+- If you're using a private GitHub org, the org memberships might not be public. If this is the case, your org members need `read:org` permission. They can request this during fist login by clicking the <kbd>Request</kbd> or <kbd>Grant</kbd> button when prompted to authorize Verdaccio with GitHub. If you or a team member accidentally skipped this step, go to https://github.com/settings/applications, find your Verdaccio registry and grant `read:org` access from there.
