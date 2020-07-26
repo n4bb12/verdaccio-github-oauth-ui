@@ -5,7 +5,7 @@
 import { NextFunction as $NextFunctionVer } from "express"
 
 export interface IUser {
-  real_groups: Array<string>
+  real_groups: string[]
   name: string
 }
 

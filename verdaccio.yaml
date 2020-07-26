@@ -29,6 +29,15 @@ auth:
   htpasswd:
     file: ./htpasswd
 
+security:
+  api:
+    jwt:
+      sign:
+        expiresIn: 90d
+  web:
+    sign:
+      expiresIn: 7d
+
 # a list of other known repositories we can talk to
 uplinks:
   npmjs:
