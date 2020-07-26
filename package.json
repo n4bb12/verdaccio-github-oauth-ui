@@ -69,6 +69,7 @@
     "lodash": "4.17.19",
     "nodemon": "^2.0.2",
     "prettier": "^2.0.5",
+    "query-string": "^6.13.1",
     "release-it": "^13.0.2",
     "rollup": "^2.0.4",
     "rollup-plugin-babel": "^4.3.3",

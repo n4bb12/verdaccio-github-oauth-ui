@@ -23,7 +23,7 @@ function saveAndRemoveQueryParams() {
     return
   }
 
-  const credentials: Credentials = parseQueryParams()
+  const credentials: Credentials = parseQueryParams() as any
   if (!validateCredentials(credentials)) {
     return
   }
