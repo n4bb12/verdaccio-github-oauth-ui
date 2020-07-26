@@ -21,11 +21,11 @@ export class AuthCore {
     }
   }
 
-  async createUiCallbackUrl(username: string, token: string) {
+  async createUiCallbackUrl(token: string, username: string, groups: string[]) {
     const user: User = this.createUser(username)
 
     const uiToken = await this.verdaccio.issueUiToken(user)
-    const npmToken = await this.verdaccio.issueNpmToken(username, token)
+    const npmToken = await this.verdaccio.issueNpmToken(token, username, groups)
 
     const query = { username, uiToken, npmToken }
     const url = "/?" + stringify(query)

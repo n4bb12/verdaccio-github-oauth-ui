@@ -33,8 +33,13 @@ export class Verdaccio {
     this.auth = auth
   }
 
-  async issueNpmToken(username: string, token: string) {
-    return this.encrypt(username + ":" + token)
+  async issueNpmToken(token: string, username: string, groups: string[]) {
+    if (this.config.security?.api?.jwt?.sign) {
+      const user: User = { real_groups: groups, groups, name: username }
+      return this.issueJWTVerdaccio4(user)
+    } else {
+      return this.encrypt(username + ":" + token)
+    }
   }
 
   async issueUiToken(user: User) {
