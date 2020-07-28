@@ -71,13 +71,22 @@ whoami() {
   npm whoami --registry http://localhost:4873
 }
 
+publish() {
+  packageName="0.0.0-$(date +%Y%m%d%H%M%S)"
+  directory="package/$packageName"
+  mkdir -p "$directory"
+  echo "{\"name\":\"oauth-cli-test\",\"version\":\"$packageName\",\"license\":\"UNLICENSED\"}" > "$directory/package.json"
+  cd "$directory"
+  npm publish --registry http://localhost:4873
+}
+
 #
 # Sinopia CLI test
 #
 oauth-cli-test() {
   # npx verdaccio-github-oauth-ui --registry http://localhost:4873
   ./dist/cli.js --registry http://localhost:4873
-  whoami
+  publish
 }
 
 #
