@@ -1,4 +1,4 @@
-import { Config } from "@verdaccio/types"
+import { Config, JWTSignOptions } from "@verdaccio/types"
 
 import { Auth, User } from "../verdaccio"
 import { getSecurity } from "./verdaccio-4-auth-utils"
@@ -34,18 +34,22 @@ export class Verdaccio {
   }
 
   async issueNpmToken(token: string, username: string, groups: string[]) {
-    if (this.config.security?.api?.jwt?.sign) {
+    const jwtSignOptions = getSecurity(this.config).api?.jwt?.sign
+
+    if (jwtSignOptions) {
       const user: User = { real_groups: groups, groups, name: username }
-      return this.issueJWTVerdaccio4(user)
+      return this.issueJWTVerdaccio4(user, jwtSignOptions)
     } else {
       return this.encrypt(username + ":" + token)
     }
   }
 
   async issueUiToken(user: User) {
+    const jwtSignOptions = getSecurity(this.config).web.sign
+
     return this.majorVersion === 3
       ? this.issueJWTVerdaccio3(user)
-      : this.issueJWTVerdaccio4(user)
+      : this.issueJWTVerdaccio4(user, jwtSignOptions)
   }
 
   // https://github.com/verdaccio/verdaccio/blob/3.x/src/api/web/endpoint/user.js#L15
@@ -54,9 +58,8 @@ export class Verdaccio {
   }
 
   // https://github.com/verdaccio/verdaccio/blob/master/src/api/web/endpoint/user.ts#L31
-  private async issueJWTVerdaccio4(user: User) {
-    const jWTSignOptions = getSecurity(this.config).web.sign
-    return this.auth.jwtEncrypt(user, jWTSignOptions)
+  private async issueJWTVerdaccio4(user: User, jwtSignOptions: JWTSignOptions) {
+    return this.auth.jwtEncrypt(user, jwtSignOptions)
   }
 
   private encrypt(text: string) {
