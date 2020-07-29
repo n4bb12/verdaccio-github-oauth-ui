@@ -74,6 +74,7 @@ export class WebFlow implements IPluginMiddleware<any> {
 
       if (this.core.authenticate(username, groups)) {
         const ui = await this.core.createUiCallbackUrl(token, username)
+
         res.redirect(ui)
       } else {
         res.status(401).send(accessDeniedPage)

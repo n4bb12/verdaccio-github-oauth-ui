@@ -44,6 +44,7 @@ export class CliFlow implements IPluginMiddleware<any> {
         const user = this.core.createAuthenticatedUser(username)
         const npmToken = await this.verdaccio.issueNpmToken(token, user)
         const cli = cliCallbackUrl + encodeURIComponent(npmToken)
+
         res.redirect(cli)
       } else {
         res.status(401).send(accessDeniedPage)

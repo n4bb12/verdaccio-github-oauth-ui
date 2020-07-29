@@ -47,14 +47,18 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
    * IPluginAuth
    */
   async authenticate(username: string, token: string, callback: AuthCallback) {
-    const providerGroups = await this.cache.getGroups(token)
+    try {
+      const providerGroups = await this.cache.getGroups(token)
 
-    if (this.core.authenticate(username, providerGroups)) {
-      const user = this.core.createAuthenticatedUser(username)
+      if (this.core.authenticate(username, providerGroups)) {
+        const user = this.core.createAuthenticatedUser(username)
 
-      callback(null, user.real_groups)
-    } else {
-      callback(null, false)
+        callback(null, user.real_groups)
+      } else {
+        callback(null, false)
+      }
+    } catch (error) {
+      callback(error, false)
     }
   }
 }
