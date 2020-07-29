@@ -2,7 +2,6 @@ import {
   createTestAuthCore,
   testNPMToken,
   testOAuthToken,
-  testRequiredGroup,
   testUIToken,
   testUsername,
 } from "test/utils"
@@ -19,7 +18,7 @@ describe("AuthCore", () => {
     })
 
     it("contains username, uiToken and npmToken", async () => {
-      const url = await core.createUiCallbackUrl(testOAuthToken, testUsername, [testRequiredGroup])
+      const url = await core.createUiCallbackUrl(testOAuthToken, testUsername)
       const { username, uiToken, npmToken } = parse(url, true).query
 
       expect(username).toBe(testUsername)

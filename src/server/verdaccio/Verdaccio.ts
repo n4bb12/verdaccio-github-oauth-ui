@@ -1,7 +1,24 @@
 import { Config, JWTSignOptions } from "@verdaccio/types"
+import { merge } from "lodash"
 
 import { Auth, User } from "../verdaccio"
-import { getSecurity } from "./verdaccio-4-auth-utils"
+
+// Most of this is duplicated Verdaccio code because it is unfortunately not availabel via API.
+// https://github.com/verdaccio/verdaccio/blob/master/src/lib/auth-utils.ts#L129
+
+const TIME_EXPIRATION_7D = "7d" as const
+
+const defaultSecurity = {
+  api: {
+    legacy: true,
+  },
+  web: {
+    sign: {
+      expiresIn: TIME_EXPIRATION_7D,
+    },
+    verify: {},
+  },
+} as const
 
 /**
  * user_agent: e.g. "verdaccio/4.3.4" --> 4
@@ -18,12 +35,17 @@ function getBaseUrl(config: Config) {
   return ""
 }
 
+function getSecurity(config: Config) {
+  return merge({}, defaultSecurity, config.security)
+}
+
 /**
  * Abstract Verdaccio version differences and usage of all Verdaccio objects.
  */
 export class Verdaccio {
   readonly majorVersion = getMajorVersion(this.config)
   readonly baseUrl = getBaseUrl(this.config)
+  readonly security = getSecurity(this.config)
 
   private auth!: Auth
 
@@ -33,19 +55,18 @@ export class Verdaccio {
     this.auth = auth
   }
 
-  async issueNpmToken(token: string, username: string, groups: string[]) {
-    const jwtSignOptions = getSecurity(this.config).api?.jwt?.sign
+  async issueNpmToken(token: string, user: User) {
+    const jwtSignOptions = this.config.security?.api?.jwt?.sign
 
     if (jwtSignOptions) {
-      const user: User = { real_groups: groups, groups, name: username }
       return this.issueJWTVerdaccio4(user, jwtSignOptions)
     } else {
-      return this.encrypt(username + ":" + token)
+      return this.encrypt(user.name + ":" + token)
     }
   }
 
   async issueUiToken(user: User) {
-    const jwtSignOptions = getSecurity(this.config).web.sign
+    const jwtSignOptions = this.security.web.sign
 
     return this.majorVersion === 3
       ? this.issueJWTVerdaccio3(user)

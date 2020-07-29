@@ -10,12 +10,12 @@ describe("AuthCore", () => {
     })
 
     it("user contains configured username", () => {
-      const user = core.createUser(testUsername)
+      const user = core.createAuthenticatedUser(testUsername)
       expect(user.name).toBe(testUsername)
     })
 
     it("user groups includes the configured org", () => {
-      const user = core.createUser(testUsername)
+      const user = core.createAuthenticatedUser(testUsername)
       expect(user.groups).toContain(testRequiredGroup)
       expect(user.real_groups).toContain(testRequiredGroup)
     })
