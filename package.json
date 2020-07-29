@@ -25,6 +25,7 @@
   ],
   "scripts": {
     "build": "bash run build",
+    "dev": "yarn update && yarn start",
     "format": "prettier --write \"**/*.{ts,js,css,scss,html,json}\"",
     "lint": "bash run lint",
     "prepack": "bash run clean && bash run build",
@@ -32,7 +33,6 @@
     "test": "jest",
     "test:cli": "bash run oauth-cli-test",
     "test:coverage": "jest --collectCoverage && codecov",
-    "test:manual": "yarn update && yarn start",
     "test:publish": "bash run publish",
     "test:watch": "jest --watch",
     "test:whoami": "bash run whoami",
