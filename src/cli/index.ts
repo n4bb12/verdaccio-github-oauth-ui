@@ -1,7 +1,17 @@
 import express from "express"
 import open from "open"
 
-import { buildStatusPage } from "../statusPage"
+import {
+  cliDeniedCallbackPath,
+  cliErrorCallbackPath,
+  cliPort,
+  cliSuccessCallbackPath,
+} from "../constants"
+import {
+  accessDeniedPage,
+  buildErrorPage,
+  buildStatusPage,
+} from "../statusPage"
 import { getConfigFile, getRegistry, save } from "./npm"
 import { printUsage } from "./usage"
 
@@ -22,7 +32,7 @@ const successPage = buildStatusPage(`
 `)
 
 const server = express()
-  .get("/", (req, res) => {
+  .get(cliSuccessCallbackPath, (req, res) => {
     const token = decodeURIComponent(req.query.token as string)
     save(registry, token)
     res.setHeader("Content-Type", "text/html")
@@ -30,4 +40,18 @@ const server = express()
     server.close()
     process.exit(0)
   })
-  .listen(8239)
+  .get(cliDeniedCallbackPath, (req, res) => {
+    res.setHeader("Content-Type", "text/html")
+    res.status(401)
+    res.send(accessDeniedPage)
+    server.close()
+    process.exit(1)
+  })
+  .get(cliErrorCallbackPath, (req, res) => {
+    res.setHeader("Content-Type", "text/html")
+    res.status(500)
+    res.send(buildErrorPage(req.query.message))
+    server.close()
+    process.exit(1)
+  })
+  .listen(cliPort)

@@ -3,3 +3,7 @@ export const publicRoot = __dirname + "/public"
 export const staticPath = "/-/static/" + pluginName
 export const authorizePath = "/-/oauth/authorize"
 export const callbackPath = "/-/oauth/callback"
+export const cliSuccessCallbackPath = "/success"
+export const cliDeniedCallbackPath = "/denied"
+export const cliErrorCallbackPath = "/error"
+export const cliPort = 8239
