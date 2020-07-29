@@ -2,7 +2,7 @@ import { AuthCore } from "src/server/plugin/AuthCore"
 import { createTestAuthCore, testRequiredGroup, testUsername } from "test/utils"
 
 describe("AuthCore", () => {
-  describe("canAuthenticate", () => {
+  describe("authenticate", () => {
     let core: AuthCore
 
     beforeEach(() => {
@@ -10,12 +10,12 @@ describe("AuthCore", () => {
     })
 
     function expectTrue(groups: string[]) {
-      const result = core.canAuthenticate(testUsername, groups)
+      const result = core.authenticate(testUsername, groups)
       return expect(result).toBe(true)
     }
 
     function expectFalse(groups: string[]) {
-      const result = core.canAuthenticate(testUsername, groups)
+      const result = core.authenticate(testUsername, groups)
       return expect(result).toBe(false)
     }
 

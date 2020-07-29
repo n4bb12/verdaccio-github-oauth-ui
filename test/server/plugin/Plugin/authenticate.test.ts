@@ -36,6 +36,7 @@ describe("Plugin", () => {
         expect(err).toBeNull()
         expect(groups).toMatchInlineSnapshot(`
           Array [
+            "test-username",
             "TEST_ORG",
           ]
         `)

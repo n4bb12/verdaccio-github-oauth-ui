@@ -40,7 +40,7 @@ export class CliFlow implements IPluginMiddleware<any> {
       const username = await this.provider.getUsername(token)
       const groups = await this.provider.getGroups(token)
 
-      if (this.core.canAuthenticate(username, groups)) {
+      if (this.core.authenticate(username, groups)) {
         const user = this.core.createAuthenticatedUser(username)
         const npmToken = await this.verdaccio.issueNpmToken(token, user)
         const cli = cliCallbackUrl + encodeURIComponent(npmToken)

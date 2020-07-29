@@ -1,11 +1,4 @@
-import {
-  AuthAccessCallback,
-  AuthCallback,
-  IPluginAuth,
-  IPluginMiddleware,
-  PackageAccess,
-  RemoteUser,
-} from "@verdaccio/types"
+import { AuthCallback, IPluginAuth, IPluginMiddleware } from "@verdaccio/types"
 import { Application } from "express"
 
 import { CliFlow, WebFlow } from "../flows"
@@ -13,7 +6,7 @@ import { GitHubAuthProvider } from "../github"
 import { Auth, Verdaccio } from "../verdaccio"
 import { AuthCore } from "./AuthCore"
 import { Cache } from "./Cache"
-import { Config, getConfig, validateConfig } from "./Config"
+import { Config, validateConfig } from "./Config"
 import { PatchHtml } from "./PatchHtml"
 import { registerGlobalProxyAgent } from "./ProxyAgent"
 import { ServeStatic } from "./ServeStatic"
@@ -22,7 +15,6 @@ import { ServeStatic } from "./ServeStatic"
  * Implements the verdaccio plugin interfaces.
  */
 export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
-  private readonly requiredGroup = getConfig(this.config, "org")
   private readonly provider = new GitHubAuthProvider(this.config)
   private readonly cache = new Cache(this.provider)
   private readonly verdaccio = new Verdaccio(this.config)
@@ -55,29 +47,12 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
    * IPluginAuth
    */
   async authenticate(username: string, token: string, callback: AuthCallback) {
-    const groups = await this.cache.getGroups(token)
+    const providerGroups = await this.cache.getGroups(token)
 
-    if (this.core.canAuthenticate(username, groups)) {
-      callback(null, [this.requiredGroup])
-    } else {
-      callback(null, false)
-    }
-  }
+    if (this.core.authenticate(username, providerGroups)) {
+      const user = this.core.createAuthenticatedUser(username)
 
-  /**
-   * IPluginAuth
-   */
-  allow_access(
-    user: RemoteUser,
-    pkg: PackageAccess,
-    callback: AuthAccessCallback,
-  ): void {
-    const requiredGroups = [...(pkg.access || [])]
-
-    if (
-      this.core.canAccess(user.name || "anonymous", user.groups, requiredGroups)
-    ) {
-      callback(null, true)
+      callback(null, user.real_groups)
     } else {
       callback(null, false)
     }
