@@ -1,12 +1,12 @@
-import { GitHubAuthProvider } from "src/server/github/AuthProvider"
-import { Plugin } from "src/server/plugin/Plugin"
 import {
   createTestAuthProvider,
   createTestPlugin,
   testOAuthToken,
-  testRequiredGroup,
   testUsername,
 } from "test/utils"
+
+import { GitHubAuthProvider } from "src/server/github/AuthProvider"
+import { Plugin } from "src/server/plugin/Plugin"
 
 jest.mock("src/server/github/AuthProvider")
 
@@ -34,7 +34,11 @@ describe("Plugin", () => {
     it("user with valid token can authenticate", (done) => {
       plugin.authenticate(testUsername, testOAuthToken, (err, groups) => {
         expect(err).toBeNull()
-        expect(groups).toEqual([testRequiredGroup])
+        expect(groups).toMatchInlineSnapshot(`
+          Array [
+            "TEST_ORG",
+          ]
+        `)
         done()
       })
     })

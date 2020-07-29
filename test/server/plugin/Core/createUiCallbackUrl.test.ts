@@ -1,11 +1,4 @@
-import {
-  createTestAuthCore,
-  testNPMToken,
-  testOAuthToken,
-  testUIToken,
-  testUsername,
-} from "test/utils"
-import { parse } from "url"
+import { createTestAuthCore, testOAuthToken, testUsername } from "test/utils"
 
 import { AuthCore } from "src/server/plugin/AuthCore"
 
@@ -19,11 +12,10 @@ describe("AuthCore", () => {
 
     it("contains username, uiToken and npmToken", async () => {
       const url = await core.createUiCallbackUrl(testOAuthToken, testUsername)
-      const { username, uiToken, npmToken } = parse(url, true).query
 
-      expect(username).toBe(testUsername)
-      expect(uiToken).toBe(testUIToken)
-      expect(npmToken).toBe(testNPMToken)
+      expect(url).toMatchInlineSnapshot(
+        `"/?username=test-username&uiToken=test-ui-token&npmToken=test-npm-token"`,
+      )
     })
   })
 })
