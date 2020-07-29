@@ -3,16 +3,10 @@ import { Application, Handler, Request } from "express"
 
 import { authorizePath, callbackPath } from "../../constants"
 import { logger } from "../../logger"
-import { buildStatusPage } from "../../statusPage"
+import { accessDeniedPage, buildErrorPage } from "../../statusPage"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { Verdaccio } from "../verdaccio"
-
-export const accessDeniedPage = buildStatusPage(`
-  <h1>Access Denied</h1>
-  <p>You are not a member of the required org.</p>
-  <p><a href="/">Go back</a></p>
-`)
 
 export class WebFlow implements IPluginMiddleware<any> {
   static getAuthorizePath(id?: string) {
@@ -81,12 +75,8 @@ export class WebFlow implements IPluginMiddleware<any> {
       }
     } catch (error) {
       logger.error(error)
-      const errorPage = buildStatusPage(`
-        <h1>Sorry :(</h1>
-        <p>${error?.message || error}</p>
-        <p><a href="/">Go back</a></p>
-      `)
-      res.status(500).send(errorPage)
+
+      res.status(500).send(buildErrorPage(error))
     }
   }
 

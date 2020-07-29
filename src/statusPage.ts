@@ -39,3 +39,17 @@ export function buildStatusPage(body: string) {
   </body>
 </html>`
 }
+
+export function buildErrorPage(error: any) {
+  return buildStatusPage(`
+    <h1>Sorry :(</h1>
+    <p>${error?.message || error}</p>
+    <p><a href="/">Go back</a></p>
+  `)
+}
+
+export const accessDeniedPage = buildStatusPage(`
+  <h1>Access Denied</h1>
+  <p>You are not a member of the required org.</p>
+  <p><a href="/">Go back</a></p>
+`)
