@@ -6,7 +6,6 @@ import { Config } from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
 import { Verdaccio } from "src/server/verdaccio/Verdaccio"
 
-export const authenticated = "$authenticated"
 export const testRequiredGroup = "TEST_ORG"
 export const testClientId = "TEST_CLIENT_ID"
 export const testClientSecret = "TEST_CLIENT_SECRET"
@@ -19,7 +18,7 @@ export const testMajorVersion = 4
 export const testBaseUrl = "http://localhost:4873"
 export const testUIToken = "test-ui-token"
 export const testNPMToken = "test-npm-token"
-export const testErrorMessage = "test-error"
+export const testErrorMessage = "expected-error"
 
 export function createTestPluginConfig(config?: any) {
   return {
@@ -64,13 +63,13 @@ export function createTestAuthProvider() {
       return testOAuthCode
     },
     async getToken(code: string) {
-      return testOAuthToken
+      return code === testOAuthCode ? testOAuthToken : ""
     },
     async getUsername(token: string) {
-      return testUsername
+      return token === testOAuthToken ? testUsername : ""
     },
     async getGroups(token: string) {
-      return [testRequiredGroup]
+      return token === testOAuthToken ? [testRequiredGroup] : []
     },
   }
   return provider

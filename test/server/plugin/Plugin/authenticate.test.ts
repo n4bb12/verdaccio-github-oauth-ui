@@ -1,6 +1,7 @@
 import { GitHubAuthProvider } from "src/server/github/AuthProvider"
 import { Plugin } from "src/server/plugin/Plugin"
 import {
+  createTestAuthProvider,
   createTestPlugin,
   testOAuthToken,
   testRequiredGroup,
@@ -18,19 +19,7 @@ describe("Plugin", () => {
     let plugin: Plugin
 
     beforeEach(() => {
-      AuthProvider.mockImplementation(() => {
-        return {
-          async getId() {
-            return "test"
-          },
-          async getUsername(token: string) {
-            return token === testOAuthToken ? testUsername : ""
-          },
-          async getGroups(token: string) {
-            return token === testOAuthToken ? [testRequiredGroup] : []
-          },
-        }
-      })
+      AuthProvider.mockImplementation(() => createTestAuthProvider())
       plugin = createTestPlugin()
     })
 
