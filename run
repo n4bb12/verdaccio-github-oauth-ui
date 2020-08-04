@@ -24,33 +24,31 @@ fail() {
 # Commands
 ##################################################
 
-linkdir=node_modules/verdaccio-github-oauth-ui
+dist=dist
+pluginDist=plugins/verdaccio-github-oauth-ui
 
 #
 # Build server, config and client
 #
 build() {
   run build node rollup.js
-  run build cp -R src/client/*.css dist/public/
+  run build cp -R src/client/*.css $dist/public/
 }
 
 #
 # Remove the plugin from node_modules
 #
 clean() {
-  run clean rm -rf dist
-  run clean rm -rf $linkdir
+  run clean rm -rf $dist
 }
-
 
 #
 # Copy the built plugin to node_modules
 #
-link() {
-  run link mkdir -p $linkdir/
-  run link cp -R dist $linkdir/
-  run link cp package.json $linkdir/
-  run link cp config.yaml $linkdir/
+copy() {
+  run link mkdir -p $pluginDist/
+  run link cp -R dist $pluginDist/
+  run link cp package.json $pluginDist/
 }
 
 #
@@ -81,8 +79,7 @@ test-publish() {
 }
 
 test-cli() {
-  # npx verdaccio-github-oauth-ui --registry http://localhost:4873
-  ./dist/cli.js --registry http://localhost:4873
+  yarn node ./$dist/cli.js --registry http://localhost:4873
   publish
 }
 

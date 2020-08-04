@@ -1,6 +1,11 @@
+.pnp.js
 .vscode/
+.yarn/
+*.log
+*.stackdump
 coverage/
 dist/
-node_modules/
+htpasswd
 package/
+plugins/
 storage/

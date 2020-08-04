@@ -6,6 +6,8 @@ const commonjs = require("rollup-plugin-commonjs")
 const json = require("rollup-plugin-json")
 const { terser } = require("rollup-plugin-terser")
 
+const dist = "dist"
+
 async function createBundle(options) {
   const { target, input, output } = options
 
@@ -19,13 +21,10 @@ async function createBundle(options) {
         extensions: [".mjs", ".js", ".json", ".node", ".ts"],
         preferBuiltins: false,
       }),
-      commonjs({
-        include: "node_modules/**",
-      }),
+      commonjs(),
       babel({
         envName: target,
         extensions: [".ts"],
-        exclude: "node_modules/**",
       }),
       target === "client" && terser(),
     ],
@@ -48,7 +47,7 @@ async function build() {
       target: "client",
       input: `src/client/verdaccio-${version}.ts`,
       output: {
-        file: `dist/public/verdaccio-${version}.js`,
+        file: `${dist}/public/verdaccio-${version}.js`,
         format: "umd",
         name: `verdaccio-${version}`,
       },
@@ -60,7 +59,7 @@ async function build() {
       target: "server",
       input: "src/server/index.ts",
       output: {
-        file: "dist/server.js",
+        file: `${dist}/server.js`,
         format: "cjs",
         exports: "named",
       },
@@ -71,7 +70,7 @@ async function build() {
       target: "server",
       input: "src/cli/index.ts",
       output: {
-        file: "dist/cli.js",
+        file: `${dist}/cli.js`,
         format: "cjs",
         exports: "named",
         banner: "#!/usr/bin/env node",
