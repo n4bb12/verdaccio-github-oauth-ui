@@ -4,18 +4,26 @@ import { get } from "lodash"
 
 import { pluginName } from "../../constants"
 import { logger } from "../../logger"
-
+import { readFileSync, existsSync } from 'fs';
 //
 // Types
 //
 
-export interface PluginConfig {
-  org: string
-  "client-id": string
-  "client-secret": string
+export interface PluginConfigBase {
+  org?: string
+  "client-id"?: string
+  "client-secret"?: string
   "enterprise-origin"?: string
 }
 
+export interface PluginConfig extends PluginConfigBase {
+  "org-file"?: string
+  "client-id-file"?: string
+  "client-secret-file"?: string
+  "enterprise-origin-file"?: string
+}
+
+export type PluginConfigBaseKey = keyof PluginConfigBase
 export type PluginConfigKey = keyof PluginConfig
 
 export interface Config extends VerdaccioConfig, PluginConfig {
@@ -34,6 +42,10 @@ export function getConfig(config: Config, key: PluginConfigKey): string {
     get(config, `auth[${pluginName}][${key}]`)
 
   return process.env[value] || value
+}
+
+export function setConfig(config: Config, key: PluginConfigKey, section: 'middlewares' | 'auth', value: string): void {
+  config[section][pluginName][key] = value;
 }
 
 //
@@ -62,7 +74,26 @@ function ensureNodeIsNotEmpty(config: Config, node: keyof Config) {
   }
 }
 
+
+function setConfigFromFile(config: Config, key: PluginConfigBaseKey) {
+  const fileKey = `${key}-file` as PluginConfigKey;
+  const cfgPath = getConfig(config, fileKey);
+  if(typeof cfgPath === 'string'){
+    if (!existsSync(cfgPath)) {
+      throw new Error(`Invalid path for '${fileKey}'. Please check your verdaccio config.`)
+    }
+    const value = readFileSync(cfgPath, 'utf8').trim();
+    setConfig(config, key, 'auth', value);
+    setConfig(config, key, 'middlewares', value);
+  }
+}
+
 export function validateConfig(config: Config) {
+  setConfigFromFile(config, 'org');
+  setConfigFromFile(config, 'client-id');
+  setConfigFromFile(config, 'client-secret');
+  setConfigFromFile(config, 'enterprise-origin');
+
   ensureNodeIsNotEmpty(config, "auth")
   ensureNodeIsNotEmpty(config, "middlewares")
 
