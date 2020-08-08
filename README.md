@@ -101,11 +101,11 @@ Set this if you are using GitHub Enterprise. Example: `https://hostname`
 
 If configured, it must match `YOUR_REGISTRY_URL`. See [GitHub Config](#GitHub-Config).
 
-### File Based Config (Support for volumes and Docker secrets/config)
+### Support for volumes and Docker secrets/config
 
   `org`, `client-id`, `client-secret` and `enterprise-origin` can be provided as `org-file`, `client-id-file`, `client-secret-file` and `enterprise-origin-file` respectivly. 
   
-  These options take a file path and the contents of the file will be used as the value. 
+  These options take a file path and the contents of the file will be used as the value. If both a file and value are provided the value in the file will be used.
 
 
 ### Proxy Config
