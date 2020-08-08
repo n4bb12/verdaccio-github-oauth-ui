@@ -50,7 +50,7 @@ describe("Config", () => {
       shouldSucceed({
         auth: {
           [pluginName]: {
-            ["org-file'"]: join(__dirname, 'files', 'enterprise-origin'),
+            ["org-file"]: join(__dirname, 'files', 'enterprise-origin'),
             ["client-id-file"]: join(__dirname, 'files', 'client-id'),
             ["client-secret-file"]: join(__dirname, 'files', 'client-secret'),
             ["enterprise-origin-file"]: join(__dirname, 'files', 'enterprise-origin'),
