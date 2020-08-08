@@ -5,6 +5,7 @@ import { get } from "lodash"
 import { pluginName } from "../../constants"
 import { logger } from "../../logger"
 import { readFileSync, existsSync } from 'fs';
+
 //
 // Types
 //
@@ -55,7 +56,6 @@ function setConfigFromFile(config: Config, key: PluginConfigBaseKey) {
     if (!existsSync(cfgPath)) {
       throw new Error(`Invalid path for '${fileKey}'. Please check your verdaccio config.`)
     }
-
     const value = readFileSync(cfgPath, 'utf8').trim();
     setConfig(config, key, 'auth', value);
     setConfig(config, key, 'middlewares', value);
