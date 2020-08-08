@@ -44,8 +44,22 @@ export function getConfig(config: Config, key: PluginConfigKey): string {
   return process.env[value] || value
 }
 
-export function setConfig(config: Config, key: PluginConfigKey, section: 'middlewares' | 'auth', value: string): void {
+function setConfig(config: Config, key: PluginConfigKey, section: 'middlewares' | 'auth', value: string): void {
   config[section][pluginName][key] = value;
+}
+
+function setConfigFromFile(config: Config, key: PluginConfigBaseKey) {
+  const fileKey = `${key}-file` as PluginConfigKey;
+  const cfgPath = getConfig(config, fileKey);
+  if(typeof cfgPath === 'string'){
+    if (!existsSync(cfgPath)) {
+      throw new Error(`Invalid path for '${fileKey}'. Please check your verdaccio config.`)
+    }
+
+    const value = readFileSync(cfgPath, 'utf8').trim();
+    setConfig(config, key, 'auth', value);
+    setConfig(config, key, 'middlewares', value);
+  }
 }
 
 //
@@ -71,20 +85,6 @@ function ensureNodeIsNotEmpty(config: Config, node: keyof Config) {
 
   if (!Object.keys(obj).length) {
     throw new Error(`"${node}.${pluginName}" must be enabled`)
-  }
-}
-
-
-function setConfigFromFile(config: Config, key: PluginConfigBaseKey) {
-  const fileKey = `${key}-file` as PluginConfigKey;
-  const cfgPath = getConfig(config, fileKey);
-  if(typeof cfgPath === 'string'){
-    if (!existsSync(cfgPath)) {
-      throw new Error(`Invalid path for '${fileKey}'. Please check your verdaccio config.`)
-    }
-    const value = readFileSync(cfgPath, 'utf8').trim();
-    setConfig(config, key, 'auth', value);
-    setConfig(config, key, 'middlewares', value);
   }
 }
 
