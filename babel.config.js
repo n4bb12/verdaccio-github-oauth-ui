@@ -5,10 +5,9 @@ module.exports = (api) => {
 
   return {
     plugins: [
-      ["@babel/proposal-numeric-separator"],
-      ["@babel/proposal-class-properties"],
+      ["@babel/plugin-proposal-class-properties"],
       [
-        "@babel/proposal-object-rest-spread",
+        "@babel/plugin-proposal-object-rest-spread",
         {
           useBuiltIns: "usage",
           corejs: 3,
@@ -17,7 +16,7 @@ module.exports = (api) => {
     ],
     presets: [
       [
-        "@babel/env",
+        "@babel/preset-env",
         {
           modules: isTest ? "commonjs" : false,
           useBuiltIns: "usage",
@@ -25,7 +24,7 @@ module.exports = (api) => {
           targets: isTest ? { node: "current" } : undefined,
         },
       ],
-      ["@babel/typescript"],
+      ["@babel/preset-typescript"],
     ],
   }
 }

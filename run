@@ -30,8 +30,17 @@ pluginDir=plugins/verdaccio-github-oauth-ui
 # Build server, config and client
 #
 build() {
-  run build node rollup.js
-  run build cp -R src/client/*.css dist/public/
+  mkdir -p dist/public/
+
+  run build cp -R src/client/*.css dist/public/ &
+
+  export NODE_ENV=production
+  run build yarn -s parcel build src/client/verdaccio-3.ts --target browser --experimental-scope-hoisting --out-dir dist/public &
+  run build yarn -s parcel build src/client/verdaccio-4.ts --target browser --experimental-scope-hoisting --out-dir dist/public &
+  run build yarn -s parcel build src/server/index.ts --target node --out-file server.js &
+  run build yarn -s parcel build src/cli/index.ts    --target node --out-file cli.js &
+
+  wait
 }
 
 #
@@ -56,14 +65,14 @@ copy() {
 # Run linters
 #
 lint() {
-  yarn tsc -p src/cli/tsconfig.json
-  yarn tsc -p src/client/tsconfig.json
-  yarn tsc -p src/server/tsconfig.json
-  yarn tsc -p test/tsconfig.json
-  yarn tslint -p src/cli/tsconfig.json ${@}
-  yarn tslint -p src/client/tsconfig.json ${@}
-  yarn tslint -p src/server/tsconfig.json ${@}
-  yarn tslint -p test/tsconfig.json ${@}
+  yarn -s tsc -p src/cli/tsconfig.json
+  yarn -s tsc -p src/client/tsconfig.json
+  yarn -s tsc -p src/server/tsconfig.json
+  yarn -s tsc -p test/tsconfig.json
+  yarn -s tslint -p src/cli/tsconfig.json ${@}
+  yarn -s tslint -p src/client/tsconfig.json ${@}
+  yarn -s tslint -p src/server/tsconfig.json ${@}
+  yarn -s tslint -p test/tsconfig.json ${@}
 }
 
 whoami() {
@@ -81,8 +90,8 @@ test-publish() {
 
 test-cli() {
   # npx verdaccio-github-oauth-ui --registry http://localhost:4873
-  ./dist/cli.js --registry http://localhost:4873
-  publish
+  node ./dist/cli.js --registry http://localhost:4873
+  test-publish
 }
 
 test-docker() {

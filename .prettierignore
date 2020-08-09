@@ -1,3 +1,4 @@
+.cache/
 .env
 .vscode/
 coverage/
