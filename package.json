@@ -37,7 +37,7 @@
     "test:publish": "bash run test-publish",
     "test:watch": "jest --watch",
     "test:whoami": "bash run whoami",
-    "update": "yarn prepack && bash run link",
+    "update": "yarn prepack && bash run copy",
     "watch": "nodemon --watch src --ext ts,css --exec \"yarn update\""
   },
   "dependencies": {

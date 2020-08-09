@@ -24,7 +24,7 @@ fail() {
 # Commands
 ##################################################
 
-linkdir=node_modules/verdaccio-github-oauth-ui
+pluginDir=plugins/verdaccio-github-oauth-ui
 
 #
 # Build server, config and client
@@ -39,18 +39,17 @@ build() {
 #
 clean() {
   run clean rm -rf dist
-  run clean rm -rf $linkdir
+  run clean rm -rf $pluginDir
 }
 
 
 #
 # Copy the built plugin to node_modules
 #
-link() {
-  run link mkdir -p $linkdir/
-  run link cp -R dist $linkdir/
-  run link cp package.json $linkdir/
-  run link cp config.yaml $linkdir/
+copy() {
+  run copy mkdir -p $pluginDir/
+  run copy cp -R dist $pluginDir/
+  run copy cp package.json $pluginDir/
 }
 
 #
