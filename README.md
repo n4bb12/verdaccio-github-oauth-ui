@@ -77,9 +77,9 @@ auth:
     org: GITHUB_ORG
     client-id: GITHUB_CLIENT_ID
     client-secret: GITHUB_CLIENT_SECRET
-    enterprise-origin: GITHUB_ENTERPRISE_ORIGIN
+    enterprise-origin: GITHUB_ENTERPRISE_ORIGIN # optional, if you are using github enterprise
 
-url_prefix: YOUR_REGISTRY_URL
+url_prefix: YOUR_REGISTRY_URL # optional, make sure it is configured as described
 ```
 
 - The configured values can either be the actual value or the name of an environment variable that contains the value.
