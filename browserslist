@@ -1,10 +1,6 @@
-[client]
 last 2 chrome versions
 last 2 firefox versions
 firefox esr
 last 2 edge versions
 last 2 safari versions
 ie 11
-
-[server]
-node 10
