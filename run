@@ -50,7 +50,7 @@ link() {
   run link mkdir -p $linkdir/
   run link cp -R dist $linkdir/
   run link cp package.json $linkdir/
-  run link cp verdaccio.yaml $linkdir/
+  run link cp config.yaml $linkdir/
 }
 
 #
@@ -71,7 +71,7 @@ whoami() {
   npm whoami --registry http://localhost:4873
 }
 
-publish() {
+test-publish() {
   packageName="0.0.0-$(date +%Y%m%d%H%M%S)"
   directory="package/$packageName"
   mkdir -p "$directory"
@@ -80,13 +80,16 @@ publish() {
   npm publish --registry http://localhost:4873
 }
 
-#
-# Sinopia CLI test
-#
-oauth-cli-test() {
+test-cli() {
   # npx verdaccio-github-oauth-ui --registry http://localhost:4873
   ./dist/cli.js --registry http://localhost:4873
   publish
+}
+
+test-docker() {
+  docker rm --force verdaccio || true
+  docker build --tag verdaccio .
+  docker run --publish 4873:4873 --name verdaccio verdaccio
 }
 
 #
