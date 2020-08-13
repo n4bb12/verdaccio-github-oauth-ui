@@ -1,4 +1,3 @@
-import dotenv from "dotenv"
 import express from "express"
 import open from "open"
 
@@ -15,8 +14,6 @@ import {
 } from "../statusPage"
 import { getConfigFile, getRegistry, save } from "./npm"
 import { printUsage } from "./usage"
-
-dotenv.config()
 
 const registry = getRegistry()
 
