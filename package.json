@@ -65,6 +65,7 @@
     "@types/memory-cache": "^0.2.1",
     "@types/minimist": "^1.2.0",
     "@types/node": "^14.0.13",
+    "@types/query-string": "^6.3.0",
     "@verdaccio/types": "^9.3.0",
     "babel-jest": "^26.0.1",
     "codecov": "^3.7.1",
