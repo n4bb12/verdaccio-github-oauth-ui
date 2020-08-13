@@ -18,7 +18,6 @@ import { printUsage } from "./usage"
 const registry = getRegistry()
 
 if (registry.includes("registry.npmjs.org")) {
-  // lgtm [js/incomplete-url-substring-sanitization]
   printUsage()
   process.exit(1)
 }
