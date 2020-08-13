@@ -160,7 +160,7 @@ export interface IProxy {
   upname: string
   fetchTarball(url: string): IReadTarball
   isUplinkValid(url: string): boolean
-  search(options: any)
+  search(options: any): any
   getRemoteMetadata(name: string, options: any, callback: Callback): void
 }
 
