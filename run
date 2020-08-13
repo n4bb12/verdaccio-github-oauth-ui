@@ -64,14 +64,19 @@ copy() {
 # Run linters
 #
 lint() {
-  run lint yarn -s tsc -p src/cli/tsconfig.json
-  run lint yarn -s tsc -p src/client/tsconfig.json
-  run lint yarn -s tsc -p src/server/tsconfig.json
-  run lint yarn -s tsc -p test/tsconfig.json
-  run lint yarn -s tslint -p src/cli/tsconfig.json ${@}
-  run lint yarn -s tslint -p src/client/tsconfig.json ${@}
-  run lint yarn -s tslint -p src/server/tsconfig.json ${@}
-  run lint yarn -s tslint -p test/tsconfig.json ${@}
+  run lint yarn -s tsc -p src/cli/tsconfig.json &
+  run lint yarn -s tsc -p src/client/tsconfig.json &
+  run lint yarn -s tsc -p src/server/tsconfig.json &
+  run lint yarn -s tsc -p test/tsconfig.json &
+
+  wait
+
+  run lint yarn -s tslint -p src/cli/tsconfig.json ${@} &
+  run lint yarn -s tslint -p src/client/tsconfig.json ${@} &
+  run lint yarn -s tslint -p src/server/tsconfig.json ${@} &
+  run lint yarn -s tslint -p test/tsconfig.json ${@} &
+
+  wait
 }
 
 test-whoami() {
@@ -92,6 +97,7 @@ test-publish() {
 test-cli() {
   # npx verdaccio-github-oauth-ui --registry http://localhost:4873
   run test-cli node ./dist/cli.js --registry http://localhost:4873
+
   test-publish
 }
 
