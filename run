@@ -30,8 +30,7 @@ pluginDir=plugins/verdaccio-github-oauth-ui
 # Build server, config and client
 #
 build() {
-  mkdir -p dist/public/
-
+  run build mkdir -p dist/public/
   run build cp -R src/client/*.css dist/public/ &
 
   export NODE_ENV=production
@@ -65,39 +64,41 @@ copy() {
 # Run linters
 #
 lint() {
-  yarn -s tsc -p src/cli/tsconfig.json
-  yarn -s tsc -p src/client/tsconfig.json
-  yarn -s tsc -p src/server/tsconfig.json
-  yarn -s tsc -p test/tsconfig.json
-  yarn -s tslint -p src/cli/tsconfig.json ${@}
-  yarn -s tslint -p src/client/tsconfig.json ${@}
-  yarn -s tslint -p src/server/tsconfig.json ${@}
-  yarn -s tslint -p test/tsconfig.json ${@}
+  run lint yarn -s tsc -p src/cli/tsconfig.json
+  run lint yarn -s tsc -p src/client/tsconfig.json
+  run lint yarn -s tsc -p src/server/tsconfig.json
+  run lint yarn -s tsc -p test/tsconfig.json
+  run lint yarn -s tslint -p src/cli/tsconfig.json ${@}
+  run lint yarn -s tslint -p src/client/tsconfig.json ${@}
+  run lint yarn -s tslint -p src/server/tsconfig.json ${@}
+  run lint yarn -s tslint -p test/tsconfig.json ${@}
 }
 
-whoami() {
-  npm whoami --registry http://localhost:4873
+test-whoami() {
+  run whoami npm whoami --registry http://localhost:4873
 }
 
 test-publish() {
   packageName="0.0.0-$(date +%Y%m%d%H%M%S)"
   directory="package/$packageName"
+
   mkdir -p "$directory"
   echo "{\"name\":\"oauth-cli-test\",\"version\":\"$packageName\",\"license\":\"UNLICENSED\"}" > "$directory/package.json"
-  cd "$directory"
-  npm publish --registry http://localhost:4873
+
+  run test-publish cd "$directory"
+  run test-publish npm publish --registry http://localhost:4873
 }
 
 test-cli() {
   # npx verdaccio-github-oauth-ui --registry http://localhost:4873
-  node ./dist/cli.js --registry http://localhost:4873
+  run test-cli node ./dist/cli.js --registry http://localhost:4873
   test-publish
 }
 
 test-docker() {
-  docker rm --force verdaccio || true
-  docker build --tag verdaccio .
-  docker run --publish 4873:4873 --name verdaccio verdaccio
+  run test-docker docker rm --force verdaccio || true
+  run test-docker docker build --tag verdaccio .
+  run test-docker docker run --publish 4873:4873 --name verdaccio verdaccio
 }
 
 #

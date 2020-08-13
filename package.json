@@ -36,7 +36,7 @@
     "test:docker": "bash run test-docker",
     "test:publish": "bash run test-publish",
     "test:watch": "jest --watch",
-    "test:whoami": "bash run whoami",
+    "test:whoami": "bash run test-whoami",
     "update": "yarn prepack && bash run copy",
     "watch": "nodemon --watch src --ext ts,css --exec \"yarn update\""
   },
