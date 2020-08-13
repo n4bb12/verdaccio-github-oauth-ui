@@ -59,6 +59,7 @@
     "@babel/preset-typescript": "^7.8.3",
     "@n4bb12/config-tslint": "^1.4.1",
     "@types/express": "^4.16.1",
+    "@types/global-agent": "^2.1.0",
     "@types/got": "^9.4.1",
     "@types/jest": "^26.0.0",
     "@types/lodash": "^4.14.123",

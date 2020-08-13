@@ -1434,6 +1434,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/global-agent@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@types/global-agent/-/global-agent-2.1.0.tgz#1becbcb067c9c7a8d2cd70b786ca1d062538e299"
+  integrity sha512-xBOerse4Agekl7VZJclA9bfuA9aa3u9T24TDkBiMQrZgu4qe5HMBPzVGzAt2k4dx/v3uIFI6CzG0Z9X894LHrg==
+
 "@types/got@^9.4.1":
   version "9.6.11"
   resolved "https://registry.npmjs.org/@types/got/-/got-9.6.11.tgz#482b402cc5ee459481aeeadb08142ebb1a9afb26"
