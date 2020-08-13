@@ -37,7 +37,7 @@ export class WebFlow implements IPluginMiddleware<any> {
   authorize: Handler = async (req, res, next) => {
     try {
       const redirectUrl = this.getRedirectUrl(req)
-      const url = await this.provider.getLoginUrl(redirectUrl)
+      const url = this.provider.getLoginUrl(redirectUrl)
       res.redirect(url)
     } catch (error) {
       logger.error(error)
