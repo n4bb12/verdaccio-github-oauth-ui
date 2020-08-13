@@ -1,14 +1,11 @@
 {
-  "$schema": "http://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "module": "esnext",
+    "baseUrl": ".",
+    "module": "es2015",
     "moduleResolution": "node",
     "noEmit": true,
     "noImplicitAny": false,
-    "resolveJsonModule": true,
-    "strict": true,
-    "types": []
-  }
+    "types": ["node"]
+  },
+  "extends": "@tsconfig/node10/tsconfig.json"
 }
