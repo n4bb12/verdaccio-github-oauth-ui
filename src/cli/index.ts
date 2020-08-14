@@ -17,6 +17,12 @@ const server = express()
     let message = req.query.message as string
     const token = decodeURIComponent(req.query.token as string)
 
+    // We use `!status` for compatibility with plugin version <=2.3.0
+    // where there was no error handling and status differentiation yet.
+    if (!status) {
+      status = "success"
+    }
+
     try {
       if (status === "success") {
         saveNpmToken(token)
