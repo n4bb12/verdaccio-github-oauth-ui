@@ -2,24 +2,42 @@ import { execSync } from "child_process"
 import minimist from "minimist"
 import { URL } from "url"
 
-const npmConfig = JSON.parse(execSync("npm config list --json").toString())
+function parseCliArgs() {
+  return minimist(process.argv.slice(2))
+}
+
+function getNpmConfig() {
+  return JSON.parse(execSync("npm config list --json").toString())
+}
+
+function removeTrailingSlash(input: string) {
+  return input.trim().replace(/\/?$/, "")
+}
+
+function ensureTrailingSlash(input: string) {
+  return input.endsWith("/") ? input : `${input}/`
+}
 
 export function getRegistry() {
-  const args = minimist(process.argv.slice(2))
-  return (args.registry || npmConfig.registry).trim().replace(/\/?$/, "") // Remove potential trailing slash
+  const cliArgs = parseCliArgs()
+  const npmConfig = getNpmConfig()
+
+  const registry = cliArgs.registry || npmConfig.registry
+
+  return removeTrailingSlash(registry)
 }
 
 export function getConfigFile() {
+  const npmConfig = getNpmConfig()
+
   return npmConfig.userconfig
 }
 
 export function getSaveCommands(registry: string, token: string) {
   const url = new URL(registry)
-  // restore trailing slash if missing
-  const pathname = url.pathname.endsWith("/")
-    ? url.pathname
-    : `${url.pathname}/`
+  const pathname = ensureTrailingSlash(url.pathname)
   const baseUrl = url.host + pathname
+
   return [
     `npm config set //${baseUrl}:_authToken "${token}"`,
     `npm config set //${baseUrl}:always-auth true`,
@@ -27,5 +45,7 @@ export function getSaveCommands(registry: string, token: string) {
 }
 
 export function save(registry: string, token: string) {
-  getSaveCommands(registry, token).forEach((command) => execSync(command))
+  const commands = getSaveCommands(registry, token)
+
+  commands.forEach((command) => execSync(command))
 }
