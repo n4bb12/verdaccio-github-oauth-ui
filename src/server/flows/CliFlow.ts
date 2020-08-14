@@ -5,7 +5,8 @@ import qs from "query-string"
 import {
   cliDeniedCallbackPath,
   cliErrorCallbackPath,
-  cliPort,
+  cliProviderId,
+  cliCallbackUrl,
   cliSuccessCallbackPath,
 } from "../../constants"
 import { logger } from "../../logger"
@@ -14,12 +15,7 @@ import { AuthProvider } from "../plugin/AuthProvider"
 import { Verdaccio } from "../verdaccio"
 import { WebFlow } from "./WebFlow"
 
-const cliAuthorizeUrl = "/oauth/authorize"
-const cliCallbackUrl = `http://localhost:${cliPort}`
-const providerId = "cli"
-
-const pluginAuthorizeUrl = WebFlow.getAuthorizePath(providerId)
-const pluginCallbackeUrl = WebFlow.getCallbackPath(providerId)
+const pluginCallbackeUrl = WebFlow.getCallbackPath(cliProviderId)
 
 export class CliFlow implements IPluginMiddleware<any> {
   constructor(
@@ -32,12 +28,7 @@ export class CliFlow implements IPluginMiddleware<any> {
    * IPluginMiddleware
    */
   register_middlewares(app: Application) {
-    app.get(cliAuthorizeUrl, this.authorize)
     app.get(pluginCallbackeUrl, this.callback)
-  }
-
-  authorize: Handler = async (req, res) => {
-    res.redirect(pluginAuthorizeUrl)
   }
 
   callback: Handler = async (req, res, next) => {

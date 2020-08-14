@@ -5,8 +5,10 @@ import {
   cliDeniedCallbackPath,
   cliErrorCallbackPath,
   cliPort,
+  cliProviderId,
   cliSuccessCallbackPath,
 } from "../constants"
+import { WebFlow } from "../server/flows/WebFlow"
 import {
   accessDeniedPage,
   buildErrorPage,
@@ -22,7 +24,7 @@ if (registry.includes("registry.npmjs.org")) {
   process.exit(1)
 }
 
-open(registry + "/oauth/authorize")
+const authorizeUrl = registry + WebFlow.getAuthorizePath(cliProviderId)
 
 const successPage = buildStatusPage(`
   <h1>All done!</h1>
@@ -53,4 +55,6 @@ const server = express()
     server.close()
     process.exit(1)
   })
-  .listen(cliPort)
+  .listen(cliPort, () => {
+    open(authorizeUrl)
+  })
