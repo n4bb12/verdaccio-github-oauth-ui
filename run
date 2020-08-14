@@ -79,6 +79,14 @@ lint() {
   wait
 }
 
+read-env() {
+  if [ -f .env ]; then
+    set +a
+    source .env
+    set -a
+  fi
+}
+
 test-whoami() {
   run whoami npm whoami --registry http://localhost:4873
 }
@@ -102,9 +110,16 @@ test-cli() {
 }
 
 test-docker() {
+  read-env
+
   run test-docker docker rm --force verdaccio || true
   run test-docker docker build --tag verdaccio .
-  run test-docker docker run --publish 4873:4873 --name verdaccio verdaccio
+  run test-docker docker run \
+    --publish 4873:4873 \
+    --env "GITHUB_ORG=$GITHUB_ORG" \
+    --env "GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID" \
+    --env "GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET" \
+    --name verdaccio verdaccio
 }
 
 #
