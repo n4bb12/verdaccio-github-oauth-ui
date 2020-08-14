@@ -9,10 +9,12 @@ about: Create a report to help us improve
 
 #### Versions
 
-|                           | Version |
-| ------------------------- | ------- |
-| verdaccio                 |         |
-| verdaccio-github-oauth-ui |         |
+|                                    | Version |
+| ---------------------------------- | ------- |
+| node.js                            |         |
+| verdaccio                          |         |
+| verdaccio-github-oauth-ui (Plugin) |         |
+| verdaccio-github-oauth-ui (CLI)    |         |
 
 #### Expected behavior
 <!-- A clear and concise description of what you expected to happen. -->
