@@ -106,7 +106,7 @@ test-publish() {
 
 test-cli() {
   # npx verdaccio-github-oauth-ui --registry http://localhost:4873
-  run test-cli node ./dist/cli.js --registry http://localhost:4873
+  run test-cli ./dist/cli.js --registry http://localhost:4873
 
   test-publish
 }
