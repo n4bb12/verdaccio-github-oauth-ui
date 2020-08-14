@@ -40,6 +40,8 @@ build() {
   run build yarn -s parcel build src/cli/index.ts    --target node --out-file cli.js &
 
   wait
+
+  printf '%s\n%s\n' '#!/usr/bin/env node' "$(cat dist/cli.js)" > dist/cli.js
 }
 
 #
