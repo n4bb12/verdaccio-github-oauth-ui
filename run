@@ -36,8 +36,8 @@ build() {
   export NODE_ENV=production
   run build yarn -s parcel build src/client/verdaccio-3.ts --target browser --experimental-scope-hoisting --out-dir dist/public &
   run build yarn -s parcel build src/client/verdaccio-4.ts --target browser --experimental-scope-hoisting --out-dir dist/public &
-  run build yarn -s parcel build src/server/index.ts --target node --out-file server.js &
-  run build yarn -s parcel build src/cli/index.ts    --target node --out-file cli.js &
+  run build yarn -s parcel build src/server/index.ts --target node --no-minify --out-file server.js &
+  run build yarn -s parcel build src/cli/index.ts    --target node --no-minify --out-file cli.js &
 
   wait
 
