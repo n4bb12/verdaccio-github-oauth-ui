@@ -53,7 +53,8 @@ export class WebFlow implements IPluginMiddleware<any> {
    */
   callback: Handler = async (req, res, next) => {
     try {
-      const code = await this.provider.getCode(req)
+      const code = this.provider.getCode(req)
+
       const token = await this.provider.getToken(code)
       const username = await this.provider.getUsername(token)
       const groups = await this.provider.getGroups(token)
