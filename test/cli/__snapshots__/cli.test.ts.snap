@@ -1,12 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CLI npm save commands match the snapshot 1`] = `
-Array [
-  "npm config set //localhost:4873/:_authToken \\"test-npm-token\\"",
-  "npm config set //localhost:4873/:always-auth true",
-]
-`;
-
 exports[`CLI usage usage info matches the snapshot 1`] = `
 Array [
   "It seems you are using the default npm registry.",

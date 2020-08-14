@@ -1,16 +1,16 @@
 import { Response } from "express"
+import { getNpmConfigFile } from "../npm"
 
 import {
-  accessDeniedPage,
+  buildAccessDeniedPage,
   buildErrorPage,
   buildStatusPage,
 } from "../statusPage"
-import { getConfigFile } from "./npm"
 
 const successPage = buildStatusPage(`
   <h1>All done!</h1>
   <p>We've updated your npm configuration.</p>
-  <p><code>${getConfigFile()}</code></p>
+  <p><code>${getNpmConfigFile()}</code></p>
 `)
 
 export function respondWithWebPage(
@@ -28,7 +28,7 @@ export function respondWithWebPage(
 
     case "denied":
       res.status(401)
-      res.send(accessDeniedPage)
+      res.send(buildAccessDeniedPage())
       break
 
     default:

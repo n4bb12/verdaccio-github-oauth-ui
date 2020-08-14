@@ -1,5 +1,5 @@
 import {
-  accessDeniedPage,
+  buildAccessDeniedPage,
   buildErrorPage,
   buildStatusPage,
 } from "src/statusPage"
@@ -15,7 +15,7 @@ describe("Shared", () => {
       expect(buildErrorPage(new Error(testErrorMessage))).toMatchSnapshot()
     })
     it("access denied page matches the snapshot", () => {
-      expect(accessDeniedPage).toMatchSnapshot()
+      expect(buildAccessDeniedPage()).toMatchSnapshot()
     })
   })
 })

@@ -18,7 +18,7 @@ function ensureTrailingSlash(input: string) {
   return input.endsWith("/") ? input : `${input}/`
 }
 
-export function getRegistry() {
+export function getRegistryUrl() {
   const cliArgs = parseCliArgs()
   const npmConfig = getNpmConfig()
 
@@ -27,13 +27,13 @@ export function getRegistry() {
   return removeTrailingSlash(registry)
 }
 
-export function getConfigFile() {
+export function getNpmConfigFile() {
   const npmConfig = getNpmConfig()
 
   return npmConfig.userconfig
 }
 
-export function getSaveCommands(registry: string, token: string) {
+export function getNpmSaveCommands(registry: string, token: string) {
   const url = new URL(registry)
   const pathname = ensureTrailingSlash(url.pathname)
   const baseUrl = url.host + pathname
@@ -44,9 +44,9 @@ export function getSaveCommands(registry: string, token: string) {
   ]
 }
 
-export function saveToken(token: string) {
-  const registry = getRegistry()
-  const commands = getSaveCommands(registry, token)
+export function saveNpmToken(token: string) {
+  const registry = getRegistryUrl()
+  const commands = getNpmSaveCommands(registry, token)
 
   commands.forEach((command) => execSync(command))
 }

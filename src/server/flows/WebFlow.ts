@@ -3,7 +3,7 @@ import { Application, Handler, Request } from "express"
 
 import { logger } from "../../logger"
 import { getAuthorizePath, getCallbackPath } from "../../redirect"
-import { accessDeniedPage, buildErrorPage } from "../../statusPage"
+import { buildAccessDeniedPage, buildErrorPage } from "../../statusPage"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { Verdaccio } from "../verdaccio"
@@ -51,7 +51,7 @@ export class WebFlow implements IPluginMiddleware<any> {
    * There is no need to later decode and decrypt the token. This process is
    * automatically reversed by verdaccio before passing it to the plugin.
    */
-  callback: Handler = async (req, res, next) => {
+  callback: Handler = async (req, res) => {
     try {
       const code = this.provider.getCode(req)
 
@@ -64,7 +64,7 @@ export class WebFlow implements IPluginMiddleware<any> {
 
         res.redirect(ui)
       } else {
-        res.status(401).send(accessDeniedPage)
+        res.status(401).send(buildAccessDeniedPage())
       }
     } catch (error) {
       logger.error(error)

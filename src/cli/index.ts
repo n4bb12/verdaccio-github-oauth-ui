@@ -2,9 +2,9 @@ import express from "express"
 import open from "open"
 
 import { cliPort, cliProviderId } from "../constants"
+import { saveNpmToken } from "../npm"
 import { getAuthorizePath } from "../redirect"
 import { respondWithCliMessage } from "./cli-response"
-import { saveToken } from "./npm"
 import { validateRegistry } from "./usage"
 import { respondWithWebPage } from "./web-response"
 
@@ -19,7 +19,7 @@ const server = express()
 
     try {
       if (status === "success") {
-        saveToken(token)
+        saveNpmToken(token)
       }
     } catch (error) {
       status = "error"

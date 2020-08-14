@@ -1,6 +1,6 @@
 import { pluginName } from "../constants"
 import { logger } from "../logger"
-import { getRegistry } from "./npm"
+import { getRegistryUrl } from "../npm"
 
 export function getUsageInfo() {
   return [
@@ -20,7 +20,7 @@ export function printUsage() {
 }
 
 export function validateRegistry() {
-  const registry = getRegistry()
+  const registry = getRegistryUrl()
 
   if (registry.includes("registry.npmjs.org")) {
     printUsage()
