@@ -1,22 +1,14 @@
 import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler, Request } from "express"
 
-import { authorizePath, callbackPath } from "../../constants"
 import { logger } from "../../logger"
+import { getAuthorizePath, getCallbackPath } from "../../redirect"
 import { accessDeniedPage, buildErrorPage } from "../../statusPage"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { Verdaccio } from "../verdaccio"
 
 export class WebFlow implements IPluginMiddleware<any> {
-  static getAuthorizePath(id?: string) {
-    return authorizePath + "/" + (id || ":id?")
-  }
-
-  static getCallbackPath(id?: string) {
-    return callbackPath + (id ? "/" + id : "")
-  }
-
   constructor(
     private readonly verdaccio: Verdaccio,
     private readonly core: AuthCore,
@@ -27,8 +19,8 @@ export class WebFlow implements IPluginMiddleware<any> {
    * IPluginMiddleware
    */
   register_middlewares(app: Application) {
-    app.get(WebFlow.getAuthorizePath(), this.authorize)
-    app.get(WebFlow.getCallbackPath(), this.callback)
+    app.get(getAuthorizePath(), this.authorize)
+    app.get(getCallbackPath(), this.callback)
   }
 
   /**
@@ -80,14 +72,14 @@ export class WebFlow implements IPluginMiddleware<any> {
     }
   }
 
-  private getRedirectUrl(req: Request): string {
-    const baseUrl = this.verdaccio.baseUrl || this.getRequestOrigin(req)
-    const path = WebFlow.getCallbackPath(req.params.id)
-    return baseUrl + path
-  }
-
   private getRequestOrigin(req: Request) {
     const protocal = req.get("X-Forwarded-Proto") || req.protocol
     return protocal + "://" + req.get("host")
+  }
+
+  private getRedirectUrl(req: Request): string {
+    const baseUrl = this.verdaccio.baseUrl || this.getRequestOrigin(req)
+    const path = getCallbackPath(req.params.id)
+    return baseUrl + path
   }
 }

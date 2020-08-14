@@ -2,14 +2,14 @@ import express from "express"
 import open from "open"
 
 import { cliPort, cliProviderId } from "../constants"
-import { WebFlow } from "../server/flows/WebFlow"
+import { getAuthorizePath } from "../redirect"
+import { respondWithCliMessage } from "./cli-response"
 import { saveToken } from "./npm"
 import { validateRegistry } from "./usage"
 import { respondWithWebPage } from "./web-response"
-import { respondWithCliMessage } from "./cli-response"
 
 const registry = validateRegistry()
-const authorizeUrl = registry + WebFlow.getAuthorizePath(cliProviderId)
+const authorizeUrl = registry + getAuthorizePath(cliProviderId)
 
 const server = express()
   .get("/", (req, res) => {

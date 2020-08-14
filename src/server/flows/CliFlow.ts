@@ -4,12 +4,12 @@ import qs from "query-string"
 
 import { cliPort, cliProviderId } from "../../constants"
 import { logger } from "../../logger"
+import { getCallbackPath } from "../../redirect"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { Verdaccio } from "../verdaccio"
-import { WebFlow } from "./WebFlow"
 
-const pluginCallbackeUrl = WebFlow.getCallbackPath(cliProviderId)
+const pluginCallbackeUrl = getCallbackPath(cliProviderId)
 
 export class CliFlow implements IPluginMiddleware<any> {
   constructor(
