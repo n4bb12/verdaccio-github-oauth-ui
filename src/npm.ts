@@ -2,12 +2,19 @@ import { execSync } from "child_process"
 import minimist from "minimist"
 import { URL } from "url"
 
+import { logger } from "./logger"
+
 function parseCliArgs() {
   return minimist(process.argv.slice(2))
 }
 
+function runCommand(command: string) {
+  logger.log(`Running command: ${command}`)
+  return execSync(command)
+}
+
 function getNpmConfig() {
-  return JSON.parse(execSync("npm config list --json").toString())
+  return JSON.parse(runCommand("npm config list --json").toString())
 }
 
 function removeTrailingSlash(input: string) {
@@ -39,8 +46,8 @@ export function getNpmSaveCommands(registry: string, token: string) {
   const baseUrl = url.host + pathname
 
   return [
-    `npm config set //${baseUrl}:_authToken "${token}"`,
     `npm config set //${baseUrl}:always-auth true`,
+    `npm config set //${baseUrl}:_authToken "${token}"`,
   ]
 }
 
@@ -48,5 +55,5 @@ export function saveNpmToken(token: string) {
   const registry = getRegistryUrl()
   const commands = getNpmSaveCommands(registry, token)
 
-  commands.forEach((command) => execSync(command))
+  commands.forEach((command) => runCommand(command))
 }

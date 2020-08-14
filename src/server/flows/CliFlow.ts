@@ -40,7 +40,7 @@ export class CliFlow implements IPluginMiddleware<any> {
         const npmToken = await this.verdaccio.issueNpmToken(token, user)
 
         params.status = "success"
-        params.token = npmToken
+        params.token = encodeURIComponent(npmToken)
       } else {
         params.status = "denied"
       }
