@@ -44,7 +44,8 @@ export function getSaveCommands(registry: string, token: string) {
   ]
 }
 
-export function save(registry: string, token: string) {
+export function saveToken(token: string) {
+  const registry = getRegistry()
   const commands = getSaveCommands(registry, token)
 
   commands.forEach((command) => execSync(command))

@@ -2,13 +2,7 @@ import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler } from "express"
 import qs from "query-string"
 
-import {
-  cliDeniedCallbackPath,
-  cliErrorCallbackPath,
-  cliProviderId,
-  cliCallbackUrl,
-  cliSuccessCallbackPath,
-} from "../../constants"
+import { cliPort, cliProviderId } from "../../constants"
 import { logger } from "../../logger"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
@@ -31,8 +25,8 @@ export class CliFlow implements IPluginMiddleware<any> {
     app.get(pluginCallbackeUrl, this.callback)
   }
 
-  callback: Handler = async (req, res, next) => {
-    let redirectUrl: string
+  callback: Handler = async (req, res) => {
+    const params: Record<string, string> = {}
 
     try {
       const code = await this.provider.getCode(req)
@@ -43,19 +37,21 @@ export class CliFlow implements IPluginMiddleware<any> {
       if (this.core.authenticate(username, groups)) {
         const user = this.core.createAuthenticatedUser(username)
         const npmToken = await this.verdaccio.issueNpmToken(token, user)
-        const params = qs.stringify({ token: npmToken })
 
-        redirectUrl = cliCallbackUrl + cliSuccessCallbackPath + "?" + params
+        params.status = "success"
+        params.token = npmToken
       } else {
-        redirectUrl = cliCallbackUrl + cliDeniedCallbackPath
+        params.status = "denied"
       }
     } catch (error) {
       logger.error(error)
 
-      const params = qs.stringify({ message: error.message || error })
-
-      redirectUrl = cliCallbackUrl + cliErrorCallbackPath + "?" + params
+      params.status = "error"
+      params.message = error.message || error
     }
+
+    const redirectUrl =
+      `http://localhost:${cliPort}` + "?" + qs.stringify(params)
 
     res.redirect(redirectUrl)
   }

@@ -1,5 +1,6 @@
 import { pluginName } from "../constants"
 import { logger } from "../logger"
+import { getRegistry } from "./npm"
 
 export function getUsageInfo() {
   return [
@@ -16,4 +17,15 @@ export function getUsageInfo() {
 
 export function printUsage() {
   getUsageInfo().forEach((line) => logger.log(line))
+}
+
+export function validateRegistry() {
+  const registry = getRegistry()
+
+  if (registry.includes("registry.npmjs.org")) {
+    printUsage()
+    process.exit(1)
+  }
+
+  return registry
 }
