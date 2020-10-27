@@ -89,7 +89,7 @@
     "verdaccio": "3 || 4"
   },
   "engines": {
-    "node": ">=10"
+    "node": "^10||^12||^14"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
