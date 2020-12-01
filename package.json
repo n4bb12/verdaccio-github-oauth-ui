@@ -76,7 +76,7 @@
     "lodash": "4.17.20",
     "nodemon": "^2.0.6",
     "parcel-bundler": "^1.12.4",
-    "prettier": "^2.1.2",
+    "prettier": "^2.2.1",
     "release-it": "^14.2.0",
     "tslint": "^6.0.0",
     "tslint-config-prettier": "^1.18.0",
