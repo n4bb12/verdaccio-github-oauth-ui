@@ -59,7 +59,7 @@
     "@babel/preset-typescript": "^7.12.1",
     "@n4bb12/config-tslint": "^1.4.1",
     "@tsconfig/node10": "^1.0.7",
-    "@types/express": "^4.17.8",
+    "@types/express": "^4.17.9",
     "@types/global-agent": "^2.1.0",
     "@types/got": "^9.4.1",
     "@types/jest": "^26.0.15",
