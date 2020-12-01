@@ -55,7 +55,7 @@
     "@babel/core": "^7.12.3",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.12.1",
-    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-env": "^7.12.7",
     "@babel/preset-typescript": "^7.12.1",
     "@n4bb12/config-tslint": "^1.4.1",
     "@tsconfig/node10": "^1.0.7",
