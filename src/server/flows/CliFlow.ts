@@ -8,6 +8,7 @@ import { getCallbackPath } from "../../redirect"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { Verdaccio } from "../verdaccio"
+import { getConfig } from "../plugin/Config"
 
 const pluginCallbackeUrl = getCallbackPath(cliProviderId)
 
@@ -34,8 +35,9 @@ export class CliFlow implements IPluginMiddleware<any> {
       const token = await this.provider.getToken(code)
       const username = await this.provider.getUsername(token)
       const groups = await this.provider.getGroups(token)
+      const teams = await this.provider.getTeams(username, getConfig(this.provider.getConf(), "org"), token)
 
-      if (this.core.authenticate(username, groups)) {
+      if (this.core.authenticate(username, groups, teams)) {
         const user = this.core.createAuthenticatedUser(username)
         const npmToken = await this.verdaccio.issueNpmToken(token, user)
 

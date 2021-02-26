@@ -7,7 +7,7 @@ export function respondWithCliMessage(status: string, message: string) {
       break
 
     case "denied":
-      logger.log("You are not a member of the required org.")
+      logger.log("You are not a member of the required org/team.")
       break
 
     default:

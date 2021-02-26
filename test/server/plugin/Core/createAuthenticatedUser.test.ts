@@ -25,6 +25,7 @@ describe("AuthCore", () => {
           "real_groups": Array [
             "test-username",
             "TEST_ORG",
+            "TEST_TEAM",
           ],
         }
       `)

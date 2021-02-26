@@ -4,12 +4,13 @@ import { logger } from "../../logger"
 import { GitHubOAuth } from "./OAuth"
 import { GitHubOrganization } from "./Organization"
 import { GitHubUser } from "./User"
+import { GitHubTeamResult } from "./TeamResult"
 
 export class GitHubClient {
   constructor(
     private readonly webBaseUrl: string,
     private readonly apiBaseUrl: string,
-  ) {}
+  ) { }
 
   /**a
    * `POST /login/oauth/access_token`
@@ -77,6 +78,44 @@ export class GitHubClient {
       return await got(url, options).json()
     } catch (error) {
       throw new Error("Failed requesting GitHub user orgs: " + error.message)
+    }
+  }
+
+  /**
+   * get user teams using Github Graphql API
+   */
+  requestUserTeams = async (
+    username: string,
+    org: string,
+    accessToken: string,
+  ): Promise<GitHubTeamResult> => {
+    const url = this.apiBaseUrl + "/graphql"
+    const query = `{
+      organization(login: \"${org}\") {
+        teams(first: 100, userLogins: [\"${username}\"]) {
+          edges {
+            node {
+              name
+            }
+          }
+        }
+      }
+    }`
+    const options = {
+      method: "POST",
+      json: {
+        query: query.replace(/[\n\r]/g, '')
+      },
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+      responseType: 'json'
+    } as const
+
+    try {
+      return await got(url, options).json()
+    } catch (error) {
+      throw new Error("Failed requesting GitHub user teams: " + error.message)
     }
   }
 }
