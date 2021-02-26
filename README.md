@@ -72,6 +72,7 @@ auth:
     client-id: GITHUB_CLIENT_ID
     client-secret: GITHUB_CLIENT_SECRET
     enterprise-origin: GITHUB_ENTERPRISE_ORIGIN # optional, if you are using github enterprise
+    team: GITHUB_TEAM # optional, to filter by team name
 
 url_prefix: YOUR_REGISTRY_URL # optional, make sure it is configured as described
 ```
@@ -90,6 +91,10 @@ These values can be obtained from GitHub OAuth app page at https://github.com/se
 #### `enterprise-origin` (optional)
 
 Set this if you are using GitHub Enterprise. Example: `https://hostname`
+
+#### `team` (optional)
+
+Users within specified team will be able to authenticate
 
 #### `url_prefix` (optional)
 

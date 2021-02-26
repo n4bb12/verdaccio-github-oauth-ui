@@ -19,7 +19,7 @@ describe("Plugin", () => {
     let plugin: Plugin
 
     beforeEach(() => {
-      AuthProvider.mockImplementation(() => createTestAuthProvider())
+      AuthProvider.mockImplementation(() => createTestAuthProvider({}))
       plugin = createTestPlugin()
     })
 
@@ -38,6 +38,7 @@ describe("Plugin", () => {
           Array [
             "test-username",
             "TEST_ORG",
+            "TEST_TEAM",
           ]
         `)
         done()

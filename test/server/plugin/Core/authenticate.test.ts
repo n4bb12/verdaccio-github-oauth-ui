@@ -1,5 +1,5 @@
 import { AuthCore } from "src/server/plugin/AuthCore"
-import { createTestAuthCore, testRequiredGroup, testUsername } from "test/utils"
+import { createTestAuthCore, testRequiredGroup, testRequiredTeam, testUsername } from "test/utils"
 
 describe("AuthCore", () => {
   describe("authenticate", () => {
@@ -9,25 +9,28 @@ describe("AuthCore", () => {
       core = createTestAuthCore()
     })
 
-    function expectTrue(groups: string[]) {
-      const result = core.authenticate(testUsername, groups)
+    function expectTrue(groups: string[], teams: string[]) {
+      const result = core.authenticate(testUsername, groups, teams)
       return expect(result).toBe(true)
     }
 
-    function expectFalse(groups: string[]) {
-      const result = core.authenticate(testUsername, groups)
+    function expectFalse(groups: string[], teams: string[]) {
+      const result = core.authenticate(testUsername, groups, teams)
       return expect(result).toBe(false)
     }
 
     it("true", () => {
-      expectTrue([testRequiredGroup])
-      expectTrue(["A", testRequiredGroup])
-      expectTrue(["A", testRequiredGroup, "B"])
+      expectTrue([testRequiredGroup], [testRequiredTeam])
+      expectTrue(["A", testRequiredGroup], [testRequiredTeam])
+      expectTrue(["A", testRequiredGroup, "B"], [testRequiredTeam])
+      expectTrue(["A", testRequiredGroup, "B"], ["A", testRequiredTeam])
     })
 
     it("false", () => {
-      expectFalse([])
-      expectFalse(["A"])
+      expectFalse([], [])
+      expectFalse(["A"], [])
+      expectFalse(["A", testRequiredGroup], [])
+      expectFalse(["A", testRequiredGroup], ["A"])
     })
   })
 })

@@ -41,4 +41,24 @@ export class Cache {
 
     return groups || []
   }
+
+  async getTeams(username: string, org: string, token: string): Promise<string[]> {
+    let teams: string[] | null = null
+
+    try {
+      const key = [this.namespace, "team", token].join("_")
+
+      teams = this.cache.get(key)
+
+      if (!teams) {
+        teams = await this.authProvider.getTeams(username, org, token)
+      }
+
+      this.cache.put(key, teams || [], this.cacheTTLms)
+    } catch (error) {
+      logger.error(error)
+    }
+
+    return teams || []
+  }
 }

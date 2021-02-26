@@ -7,6 +7,7 @@ import { Plugin } from "src/server/plugin/Plugin"
 import { Verdaccio } from "src/server/verdaccio/Verdaccio"
 
 export const testRequiredGroup = "TEST_ORG"
+export const testRequiredTeam = "TEST_TEAM"
 export const testClientId = "TEST_CLIENT_ID"
 export const testClientSecret = "TEST_CLIENT_SECRET"
 export const testUsername = "test-username"
@@ -23,6 +24,7 @@ export const testErrorMessage = "expected-error"
 export function createTestPluginConfig(config?: any) {
   return {
     org: testRequiredGroup,
+    team: testRequiredTeam,
     "client-id": testClientId,
     "client-secret": testClientSecret,
     ...config,
@@ -51,10 +53,14 @@ export function createTestVerdaccio(config?: any) {
   return verdaccio
 }
 
-export function createTestAuthProvider() {
+export function createTestAuthProvider(config?: any) {
+  const conf = createTestConfig(config)
   const provider: AuthProvider = {
     getId() {
       return testProviderId
+    },
+    getConf(){
+      return conf
     },
     getLoginUrl() {
       return testLoginUrl
@@ -71,6 +77,9 @@ export function createTestAuthProvider() {
     async getGroups(token: string) {
       return token === testOAuthToken ? [testRequiredGroup] : []
     },
+    async getTeams(username: string, group: string, token: string) {
+      return token === testOAuthToken ? [testRequiredTeam] : []
+    }
   }
   return provider
 }

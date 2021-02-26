@@ -55,6 +55,6 @@ export function buildErrorPage(error: any) {
 export function buildAccessDeniedPage() {
   return buildStatusPage(`
     <h1>Access Denied</h1>
-    <p>You are not a member of the required org.</p>
+    <p>You are not a member of the required org/team.</p>
   `)
 }

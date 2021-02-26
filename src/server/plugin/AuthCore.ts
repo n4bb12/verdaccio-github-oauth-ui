@@ -6,6 +6,7 @@ import { Config, getConfig } from "./Config"
 
 export class AuthCore {
   private readonly requiredOrgName = getConfig(this.config, "org")
+  private readonly requiredTeamName = getConfig(this.config, "team")
 
   constructor(
     private readonly verdaccio: Verdaccio,
@@ -17,7 +18,7 @@ export class AuthCore {
     return {
       name: username,
       groups: ["$all", "@all", "$authenticated", "@authenticated"],
-      real_groups: [username, this.requiredOrgName],
+      real_groups: [username, this.requiredOrgName, this.requiredTeamName],
     }
   }
 
@@ -33,9 +34,11 @@ export class AuthCore {
     return url
   }
 
-  authenticate(username: string, groups: string[]): boolean {
-    const success = groups.includes(this.requiredOrgName)
-
+  authenticate(username: string, groups: string[], teams: string[]): boolean {
+    let success = groups.includes(this.requiredOrgName)
+    if (success && this.requiredTeamName){
+      success = teams.includes(this.requiredTeamName)
+    }
     if (!success) {
       logger.error(this.getDeniedMessage(username))
     }
@@ -44,6 +47,6 @@ export class AuthCore {
   }
 
   private getDeniedMessage(username: string) {
-    return `Access denied: User "${username}" is not a member of "${this.requiredOrgName}"`
+    return `Access denied: User "${username}" is not a member of "${this.requiredOrgName}"${this.requiredTeamName ? " or member of " + this.requiredTeamName + " team" : ""}`
   }
 }
