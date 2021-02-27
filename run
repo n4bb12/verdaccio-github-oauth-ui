@@ -30,17 +30,19 @@ pluginDir=plugins/verdaccio-github-oauth-ui
 # Build server, config and client
 #
 build() {
+  # copy assets
   run build mkdir -p dist/public/
   run build cp -R src/client/*.css dist/public/ &
 
+  # build with parcel
   export NODE_ENV=production
   run build yarn -s parcel build src/client/verdaccio-3.ts --target browser --experimental-scope-hoisting --out-dir dist/public &
   run build yarn -s parcel build src/client/verdaccio-4.ts --target browser --experimental-scope-hoisting --out-dir dist/public &
   run build yarn -s parcel build src/server/index.ts --target node --no-minify --out-file server.js &
   run build yarn -s parcel build src/cli/index.ts    --target node --no-minify --out-file cli.js &
-
   wait
 
+  # add node shebang
   printf '%s\n%s\n' '#!/usr/bin/env node' "$(cat dist/cli.js)" > dist/cli.js
 }
 
