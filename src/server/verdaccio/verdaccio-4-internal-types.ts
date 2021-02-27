@@ -1,8 +1,5 @@
 // These types are defined but unfortunately not made available.
 // https://github.com/verdaccio/verdaccio/blob/master/types/index.ts
-// tslint:disable
-
-/*  @typescript-eslint/interface-name-prefix */
 
 import {
   IBasicAuth,
@@ -120,7 +117,6 @@ export interface IAuth extends IBasicAuth<Config>, IAuthMiddleware, IAuthWebUI {
   config: Config
   logger: Logger
   secret: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   plugins: any[]
   allow_unpublish(
     pkg: AuthPluginPackage,
@@ -132,7 +128,6 @@ export interface IAuth extends IBasicAuth<Config>, IAuthMiddleware, IAuthWebUI {
 export interface IWebSearch {
   index: any
   storage: IStorageHandler
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   query(query: string): any
   add(pkg: Version): void
   remove(name: string): void

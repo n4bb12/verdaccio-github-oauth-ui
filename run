@@ -62,25 +62,6 @@ copy() {
   run copy cp package.json $pluginDir/
 }
 
-#
-# Run linters
-#
-lint() {
-  run lint yarn -s tsc -p src/cli/tsconfig.json &
-  run lint yarn -s tsc -p src/client/tsconfig.json &
-  run lint yarn -s tsc -p src/server/tsconfig.json &
-  run lint yarn -s tsc -p test/tsconfig.json &
-
-  wait
-
-  run lint yarn -s tslint -p src/cli/tsconfig.json ${@} &
-  run lint yarn -s tslint -p src/client/tsconfig.json ${@} &
-  run lint yarn -s tslint -p src/server/tsconfig.json ${@} &
-  run lint yarn -s tslint -p test/tsconfig.json ${@} &
-
-  wait
-}
-
 read-env() {
   if [ -f .env ]; then
     set -a

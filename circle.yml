@@ -22,12 +22,6 @@ jobs:
           root: .
           paths: .
 
-  lint:
-    executor: node
-    steps:
-      - attach_workspace: { "at": "." }
-      - run: yarn lint
-
   test:
     executor: node
     steps:
@@ -45,9 +39,6 @@ workflows:
   default:
     jobs:
       - install
-      - lint:
-          requires:
-            - install
       - test:
           requires:
             - install
