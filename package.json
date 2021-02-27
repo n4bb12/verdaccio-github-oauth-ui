@@ -28,6 +28,7 @@
     "build": "bash run build",
     "dev": "yarn update && yarn start",
     "format": "prettier --write \"**/*.{ts,js,css,scss,html,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,css,scss,html,json}\"",
     "prepack": "bash run clean && bash run build",
     "start": "verdaccio -c config.yaml",
     "test": "jest",
