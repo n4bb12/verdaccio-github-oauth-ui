@@ -10,7 +10,6 @@ import { Plugin } from "src/server/plugin/Plugin"
 
 jest.mock("src/server/github/AuthProvider")
 
-// tslint:disable-next-line: variable-name
 const AuthProvider: GitHubAuthProvider &
   jest.MockInstance<any, any> = GitHubAuthProvider as any
 
