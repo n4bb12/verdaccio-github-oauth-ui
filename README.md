@@ -32,9 +32,10 @@ This is a Verdaccio plugin that offers GitHub OAuth integragtion for both the br
 
 ### Features
 
-- UI integration with fully functional login and logout. When clicking the login button the user is redirected to GitHub and returns with a working session.
-- Updated usage info and working copy-to-clipboard for setup commands. 
-- A small CLI for quick-and-easy configuration.
+- Use the Verdaccio default login and logout button. The login button redirects you to GitHub. When you return, you are logged-in.
+- The default Verdaccio usage info is updated with working copy-to-clipboard for setup commands. 
+- The plugin ships with a small CLI for quick-and-easy npm configuration.
+- Use GitHub team names to configure fine-grained permissions.
 
 ### Compatibility
 
@@ -72,7 +73,11 @@ auth:
     client-id: GITHUB_CLIENT_ID
     client-secret: GITHUB_CLIENT_SECRET
     enterprise-origin: GITHUB_ENTERPRISE_ORIGIN # optional, if you are using github enterprise
-    team: GITHUB_TEAM # optional, to filter by team name
+
+packages:
+  "foo":
+    access: $authenticated
+    publish: github/GITHUB_ORG/GITHUB_TEAM # optional, limit actions to a certain team
 
 url_prefix: YOUR_REGISTRY_URL # optional, make sure it is configured as described
 ```
@@ -91,10 +96,6 @@ These values can be obtained from GitHub OAuth app page at https://github.com/se
 #### `enterprise-origin` (optional)
 
 Set this if you are using GitHub Enterprise. Example: `https://hostname`
-
-#### `team` (optional)
-
-Users within specified team will be able to authenticate
 
 #### `url_prefix` (optional)
 

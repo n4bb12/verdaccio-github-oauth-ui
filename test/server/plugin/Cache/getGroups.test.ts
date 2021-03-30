@@ -14,13 +14,13 @@ describe("Cache", () => {
     let cache: Cache
 
     function configureProvider(getGroups: (token: string) => string[]) {
-      provider = createTestAuthProvider({})
+      provider = createTestAuthProvider()
       provider.getGroups = jest.fn((token) => Promise.resolve(getGroups(token)))
       cache = new Cache(provider, cacheTTLms)
     }
 
     function configureErrorProvider() {
-      provider = createTestAuthProvider({})
+      provider = createTestAuthProvider()
       jest
         .spyOn(provider, "getGroups")
         .mockRejectedValue(new Error(testErrorMessage))

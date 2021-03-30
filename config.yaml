@@ -26,7 +26,6 @@ auth:
     client-id: GITHUB_CLIENT_ID # required
     client-secret: GITHUB_CLIENT_SECRET # required
     # enterprise-origin: GITHUB_ENTERPRISE_ORIGIN # optional, set this if you are using github enterprise
-    # team: GITHUB_TEAM # optional, to filter by team name
   htpasswd:
     file: ./htpasswd
 
@@ -46,7 +45,6 @@ uplinks:
 
 packages:
   "@*/*":
-    # scoped packages
     access: $authenticated
     publish: $authenticated
     proxy: npmjs

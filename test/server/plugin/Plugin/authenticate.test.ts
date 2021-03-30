@@ -18,7 +18,7 @@ describe("Plugin", () => {
     let plugin: Plugin
 
     beforeEach(() => {
-      AuthProvider.mockImplementation(() => createTestAuthProvider({}))
+      AuthProvider.mockImplementation(() => createTestAuthProvider())
       plugin = createTestPlugin()
     })
 
@@ -36,8 +36,10 @@ describe("Plugin", () => {
         expect(groups).toMatchInlineSnapshot(`
           Array [
             "test-username",
-            "TEST_ORG",
-            "TEST_TEAM",
+            "github/TEST_ORG",
+            "unrelated_org",
+            "github/TEST_ORG/TEST_TEAM",
+            "github/TEST_ORG/unrelated_team",
           ]
         `)
         done()

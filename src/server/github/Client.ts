@@ -1,10 +1,9 @@
 import got from "got"
 
-import { logger } from "../../logger"
 import { GitHubOAuth } from "./OAuth"
 import { GitHubOrganization } from "./Organization"
+import { GitHubTeam } from "./Team"
 import { GitHubUser } from "./User"
-import { GitHubTeamResult } from "./TeamResult"
 
 export class GitHubClient {
   constructor(
@@ -84,32 +83,12 @@ export class GitHubClient {
   /**
    * get user teams using Github Graphql API
    */
-  requestUserTeams = async (
-    username: string,
-    org: string,
-    accessToken: string,
-  ): Promise<GitHubTeamResult> => {
-    const url = this.apiBaseUrl + "/graphql"
-    const query = `{
-      organization(login: \"${org}\") {
-        teams(first: 100, userLogins: [\"${username}\"]) {
-          edges {
-            node {
-              name
-            }
-          }
-        }
-      }
-    }`
+  requestUserTeams = async (accessToken: string): Promise<GitHubTeam[]> => {
+    const url = this.apiBaseUrl + "/user/teams"
     const options = {
-      method: "POST",
-      json: {
-        query: query.replace(/[\n\r]/g, ""),
-      },
       headers: {
         Authorization: "Bearer " + accessToken,
       },
-      responseType: "json",
     } as const
 
     try {

@@ -7,7 +7,6 @@ import { buildAccessDeniedPage, buildErrorPage } from "../../statusPage"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { Verdaccio } from "../verdaccio"
-import { getConfig } from "../plugin/Config"
 
 export class WebFlow implements IPluginMiddleware<any> {
   constructor(
@@ -55,18 +54,12 @@ export class WebFlow implements IPluginMiddleware<any> {
   callback: Handler = async (req, res) => {
     try {
       const code = this.provider.getCode(req)
-
       const token = await this.provider.getToken(code)
       const username = await this.provider.getUsername(token)
       const groups = await this.provider.getGroups(token)
-      const teams = await this.provider.getTeams(
-        username,
-        getConfig(this.provider.getConf(), "org"),
-        token,
-      )
 
-      if (this.core.authenticate(username, groups, teams)) {
-        const ui = await this.core.createUiCallbackUrl(token, username)
+      if (this.core.authenticate(username, groups)) {
+        const ui = await this.core.createUiCallbackUrl(username, token, groups)
 
         res.redirect(ui)
       } else {

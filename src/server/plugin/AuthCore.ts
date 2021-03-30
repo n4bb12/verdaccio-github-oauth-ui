@@ -5,25 +5,31 @@ import { User, Verdaccio } from "../verdaccio"
 import { Config, getConfig } from "./Config"
 
 export class AuthCore {
-  private readonly requiredOrgName = getConfig(this.config, "org")
-  private readonly requiredTeamName = getConfig(this.config, "team")
+  private readonly requiredGroup = "github/" + getConfig(this.config, "org")
 
   constructor(
     private readonly verdaccio: Verdaccio,
     private readonly config: Config,
   ) {}
 
-  createAuthenticatedUser(username: string): User {
+  async createAuthenticatedUser(
+    username: string,
+    groups: string[],
+  ): Promise<User> {
     // See https://verdaccio.org/docs/en/packages
     return {
       name: username,
       groups: ["$all", "@all", "$authenticated", "@authenticated"],
-      real_groups: [username, this.requiredOrgName, this.requiredTeamName],
+      real_groups: [username, ...groups],
     }
   }
 
-  async createUiCallbackUrl(token: string, username: string): Promise<string> {
-    const user = this.createAuthenticatedUser(username)
+  async createUiCallbackUrl(
+    username: string,
+    token: string,
+    groups: string[],
+  ): Promise<string> {
+    const user = await this.createAuthenticatedUser(username, groups)
 
     const uiToken = await this.verdaccio.issueUiToken(user)
     const npmToken = await this.verdaccio.issueNpmToken(token, user)
@@ -34,25 +40,14 @@ export class AuthCore {
     return url
   }
 
-  authenticate(username: string, groups: string[], teams: string[]): boolean {
-    let success = groups.includes(this.requiredOrgName)
-    if (success && this.requiredTeamName) {
-      success = teams.includes(this.requiredTeamName)
-    }
-    if (!success) {
-      logger.error(this.getDeniedMessage(username))
+  authenticate(username: string, groups: string[]): boolean {
+    if (!groups.includes(this.requiredGroup)) {
+      logger.error(
+        `Access denied: User "${username}" is not a member of the required GitHub org "${this.requiredGroup}"`,
+      )
+      return false
     }
 
-    return success
-  }
-
-  private getDeniedMessage(username: string) {
-    return `Access denied: User "${username}" is not a member of "${
-      this.requiredOrgName
-    }"${
-      this.requiredTeamName
-        ? " or member of " + this.requiredTeamName + " team"
-        : ""
-    }`
+    return true
   }
 }

@@ -11,7 +11,6 @@ import { logger } from "../../logger"
 
 export interface PluginConfig {
   org: string
-  team: string
   "client-id": string
   "client-secret": string
   "enterprise-origin"?: string

@@ -1,4 +1,6 @@
 import { Request } from "express"
+
+import { PluginConfig } from "../src/server/plugin/Config"
 import { pluginName } from "src/constants"
 import { AuthCore } from "src/server/plugin/AuthCore"
 import { AuthProvider } from "src/server/plugin/AuthProvider"
@@ -6,8 +8,14 @@ import { Config } from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
 import { Verdaccio } from "src/server/verdaccio/Verdaccio"
 
-export const testRequiredGroup = "TEST_ORG"
-export const testRequiredTeam = "TEST_TEAM"
+export const testOrg = "github/TEST_ORG"
+export const testTeam = "github/TEST_ORG/TEST_TEAM"
+export const testGroups = [
+  testOrg,
+  "unrelated_org",
+  testTeam,
+  `${testOrg}/unrelated_team`,
+]
 export const testClientId = "TEST_CLIENT_ID"
 export const testClientSecret = "TEST_CLIENT_SECRET"
 export const testUsername = "test-username"
@@ -21,17 +29,16 @@ export const testUIToken = "test-ui-token"
 export const testNPMToken = "test-npm-token"
 export const testErrorMessage = "expected-error"
 
-export function createTestPluginConfig(config?: any) {
+export function createTestPluginConfig(config?: Partial<PluginConfig>) {
   return {
-    org: testRequiredGroup,
-    team: testRequiredTeam,
+    org: "TEST_ORG",
     "client-id": testClientId,
     "client-secret": testClientSecret,
     ...config,
   }
 }
 
-export function createTestConfig(config?: any) {
+export function createTestConfig(config?: Partial<PluginConfig>) {
   return ({
     auth: {
       [pluginName]: createTestPluginConfig(),
@@ -46,21 +53,17 @@ export function createTestConfig(config?: any) {
   } as any) as Config
 }
 
-export function createTestVerdaccio(config?: any) {
+export function createTestVerdaccio(config?: Partial<PluginConfig>) {
   const verdaccio = new Verdaccio(createTestConfig(config))
   verdaccio.issueUiToken = jest.fn(() => Promise.resolve(testUIToken))
   verdaccio.issueNpmToken = jest.fn(() => Promise.resolve(testNPMToken))
   return verdaccio
 }
 
-export function createTestAuthProvider(config?: any) {
-  const conf = createTestConfig(config)
+export function createTestAuthProvider() {
   const provider: AuthProvider = {
     getId() {
       return testProviderId
-    },
-    getConf() {
-      return conf
     },
     getLoginUrl() {
       return testLoginUrl
@@ -75,20 +78,17 @@ export function createTestAuthProvider(config?: any) {
       return token === testOAuthToken ? testUsername : ""
     },
     async getGroups(token: string) {
-      return token === testOAuthToken ? [testRequiredGroup] : []
-    },
-    async getTeams(username: string, group: string, token: string) {
-      return token === testOAuthToken ? [testRequiredTeam] : []
+      return token === testOAuthToken ? testGroups : []
     },
   }
   return provider
 }
 
-export function createTestAuthCore(config?: any) {
+export function createTestAuthCore(config?: Partial<PluginConfig>) {
   return new AuthCore(createTestVerdaccio(config), createTestConfig(config))
 }
 
-export function createTestPlugin(config?: any) {
+export function createTestPlugin(config?: Partial<PluginConfig>) {
   return new Plugin(createTestConfig(config))
 }
 

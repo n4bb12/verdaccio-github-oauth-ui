@@ -1,4 +1,4 @@
-import { createTestAuthCore, testUsername } from "test/utils"
+import { createTestAuthCore, testGroups, testUsername } from "test/utils"
 
 import { AuthCore } from "src/server/plugin/AuthCore"
 
@@ -10,8 +10,8 @@ describe("AuthCore", () => {
       core = createTestAuthCore()
     })
 
-    it("the created user contains the expected information", () => {
-      const user = core.createAuthenticatedUser(testUsername)
+    it("the created user contains the expected information", async () => {
+      const user = await core.createAuthenticatedUser(testUsername, testGroups)
 
       expect(user).toMatchInlineSnapshot(`
         Object {
@@ -24,8 +24,10 @@ describe("AuthCore", () => {
           "name": "test-username",
           "real_groups": Array [
             "test-username",
-            "TEST_ORG",
-            "TEST_TEAM",
+            "github/TEST_ORG",
+            "unrelated_org",
+            "github/TEST_ORG/TEST_TEAM",
+            "github/TEST_ORG/unrelated_team",
           ],
         }
       `)

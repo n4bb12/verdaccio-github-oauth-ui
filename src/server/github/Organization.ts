@@ -1,5 +1,5 @@
 /**
- * https://developer.github.com/v3/orgs/#response
+ * https://docs.github.com/en/rest/reference/orgs
  */
 export interface GitHubOrganization {
   login: string
