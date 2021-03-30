@@ -1,23 +1,23 @@
 export interface GitHubTeamResult {
-    data: GitHubTeamDataResult
+  data: GitHubTeamDataResult
 }
 
 export interface GitHubTeamDataResult {
-    organization: OrganizationGraphQL
+  organization: OrganizationGraphQL
 }
 
 export interface OrganizationGraphQL {
-    teams: TeamsObjectGraphQL
+  teams: TeamsObjectGraphQL
 }
 
 export interface TeamsObjectGraphQL {
-    edges: TeamGraphQL[]
+  edges: TeamGraphQL[]
 }
 
 export interface TeamGraphQL {
-    node: TeamNodeGraphQL
+  node: TeamNodeGraphQL
 }
 
 export interface TeamNodeGraphQL {
-    name: string
+  name: string
 }

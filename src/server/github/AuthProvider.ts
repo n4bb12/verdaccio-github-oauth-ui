@@ -24,7 +24,7 @@ export class GitHubAuthProvider implements AuthProvider {
       : "https://api.github.com"
   }
 
-  constructor(private readonly config: Config) { }
+  constructor(private readonly config: Config) {}
 
   getConf() {
     return this.config
@@ -67,6 +67,6 @@ export class GitHubAuthProvider implements AuthProvider {
 
   async getTeams(username: string, org: string, token: string) {
     const teams = await this.client.requestUserTeams(username, org, token)
-    return teams.data.organization.teams.edges.map(it => it.node.name)
+    return teams.data.organization.teams.edges.map((it) => it.node.name)
   }
 }

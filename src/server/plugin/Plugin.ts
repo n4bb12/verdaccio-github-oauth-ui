@@ -49,7 +49,11 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   async authenticate(username: string, token: string, callback: AuthCallback) {
     try {
       const providerGroups = await this.cache.getGroups(token)
-      const providerTeams = await this.cache.getTeams(username, this.config.org, token)
+      const providerTeams = await this.cache.getTeams(
+        username,
+        this.config.org,
+        token,
+      )
 
       if (this.core.authenticate(username, providerGroups, providerTeams)) {
         const user = this.core.createAuthenticatedUser(username)

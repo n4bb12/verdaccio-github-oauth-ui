@@ -59,7 +59,7 @@ export function createTestAuthProvider(config?: any) {
     getId() {
       return testProviderId
     },
-    getConf(){
+    getConf() {
       return conf
     },
     getLoginUrl() {
@@ -79,7 +79,7 @@ export function createTestAuthProvider(config?: any) {
     },
     async getTeams(username: string, group: string, token: string) {
       return token === testOAuthToken ? [testRequiredTeam] : []
-    }
+    },
   }
   return provider
 }

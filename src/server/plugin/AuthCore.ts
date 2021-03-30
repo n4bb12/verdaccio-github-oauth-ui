@@ -36,7 +36,7 @@ export class AuthCore {
 
   authenticate(username: string, groups: string[], teams: string[]): boolean {
     let success = groups.includes(this.requiredOrgName)
-    if (success && this.requiredTeamName){
+    if (success && this.requiredTeamName) {
       success = teams.includes(this.requiredTeamName)
     }
     if (!success) {
@@ -47,6 +47,12 @@ export class AuthCore {
   }
 
   private getDeniedMessage(username: string) {
-    return `Access denied: User "${username}" is not a member of "${this.requiredOrgName}"${this.requiredTeamName ? " or member of " + this.requiredTeamName + " team" : ""}`
+    return `Access denied: User "${username}" is not a member of "${
+      this.requiredOrgName
+    }"${
+      this.requiredTeamName
+        ? " or member of " + this.requiredTeamName + " team"
+        : ""
+    }`
   }
 }

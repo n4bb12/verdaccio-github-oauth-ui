@@ -35,7 +35,11 @@ export class CliFlow implements IPluginMiddleware<any> {
       const token = await this.provider.getToken(code)
       const username = await this.provider.getUsername(token)
       const groups = await this.provider.getGroups(token)
-      const teams = await this.provider.getTeams(username, getConfig(this.provider.getConf(), "org"), token)
+      const teams = await this.provider.getTeams(
+        username,
+        getConfig(this.provider.getConf(), "org"),
+        token,
+      )
 
       if (this.core.authenticate(username, groups, teams)) {
         const user = this.core.createAuthenticatedUser(username)

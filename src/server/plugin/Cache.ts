@@ -42,7 +42,11 @@ export class Cache {
     return groups || []
   }
 
-  async getTeams(username: string, org: string, token: string): Promise<string[]> {
+  async getTeams(
+    username: string,
+    org: string,
+    token: string,
+  ): Promise<string[]> {
     let teams: string[] | null = null
 
     try {

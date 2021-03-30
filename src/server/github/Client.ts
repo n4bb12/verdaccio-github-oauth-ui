@@ -10,7 +10,7 @@ export class GitHubClient {
   constructor(
     private readonly webBaseUrl: string,
     private readonly apiBaseUrl: string,
-  ) { }
+  ) {}
 
   /**a
    * `POST /login/oauth/access_token`
@@ -104,12 +104,12 @@ export class GitHubClient {
     const options = {
       method: "POST",
       json: {
-        query: query.replace(/[\n\r]/g, '')
+        query: query.replace(/[\n\r]/g, ""),
       },
       headers: {
         Authorization: "Bearer " + accessToken,
       },
-      responseType: 'json'
+      responseType: "json",
     } as const
 
     try {
