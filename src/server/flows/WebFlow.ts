@@ -63,7 +63,7 @@ export class WebFlow implements IPluginMiddleware<any> {
       const teams = await this.provider.getTeams(username, getConfig(this.provider.getConf(), "org"), token)
 
       if (this.core.authenticate(username, groups, teams)) {
-        const ui = await this.core.createUiCallbackUrl(token, username)
+        const ui = await this.core.createUiCallbackUrl(token, username, teams)
 
         res.redirect(ui)
       } else {

@@ -13,17 +13,17 @@ export class AuthCore {
     private readonly config: Config,
   ) {}
 
-  createAuthenticatedUser(username: string): User {
+  createAuthenticatedUser(username: string, teams: string[]): User {
     // See https://verdaccio.org/docs/en/packages
     return {
       name: username,
       groups: ["$all", "@all", "$authenticated", "@authenticated"],
-      real_groups: [username, this.requiredOrgName, this.requiredTeamName],
+      real_groups: [username, this.requiredOrgName, ...teams],
     }
   }
 
-  async createUiCallbackUrl(token: string, username: string): Promise<string> {
-    const user = this.createAuthenticatedUser(username)
+  async createUiCallbackUrl(token: string, username: string, teams: string[]): Promise<string> {
+    const user = this.createAuthenticatedUser(username, teams)
 
     const uiToken = await this.verdaccio.issueUiToken(user)
     const npmToken = await this.verdaccio.issueNpmToken(token, user)
@@ -37,7 +37,13 @@ export class AuthCore {
   authenticate(username: string, groups: string[], teams: string[]): boolean {
     let success = groups.includes(this.requiredOrgName)
     if (success && this.requiredTeamName){
-      success = teams.includes(this.requiredTeamName)
+      const reqTeams = this.requiredTeamName.split(" ")
+      for( let i = 0; i < reqTeams.length; i++) {
+         success = teams.includes(reqTeams[i]) 
+         if (success) {
+            return success
+         }
+      }
     }
     if (!success) {
       logger.error(this.getDeniedMessage(username))

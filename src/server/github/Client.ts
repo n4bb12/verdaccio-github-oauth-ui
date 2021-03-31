@@ -4,7 +4,7 @@ import { logger } from "../../logger"
 import { GitHubOAuth } from "./OAuth"
 import { GitHubOrganization } from "./Organization"
 import { GitHubUser } from "./User"
-import { GitHubTeamResult } from "./TeamResult"
+import { getTeamsByUser, IResponseData, IMemberNode } from "./Team"
 
 export class GitHubClient {
   constructor(
@@ -84,38 +84,31 @@ export class GitHubClient {
   /**
    * get user teams using Github Graphql API
    */
-  requestUserTeams = async (
-    username: string,
-    org: string,
-    accessToken: string,
-  ): Promise<GitHubTeamResult> => {
-    const url = this.apiBaseUrl + "/graphql"
-    const query = `{
-      organization(login: \"${org}\") {
-        teams(first: 100, userLogins: [\"${username}\"]) {
-          edges {
-            node {
-              name
-            }
-          }
-        }
-      }
-    }`
-    const options = {
-      method: "POST",
-      json: {
-        query: query.replace(/[\n\r]/g, '')
-      },
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-      responseType: 'json'
-    } as const
+  requestUserTeams = async ( 
+     username: string, 
+     org: string, 
+     endCursor: string, 
+     accessToken: string ): Promise<string[]> => {
+       let teamList: string[] = []
+       if(!username) {
+         return teamList
+       }
+       const graphqlBaseUrl = this.apiBaseUrl.replace("/v3","")
+       const data = await getTeamsByUser(username, org, graphqlBaseUrl, endCursor, accessToken)
+       const { data: { organization: { teams: { edges, pageInfo, totalCount } }}} =  data
+       const { hasNextPage, endCursor } = pageInfo;
 
-    try {
-      return await got(url, options).json()
-    } catch (error) {
-      throw new Error("Failed requesting GitHub user teams: " + error.message)
-    }
-  }
+
+       if (!totalCount) {
+          return teamList
+       }
+       for (let i = 0; i < edges.length; i++) {
+          teamList.push(edges[i].node.slug)
+       }
+       if (hasNextPage && endCursor) {
+          teamList = [...teamList,...await requestUserTeams(username, org, endCursor, accessToken)];
+       }
+     return teamList
+   }
 }
+

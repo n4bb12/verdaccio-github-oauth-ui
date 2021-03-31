@@ -66,7 +66,7 @@ export class GitHubAuthProvider implements AuthProvider {
   }
 
   async getTeams(username: string, org: string, token: string) {
-    const teams = await this.client.requestUserTeams(username, org, token)
-    return teams.data.organization.teams.edges.map(it => it.node.name)
+    const teams = await this.client.requestUserTeams(username, org, '', token)
+    return teams
   }
 }
