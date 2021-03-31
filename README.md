@@ -76,16 +76,20 @@ auth:
     client-secret: GITHUB_CLIENT_SECRET
     enterprise-origin: GITHUB_ENTERPRISE_ORIGIN # optional, if you are using github enterprise
 
-packages:
-  foo: # optional example
-    access: $authenticated # optional, limit actions to org members
-    publish: github/GITHUB_ORG/GITHUB_TEAM # optional, limit actions to a certain team members
+packages: # example package config, see https://verdaccio.org/docs/en/packages
+  foo:
+    access: $authenticated # example, limit actions to logged-in users (works in combination with other plugins such as htpasswd)
+    publish: github/GITHUB_ORG # example, limit actions to org members
+    unpublish: github/GITHUB_ORG/GITHUB_TEAM # example, limit actions to team members
 
 url_prefix: YOUR_REGISTRY_URL # optional, make sure it is configured as described
 ```
 
-- The configured values can either be the actual value or the name of an environment variable that contains the value.
-- The config props can be specified under either the `middlewares` or the `auth` node. Just make sure, the addon is included under both nodes.
+Notes:
+
+- The configured plugin options can either be the actual value or the name of an environment variable that contains the value.
+- The plugin options can be specified under either the `middlewares` or the `auth` node.
+- Ensure the plugin name is included under both `middlewares` and `auth`.
 
 #### `org`
 
