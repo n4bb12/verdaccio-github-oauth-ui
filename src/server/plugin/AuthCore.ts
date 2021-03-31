@@ -17,11 +17,13 @@ export class AuthCore {
     groups: string[],
   ): Promise<User> {
     // See https://verdaccio.org/docs/en/packages
-    return {
+    const user: User = {
       name: username,
       groups: ["$all", "@all", "$authenticated", "@authenticated"],
       real_groups: [username, ...groups],
     }
+    logger.log("Created authenticated user", user)
+    return user
   }
 
   async createUiCallbackUrl(
