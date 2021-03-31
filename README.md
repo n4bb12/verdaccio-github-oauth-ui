@@ -56,6 +56,8 @@ $ npm install verdaccio-github-oauth-ui
 - Create an OAuth app at https://github.com/settings/developers
 - The callback URL should be `YOUR_REGISTRY_URL/-/oauth/callback`
 
+Example:
+
 ![](screenshots/github-app.png)
 
 ### Verdaccio Config
@@ -75,9 +77,9 @@ auth:
     enterprise-origin: GITHUB_ENTERPRISE_ORIGIN # optional, if you are using github enterprise
 
 packages:
-  "foo":
-    access: $authenticated
-    publish: github/GITHUB_ORG/GITHUB_TEAM # optional, limit actions to a certain team
+  foo: # optional example
+    access: $authenticated # optional, limit actions to org members
+    publish: github/GITHUB_ORG/GITHUB_TEAM # optional, limit actions to a certain team members
 
 url_prefix: YOUR_REGISTRY_URL # optional, make sure it is configured as described
 ```
@@ -143,7 +145,7 @@ Open the "Register Info" dialog and klick "Copy to clipboard":
 
 - Verdaccio 3:
 
-Select the text in the header and copy it. In case the text is too long, you can double-click it. The invisible part will still be selected and copied.
+Select the text in the header and copy it. (In case the text is too long, you can double-click it. The invisible part will still be selected and copied.)
 
 ![](screenshots/header.png)
 
