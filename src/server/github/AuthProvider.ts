@@ -58,8 +58,10 @@ export class GitHubAuthProvider implements AuthProvider {
   }
 
   async getGroups(token: string) {
-    const orgs = await this.client.requestUserOrgs(token)
-    const teams = await this.client.requestUserTeams(token)
+    const [orgs, teams] = await Promise.all([
+      this.client.requestUserOrgs(token),
+      this.client.requestUserTeams(token),
+    ])
 
     const orgGroups = orgs.map((org) => `github/${org.login}`)
     const teamGroups = teams.map(

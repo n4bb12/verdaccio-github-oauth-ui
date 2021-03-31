@@ -55,8 +55,10 @@ export class WebFlow implements IPluginMiddleware<any> {
     try {
       const code = this.provider.getCode(req)
       const token = await this.provider.getToken(code)
-      const username = await this.provider.getUsername(token)
-      const groups = await this.provider.getGroups(token)
+      const [username, groups] = await Promise.all([
+        this.provider.getUsername(token),
+        this.provider.getGroups(token),
+      ])
 
       if (this.core.authenticate(username, groups)) {
         const ui = await this.core.createUiCallbackUrl(username, token, groups)
