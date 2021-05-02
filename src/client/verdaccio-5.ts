@@ -7,7 +7,7 @@ const randomClass = "Os1waV6BSoZQKfFwNlIwS"
 
 // copied from here as it needs to be the same behaviour
 // https://github.com/verdaccio/ui/blob/master/src/utils/cli-utils.ts
-export function copyToClipboard(text: string) {
+function copyToClipboard(text: string) {
   const node = document.createElement("div")
   node.innerText = text
   document.body.appendChild(node)
@@ -96,7 +96,7 @@ function updateUsageInfo() {
 }
 
 init({
-  loginButton: "#header--button-login, [data-testid='header--button-login']",
-  logoutButton: "#header--button-logout, [data-testid='header--button-logout']",
+  loginButton: `[data-testid="header--button-login"]`,
+  logoutButton: `[data-testid="header--button-logout"]`,
   updateUsageInfo,
 })

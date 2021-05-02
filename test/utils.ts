@@ -48,7 +48,7 @@ export function createTestConfig(config?: Partial<PluginConfig>) {
         enabled: true,
       },
     },
-    user_agent: "verdaccio/4.3.4",
+    user_agent: "verdaccio/5.0.4",
     ...config,
   } as any) as Config
 }
