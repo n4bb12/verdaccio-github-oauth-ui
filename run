@@ -36,10 +36,9 @@ build() {
 
   # build with parcel
   export NODE_ENV=production
-  run build yarn -s parcel build src/client/verdaccio-3.ts --target browser --experimental-scope-hoisting --out-dir dist/public &
-  run build yarn -s parcel build src/client/verdaccio-4.ts --target browser --experimental-scope-hoisting --out-dir dist/public &
-  run build yarn -s parcel build src/server/index.ts --target node --no-minify --out-file server.js &
-  run build yarn -s parcel build src/cli/index.ts    --target node --no-minify --out-file cli.js &
+  run build yarn -s parcel build src/client/verdaccio-5.ts --target browser --experimental-scope-hoisting --out-dir dist/public &
+  run build yarn -s parcel build src/server/index.ts       --target node --no-minify --out-file server.js &
+  run build yarn -s parcel build src/cli/index.ts          --target node --no-minify --out-file cli.js &
   wait
 
   # add node shebang
@@ -70,6 +69,14 @@ read-env() {
     source .env
     set +a
   fi
+}
+
+typecheck() {
+  run typecheck yarn -s tsc --noEmit --project src/client/tsconfig.json &
+  run typecheck yarn -s tsc --noEmit --project src/server/tsconfig.json &
+  run typecheck yarn -s tsc --noEmit --project src/cli/tsconfig.json &
+  run typecheck yarn -s tsc --noEmit --project test/tsconfig.json &
+  wait
 }
 
 test-whoami() {

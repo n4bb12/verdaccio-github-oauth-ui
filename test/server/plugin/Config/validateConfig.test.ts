@@ -1,10 +1,12 @@
 import { pluginName } from "src/constants"
 import { validateConfig } from "src/server/plugin/Config"
 import { createTestPluginConfig } from "test/utils"
+import { createTestConfig } from "../../../utils"
 
 describe("Config", () => {
   describe("validateConfig", () => {
     function shouldSucceed(config: any) {
+      config.user_agent = createTestConfig().user_agent
       validateConfig(config)
     }
 
@@ -46,6 +48,7 @@ describe("Config", () => {
 
     function shouldFail(config: any) {
       try {
+        config.user_agent = createTestConfig().user_agent
         validateConfig(config)
         fail()
       } catch (error) {

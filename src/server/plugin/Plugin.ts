@@ -34,7 +34,7 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
     const children = [
       new ServeStatic(),
       new PatchHtml(this.verdaccio),
-      new WebFlow(this.verdaccio, this.core, this.provider),
+      new WebFlow(this.config, this.core, this.provider),
       new CliFlow(this.verdaccio, this.core, this.provider),
     ]
 
@@ -48,15 +48,21 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
    */
   async authenticate(username: string, token: string, callback: AuthCallback) {
     try {
+      if (!username || !token) {
+        callback(null, false)
+        return
+      }
+
       const groups = await this.cache.getGroups(token)
 
       if (this.core.authenticate(username, groups)) {
         const user = await this.core.createAuthenticatedUser(username, groups)
 
         callback(null, user.real_groups)
-      } else {
-        callback(null, false)
+        return
       }
+
+      callback(null, false)
     } catch (error) {
       callback(error, false)
     }

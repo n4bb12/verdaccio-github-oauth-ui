@@ -40,7 +40,7 @@ export class PatchHtml implements IPluginMiddleware<any> {
 
   private insertTags = (html: string | Buffer): string => {
     html = String(html)
-    if (!html.includes("VERDACCIO_API_URL")) {
+    if (!html.includes("__VERDACCIO_BASENAME_UI_OPTIONS")) {
       return html
     }
     return html

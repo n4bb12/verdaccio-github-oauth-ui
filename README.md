@@ -39,9 +39,11 @@ This is a Verdaccio plugin that offers GitHub OAuth integragtion for both the br
 
 ### Compatibility
 
-- Verdaccio 3 and 4
-- Node >=10
-- Chrome, Firefox, Firefox ESR, Edge, Safari, IE 11
+- Verdaccio 5
+- Node 14, 16
+- Chrome, Firefox, Firefox ESR, Edge, Safari
+
+If you would like to use this with Verdaccio 3-4, Node.js 10-13, or IE you can use version 2 of the plugin.
 
 ## Setup
 
@@ -81,8 +83,6 @@ packages: # example package config, see https://verdaccio.org/docs/en/packages
     access: $authenticated # example, limit actions to logged-in users (works in combination with other plugins such as htpasswd)
     publish: github/GITHUB_ORG # example, limit actions to org members
     unpublish: github/GITHUB_ORG/GITHUB_TEAM # example, limit actions to team members
-
-url_prefix: YOUR_REGISTRY_URL # optional, make sure it is configured as described
 ```
 
 Notes:
@@ -102,10 +102,6 @@ These values can be obtained from GitHub OAuth app page at https://github.com/se
 #### `enterprise-origin` (optional)
 
 Set this if you are using GitHub Enterprise. Example: `https://hostname`
-
-#### `url_prefix` (optional)
-
-If configured, it must match `YOUR_REGISTRY_URL`. See [GitHub Config](#GitHub-Config).
 
 ### Proxy Config
 
@@ -141,17 +137,11 @@ $ npx verdaccio-github-oauth-ui --registry http://localhost:4873
 
 #### Option B) Copy commands from the UI
 
-- Verdaccio 4:
+- Verdaccio 5:
 
 Open the "Register Info" dialog and klick "Copy to clipboard":
 
 ![](screenshots/register-info.png)
-
-- Verdaccio 3:
-
-Select the text in the header and copy it. (In case the text is too long, you can double-click it. The invisible part will still be selected and copied.)
-
-![](screenshots/header.png)
 
 - Run the copied commands on your terminal:
 

@@ -7,11 +7,14 @@ import {
   buildStatusPage,
 } from "../statusPage"
 
-const successPage = buildStatusPage(`
-  <h1>All done!</h1>
+const withBackButton = false
+
+const successPage = buildStatusPage(
+  `<h1>All done!</h1>
   <p>We've updated your npm configuration.</p>
-  <p><code>${getNpmConfigFile()}</code></p>
-`)
+  <p><code>${getNpmConfigFile()}</code></p>`,
+  withBackButton,
+)
 
 export function respondWithWebPage(
   status: string,
@@ -28,12 +31,12 @@ export function respondWithWebPage(
 
     case "denied":
       res.status(401)
-      res.send(buildAccessDeniedPage())
+      res.send(buildAccessDeniedPage(withBackButton))
       break
 
     default:
       res.status(500)
-      res.send(buildErrorPage(message))
+      res.send(buildErrorPage(message, withBackButton))
       break
   }
 }

@@ -3,20 +3,10 @@
 # https://github.com/verdaccio/verdaccio/tree/master/conf
 #
 
-# path to a directory with all packages
 storage: ./storage
-
-# path to a directory with plugins to include
 plugins: ./plugins
 
-web:
-  # WebUI is enabled as default, if you want disable it, just uncomment this line
-  title: Verdaccio
-
-# To use `npm audit` uncomment the following section
 middlewares:
-  audit:
-    enabled: true
   github-oauth-ui:
     enabled: true
 
@@ -38,11 +28,6 @@ security:
     sign:
       expiresIn: 7d
 
-# a list of other known repositories we can talk to
-uplinks:
-  npmjs:
-    url: https://registry.npmjs.org/
-
 packages:
   "@*/*":
     access: $authenticated
@@ -50,23 +35,6 @@ packages:
     proxy: npmjs
 
   "**":
-    # allow all users (including non-authenticated users) to read and
-    # publish all packages
-    #
-    # you can specify usernames/groupnames (depending on your auth plugin)
-    # and three keywords: "$all", "$anonymous", "$authenticated"
     access: $authenticated
-
-    # allow all known users to publish packages
-    # (anyone can register by default, remember?)
     publish: $authenticated
-
-    # if package is not available locally, proxy requests to 'npmjs' registry
     proxy: npmjs
-
-# log settings
-logs:
-  - { type: stdout, format: pretty, level: http }
-  #- {type: file, path: verdaccio.log, level: info}
-
-url_prefix: ""

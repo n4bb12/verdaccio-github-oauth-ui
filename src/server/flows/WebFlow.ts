@@ -1,16 +1,17 @@
 import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler, Request } from "express"
+import { getPublicUrl } from "verdaccio/build/lib/utils"
 
 import { logger } from "../../logger"
 import { getAuthorizePath, getCallbackPath } from "../../redirect"
 import { buildAccessDeniedPage, buildErrorPage } from "../../statusPage"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
-import { Verdaccio } from "../verdaccio"
+import { Config } from "../plugin/Config"
 
 export class WebFlow implements IPluginMiddleware<any> {
   constructor(
-    private readonly verdaccio: Verdaccio,
+    private readonly config: Config,
     private readonly core: AuthCore,
     private readonly provider: AuthProvider,
   ) {}
@@ -52,6 +53,8 @@ export class WebFlow implements IPluginMiddleware<any> {
    * automatically reversed by verdaccio before passing it to the plugin.
    */
   callback: Handler = async (req, res) => {
+    const withBackButton = true
+
     try {
       const code = this.provider.getCode(req)
       const token = await this.provider.getToken(code)
@@ -65,23 +68,20 @@ export class WebFlow implements IPluginMiddleware<any> {
 
         res.redirect(ui)
       } else {
-        res.status(401).send(buildAccessDeniedPage())
+        res.status(401).send(buildAccessDeniedPage(withBackButton))
       }
     } catch (error) {
       logger.error(error)
 
-      res.status(500).send(buildErrorPage(error))
+      res.status(500).send(buildErrorPage(error, withBackButton))
     }
   }
 
-  private getRequestOrigin(req: Request) {
-    const protocal = req.get("X-Forwarded-Proto") || req.protocol
-    return protocal + "://" + req.get("host")
-  }
-
   private getRedirectUrl(req: Request): string {
-    const baseUrl = this.verdaccio.baseUrl || this.getRequestOrigin(req)
+    const baseUrl = getPublicUrl(this.config.url_prefix, req).replace(/\/$/, "")
     const path = getCallbackPath(req.params.id)
-    return baseUrl + path
+    const redirectUrl = baseUrl + path
+
+    return redirectUrl
   }
 }
