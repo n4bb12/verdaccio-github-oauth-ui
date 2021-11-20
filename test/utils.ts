@@ -10,11 +10,14 @@ import { Verdaccio } from "src/server/verdaccio/Verdaccio"
 
 export const testOrg = "github/TEST_ORG"
 export const testTeam = "github/TEST_ORG/TEST_TEAM"
-export const testGroups = [
+export const testRepo = "github/TEST_ORG/repo/TEST_REPO"
+export const testProviderGroups = [
   testOrg,
-  "unrelated_org",
+  "another_org",
   testTeam,
-  `${testOrg}/unrelated_team`,
+  `${testOrg}/another_team`,
+  testRepo,
+  `${testOrg}/repo/another_repo`,
 ]
 export const testClientId = "TEST_CLIENT_ID"
 export const testClientSecret = "TEST_CLIENT_SECRET"
@@ -78,7 +81,7 @@ export function createTestAuthProvider() {
       return token === testOAuthToken ? testUsername : ""
     },
     async getGroups(token: string) {
-      return token === testOAuthToken ? testGroups : []
+      return token === testOAuthToken ? testProviderGroups : []
     },
   }
   return provider

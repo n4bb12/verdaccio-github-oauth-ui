@@ -32,10 +32,10 @@ This is a Verdaccio plugin that offers GitHub OAuth integragtion for both the br
 
 ### Features
 
-- Use the Verdaccio default login and logout button. The login button redirects you to GitHub. When you return, you are logged-in.
-- The default Verdaccio usage info is updated with working copy-to-clipboard for setup commands. 
-- The plugin ships with a small CLI for quick-and-easy npm configuration.
-- Use GitHub team names to configure fine-grained permissions.
+- The Verdaccio login button redirects you to GitHub. If you have access, you return as a logged-in user. Logout works, too.
+- The Verdaccio usage info is updated including copy-to-clipboard. 
+- Use the built-in command line tool for quick and easy npm configuration.
+- Use GitHub organizations, teams, or repositories to configure permissions.
 
 ### Compatibility
 
@@ -76,13 +76,24 @@ auth:
     org: GITHUB_ORG
     client-id: GITHUB_CLIENT_ID
     client-secret: GITHUB_CLIENT_SECRET
-    enterprise-origin: GITHUB_ENTERPRISE_ORIGIN # optional, if you are using github enterprise
 
-packages: # example package config, see https://verdaccio.org/docs/en/packages
-  foo:
-    access: $authenticated # example, limit actions to logged-in users (works in combination with other plugins such as htpasswd)
-    publish: github/GITHUB_ORG # example, limit actions to org members
-    unpublish: github/GITHUB_ORG/GITHUB_TEAM # example, limit actions to team members
+    # optional, if you are using github enterprise
+    enterprise-origin: GITHUB_ENTERPRISE_ORIGIN
+
+# example package config, see https://verdaccio.org/docs/en/packages
+packages:
+  fooA:
+    # example, limit actions to logged-in users (works in combination with other plugins such as htpasswd)
+    access: $authenticated
+
+    # example, limit actions to org members
+    publish: github/GITHUB_ORG 
+
+    # example, limit actions to team members
+    unpublish: github/GITHUB_ORG/GITHUB_TEAM 
+  bar:
+    # example, limit actions to repository members (including outside collaborators)
+    access: github/GITHUB_ORG/repo/GITHUB_REPO
 ```
 
 Notes:

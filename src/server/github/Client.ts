@@ -2,6 +2,7 @@ import got from "got"
 
 import { GitHubOAuth } from "./OAuth"
 import { GitHubOrganization } from "./Organization"
+import { GitHubRepo } from "./Repo"
 import { GitHubTeam } from "./Team"
 import { GitHubUser } from "./User"
 
@@ -81,7 +82,9 @@ export class GitHubClient {
   }
 
   /**
-   * get user teams using Github Graphql API
+   * `GET /user/teams`
+   *
+   * [List your teams](https://docs.github.com/en/rest/reference/teams#list-teams-for-the-authenticated-user)
    */
   requestUserTeams = async (accessToken: string): Promise<GitHubTeam[]> => {
     const url = this.apiBaseUrl + "/user/teams"
@@ -95,6 +98,28 @@ export class GitHubClient {
       return await got(url, options).json()
     } catch (error) {
       throw new Error("Failed requesting GitHub user teams: " + error.message)
+    }
+  }
+
+  /**
+   * `GET /user/repos`
+   *
+   * [List your repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-the-authenticated-user)
+   */
+  requestUserRepos = async (accessToken: string): Promise<GitHubRepo[]> => {
+    const url = this.apiBaseUrl + "/user/repos"
+    const options = {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    } as const
+
+    try {
+      return await got(url, options).json()
+    } catch (error) {
+      throw new Error(
+        "Failed requesting GitHub user repositories: " + error.message,
+      )
     }
   }
 }

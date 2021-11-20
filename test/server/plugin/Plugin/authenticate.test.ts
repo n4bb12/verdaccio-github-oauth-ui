@@ -37,9 +37,11 @@ describe("Plugin", () => {
           Array [
             "test-username",
             "github/TEST_ORG",
-            "unrelated_org",
+            "another_org",
             "github/TEST_ORG/TEST_TEAM",
-            "github/TEST_ORG/unrelated_team",
+            "github/TEST_ORG/another_team",
+            "github/TEST_ORG/repo/TEST_REPO",
+            "github/TEST_ORG/repo/another_repo",
           ]
         `)
         done()

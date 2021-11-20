@@ -1,9 +1,7 @@
 import {
   createTestAuthCore,
-  testGroups,
+  testProviderGroups,
   testOAuthToken,
-  testOrg,
-  testTeam,
   testUsername,
 } from "test/utils"
 
@@ -21,7 +19,7 @@ describe("AuthCore", () => {
       const url = await core.createUiCallbackUrl(
         testUsername,
         testOAuthToken,
-        testGroups,
+        testProviderGroups,
       )
 
       expect(url).toMatchInlineSnapshot(
