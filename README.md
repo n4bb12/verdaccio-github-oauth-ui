@@ -120,7 +120,7 @@ packages:
     # limit actions to team members
     unpublish: github/GITHUB_ORG/team/GITHUB_TEAM
   bar:
-    # limit actions to repository members (including outside collaborators)
+    # limit actions to repository members (does not work for outside collaborators)
     access: github/GITHUB_ORG/repo/GITHUB_REPO
 ```
 
