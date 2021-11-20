@@ -9,13 +9,16 @@ import { Plugin } from "src/server/plugin/Plugin"
 import { Verdaccio } from "src/server/verdaccio/Verdaccio"
 
 export const testOrg = "github/TEST_ORG"
-export const testTeam = "github/TEST_ORG/TEST_TEAM"
+export const testLegacyTeam = "github/TEST_ORG/TEST_LEGACY_TEAM"
+export const testTeam = "github/TEST_ORG/team/TEST_TEAM"
 export const testRepo = "github/TEST_ORG/repo/TEST_REPO"
 export const testProviderGroups = [
   testOrg,
   "another_org",
+  testLegacyTeam,
+  `${testOrg}/another_legacy_team`,
   testTeam,
-  `${testOrg}/another_team`,
+  `${testOrg}/team/another_team`,
   testRepo,
   `${testOrg}/repo/another_repo`,
 ]

@@ -90,7 +90,7 @@ packages:
     publish: github/GITHUB_ORG 
 
     # example, limit actions to team members
-    unpublish: github/GITHUB_ORG/GITHUB_TEAM 
+    unpublish: github/GITHUB_ORG/team/GITHUB_TEAM 
   bar:
     # example, limit actions to repository members (including outside collaborators)
     access: github/GITHUB_ORG/repo/GITHUB_REPO

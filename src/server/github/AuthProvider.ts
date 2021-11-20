@@ -65,13 +65,16 @@ export class GitHubAuthProvider implements AuthProvider {
     ])
 
     const orgGroups = orgs.map((org) => `github/${org.login}`)
-    const teamGroups = teams.map(
+    const legacyTeamGroups = teams.map(
       (team) => `github/${team.organization?.login}/${team.name}`,
+    )
+    const teamGroups = teams.map(
+      (team) => `github/${team.organization?.login}/team/${team.name}`,
     )
     const repoGroups = repos.map(
       (repo) => `github/${repo.owner?.login}/repo/${repo.name}`,
     )
 
-    return [...orgGroups, ...teamGroups, ...repoGroups]
+    return [...orgGroups, ...legacyTeamGroups, ...teamGroups, ...repoGroups]
   }
 }
