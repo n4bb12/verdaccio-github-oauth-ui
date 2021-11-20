@@ -5,19 +5,8 @@ const dialogUsageInfoSelector =
   "#registryInfo--dialog-container .MuiDialogContent-root .MuiTypography-root span"
 const randomClass = "Os1waV6BSoZQKfFwNlIwS"
 
-// copied from here as it needs to be the same behaviour
-// https://github.com/verdaccio/ui/blob/master/src/utils/cli-utils.ts
-function copyToClipboard(text: string) {
-  const node = document.createElement("div")
-  node.innerText = text
-  document.body.appendChild(node)
-  const range = document.createRange()
-  const selection = window.getSelection() as Selection
-  range.selectNodeContents(node)
-  selection.removeAllRanges()
-  selection.addRange(range)
-  document.execCommand("copy")
-  document.body.removeChild(node)
+async function copyToClipboard(text: string) {
+  await navigator.clipboard.writeText(text)
 }
 
 function modifyUsageInfoNodes(
@@ -27,8 +16,9 @@ function modifyUsageInfoNodes(
   const usageInfo = getUsageInfo()
   const loggedIn = isLoggedIn()
 
-  const infoElements: NodeListOf<HTMLSpanElement> =
-    document.querySelectorAll(selector)
+  const infoElements: NodeListOf<HTMLSpanElement> = document.querySelectorAll(
+    selector,
+  )
   const firstUsageInfoEl = Array.prototype.find.call(
     infoElements,
     findPredicate,
