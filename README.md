@@ -73,46 +73,58 @@ middlewares:
 
 auth:
   github-oauth-ui:
-    org: GITHUB_ORG
-    client-id: GITHUB_CLIENT_ID
-    client-secret: GITHUB_CLIENT_SECRET
-
-    # optional, if you are using github enterprise
-    enterprise-origin: GITHUB_ENTERPRISE_ORIGIN
-
-# example package config, see https://verdaccio.org/docs/en/packages
-packages:
-  fooA:
-    # example, limit actions to logged-in users (works in combination with other plugins such as htpasswd)
-    access: $authenticated
-
-    # example, limit actions to org members
-    publish: github/GITHUB_ORG 
-
-    # example, limit actions to team members
-    unpublish: github/GITHUB_ORG/team/GITHUB_TEAM 
-  bar:
-    # example, limit actions to repository members (including outside collaborators)
-    access: github/GITHUB_ORG/repo/GITHUB_REPO
+    org: GITHUB_ORG # (required)
+    client-id: GITHUB_CLIENT_ID # (required)
+    client-secret: GITHUB_CLIENT_SECRET # (required)
+    enterprise-origin: GITHUB_ENTERPRISE_ORIGIN # (optional)
 ```
 
-Notes:
+#### Notes
 
-- The configured plugin options can either be the actual value or the name of an environment variable that contains the value.
+- The plugin options can be actual values or the names of environment variables containing the values.
 - The plugin options can be specified under either the `middlewares` or the `auth` node.
-- Ensure the plugin name is included under both `middlewares` and `auth`.
+- The plugin name must be included under both `middlewares` and `auth` nodes.
 
-#### `org`
+#### `org` (required)
 
-Users within this org will be able to authenticate.
+Members of this org will be able to authenticate.
 
-#### `client-id` and `client-secret`
+#### `client-id` and `client-secret` (required)
 
 These values can be obtained from GitHub OAuth app page at https://github.com/settings/developers.
 
 #### `enterprise-origin` (optional)
 
-Set this if you are using GitHub Enterprise. Example: `https://hostname`
+Set this if you are using GitHub Enterprise. Example: `https://github.example.com`
+
+### Package Access
+
+The following groups are added during login and can be used to configure package permissions:
+
+- `$authenticated`
+- `github/GITHUB_ORG` for every GitHub org the user is a member of
+- `github/GITHUB_ORG/team/GITHUB_TEAM` for every GitHub team the user is a member of
+- `github/GITHUB_ORG/repo/GITHUB_REPO` for every GitHub repository the user has access to
+
+You can use these groups as shown below:
+
+```yml
+packages:
+  foo:
+    # limit actions to logged-in users (works in combination with other plugins such as htpasswd)
+    access: $authenticated
+
+    # limit actions to org members
+    publish: github/GITHUB_ORG
+
+    # limit actions to team members
+    unpublish: github/GITHUB_ORG/team/GITHUB_TEAM
+  bar:
+    # limit actions to repository members (including outside collaborators)
+    access: github/GITHUB_ORG/repo/GITHUB_REPO
+```
+
+See [Package Access](https://verdaccio.org/docs/en/packages) for more examples.
 
 ### Proxy Config
 
@@ -218,4 +230,8 @@ More info: https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/13#issueco
 
 ### "Your auth token is no longer valid. Please log in again."
 
-- If you're using a private GitHub org, the org memberships might not be public. If this is the case, your org members need `read:org` permission. They can request this during fist login by clicking the <kbd>Request</kbd> or <kbd>Grant</kbd> button when prompted to authorize Verdaccio with GitHub. If you or a team member accidentally skipped this step, go to https://github.com/settings/applications, find your Verdaccio registry and grant `read:org` access from there.
+If your GitHub org is private, the org membership visibility might be restrigted. If this is the case, your org members need to grant `read:org` permission during login.
+
+They can request this during fist login by clicking the <kbd>Request</kbd> or <kbd>Grant</kbd> button when prompted to authorize Verdaccio with GitHub.
+
+If you or a team member accidentally skipped this step, go to https://github.com/settings/applications, find your Verdaccio registry and grant `read:org` access from there.
