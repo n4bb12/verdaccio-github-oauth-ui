@@ -49,12 +49,12 @@ export class GitHubAuthProvider implements AuthProvider {
       this.clientId,
       this.clientSecret,
     )
-    return auth.access_token
+    return auth.authentication.token
   }
 
   async getUsername(token: string) {
     const user = await this.client.requestUser(token)
-    return user.login
+    return user.data.login
   }
 
   async getGroups(token: string) {

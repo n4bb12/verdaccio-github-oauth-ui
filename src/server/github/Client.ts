@@ -1,16 +1,26 @@
-import got from "got"
-
-import { GitHubOAuth } from "./OAuth"
-import { GitHubOrganization } from "./Organization"
-import { GitHubRepo } from "./Repo"
-import { GitHubTeam } from "./Team"
-import { GitHubUser } from "./User"
+import { exchangeWebFlowCode } from "@octokit/oauth-methods"
+import { request } from "@octokit/request"
+import { Octokit } from "octokit"
 
 export class GitHubClient {
   constructor(
     private readonly webBaseUrl: string,
     private readonly apiBaseUrl: string,
   ) {}
+
+  private createOktokit(accessToken: string) {
+    return new Octokit({ auth: accessToken, baseUrl: this.apiBaseUrl })
+  }
+
+  private async paginate(
+    accessToken: string,
+    getEndpoint: (oktokit: Octokit) => any,
+  ) {
+    const oktokit = this.createOktokit(accessToken)
+    const endpoint = getEndpoint(oktokit)
+
+    return await oktokit.paginate(endpoint, { per_page: 100 })
+  }
 
   /**a
    * `POST /login/oauth/access_token`
@@ -21,19 +31,17 @@ export class GitHubClient {
     code: string,
     clientId: string,
     clientSecret: string,
-  ): Promise<GitHubOAuth> => {
-    const url = this.webBaseUrl + "/login/oauth/access_token"
-    const options = {
-      method: "POST",
-      json: {
-        client_id: clientId,
-        client_secret: clientSecret,
-        code,
-      },
-    } as const
-
+  ) => {
     try {
-      return await got(url, options).json()
+      return await exchangeWebFlowCode({
+        clientType: "oauth-app",
+        clientId,
+        clientSecret,
+        code,
+        request: request.defaults({
+          baseUrl: this.webBaseUrl,
+        }),
+      })
     } catch (error) {
       throw new Error("Failed requesting GitHub access token: " + error.message)
     }
@@ -44,16 +52,10 @@ export class GitHubClient {
    *
    * [Get the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
    */
-  requestUser = async (accessToken: string): Promise<GitHubUser> => {
-    const url = this.apiBaseUrl + "/user"
-    const options = {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-    } as const
-
+  requestUser = async (accessToken: string) => {
     try {
-      return await got(url, options).json()
+      const oktokit = this.createOktokit(accessToken)
+      return await oktokit.rest.users.getAuthenticated()
     } catch (error) {
       throw new Error("Failed requesting GitHub user info: " + error.message)
     }
@@ -64,18 +66,12 @@ export class GitHubClient {
    *
    * [List your organizations](https://developer.github.com/v3/orgs/#list-your-organizations)
    */
-  requestUserOrgs = async (
-    accessToken: string,
-  ): Promise<GitHubOrganization[]> => {
-    const url = this.apiBaseUrl + "/user/orgs"
-    const options = {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-    } as const
-
+  requestUserOrgs = async (accessToken: string) => {
     try {
-      return await got(url, options).json()
+      return await this.paginate(
+        accessToken,
+        (oktokit) => oktokit.rest.orgs.listForAuthenticatedUser,
+      )
     } catch (error) {
       throw new Error("Failed requesting GitHub user orgs: " + error.message)
     }
@@ -86,16 +82,12 @@ export class GitHubClient {
    *
    * [List your teams](https://docs.github.com/en/rest/reference/teams#list-teams-for-the-authenticated-user)
    */
-  requestUserTeams = async (accessToken: string): Promise<GitHubTeam[]> => {
-    const url = this.apiBaseUrl + "/user/teams"
-    const options = {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-    } as const
-
+  requestUserTeams = async (accessToken: string) => {
     try {
-      return await got(url, options).json()
+      return await this.paginate(
+        accessToken,
+        (oktokit) => oktokit.rest.teams.listForAuthenticatedUser,
+      )
     } catch (error) {
       throw new Error("Failed requesting GitHub user teams: " + error.message)
     }
@@ -106,16 +98,12 @@ export class GitHubClient {
    *
    * [List your repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-the-authenticated-user)
    */
-  requestUserRepos = async (accessToken: string): Promise<GitHubRepo[]> => {
-    const url = this.apiBaseUrl + "/user/repos"
-    const options = {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-    } as const
-
+  requestUserRepos = async (accessToken: string) => {
     try {
-      return await got(url, options).json()
+      return await this.paginate(
+        accessToken,
+        (oktokit) => oktokit.rest.repos.listForAuthenticatedUser,
+      )
     } catch (error) {
       throw new Error(
         "Failed requesting GitHub user repositories: " + error.message,
