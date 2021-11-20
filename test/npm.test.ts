@@ -1,5 +1,5 @@
 import { getNpmConfigFile, getNpmSaveCommands, getRegistryUrl } from "src/npm"
-import { testBaseUrl, testNPMToken } from "test/utils"
+import { testBaseUrl, testNpmToken } from "test/utils"
 
 describe("npm", () => {
   const argv = process.argv
@@ -26,6 +26,6 @@ describe("npm", () => {
   })
 
   it("save commands match the snapshot", () => {
-    expect(getNpmSaveCommands(testBaseUrl, testNPMToken)).toMatchSnapshot()
+    expect(getNpmSaveCommands(testBaseUrl, testNpmToken)).toMatchSnapshot()
   })
 })

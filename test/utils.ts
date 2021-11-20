@@ -31,8 +31,8 @@ export const testOAuthCode = "test-code"
 export const testOAuthToken = "test-token"
 export const testMajorVersion = 4
 export const testBaseUrl = "http://localhost:4873"
-export const testUIToken = "test-ui-token"
-export const testNPMToken = "test-npm-token"
+export const testUiToken = "test-ui-token"
+export const testNpmToken = "test-npm-token"
 export const testErrorMessage = "expected-error"
 
 export function createTestPluginConfig(config?: Partial<PluginConfig>) {
@@ -61,8 +61,8 @@ export function createTestConfig(config?: Partial<PluginConfig>) {
 
 export function createTestVerdaccio(config?: Partial<PluginConfig>) {
   const verdaccio = new Verdaccio(createTestConfig(config))
-  verdaccio.issueUiToken = jest.fn(() => Promise.resolve(testUIToken))
-  verdaccio.issueNpmToken = jest.fn(() => Promise.resolve(testNPMToken))
+  verdaccio.issueUiToken = jest.fn(() => Promise.resolve(testUiToken))
+  verdaccio.issueNpmToken = jest.fn(() => Promise.resolve(testNpmToken))
   return verdaccio
 }
 

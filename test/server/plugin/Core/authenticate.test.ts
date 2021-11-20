@@ -10,24 +10,24 @@ describe("AuthCore", () => {
       core = createTestAuthCore()
     })
 
-    function expectTrue(groups: string[]) {
+    function expectAccessGranted(groups: string[]) {
       const result = core.authenticate(testUsername, groups)
       return expect(result).toBe(true)
     }
 
-    function expectFalse(groups: string[]) {
+    function expectAccessDenied(groups: string[]) {
       const result = core.authenticate(testUsername, groups)
       return expect(result).toBe(false)
     }
 
-    it("true", () => {
-      expectTrue([testOrg])
-      expectTrue(["A", testOrg])
+    it("should grant access", () => {
+      expectAccessGranted([testOrg])
+      expectAccessGranted(["invalid_org", testOrg])
     })
 
-    it("false", () => {
-      expectFalse([])
-      expectFalse(["A"])
+    it("should deny access", () => {
+      expectAccessDenied([])
+      expectAccessDenied(["invalid_org"])
     })
   })
 })
