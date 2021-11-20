@@ -45,7 +45,7 @@ export function createTestPluginConfig(config?: Partial<PluginConfig>) {
 }
 
 export function createTestConfig(config?: Partial<PluginConfig>) {
-  return ({
+  return {
     auth: {
       [pluginName]: createTestPluginConfig(),
     },
@@ -56,7 +56,7 @@ export function createTestConfig(config?: Partial<PluginConfig>) {
     },
     user_agent: "verdaccio/5.0.4",
     ...config,
-  } as any) as Config
+  } as any as Config
 }
 
 export function createTestVerdaccio(config?: Partial<PluginConfig>) {

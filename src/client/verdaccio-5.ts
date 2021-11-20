@@ -16,9 +16,8 @@ function modifyUsageInfoNodes(
   const usageInfo = getUsageInfo()
   const loggedIn = isLoggedIn()
 
-  const infoElements: NodeListOf<HTMLSpanElement> = document.querySelectorAll(
-    selector,
-  )
+  const infoElements: NodeListOf<HTMLSpanElement> =
+    document.querySelectorAll(selector)
   const firstUsageInfoEl = Array.prototype.find.call(
     infoElements,
     findPredicate,
