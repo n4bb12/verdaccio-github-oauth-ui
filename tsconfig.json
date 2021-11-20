@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "module": "es2015",
+    "module": "es2020",
     "moduleResolution": "node",
     "noEmit": true,
     "noImplicitAny": false,
-    "types": ["node"]
+    "types": ["node"],
+    "useUnknownInCatchVariables": false
   },
-  "extends": "@tsconfig/node10/tsconfig.json"
+  "extends": "@tsconfig/node14/tsconfig.json"
 }

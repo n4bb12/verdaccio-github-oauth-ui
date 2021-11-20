@@ -10,8 +10,8 @@ import { Plugin } from "src/server/plugin/Plugin"
 
 jest.mock("src/server/github/AuthProvider")
 
-const AuthProvider: GitHubAuthProvider &
-  jest.MockInstance<any, any> = GitHubAuthProvider as any
+const AuthProvider: GitHubAuthProvider & jest.MockInstance<any, any> =
+  GitHubAuthProvider as any
 
 describe("Plugin", () => {
   describe("authenticate", () => {
