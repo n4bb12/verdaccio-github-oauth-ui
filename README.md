@@ -28,13 +28,13 @@
 
 <img src="screenshots/authorize.png" align="right" width="270"/>
 
-This is a Verdaccio plugin that offers GitHub OAuth integragtion for both the browser and the command line.
+This is a Verdaccio plugin that offers GitHub OAuth integration for both the browser and the command line.
 
 ### Features
 
 - The Verdaccio login button redirects you to GitHub. If you have access, you return as a logged-in user. Logout works, too.
 - The Verdaccio usage info is updated including copy-to-clipboard. 
-- Use the built-in command line tool for quick and easy npm configuration.
+- Use the built-in command-line tool for quick and easy npm configuration.
 - Use GitHub organizations, teams, or repositories to configure permissions.
 
 ### Compatibility
@@ -91,7 +91,7 @@ Members of this org will be able to authenticate.
 
 #### `client-id` and `client-secret` (required)
 
-These values can be obtained from GitHub OAuth app page at https://github.com/settings/developers.
+These values can be obtained from the GitHub OAuth app page at https://github.com/settings/developers.
 
 #### `enterprise-origin` (optional)
 
@@ -128,7 +128,7 @@ See [Package Access](https://verdaccio.org/docs/en/packages) for more examples.
 
 ### Proxy Config
 
-If you are behind a proxy server, the plugin needs to know the proxy server in order to make GitHub requests.
+If you are behind a proxy server, the plugin needs to know the proxy server to make GitHub requests.
 
 Configure the below environment variable.
 
@@ -162,7 +162,7 @@ $ npx verdaccio-github-oauth-ui --registry http://localhost:4873
 
 - Verdaccio 5:
 
-Open the "Register Info" dialog and klick "Copy to clipboard":
+Open the "Register Info" dialog and click "Copy to clipboard":
 
 ![](screenshots/register-info.png)
 
@@ -214,8 +214,8 @@ If you have created the GitHub OAuth app, you can also revoke access for all use
 
 ### "Failed requesting GitHub user info"
 
-- Double-check your configured client id and client secret are correct.
-- If you are behind a proxy, make sure you are also passing through the query parameters to Verdaccio, see https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/47#issuecomment-643814163 for an nginx example.
+- Double-check that your configured client id and client secret are correct.
+- If you are behind a proxy, make sure you are also passing through the query parameters to Verdaccio, see https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/47#issuecomment-643814163 for an `nginx` example.
 
 ### Plugin not detected when installed globally
 
@@ -223,15 +223,15 @@ Verdaccio loads plugins by requiring them but global `node_modules` are NOT sear
 
 - If you are using npm, switch to yarn. yarn installs modules a bit differently, such that globally installed plugins are found.
 - Create a `package.json` and install verdaccio + plugins locally.
-- Add your global `node_modules` folder to the `NODE_PATH` environment variable to give node a hint to search for modules here, too.
+- Add your global `node_modules` folder to the `NODE_PATH` environment variable to give Node.js a hint to search for modules here, too.
 - Extend the official docker image. See this `docker.sh` and `Dockerfile` in this [example](https://gist.github.com/n4bb12/523e8347a580f596cbf14d0d791b5927).
 
 More info: https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/13#issuecomment-435296117
 
 ### "Your auth token is no longer valid. Please log in again."
 
-If your GitHub org is private, the org membership visibility might be restrigted. If this is the case, your org members need to grant `read:org` permission during login.
+If your GitHub org is private, the org membership visibility might be restricted. If this is the case, your org members need to grant `read:org` permission during login.
 
 They can request this during fist login by clicking the <kbd>Request</kbd> or <kbd>Grant</kbd> button when prompted to authorize Verdaccio with GitHub.
 
-If you or a team member accidentally skipped this step, go to https://github.com/settings/applications, find your Verdaccio registry and grant `read:org` access from there.
+If you or a team member accidentally skipped this step, go to https://github.com/settings/applications, find your Verdaccio registry, and grant `read:org` access from there.
