@@ -1,3 +1,4 @@
+import uniq from "lodash/uniq"
 import { stringify } from "querystring"
 
 import { logger } from "../../logger"
@@ -5,24 +6,44 @@ import { User, Verdaccio } from "../verdaccio"
 import { Config, getConfig } from "./Config"
 
 export class AuthCore {
-  private readonly requiredGroup = "github/" + getConfig(this.config, "org")
+  private readonly requiredOrg = "github/" + getConfig(this.config, "org")
+  private readonly configuredGroups = this.getConfiguredGroups()
 
   constructor(
     private readonly verdaccio: Verdaccio,
     private readonly config: Config,
   ) {}
 
+  /**
+   * Returns all permission groups used in the Verdacio config.
+   */
+  getConfiguredGroups() {
+    const groups: Record<string, true> = {}
+    Object.values(this.config.packages).forEach((packageConfig) => {
+      Object.values(packageConfig).forEach((value) => {
+        const group = process.env[value] || value
+        groups[group] = true
+      })
+    })
+    return groups
+  }
+
   async createAuthenticatedUser(
     username: string,
     groups: string[],
   ): Promise<User> {
+    const relevantGroups = groups.filter(
+      (group) => group in this.configuredGroups,
+    )
+
     // See https://verdaccio.org/docs/en/packages
     const user: User = {
       name: username,
       groups: ["$all", "@all", "$authenticated", "@authenticated"],
-      real_groups: [username, ...groups],
+      real_groups: uniq([username, this.requiredOrg, ...relevantGroups]),
     }
     logger.log("Created authenticated user", user)
+
     return user
   }
 
@@ -43,9 +64,9 @@ export class AuthCore {
   }
 
   authenticate(username: string, groups: string[]): boolean {
-    if (!groups.includes(this.requiredGroup)) {
+    if (!groups.includes(this.requiredOrg)) {
       logger.error(
-        `Access denied: User "${username}" is not a member of  "${this.requiredGroup}"`,
+        `Access denied: User "${username}" is not a member of  "${this.requiredOrg}"`,
       )
       return false
     }

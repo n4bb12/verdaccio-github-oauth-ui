@@ -32,13 +32,9 @@ describe("AuthCore", () => {
           "real_groups": Array [
             "test-username",
             "github/TEST_ORG",
-            "another_org",
             "github/TEST_ORG/TEST_LEGACY_TEAM",
-            "github/TEST_ORG/another_legacy_team",
             "github/TEST_ORG/team/TEST_TEAM",
-            "github/TEST_ORG/team/another_team",
             "github/TEST_ORG/repo/TEST_REPO",
-            "github/TEST_ORG/repo/another_repo",
           ],
         }
       `)

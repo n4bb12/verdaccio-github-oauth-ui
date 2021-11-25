@@ -54,6 +54,12 @@ export function createTestConfig(config?: Partial<PluginConfig>) {
         enabled: true,
       },
     },
+    packages: {
+      a: { access: testOrg },
+      b: { access: testLegacyTeam },
+      c: { access: testTeam },
+      d: { access: testRepo },
+    },
     user_agent: "verdaccio/5.0.4",
     ...config,
   } as any as Config
