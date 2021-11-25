@@ -34,7 +34,7 @@ export class GitHubAuthProvider implements AuthProvider {
     const queryParams = stringify({
       client_id: this.clientId,
       redirect_uri: callbackUrl,
-      scope: "read:org",
+      scope: "read:org,repo",
     })
     return this.webBaseUrl + `/login/oauth/authorize?` + queryParams
   }
