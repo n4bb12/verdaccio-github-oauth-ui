@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/package",
   "name": "verdaccio-github-oauth-ui",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "keywords": [
     "github",
     "login",
