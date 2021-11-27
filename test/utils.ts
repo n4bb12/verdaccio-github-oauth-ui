@@ -44,7 +44,7 @@ export function createTestPluginConfig(config?: Partial<PluginConfig>) {
   }
 }
 
-export function createTestConfig(config?: Partial<PluginConfig>) {
+export function createTestConfig(config?: Partial<Config>) {
   return {
     auth: {
       [pluginName]: createTestPluginConfig(),
@@ -65,7 +65,7 @@ export function createTestConfig(config?: Partial<PluginConfig>) {
   } as Config
 }
 
-export function createTestVerdaccio(config?: Partial<PluginConfig>) {
+export function createTestVerdaccio(config?: Partial<Config>) {
   const verdaccio = new Verdaccio(createTestConfig(config))
   verdaccio.issueUiToken = jest.fn(() => Promise.resolve(testUiToken))
   verdaccio.issueNpmToken = jest.fn(() => Promise.resolve(testNpmToken))
@@ -96,11 +96,11 @@ export function createTestAuthProvider() {
   return provider
 }
 
-export function createTestAuthCore(config?: Partial<PluginConfig>) {
+export function createTestAuthCore(config?: Partial<Config>) {
   return new AuthCore(createTestVerdaccio(config), createTestConfig(config))
 }
 
-export function createTestPlugin(config?: Partial<PluginConfig>) {
+export function createTestPlugin(config?: Partial<Config>) {
   return new Plugin(createTestConfig(config))
 }
 
