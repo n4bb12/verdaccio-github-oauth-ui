@@ -1,8 +1,8 @@
 import { Config as IncorrectVerdaccioConfig } from "@verdaccio/types"
 import chalk from "chalk"
-import { get } from "lodash"
-
-import { pluginName } from "../../constants"
+import get from "lodash/get"
+import ow from "ow"
+import { pluginName, publicGitHubOrigin } from "../../constants"
 import { logger } from "../../logger"
 
 //
@@ -42,8 +42,7 @@ export interface Config extends VerdaccioConfig, PluginConfig {
 
 export function getConfig(config: Config, key: PluginConfigKey): string {
   const value =
-    null ||
-    get(config, `middlewares[${pluginName}][${key}]`) ||
+    get(config, `middlewares[${pluginName}][${key}]`) ??
     get(config, `auth[${pluginName}][${key}]`)
 
   return process.env[value] || value
@@ -60,20 +59,22 @@ export function getMajorVersion(config: VerdaccioConfig) {
 // Validation
 //
 
-function ensurePropExists(config: Config, key: PluginConfigKey) {
+function validateProp(config: Config, key: PluginConfigKey, predicate: any) {
   const value = getConfig(config, key)
 
-  if (!value) {
+  try {
+    ow(value, predicate)
+  } catch (error) {
     logger.error(
       chalk.red(
-        `[${pluginName}] ERR: Missing configuration "auth.${pluginName}.${key}"`,
+        `[${pluginName}] ERR: Invalid configuration at "auth.${pluginName}.${key}": ${error.message}`,
       ),
     )
     throw new Error("Please check your verdaccio config.")
   }
 }
 
-function ensureNodeIsNotEmpty(config: Config, node: keyof Config) {
+function ensureObjectNotEmpty(config: Config, node: keyof Config) {
   const path = `[${node}][${pluginName}]`
   const obj = get(config, path, {})
 
@@ -89,10 +90,22 @@ export function validateConfig(config: Config) {
     throw new Error("This plugin requires verdaccio 5 or above")
   }
 
-  ensureNodeIsNotEmpty(config, "auth")
-  ensureNodeIsNotEmpty(config, "middlewares")
+  ensureObjectNotEmpty(config, "auth")
+  ensureObjectNotEmpty(config, "middlewares")
 
-  ensurePropExists(config, "org")
-  ensurePropExists(config, "client-id")
-  ensurePropExists(config, "client-secret")
+  validateProp(config, "client-id", ow.string.nonEmpty)
+  validateProp(config, "client-secret", ow.string.nonEmpty)
+  validateProp(
+    config,
+    "org",
+    ow.string.nonEmpty.not.startsWith(publicGitHubOrigin),
+  )
+  validateProp(
+    config,
+    "enterprise-origin",
+    ow.any(
+      ow.undefined,
+      ow.string.url.nonEmpty.not.startsWith(publicGitHubOrigin),
+    ),
+  )
 }

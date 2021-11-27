@@ -54,6 +54,7 @@
     "minimist": "^1.2.0",
     "octokit": "^1.7.0",
     "open": "^8.0.7",
+    "ow": "^0.28.1",
     "query-string": "^7.0.0"
   },
   "devDependencies": {

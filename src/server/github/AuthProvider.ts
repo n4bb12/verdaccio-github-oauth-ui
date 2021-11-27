@@ -1,6 +1,6 @@
 import { Request } from "express"
 import { stringify } from "querystring"
-
+import { publicGitHubApiOrigin, publicGitHubOrigin } from "../../constants"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { Config, getConfig } from "../plugin/Config"
 import { GitHubClient } from "./Client"
@@ -15,13 +15,13 @@ export class GitHubAuthProvider implements AuthProvider {
   private readonly client = new GitHubClient(this.webBaseUrl, this.apiBaseUrl)
 
   get webBaseUrl(): string {
-    return this.enterpriseOrigin || "https://github.com"
+    return this.enterpriseOrigin || publicGitHubOrigin
   }
 
   get apiBaseUrl(): string {
     return this.enterpriseOrigin
       ? this.enterpriseOrigin.replace(/\/?$/, "") + "/api/v3"
-      : "https://api.github.com"
+      : publicGitHubApiOrigin
   }
 
   constructor(private readonly config: Config) {}
