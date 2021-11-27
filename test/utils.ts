@@ -62,7 +62,7 @@ export function createTestConfig(config?: Partial<PluginConfig>) {
     },
     user_agent: "verdaccio/5.0.4",
     ...config,
-  } as any as Config
+  } as Config
 }
 
 export function createTestVerdaccio(config?: Partial<PluginConfig>) {
