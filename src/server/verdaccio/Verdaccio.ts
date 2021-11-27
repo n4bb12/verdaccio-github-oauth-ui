@@ -1,6 +1,5 @@
 import { JWTSignOptions } from "@verdaccio/types"
-import { merge } from "lodash"
-
+import merge from "lodash/merge"
 import { getMajorVersion, VerdaccioConfig } from "../plugin/Config"
 import { Auth, User } from "../verdaccio"
 
