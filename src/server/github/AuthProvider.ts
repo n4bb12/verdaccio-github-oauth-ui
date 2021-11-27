@@ -78,7 +78,8 @@ export class GitHubAuthProvider implements AuthProvider {
   }
 
   async getGroups(token: string) {
-    const [orgs, teams, repos] = await Promise.all([
+    const [username, orgs, teams, repos] = await Promise.all([
+      this.getUsername(token),
       this.client.requestUserOrgs(token),
       this.client.requestUserTeams(token),
       this.client.requestUserRepos(token),
@@ -103,6 +104,7 @@ export class GitHubAuthProvider implements AuthProvider {
       ...orgGroups,
       ...teamGroups,
       ...repoGroups,
+      userGroup,
       ...legacyOrgGroups,
       ...legacyTeamGroups,
     ]

@@ -14,6 +14,8 @@ export const testLoginOrgGroup = `github/owner/${testLoginOrgName}`
 export const testOrgGroup = `github/owner/TEST_ORG`
 export const testTeamGroup = `${testOrgGroup}/team/TEST_TEAM`
 export const testRepoGroup = `${testOrgGroup}/repo/TEST_REPO`
+export const testUserName = "TEST_USER"
+export const testUserGroup = `github/owner/${testUserName}`
 export const testLegacyOrgGroup = "github/TEST_LEGACY_ORG"
 export const testLegacyTeamGroup = "github/TEST_LEGACY_ORG/TEST_LEGACY_TEAM"
 
@@ -30,6 +32,7 @@ export const testProviderGroups = [
   testOrgGroup,
   testTeamGroup,
   testRepoGroup,
+  testUserGroup,
   // legacy groups
   testLegacyOrgGroup,
   testLegacyTeamGroup,

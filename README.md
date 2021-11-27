@@ -102,6 +102,7 @@ Set this if you are using GitHub Enterprise. Example: `https://github.example.co
 The following groups are added during login and can be used to configure package permissions:
 
 - `$authenticated`
+- `github/owner/GITHUB_USER` for the user's personal GitHub account
 - `github/owner/GITHUB_ORG` for every GitHub org the user is a member of
 - `github/owner/GITHUB_ORG/team/GITHUB_TEAM` for every GitHub team the user is a member of
 - `github/owner/GITHUB_ORG/repo/GITHUB_REPO` for every GitHub repository the user has access to
