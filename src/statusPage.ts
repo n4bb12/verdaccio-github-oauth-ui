@@ -57,7 +57,7 @@ export function buildErrorPage(error: any, withBackButton: boolean) {
 export function buildAccessDeniedPage(withBackButton: boolean) {
   return buildStatusPage(
     `<h1>Access Denied</h1>
-    <p>You are not a member of the required org/team.</p>`,
+    <p>You are not a member of the required access group.</p>`,
     withBackButton,
   )
 }
