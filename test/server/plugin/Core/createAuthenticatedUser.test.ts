@@ -51,12 +51,15 @@ describe("AuthCore", () => {
         },
       })
 
-      const user = await core.createAuthenticatedUser(username, providerGroups)
+      const user = await core.createAuthenticatedUser(
+        testUsername,
+        providerGroups,
+      )
 
       expect(user.real_groups).toMatchInlineSnapshot(`
         Array [
+          "github/owner/test-org",
           "test-username",
-          "github/test-org",
         ]
       `)
     })

@@ -102,9 +102,14 @@ Set this if you are using GitHub Enterprise. Example: `https://github.example.co
 The following groups are added during login and can be used to configure package permissions:
 
 - `$authenticated`
+- `github/owner/GITHUB_ORG` for every GitHub org the user is a member of
+- `github/owner/GITHUB_ORG/team/GITHUB_TEAM` for every GitHub team the user is a member of
+- `github/owner/GITHUB_ORG/repo/GITHUB_REPO` for every GitHub repository the user has access to
+
+These groups are deprecated but still work:
+
 - `github/GITHUB_ORG` for every GitHub org the user is a member of
-- `github/GITHUB_ORG/team/GITHUB_TEAM` for every GitHub team the user is a member of
-- `github/GITHUB_ORG/repo/GITHUB_REPO` for every GitHub repository the user has access to
+- `github/GITHUB_ORG/GITHUB_TEAM` for every GitHub team the user is a member of
 
 You can use these groups as shown below:
 
@@ -115,13 +120,13 @@ packages:
     access: $authenticated
 
     # limit actions to org members
-    publish: github/GITHUB_ORG
+    publish: github/owner/GITHUB_ORG
 
     # limit actions to team members
-    unpublish: github/GITHUB_ORG/team/GITHUB_TEAM
+    unpublish: github/owner/GITHUB_ORG/team/GITHUB_TEAM
   bar:
     # limit actions to repository members (does not work for outside collaborators)
-    access: github/GITHUB_ORG/repo/GITHUB_REPO
+    access: github/owner/GITHUB_ORG/repo/GITHUB_REPO
 ```
 
 See [Package Access](https://verdaccio.org/docs/en/packages) for more examples.

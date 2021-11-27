@@ -57,6 +57,26 @@ export class GitHubAuthProvider implements AuthProvider {
     return user.data.login
   }
 
+  createOwnerGroup(orgName: string) {
+    return `${this.getId()}/owner/${orgName}`
+  }
+
+  createTeamGroup(orgName: string, teamName: string) {
+    return `${this.createOwnerGroup(orgName)}/team/${teamName}`
+  }
+
+  createRepoGroup(ownerName: string, repoName: string) {
+    return `${this.createOwnerGroup(ownerName)}/repo/${repoName}`
+  }
+
+  createLegacyOrgGroup(orgName: string) {
+    return `${this.getId()}/${orgName}`
+  }
+
+  createLegacyTeamGroup(orgName: string, teamName: string) {
+    return `${this.createLegacyOrgGroup(orgName)}/team/${teamName}`
+  }
+
   async getGroups(token: string) {
     const [orgs, teams, repos] = await Promise.all([
       this.client.requestUserOrgs(token),
@@ -64,17 +84,27 @@ export class GitHubAuthProvider implements AuthProvider {
       this.client.requestUserRepos(token),
     ])
 
-    const orgGroups = orgs.map((org) => `github/${org.login}`)
-    const legacyTeamGroups = teams.map(
-      (team) => `github/${team.organization?.login}/${team.name}`,
+    const orgGroups = orgs.map((org) => this.createOwnerGroup(org.login))
+    const teamGroups = teams.map((team) =>
+      this.createTeamGroup(team.organization?.login, team.name),
     )
-    const teamGroups = teams.map(
-      (team) => `github/${team.organization?.login}/team/${team.name}`,
+    const repoGroups = repos.map((repo) =>
+      this.createRepoGroup(repo.owner.login, repo.name),
     )
-    const repoGroups = repos.map(
-      (repo) => `github/${repo.owner?.login}/repo/${repo.name}`,
+    const userGroup = this.createOwnerGroup(username)
+    const legacyOrgGroups = orgs.map((org) =>
+      this.createLegacyOrgGroup(org.login),
+    )
+    const legacyTeamGroups = teams.map((team) =>
+      this.createLegacyTeamGroup(team.organization.login, team.name),
     )
 
-    return [...orgGroups, ...legacyTeamGroups, ...teamGroups, ...repoGroups]
+    return [
+      ...orgGroups,
+      ...teamGroups,
+      ...repoGroups,
+      ...legacyOrgGroups,
+      ...legacyTeamGroups,
+    ]
   }
 }

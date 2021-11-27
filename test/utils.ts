@@ -9,20 +9,39 @@ import { Verdaccio } from "src/server/verdaccio/Verdaccio"
 import timekeeper from "timekeeper"
 import Auth from "verdaccio/build/lib/auth"
 
-export const testOrg = "github/TEST_ORG"
-export const testLegacyTeam = "github/TEST_ORG/TEST_LEGACY_TEAM"
-export const testTeam = "github/TEST_ORG/team/TEST_TEAM"
-export const testRepo = "github/TEST_ORG/repo/TEST_REPO"
+export const testLoginOrgName = "TEST_LOGIN_ORG"
+export const testLoginOrgGroup = `github/owner/${testLoginOrgName}`
+export const testOrgGroup = `github/owner/TEST_ORG`
+export const testTeamGroup = `${testOrgGroup}/team/TEST_TEAM`
+export const testRepoGroup = `${testOrgGroup}/repo/TEST_REPO`
+export const testLegacyOrgGroup = "github/TEST_LEGACY_ORG"
+export const testLegacyTeamGroup = "github/TEST_LEGACY_ORG/TEST_LEGACY_TEAM"
+
+export const unrelatedOrgGroup = "github/owner/another_org"
+export const unrelatedTeamGroup = `${unrelatedOrgGroup}/team/another_team`
+export const unrelatedRepoGroup = `${unrelatedOrgGroup}/repo/another_repo`
+export const unrelatedLegacyOrgGroup = "github/another_legacy_org"
+export const unrelatedLegacyTeamGroup =
+  "github/another_legacy_org/another_legacy_team"
+
 export const testProviderGroups = [
-  testOrg,
-  "another_org",
-  testLegacyTeam,
-  `${testOrg}/another_legacy_team`,
-  testTeam,
-  `${testOrg}/team/another_team`,
-  testRepo,
-  `${testOrg}/repo/another_repo`,
+  // regular groups
+  testLoginOrgGroup,
+  testOrgGroup,
+  testTeamGroup,
+  testRepoGroup,
+  // legacy groups
+  testLegacyOrgGroup,
+  testLegacyTeamGroup,
+  // unrelated regular groups
+  unrelatedOrgGroup,
+  unrelatedTeamGroup,
+  unrelatedRepoGroup,
+  // unrelated legacy groups
+  unrelatedLegacyOrgGroup,
+  unrelatedLegacyTeamGroup,
 ]
+
 export const testClientId = "TEST_CLIENT_ID"
 export const testClientSecret = "TEST_CLIENT_SECRET"
 export const testUsername = "test-username"
