@@ -1,12 +1,11 @@
+import { GitHubAuthProvider } from "src/server/github/AuthProvider"
+import { Plugin } from "src/server/plugin/Plugin"
 import {
   createTestAuthProvider,
   createTestPlugin,
   testOAuthToken,
   testUsername,
 } from "test/utils"
-
-import { GitHubAuthProvider } from "src/server/github/AuthProvider"
-import { Plugin } from "src/server/plugin/Plugin"
 
 jest.mock("src/server/github/AuthProvider")
 

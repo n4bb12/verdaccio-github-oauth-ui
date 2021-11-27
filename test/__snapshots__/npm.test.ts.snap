@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`npm save commands match the snapshot 1`] = `
-Array [
-  "npm config set //localhost:4873/:always-auth true",
-  "npm config set //localhost:4873/:_authToken \\"test-npm-token\\"",
-]
-`;

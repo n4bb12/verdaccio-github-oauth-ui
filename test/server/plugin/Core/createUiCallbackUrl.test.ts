@@ -1,11 +1,10 @@
+import { AuthCore } from "src/server/plugin/AuthCore"
 import {
   createTestAuthCore,
-  testProviderGroups,
   testOAuthToken,
+  testProviderGroups,
   testUsername,
 } from "test/utils"
-
-import { AuthCore } from "src/server/plugin/AuthCore"
 
 describe("AuthCore", () => {
   describe("createUiCallbackUrl", () => {

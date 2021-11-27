@@ -26,6 +26,12 @@ describe("npm", () => {
   })
 
   it("save commands match the snapshot", () => {
-    expect(getNpmSaveCommands(testBaseUrl, testNpmToken)).toMatchSnapshot()
+    expect(getNpmSaveCommands(testBaseUrl, testNpmToken))
+      .toMatchInlineSnapshot(`
+      Array [
+        "npm config set //localhost:4873/:always-auth true",
+        "npm config set //localhost:4873/:_authToken \\"test-npm-token\\"",
+      ]
+    `)
   })
 })
