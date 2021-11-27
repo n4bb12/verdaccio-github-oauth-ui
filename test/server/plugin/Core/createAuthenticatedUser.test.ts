@@ -7,7 +7,7 @@ import {
 
 describe("AuthCore", () => {
   describe("createAuthenticatedUser", () => {
-    it("the user contains the correct name", async () => {
+    it("the name is correct", async () => {
       const username = "test-username"
       const core = createTestAuthCore()
 
@@ -19,7 +19,7 @@ describe("AuthCore", () => {
       expect(user.name).toMatchInlineSnapshot(`"test-username"`)
     })
 
-    it("authenticated user groups contain the correct tokens", async () => {
+    it("groups contain the correct tokens", async () => {
       const core = createTestAuthCore()
 
       const user = await core.createAuthenticatedUser(
@@ -49,7 +49,6 @@ describe("AuthCore", () => {
             "client-secret": "_",
           },
         },
-        packages: {},
       })
 
       const user = await core.createAuthenticatedUser(username, providerGroups)
@@ -62,7 +61,7 @@ describe("AuthCore", () => {
       `)
     })
 
-    it("authenticated user real_groups contain groups used in the package access and publish config, but nothing else", async () => {
+    it("real_groups contain groups used in the package access and publish config, but nothing else", async () => {
       const username = "test-username"
       const providerGroups = ["a", "b", "c", "d", "e", "f", "g"]
       const core = createTestAuthCore({

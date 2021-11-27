@@ -1,25 +1,28 @@
+import { delay } from "lodash"
 import { AuthProvider } from "src/server/plugin/AuthProvider"
 import { Cache } from "src/server/plugin/Cache"
 import {
   createTestAuthProvider,
-  delay,
   testErrorMessage,
   testOAuthToken,
 } from "test/utils"
+import timekeeper from "timekeeper"
 
 describe("Cache", () => {
   describe("getGroups", () => {
-    const cacheTTLms = 20
+    const cacheTTLms = 200
     let provider: AuthProvider
     let cache: Cache
 
-    function configureProvider(getGroups: (token: string) => string[]) {
+    function configureSucceedingProvider(
+      getGroups: (token: string) => string[],
+    ) {
       provider = createTestAuthProvider()
       provider.getGroups = jest.fn((token) => Promise.resolve(getGroups(token)))
       cache = new Cache(provider, cacheTTLms)
     }
 
-    function configureErrorProvider() {
+    function configureFailingProvider() {
       provider = createTestAuthProvider()
       jest
         .spyOn(provider, "getGroups")
@@ -28,16 +31,17 @@ describe("Cache", () => {
     }
 
     it("fetches groups from the provider", async () => {
-      configureProvider(() => ["bread"])
+      const expectedGroups = ["some-group"]
+      configureSucceedingProvider(() => expectedGroups)
 
       const groups = await cache.getGroups(testOAuthToken)
 
       expect(provider.getGroups).toHaveBeenCalledWith(testOAuthToken)
-      expect(groups).toEqual(["bread"])
+      expect(groups).toEqual(expectedGroups)
     })
 
     it("caches groups", async () => {
-      configureProvider(() => [])
+      configureSucceedingProvider(() => [])
 
       await cache.getGroups(testOAuthToken)
       await cache.getGroups(testOAuthToken)
@@ -46,38 +50,52 @@ describe("Cache", () => {
     })
 
     it("invalidates cached groups after its ttl passed", async () => {
-      configureProvider(() => [])
+      configureSucceedingProvider(() => [])
+
+      const timeFirstCall = new Date("2021-11-27T00:00:00.000Z")
+      timekeeper.freeze(timeFirstCall)
 
       await cache.getGroups(testOAuthToken)
-      await delay(cacheTTLms * 2) // ensure it's not flaky
+
+      // multiply by 1.5 to avoid flake
+      const timeSecondCall = new Date(
+        `2021-11-27T00:00:00.${cacheTTLms * 1.5}Z`,
+      )
+      timekeeper.travel(timeSecondCall)
+
       await cache.getGroups(testOAuthToken)
+
+      timekeeper.reset()
 
       expect(provider.getGroups).toHaveBeenCalledTimes(2)
     })
 
     it("automatically extends the cache ttl on access", async () => {
-      configureProvider(() => [])
+      configureSucceedingProvider(() => [])
 
-      await cache.getGroups(testOAuthToken)
-      for (let i = 0; i < 3; i++) {
-        await delay(cacheTTLms / 2)
+      timekeeper.freeze(new Date())
+
+      for (let i = 0; i < 5; i++) {
+        const time = new Date(`2021-11-27T00:00:00.${cacheTTLms * 0.5 * i}Z`)
+        timekeeper.travel(time)
         await cache.getGroups(testOAuthToken)
       }
+
+      timekeeper.reset()
 
       expect(provider.getGroups).toHaveBeenCalledTimes(1)
     })
 
     it("returns empty groups when an error occurs", async () => {
-      configureErrorProvider()
+      configureFailingProvider()
 
       const groups = await cache.getGroups(testOAuthToken)
 
-      expect(provider.getGroups).toHaveBeenCalledTimes(1)
       expect(groups).toEqual([])
     })
 
     it("distinguishes between different tokens", async () => {
-      configureProvider((token) => [token])
+      configureSucceedingProvider((token) => [token])
 
       const aGroups = await cache.getGroups("goat")
       const bGroups = await cache.getGroups("cheese")

@@ -1,5 +1,7 @@
 import { getNpmConfigFile, getNpmSaveCommands, getRegistryUrl } from "src/npm"
-import { testBaseUrl, testNpmToken } from "test/utils"
+
+export const testRegistryBaseUrl = "http://localhost:4873"
+export const testNpmToken = "test-npm-token"
 
 describe("npm", () => {
   const argv = process.argv
@@ -12,11 +14,11 @@ describe("npm", () => {
   it("uses the correct registry", () => {
     process.argv = argv
     const first = getRegistryUrl()
-    process.argv = [...argv, "--registry", testBaseUrl]
+    process.argv = [...argv, "--registry", testRegistryBaseUrl]
     const second = getRegistryUrl()
 
     expect(first).toBeTruthy()
-    expect(second).toBe(testBaseUrl)
+    expect(second).toBe(testRegistryBaseUrl)
     expect(first).not.toBe(second)
   })
 
@@ -26,7 +28,15 @@ describe("npm", () => {
   })
 
   it("save commands match the snapshot", () => {
-    expect(getNpmSaveCommands(testBaseUrl, testNpmToken))
+    expect(getNpmSaveCommands(testRegistryBaseUrl, testNpmToken))
+      .toMatchInlineSnapshot(`
+      Array [
+        "npm config set //localhost:4873/:always-auth true",
+        "npm config set //localhost:4873/:_authToken \\"test-npm-token\\"",
+      ]
+    `)
+
+    expect(getNpmSaveCommands(testRegistryBaseUrl + "/", testNpmToken))
       .toMatchInlineSnapshot(`
       Array [
         "npm config set //localhost:4873/:always-auth true",

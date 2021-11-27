@@ -1,54 +1,46 @@
 import { pluginName } from "src/constants"
-import { validateConfig } from "src/server/plugin/Config"
-import { createTestPluginConfig } from "test/utils"
-import { createTestConfig } from "../../../utils"
+import { Config, PluginConfig, validateConfig } from "src/server/plugin/Config"
+import { createTestPluginConfig, testUserAgent } from "test/utils"
 
 describe("Config", () => {
   describe("validateConfig", () => {
-    function shouldSucceed(config: any) {
-      config.user_agent = createTestConfig().user_agent
+    const pluginConfig = createTestPluginConfig()
+    const enabledPluginNode = { enabled: true } as any as PluginConfig
+
+    function shouldSucceed(config: Config) {
       validateConfig(config)
     }
 
     it("accepts an empty 'auth' node as long as it is enabled", () => {
       shouldSucceed({
-        auth: {
-          [pluginName]: { enabled: true },
-        },
-        middlewares: {
-          [pluginName]: createTestPluginConfig(),
-        },
+        auth: { [pluginName]: enabledPluginNode },
+        middlewares: { [pluginName]: pluginConfig },
+        user_agent: testUserAgent,
       })
     })
 
     it("accepts an empty 'middlewares' node as long as it is enabled", () => {
       shouldSucceed({
-        auth: {
-          [pluginName]: createTestPluginConfig(),
-        },
-        middlewares: {
-          [pluginName]: { enabled: true },
-        },
+        auth: { [pluginName]: pluginConfig },
+        middlewares: { [pluginName]: enabledPluginNode },
+        user_agent: testUserAgent,
       })
     })
 
     it("treats 'enterprise-origin' as optional", () => {
       shouldSucceed({
         auth: {
-          [pluginName]: {
-            ...createTestPluginConfig(),
-            ["'enterprise-origin'"]: null,
-          },
+          [pluginName]: { ...pluginConfig, "enterprise-origin": undefined },
         },
         middlewares: {
-          [pluginName]: { enabled: true },
+          [pluginName]: enabledPluginNode,
         },
+        user_agent: testUserAgent,
       })
     })
 
     function shouldFail(config: any) {
       try {
-        config.user_agent = createTestConfig().user_agent
         validateConfig(config)
         fail()
       } catch (error) {
@@ -56,55 +48,61 @@ describe("Config", () => {
       }
     }
 
+    it("throws an error if the major version is below 5", () => {
+      shouldFail({
+        auth: { [pluginName]: pluginConfig },
+        middlewares: { [pluginName]: enabledPluginNode },
+        user_agent: "verdaccio/4.3.2",
+      })
+    })
+
     it("throws an error if 'auth' node is not enabled", () => {
       shouldFail({
-        middlewares: {
-          [pluginName]: createTestPluginConfig(),
-        },
+        middlewares: { [pluginName]: pluginConfig },
+        user_agent: testUserAgent,
       })
     })
 
     it("throws an error if 'middlewares' node is not enabled", () => {
       shouldFail({
-        auth: {
-          [pluginName]: createTestPluginConfig(),
-        },
-      })
-    })
-
-    it("throws an error if 'org' is missing", () => {
-      shouldFail({
-        auth: {
-          [pluginName]: { ...createTestPluginConfig(), ["org"]: null },
-        },
-        middlewares: {
-          [pluginName]: { enabled: true },
-        },
+        auth: { [pluginName]: pluginConfig },
+        user_agent: testUserAgent,
       })
     })
 
     it("throws an error if 'client-id' is missing", () => {
       shouldFail({
         auth: {
-          [pluginName]: { ...createTestPluginConfig(), ["client-id"]: null },
+          [pluginName]: { ...pluginConfig, ["client-id"]: undefined },
         },
         middlewares: {
           [pluginName]: { enabled: true },
         },
+        user_agent: testUserAgent,
       })
     })
 
     it("throws an error if 'client-secret' is missing", () => {
       shouldFail({
         auth: {
-          [pluginName]: {
-            ...createTestPluginConfig(),
-            ["client-secret"]: null,
-          },
+          [pluginName]: { ...pluginConfig, ["client-secret"]: undefined },
         },
         middlewares: {
           [pluginName]: { enabled: true },
         },
+        user_agent: testUserAgent,
+      })
+    })
+
+    it("throws an error if 'org' is missing", () => {
+      shouldFail({
+        auth: {
+          [pluginName]: { ...pluginConfig, ["org"]: undefined },
+        },
+        middlewares: {
+          [pluginName]: { enabled: true },
+        },
+        user_agent: testUserAgent,
       })
     })
   })

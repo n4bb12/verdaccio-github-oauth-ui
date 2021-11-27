@@ -7,7 +7,8 @@ describe("Verdaccio", () => {
     }
 
     it("correctly parses the user agent", () => {
-      expect(withConfig({ user_agent: "verdaccio/5.0.4" })).toBe(5)
+      expect(withConfig({ user_agent: "verdaccio/4.3.2" })).toBe(4)
+      expect(withConfig({ user_agent: "verdaccio/5.4.3" })).toBe(5)
     })
   })
 })

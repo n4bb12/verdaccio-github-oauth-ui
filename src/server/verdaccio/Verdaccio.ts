@@ -36,12 +36,13 @@ export class Verdaccio {
 
   constructor(private readonly config: VerdaccioConfig) {}
 
-  setAuth(auth: Auth) {
+  setAuth(auth: Auth): Verdaccio {
     this.auth = auth
+    return this
   }
 
   async issueNpmToken(token: string, user: User) {
-    const jwtSignOptions = this.config.security?.api?.jwt?.sign
+    const jwtSignOptions = this.security?.api?.jwt?.sign
 
     if (jwtSignOptions) {
       return this.issueVerdaccio4PlusJWT(user, jwtSignOptions)
