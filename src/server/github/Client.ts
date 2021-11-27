@@ -12,16 +12,6 @@ export class GitHubClient {
     return new Octokit({ auth: accessToken, baseUrl: this.apiBaseUrl })
   }
 
-  private async paginate(
-    accessToken: string,
-    getEndpoint: (oktokit: Octokit) => any,
-  ) {
-    const oktokit = this.createOktokit(accessToken)
-    const endpoint = getEndpoint(oktokit)
-
-    return await oktokit.paginate(endpoint, { per_page: 100 })
-  }
-
   /**a
    * `POST /login/oauth/access_token`
    *
@@ -68,9 +58,10 @@ export class GitHubClient {
    */
   requestUserOrgs = async (accessToken: string) => {
     try {
-      return await this.paginate(
-        accessToken,
-        (oktokit) => oktokit.rest.orgs.listForAuthenticatedUser,
+      const oktokit = this.createOktokit(accessToken)
+      return await oktokit.paginate(
+        oktokit.rest.orgs.listForAuthenticatedUser,
+        { per_page: 100 },
       )
     } catch (error) {
       throw new Error("Failed requesting GitHub user orgs: " + error.message)
@@ -84,9 +75,10 @@ export class GitHubClient {
    */
   requestUserTeams = async (accessToken: string) => {
     try {
-      return await this.paginate(
-        accessToken,
-        (oktokit) => oktokit.rest.teams.listForAuthenticatedUser,
+      const oktokit = this.createOktokit(accessToken)
+      return await oktokit.paginate(
+        oktokit.rest.teams.listForAuthenticatedUser,
+        { per_page: 100 },
       )
     } catch (error) {
       throw new Error("Failed requesting GitHub user teams: " + error.message)
@@ -100,9 +92,10 @@ export class GitHubClient {
    */
   requestUserRepos = async (accessToken: string) => {
     try {
-      return await this.paginate(
-        accessToken,
-        (oktokit) => oktokit.rest.repos.listForAuthenticatedUser,
+      const oktokit = this.createOktokit(accessToken)
+      return await oktokit.paginate(
+        oktokit.rest.repos.listForAuthenticatedUser,
+        { per_page: 100 },
       )
     } catch (error) {
       throw new Error(
