@@ -18,21 +18,24 @@ export class AuthCore {
    * Returns all permission groups used in the Verdacio config.
    */
   getConfiguredGroups() {
-    const groups: Record<string, true> = {}
-    Object.values(this.config.packages).forEach((packageConfig) => {
-      Object.values(packageConfig).forEach((value) => {
-        const group = process.env[value] || value
-        groups[group] = true
-      })
+    const configuredGroups: Record<string, true> = {}
+    Object.values(this.config.packages || {}).forEach((packageConfig) => {
+      ;["access", "publish"]
+        .map((key) => packageConfig[key])
+        .filter(Boolean)
+        .forEach((value) => {
+          const group = process.env[value] || value
+          configuredGroups[group] = true
+        })
     })
-    return groups
+    return configuredGroups
   }
 
   async createAuthenticatedUser(
     username: string,
-    groups: string[],
+    providerGroups: string[],
   ): Promise<User> {
-    const relevantGroups = groups.filter(
+    const relevantGroups = providerGroups.filter(
       (group) => group in this.configuredGroups,
     )
 
