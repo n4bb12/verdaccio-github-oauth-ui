@@ -21,10 +21,26 @@ describe("Plugin", () => {
       plugin = createTestPlugin()
     })
 
-    it("user with invalid token cannot authenticate", (done) => {
-      plugin.authenticate(testUsername, "invalid token", (err, groups) => {
+    it("user with empty username cannot authenticate", (done) => {
+      plugin.authenticate("", testOAuthToken, (err, groups) => {
         expect(err).toBeNull()
-        expect(groups).toEqual(false)
+        expect(groups).toBe(false)
+        done()
+      })
+    })
+
+    it("user with empty token cannot authenticate", (done) => {
+      plugin.authenticate(testUsername, "", (err, groups) => {
+        expect(err).toBeNull()
+        expect(groups).toBe(false)
+        done()
+      })
+    })
+
+    it("user with invalid token throws error", (done) => {
+      plugin.authenticate(testUsername, "invalid_token", (err, groups) => {
+        expect(err).toBeTruthy()
+        expect(groups).toBeFalsy()
         done()
       })
     })

@@ -1,12 +1,13 @@
 import uniq from "lodash/uniq"
 import { stringify } from "querystring"
-
+import { authenticatedUserGroups } from "../../constants"
 import { logger } from "../../logger"
 import { User, Verdaccio } from "../verdaccio"
 import { Config, getConfig } from "./Config"
 
 export class AuthCore {
-  private readonly requiredOrg = "github/" + getConfig(this.config, "org")
+  private readonly org = getConfig(this.config, "org")
+  private readonly requiredGroup = this.org ? "github/owner/" + this.org : null
   private readonly configuredGroups = this.getConfiguredGroups()
 
   constructor(
@@ -32,17 +33,22 @@ export class AuthCore {
 
   async createAuthenticatedUser(
     username: string,
-    providerGroups: string[],
+    groups: string[],
   ): Promise<User> {
-    const relevantGroups = providerGroups.filter(
+    const relevantGroups = groups.filter(
       (group) => group in this.configuredGroups,
     )
 
-    // See https://verdaccio.org/docs/en/packages
+    relevantGroups.push(username)
+
+    if (this.requiredGroup) {
+      relevantGroups.push(this.requiredGroup)
+    }
+
     const user: User = {
       name: username,
-      groups: ["$all", "@all", "$authenticated", "@authenticated"],
-      real_groups: uniq([username, this.requiredOrg, ...relevantGroups]),
+      groups: [...authenticatedUserGroups],
+      real_groups: uniq(relevantGroups.filter(Boolean).sort()),
     }
     logger.log("Created authenticated user", user)
 
@@ -66,10 +72,15 @@ export class AuthCore {
   }
 
   authenticate(username: string, groups: string[]): boolean {
-    if (!groups.includes(this.requiredOrg)) {
+    if (this.requiredGroup && !groups.includes(this.requiredGroup)) {
       logger.error(
-        `Access denied: User "${username}" is not a member of  "${this.requiredOrg}"`,
+        `Access denied: User "${username}" is not a member of "${this.requiredGroup}"`,
       )
+      return false
+    }
+
+    if (!groups.length) {
+      logger.error(`Access denied: User "${username}" does not have any groups`)
       return false
     }
 

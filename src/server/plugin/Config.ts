@@ -23,10 +23,10 @@ export type VerdaccioConfig = Omit<IncorrectVerdaccioConfig, "packages"> & {
 }
 
 export interface PluginConfig {
-  org: string
   "client-id": string
   "client-secret": string
-  "enterprise-origin"?: string
+  org: string | false
+  "enterprise-origin"?: string | false
 }
 
 export type PluginConfigKey = keyof PluginConfig
@@ -98,7 +98,10 @@ export function validateConfig(config: Config) {
   validateProp(
     config,
     "org",
-    ow.string.nonEmpty.not.startsWith(publicGitHubOrigin),
+    ow.any(
+      ow.string.nonEmpty.not.startsWith(publicGitHubOrigin),
+      ow.boolean.false,
+    ),
   )
   validateProp(
     config,
@@ -106,6 +109,7 @@ export function validateConfig(config: Config) {
     ow.any(
       ow.undefined,
       ow.string.url.nonEmpty.not.startsWith(publicGitHubOrigin),
+      ow.boolean.false,
     ),
   )
 }

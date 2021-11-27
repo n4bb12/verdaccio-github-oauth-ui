@@ -105,5 +105,17 @@ describe("Config", () => {
         user_agent: testUserAgent,
       })
     })
+
+    it("throws an error if 'org' is true", () => {
+      shouldFail({
+        auth: {
+          [pluginName]: { ...pluginConfig, ["org"]: true },
+        },
+        middlewares: {
+          [pluginName]: { enabled: true },
+        },
+        user_agent: testUserAgent,
+      })
+    })
   })
 })

@@ -10,3 +10,13 @@ export const cliAuthorizeUrl = "/oauth/authorize"
 
 export const publicGitHubOrigin = "https://github.com"
 export const publicGitHubApiOrigin = "https://api.github.com"
+
+/**
+ * See https://verdaccio.org/docs/en/packages
+ */
+export const authenticatedUserGroups = [
+  "$all",
+  "@all",
+  "$authenticated",
+  "@authenticated",
+] as const

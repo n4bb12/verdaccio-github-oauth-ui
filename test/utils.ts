@@ -33,13 +33,16 @@ export const testProviderGroups = [
   testTeamGroup,
   testRepoGroup,
   testUserGroup,
+
   // legacy groups
   testLegacyOrgGroup,
   testLegacyTeamGroup,
+
   // unrelated regular groups
   unrelatedOrgGroup,
   unrelatedTeamGroup,
   unrelatedRepoGroup,
+
   // unrelated legacy groups
   unrelatedLegacyOrgGroup,
   unrelatedLegacyTeamGroup,
@@ -64,9 +67,9 @@ export function createTestPluginConfig(
   config?: Partial<PluginConfig>,
 ): PluginConfig {
   return {
-    org: "TEST_ORG",
     "client-id": testClientId,
     "client-secret": testClientSecret,
+    org: false,
     ...config,
   }
 }

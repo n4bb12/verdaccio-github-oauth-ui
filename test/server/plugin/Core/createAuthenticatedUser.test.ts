@@ -37,8 +37,21 @@ describe("AuthCore", () => {
       `)
     })
 
-    it("authenticated user real_groups always contain the username and required org", async () => {
+    it("real_groups always contain the username", async () => {
       const username = "test-username"
+      const providerGroups = []
+      const core = createTestAuthCore()
+
+      const user = await core.createAuthenticatedUser(username, providerGroups)
+
+      expect(user.real_groups).toMatchInlineSnapshot(`
+        Array [
+          "test-username",
+        ]
+      `)
+    })
+
+    it("real_groups contains the required login org if configured", async () => {
       const org = "test-org"
       const providerGroups = []
       const core = createTestAuthCore({
@@ -90,14 +103,13 @@ describe("AuthCore", () => {
 
       expect(user.real_groups).toMatchInlineSnapshot(`
         Array [
-          "test-username",
-          "github/TEST_ORG",
           "a",
           "b",
           "c",
           "d",
           "e",
           "f",
+          "test-username",
         ]
       `)
     })

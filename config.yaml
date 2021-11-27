@@ -12,10 +12,10 @@ middlewares:
 
 auth:
   github-oauth-ui:
-    org: GITHUB_ORG # required, people within this org will be able to authenticate
-    client-id: GITHUB_CLIENT_ID # required
-    client-secret: GITHUB_CLIENT_SECRET # required
-    # enterprise-origin: GITHUB_ENTERPRISE_ORIGIN # optional, set this if you are using github enterprise
+    client-id: GITHUB_CLIENT_ID
+    client-secret: GITHUB_CLIENT_SECRET
+    org: false
+    enterprise-origin: false
   htpasswd:
     file: ./htpasswd
 
@@ -30,9 +30,11 @@ security:
 
 packages:
   "@*/*":
-    access: $authenticated
-    publish: $authenticated
+    access: github/owner/n4bb12-oauth-testing
+    publish: github/owner/n4bb12-oauth-testing
+    unpublish: github/owner/n4bb12-oauth-testing
 
   "**":
-    access: $authenticated
-    publish: $authenticated
+    access: github/owner/n4bb12-oauth-testing
+    publish: github/owner/n4bb12-oauth-testing
+    unpublish: github/owner/n4bb12-oauth-testing

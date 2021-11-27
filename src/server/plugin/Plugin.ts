@@ -1,4 +1,11 @@
-import { AuthCallback, IPluginAuth, IPluginMiddleware } from "@verdaccio/types"
+import {
+  AllowAccess,
+  AuthAccessCallback,
+  AuthCallback,
+  IPluginAuth,
+  IPluginMiddleware,
+  RemoteUser,
+} from "@verdaccio/types"
 import { Application } from "express"
 
 import { CliFlow, WebFlow } from "../flows"
@@ -6,7 +13,7 @@ import { GitHubAuthProvider } from "../github"
 import { Auth, Verdaccio } from "../verdaccio"
 import { AuthCore } from "./AuthCore"
 import { Cache } from "./Cache"
-import { Config, validateConfig } from "./Config"
+import { Config, PackageAccess, validateConfig } from "./Config"
 import { PatchHtml } from "./PatchHtml"
 import { registerGlobalProxyAgent } from "./ProxyAgent"
 import { ServeStatic } from "./ServeStatic"
@@ -46,7 +53,11 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   /**
    * IPluginAuth
    */
-  async authenticate(username: string, token: string, callback: AuthCallback) {
+  async authenticate(
+    username: string,
+    token: string,
+    callback: AuthCallback,
+  ): Promise<void> {
     try {
       if (!username || !token) {
         callback(null, false)
@@ -65,6 +76,56 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
       callback(null, false)
     } catch (error) {
       callback(error, false)
+    }
+  }
+
+  /**
+   * IPluginAuth
+   */
+  allow_access(
+    user: RemoteUser,
+    config: AllowAccess & PackageAccess,
+    callback: AuthAccessCallback,
+  ): void {
+    if (config.access) {
+      const grant = config.access.some((group) => user.groups.includes(group))
+      callback(null, grant)
+    } else {
+      callback(null, true)
+    }
+  }
+
+  /**
+   * IPluginAuth
+   */
+  allow_publish(
+    user: RemoteUser,
+    config: AllowAccess & PackageAccess,
+    callback: AuthAccessCallback,
+  ): void {
+    if (config.publish) {
+      const grant = config.publish.some((group) => user.groups.includes(group))
+      callback(null, grant)
+    } else {
+      this.allow_access(user, config, callback)
+    }
+  }
+
+  /**
+   * IPluginAuth
+   */
+  allow_unpublish(
+    user: RemoteUser,
+    config: AllowAccess & PackageAccess,
+    callback: AuthAccessCallback,
+  ): void {
+    if (config.unpublish) {
+      const grant = config.unpublish.some((group) =>
+        user.groups.includes(group),
+      )
+      callback(null, grant)
+    } else {
+      this.allow_publish(user, config, callback)
     }
   }
 }
