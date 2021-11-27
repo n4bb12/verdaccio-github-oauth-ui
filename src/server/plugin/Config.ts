@@ -1,4 +1,7 @@
-import { Config as IncorrectVerdaccioConfig } from "@verdaccio/types"
+import {
+  Config as IncorrectVerdaccioConfig,
+  PackageAccess as IncorrectVerdaccioPackageAccess,
+} from "@verdaccio/types"
 import chalk from "chalk"
 import get from "lodash/get"
 import ow from "ow"
@@ -11,15 +14,12 @@ import { logger } from "../../logger"
 
 // Verdaccio incorrectly types some of these as string arrays
 // although they are all strings.
-export interface PackageAccess {
-  storage?: string
-  publish?: string
-  proxy?: string
-  access?: string
+export interface PackageAccess extends IncorrectVerdaccioPackageAccess {
+  unpublish?: string[]
 }
 
 export type VerdaccioConfig = Omit<IncorrectVerdaccioConfig, "packages"> & {
-  packages: Record<string, PackageAccess>
+  packages?: Record<string, PackageAccess>
 }
 
 export interface PluginConfig {
@@ -31,7 +31,7 @@ export interface PluginConfig {
 
 export type PluginConfigKey = keyof PluginConfig
 
-export interface Config extends VerdaccioConfig, PluginConfig {
+export interface Config extends VerdaccioConfig {
   middlewares: { [pluginName]: PluginConfig }
   auth: { [pluginName]: PluginConfig }
 }

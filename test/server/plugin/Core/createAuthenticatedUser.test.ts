@@ -64,19 +64,21 @@ describe("AuthCore", () => {
 
     it("authenticated user real_groups contain groups used in the package access and publish config, but nothing else", async () => {
       const username = "test-username"
-      const providerGroups = ["a", "b", "c", "d", "e"]
+      const providerGroups = ["a", "b", "c", "d", "e", "f", "g"]
       const core = createTestAuthCore({
         packages: {
           foo: {
-            publish: "a",
-            access: "b",
-            proxy: "_",
+            access: ["a"],
+            publish: ["b"],
+            unpublish: ["c"],
+            proxy: ["_"],
             storage: "_",
           },
           bar: {
-            publish: "c",
-            access: "d",
-            proxy: "_",
+            access: ["d"],
+            publish: ["e"],
+            unpublish: ["f"],
+            proxy: ["_"],
             storage: "_",
           },
         },
@@ -92,6 +94,8 @@ describe("AuthCore", () => {
           "b",
           "c",
           "d",
+          "e",
+          "f",
         ]
       `)
     })

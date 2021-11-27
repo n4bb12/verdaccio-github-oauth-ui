@@ -20,11 +20,10 @@ export class AuthCore {
   getConfiguredGroups() {
     const configuredGroups: Record<string, true> = {}
     Object.values(this.config.packages || {}).forEach((packageConfig) => {
-      ;["access", "publish"]
-        .map((key) => packageConfig[key])
+      ;["access", "publish", "unpublish"]
+        .flatMap((key) => packageConfig[key])
         .filter(Boolean)
-        .forEach((value) => {
-          const group = process.env[value] || value
+        .forEach((group: string) => {
           configuredGroups[group] = true
         })
     })
