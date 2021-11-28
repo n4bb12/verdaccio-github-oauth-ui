@@ -14,13 +14,7 @@
     <img alt="License" src="https://flat.badgen.net/github/license/n4bb12/verdaccio-github-oauth-ui?icon=github">
   </a>
   <a href="https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/new/choose">
-    <img alt="Issues" src="https://flat.badgen.net/badge/github/create issue/pink?icon=github">
-  </a>
-  <a href="https://circleci.com/gh/n4bb12/workflows/verdaccio-github-oauth-ui">
-    <img alt="CircleCI" src="https://flat.badgen.net/circleci/github/n4bb12/verdaccio-github-oauth-ui/master?icon=circleci">
-  </a>
-  <a href="https://david-dm.org/n4bb12/verdaccio-github-oauth-ui">
-    <img alt="Dependencies" src="https://flat.badgen.net/david/dep/n4bb12/verdaccio-github-oauth-ui?icon=npm">
+    <img alt="Issues" src="https://flat.badgen.net/badge/github/Create Issue/blue?icon=github">
   </a>
 </p>
 
