@@ -12,6 +12,8 @@ export class GitHubAuthProvider implements AuthProvider {
     this.config,
     "enterprise-origin",
   )
+  private readonly repositoryAccess =
+    getConfig(this.config, "repository-access") ?? true
   private readonly client = new GitHubClient(this.webBaseUrl, this.apiBaseUrl)
 
   get webBaseUrl(): string {
@@ -34,7 +36,7 @@ export class GitHubAuthProvider implements AuthProvider {
     const queryParams = stringify({
       client_id: this.clientId,
       redirect_uri: callbackUrl,
-      scope: "read:org,repo",
+      scope: this.repositoryAccess ? "read:org,repo" : "read:org",
     })
     return this.webBaseUrl + `/login/oauth/authorize?` + queryParams
   }
@@ -82,7 +84,9 @@ export class GitHubAuthProvider implements AuthProvider {
       this.getUsername(token),
       this.client.requestUserOrgs(token),
       this.client.requestUserTeams(token),
-      this.client.requestUserRepos(token),
+      this.repositoryAccess
+        ? this.client.requestUserRepos(token)
+        : Promise.resolve([]),
     ])
 
     const orgGroups = orgs.map((org) => this.createOwnerGroup(org.login))

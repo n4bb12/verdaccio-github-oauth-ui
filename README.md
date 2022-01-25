@@ -72,6 +72,7 @@ auth:
     client-secret: GITHUB_CLIENT_SECRET
     org: GITHUB_ORG
     enterprise-origin: GITHUB_ENTERPRISE_ORIGIN # (if you are using an enterprise instance)
+    repository-access: true # (set to false if not restricting by repositories)
 ```
 
 #### Using environment variables

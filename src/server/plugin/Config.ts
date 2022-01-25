@@ -27,6 +27,7 @@ export interface PluginConfig {
   "client-secret": string
   org: string | false
   "enterprise-origin"?: string | false
+  "repository-access"?: boolean
 }
 
 export type PluginConfigKey = keyof PluginConfig
@@ -40,12 +41,20 @@ export interface Config extends VerdaccioConfig {
 // Access
 //
 
-export function getConfig(config: Config, key: PluginConfigKey): string {
+export function getConfig<K extends PluginConfigKey>(
+  config: Config,
+  key: K,
+): PluginConfig[K] {
   const value =
-    get(config, `middlewares[${pluginName}][${key}]`) ??
-    get(config, `auth[${pluginName}][${key}]`)
+    get(config, ["middlewares", pluginName, key]) ??
+    get(config, ["auth", pluginName, key])
 
-  return process.env[value] || value
+  if (typeof value === "string") {
+    // @ts-ignore
+    return process.env[value] || value
+  } else {
+    return value
+  }
 }
 
 /**
@@ -112,4 +121,5 @@ export function validateConfig(config: Config) {
       ow.boolean.false,
     ),
   )
+  validateProp(config, "repository-access", ow.optional.boolean)
 }
