@@ -28,7 +28,7 @@ function getSecurity(config: VerdaccioConfig) {
  * Abstract Verdaccio version differences and usage of all Verdaccio objects.
  */
 export class Verdaccio {
-  readonly majorVersion = getMajorVersion(this.config)
+  readonly majorVersion = getMajorVersion()
   readonly security = getSecurity(this.config)
 
   private auth!: Auth
