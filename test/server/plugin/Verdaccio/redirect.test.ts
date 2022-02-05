@@ -1,4 +1,5 @@
 import { getAuthorizePath, getCallbackPath } from "src/redirect"
+import { describe, expect, it } from "vitest"
 
 describe("redirect", () => {
   it("getAuthorizePath", () => {

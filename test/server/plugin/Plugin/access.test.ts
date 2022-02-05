@@ -1,5 +1,4 @@
 import { AllowAccess, RemoteUser } from "@verdaccio/types"
-import { GitHubAuthProvider } from "src/server/github/AuthProvider"
 import { PackageAccess } from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
 import {
@@ -8,11 +7,13 @@ import {
   createTestPlugin,
   createTestUser,
 } from "test/utils"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
-jest.mock("src/server/github/AuthProvider")
-
-const AuthProvider: GitHubAuthProvider & jest.MockInstance<any, any> =
-  GitHubAuthProvider as any
+vi.mock("src/server/github/AuthProvider", () => ({
+  GitHubAuthProvider: vi
+    .fn()
+    .mockImplementation(() => createTestAuthProvider()),
+}))
 
 describe("Plugin", () => {
   describe("allow_access", () => {
@@ -22,7 +23,6 @@ describe("Plugin", () => {
 
     describe("allow_access", () => {
       beforeEach(() => {
-        AuthProvider.mockImplementation(() => createTestAuthProvider())
         plugin = createTestPlugin()
       })
 
@@ -62,7 +62,6 @@ describe("Plugin", () => {
 
     describe("allow_publish", () => {
       beforeEach(() => {
-        AuthProvider.mockImplementation(() => createTestAuthProvider())
         plugin = createTestPlugin()
       })
 
@@ -113,7 +112,6 @@ describe("Plugin", () => {
 
     describe("allow_unpublish", () => {
       beforeEach(() => {
-        AuthProvider.mockImplementation(() => createTestAuthProvider())
         plugin = createTestPlugin()
       })
 

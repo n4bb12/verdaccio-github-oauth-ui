@@ -1,4 +1,3 @@
-import { GitHubAuthProvider } from "src/server/github/AuthProvider"
 import { Plugin } from "src/server/plugin/Plugin"
 import {
   createTestAuthProvider,
@@ -6,18 +5,19 @@ import {
   testOAuthToken,
   testUsername,
 } from "test/utils"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
-jest.mock("src/server/github/AuthProvider")
-
-const AuthProvider: GitHubAuthProvider & jest.MockInstance<any, any> =
-  GitHubAuthProvider as any
+vi.mock("src/server/github/AuthProvider", () => ({
+  GitHubAuthProvider: vi
+    .fn()
+    .mockImplementation(() => createTestAuthProvider()),
+}))
 
 describe("Plugin", () => {
   describe("authenticate", () => {
     let plugin: Plugin
 
     beforeEach(() => {
-      AuthProvider.mockImplementation(() => createTestAuthProvider())
       plugin = createTestPlugin()
     })
 

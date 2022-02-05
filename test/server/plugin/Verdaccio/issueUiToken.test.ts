@@ -5,6 +5,7 @@ import {
   freezeTimeDuringTests,
   testUser,
 } from "test/utils"
+import { describe, expect, it } from "vitest"
 
 describe("Verdaccio", () => {
   describe("issueUiToken", () => {

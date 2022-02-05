@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "noEmit": true,
     "noImplicitAny": false,
+    "esModuleInterop": true,
     "types": ["node"],
     "useUnknownInCatchVariables": false
   },

@@ -4,6 +4,7 @@ import {
   ParsedPluginConfig,
   PluginConfig,
 } from "src/server/plugin/Config"
+import { describe, expect, it } from "vitest"
 
 describe("Config", () => {
   describe("ParsedPluginConfig", () => {
@@ -76,23 +77,23 @@ describe("Config", () => {
         ParsedPluginConfig {
           "clientId": "clientId",
           "clientSecret": "clientSecret",
-          "config": Object {
-            "auth": Object {
-              "github-oauth-ui": Object {
+          "config": {
+            "auth": {
+              "github-oauth-ui": {
                 "client-id": "clientId",
                 "client-secret": "clientSecret",
                 "org": false,
               },
             },
-            "middlewares": Object {
-              "github-oauth-ui": Object {
+            "middlewares": {
+              "github-oauth-ui": {
                 "enabled": true,
               },
             },
           },
           "enterpriseOrigin": false,
           "org": false,
-          "packages": Object {},
+          "packages": {},
           "repositoryAccess": true,
           "url_prefix": "",
         }

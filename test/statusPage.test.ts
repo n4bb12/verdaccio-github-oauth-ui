@@ -3,7 +3,7 @@ import {
   buildErrorPage,
   buildStatusPage,
 } from "src/statusPage"
-
+import { describe, expect, it } from "vitest"
 import { testErrorMessage } from "./utils"
 
 describe("Shared", () => {

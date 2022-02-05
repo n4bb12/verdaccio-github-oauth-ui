@@ -6,6 +6,7 @@ import {
   testOAuthToken,
   testUser,
 } from "test/utils"
+import { describe, expect, it } from "vitest"
 
 describe("Verdaccio", () => {
   describe("issueNpmToken", () => {

@@ -4,6 +4,7 @@ import {
   testProviderGroups,
   testUsername,
 } from "test/utils"
+import { describe, expect, it } from "vitest"
 
 describe("AuthCore", () => {
   describe("createAuthenticatedUser", () => {
@@ -28,10 +29,10 @@ describe("AuthCore", () => {
       )
 
       expect(user.groups).toMatchInlineSnapshot(`
-        Array [
-          "$all",
+        [
+          "\$all",
           "@all",
-          "$authenticated",
+          "\$authenticated",
           "@authenticated",
         ]
       `)
@@ -45,7 +46,7 @@ describe("AuthCore", () => {
       const user = await core.createAuthenticatedUser(username, providerGroups)
 
       expect(user.real_groups).toMatchInlineSnapshot(`
-        Array [
+        [
           "test-username",
         ]
       `)
@@ -70,7 +71,7 @@ describe("AuthCore", () => {
       )
 
       expect(user.real_groups).toMatchInlineSnapshot(`
-        Array [
+        [
           "github/owner/test-org",
           "test-username",
         ]
@@ -102,7 +103,7 @@ describe("AuthCore", () => {
       const user = await core.createAuthenticatedUser(username, providerGroups)
 
       expect(user.real_groups).toMatchInlineSnapshot(`
-        Array [
+        [
           "a",
           "b",
           "c",
