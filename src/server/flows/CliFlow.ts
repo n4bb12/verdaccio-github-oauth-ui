@@ -8,7 +8,6 @@ import { getCallbackPath } from "../../redirect"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { Verdaccio } from "../verdaccio"
-import { getConfig } from "../plugin/Config"
 
 const pluginCallbackeUrl = getCallbackPath(cliProviderId)
 

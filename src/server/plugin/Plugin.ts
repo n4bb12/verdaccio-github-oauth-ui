@@ -7,13 +7,12 @@ import {
   RemoteUser,
 } from "@verdaccio/types"
 import { Application } from "express"
-
 import { CliFlow, WebFlow } from "../flows"
 import { GitHubAuthProvider } from "../github"
 import { Auth, Verdaccio } from "../verdaccio"
 import { AuthCore } from "./AuthCore"
 import { Cache } from "./Cache"
-import { Config, PackageAccess, validateConfig } from "./Config"
+import { Config, PackageAccess, ParsedPluginConfig } from "./Config"
 import { PatchHtml } from "./PatchHtml"
 import { registerGlobalProxyAgent } from "./ProxyAgent"
 import { ServeStatic } from "./ServeStatic"
@@ -22,13 +21,13 @@ import { ServeStatic } from "./ServeStatic"
  * Implements the verdaccio plugin interfaces.
  */
 export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
-  private readonly provider = new GitHubAuthProvider(this.config)
+  private readonly parsedConfig = new ParsedPluginConfig(this.config)
+  private readonly provider = new GitHubAuthProvider(this.parsedConfig)
   private readonly cache = new Cache(this.provider)
-  private readonly verdaccio = new Verdaccio(this.config)
-  private readonly core = new AuthCore(this.verdaccio, this.config)
+  private readonly verdaccio = new Verdaccio(this.parsedConfig)
+  private readonly core = new AuthCore(this.verdaccio, this.parsedConfig)
 
   constructor(private readonly config: Config) {
-    validateConfig(config)
     registerGlobalProxyAgent()
   }
 
@@ -41,7 +40,7 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
     const children = [
       new ServeStatic(),
       new PatchHtml(this.verdaccio),
-      new WebFlow(this.config, this.core, this.provider),
+      new WebFlow(this.parsedConfig, this.core, this.provider),
       new CliFlow(this.verdaccio, this.core, this.provider),
     ]
 

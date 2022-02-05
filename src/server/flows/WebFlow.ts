@@ -7,11 +7,11 @@ import { getAuthorizePath, getCallbackPath } from "../../redirect"
 import { buildAccessDeniedPage, buildErrorPage } from "../../statusPage"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
-import { Config } from "../plugin/Config"
+import { ParsedPluginConfig } from "../plugin/Config"
 
 export class WebFlow implements IPluginMiddleware<any> {
   constructor(
-    private readonly config: Config,
+    private readonly config: ParsedPluginConfig,
     private readonly core: AuthCore,
     private readonly provider: AuthProvider,
   ) {}

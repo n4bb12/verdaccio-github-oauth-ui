@@ -2,31 +2,23 @@ import { Request } from "express"
 import { stringify } from "querystring"
 import { publicGitHubApiOrigin, publicGitHubOrigin } from "../../constants"
 import { AuthProvider } from "../plugin/AuthProvider"
-import { Config, getConfig } from "../plugin/Config"
+import { ParsedPluginConfig } from "../plugin/Config"
 import { GitHubClient } from "./Client"
 
 export class GitHubAuthProvider implements AuthProvider {
-  private readonly clientId = getConfig(this.config, "client-id")
-  private readonly clientSecret = getConfig(this.config, "client-secret")
-  private readonly enterpriseOrigin = getConfig(
-    this.config,
-    "enterprise-origin",
-  )
-  private readonly repositoryAccess =
-    getConfig(this.config, "repository-access") ?? true
   private readonly client = new GitHubClient(this.webBaseUrl, this.apiBaseUrl)
 
   get webBaseUrl(): string {
-    return this.enterpriseOrigin || publicGitHubOrigin
+    return this.config.enterpriseOrigin || publicGitHubOrigin
   }
 
   get apiBaseUrl(): string {
-    return this.enterpriseOrigin
-      ? this.enterpriseOrigin.replace(/\/?$/, "") + "/api/v3"
+    return this.config.enterpriseOrigin
+      ? this.config.enterpriseOrigin.replace(/\/?$/, "") + "/api/v3"
       : publicGitHubApiOrigin
   }
 
-  constructor(private readonly config: Config) {}
+  constructor(private readonly config: ParsedPluginConfig) {}
 
   getId() {
     return "github"
@@ -34,9 +26,9 @@ export class GitHubAuthProvider implements AuthProvider {
 
   getLoginUrl(callbackUrl: string) {
     const queryParams = stringify({
-      client_id: this.clientId,
+      client_id: this.config.clientId,
       redirect_uri: callbackUrl,
-      scope: this.repositoryAccess ? "read:org,repo" : "read:org",
+      scope: this.config.repositoryAccess ? "read:org,repo" : "read:org",
     })
     return this.webBaseUrl + `/login/oauth/authorize?` + queryParams
   }
@@ -48,8 +40,8 @@ export class GitHubAuthProvider implements AuthProvider {
   async getToken(code: string) {
     const auth = await this.client.requestAccessToken(
       code,
-      this.clientId,
-      this.clientSecret,
+      this.config.clientId,
+      this.config.clientSecret,
     )
     return auth.authentication.token
   }
@@ -84,7 +76,7 @@ export class GitHubAuthProvider implements AuthProvider {
       this.getUsername(token),
       this.client.requestUserOrgs(token),
       this.client.requestUserTeams(token),
-      this.repositoryAccess
+      this.config.repositoryAccess
         ? this.client.requestUserRepos(token)
         : Promise.resolve([]),
     ])

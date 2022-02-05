@@ -3,16 +3,17 @@ import { stringify } from "querystring"
 import { authenticatedUserGroups } from "../../constants"
 import { logger } from "../../logger"
 import { User, Verdaccio } from "../verdaccio"
-import { Config, getConfig } from "./Config"
+import { ParsedPluginConfig } from "./Config"
 
 export class AuthCore {
-  private readonly org = getConfig(this.config, "org")
-  private readonly requiredGroup = this.org ? "github/owner/" + this.org : null
+  private readonly requiredGroup = this.config.org
+    ? "github/owner/" + this.config.org
+    : null
   private readonly configuredGroups = this.getConfiguredGroups()
 
   constructor(
     private readonly verdaccio: Verdaccio,
-    private readonly config: Config,
+    private readonly config: ParsedPluginConfig,
   ) {}
 
   /**

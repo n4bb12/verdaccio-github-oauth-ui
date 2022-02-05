@@ -1,19 +1,19 @@
 import { pluginName } from "src/constants"
-import { Config, PluginConfig, validateConfig } from "src/server/plugin/Config"
+import { Config, ParsedPluginConfig } from "src/server/plugin/Config"
 import { createTestPluginConfig, testUserAgent } from "test/utils"
 
 describe("Config", () => {
-  describe("validateConfig", () => {
+  describe("validate config", () => {
+    const enabledPluginConfig = { enabled: true } as any
     const pluginConfig = createTestPluginConfig()
-    const enabledPluginNode = { enabled: true } as any as PluginConfig
 
     function shouldSucceed(config: Config) {
-      validateConfig(config)
+      new ParsedPluginConfig(config)
     }
 
     it("accepts an empty 'auth' node as long as it is enabled", () => {
       shouldSucceed({
-        auth: { [pluginName]: enabledPluginNode },
+        auth: { [pluginName]: enabledPluginConfig },
         middlewares: { [pluginName]: pluginConfig },
         user_agent: testUserAgent,
       })
@@ -22,7 +22,7 @@ describe("Config", () => {
     it("accepts an empty 'middlewares' node as long as it is enabled", () => {
       shouldSucceed({
         auth: { [pluginName]: pluginConfig },
-        middlewares: { [pluginName]: enabledPluginNode },
+        middlewares: { [pluginName]: enabledPluginConfig },
         user_agent: testUserAgent,
       })
     })
@@ -33,7 +33,19 @@ describe("Config", () => {
           [pluginName]: { ...pluginConfig, "enterprise-origin": undefined },
         },
         middlewares: {
-          [pluginName]: enabledPluginNode,
+          [pluginName]: enabledPluginConfig,
+        },
+        user_agent: testUserAgent,
+      })
+    })
+
+    it("treats 'repository-access' as optional", () => {
+      shouldSucceed({
+        auth: {
+          [pluginName]: { ...pluginConfig, "repository-access": undefined },
+        },
+        middlewares: {
+          [pluginName]: enabledPluginConfig,
         },
         user_agent: testUserAgent,
       })
@@ -41,7 +53,7 @@ describe("Config", () => {
 
     function shouldFail(config: any) {
       try {
-        validateConfig(config)
+        new ParsedPluginConfig(config)
         fail()
       } catch (error) {
         // expected
@@ -51,7 +63,7 @@ describe("Config", () => {
     it("throws an error if the major version is below 5", () => {
       shouldFail({
         auth: { [pluginName]: pluginConfig },
-        middlewares: { [pluginName]: enabledPluginNode },
+        middlewares: { [pluginName]: enabledPluginConfig },
         user_agent: "verdaccio/4.3.2",
       })
     })

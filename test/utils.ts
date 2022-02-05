@@ -3,7 +3,12 @@ import { Request } from "express"
 import { authenticatedUserGroups, pluginName } from "src/constants"
 import { AuthCore } from "src/server/plugin/AuthCore"
 import { AuthProvider } from "src/server/plugin/AuthProvider"
-import { Config, PackageAccess, PluginConfig } from "src/server/plugin/Config"
+import {
+  Config,
+  PackageAccess,
+  ParsedPluginConfig,
+  PluginConfig,
+} from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
 import { Verdaccio } from "src/server/verdaccio/Verdaccio"
 import timekeeper from "timekeeper"
@@ -70,6 +75,7 @@ export function createTestPluginConfig(
     "client-id": testClientId,
     "client-secret": testClientSecret,
     org: false,
+    "repository-access": true,
     ...config,
   }
 }
@@ -124,7 +130,10 @@ export function createTestAuthProvider() {
 }
 
 export function createTestAuthCore(config: Partial<Config> = {}) {
-  return new AuthCore(createTestVerdaccio(config), createTestConfig(config))
+  return new AuthCore(
+    createTestVerdaccio(config),
+    new ParsedPluginConfig(createTestConfig(config)),
+  )
 }
 
 export function createTestPlugin(config: Partial<Config> = {}) {

@@ -4,9 +4,10 @@ import {
 } from "@verdaccio/types"
 import chalk from "chalk"
 import get from "lodash/get"
-import ow from "ow"
 import { pluginName, publicGitHubOrigin } from "../../constants"
 import { logger } from "../../logger"
+import assert from "ow"
+import process from "process"
 
 //
 // Types
@@ -30,31 +31,9 @@ export interface PluginConfig {
   "repository-access"?: boolean
 }
 
-export type PluginConfigKey = keyof PluginConfig
-
 export interface Config extends VerdaccioConfig {
   middlewares: { [pluginName]: PluginConfig }
   auth: { [pluginName]: PluginConfig }
-}
-
-//
-// Access
-//
-
-export function getConfig<K extends PluginConfigKey>(
-  config: Config,
-  key: K,
-): PluginConfig[K] {
-  const value =
-    get(config, ["middlewares", pluginName, key]) ??
-    get(config, ["auth", pluginName, key])
-
-  if (typeof value === "string") {
-    // @ts-ignore
-    return process.env[value] || value
-  } else {
-    return value
-  }
 }
 
 /**
@@ -69,22 +48,15 @@ export function getMajorVersion() {
 // Validation
 //
 
-function validateProp(config: Config, key: PluginConfigKey, predicate: any) {
-  const value = getConfig(config, key)
+function validateVersion() {
+  const majorVersion = getMajorVersion()
 
-  try {
-    ow(value, predicate)
-  } catch (error) {
-    logger.error(
-      chalk.red(
-        `[${pluginName}] ERR: Invalid configuration at "auth.${pluginName}.${key}": ${error.message}`,
-      ),
-    )
-    throw new Error("Please check your verdaccio config.")
+  if (majorVersion < 5) {
+    throw new Error("This plugin requires verdaccio 5 or above")
   }
 }
 
-function ensureObjectNotEmpty(config: Config, node: keyof Config) {
+function validateNodeExists(config: Config, node: keyof Config) {
   const path = `[${node}][${pluginName}]`
   const obj = get(config, path, {})
 
@@ -93,34 +65,87 @@ function ensureObjectNotEmpty(config: Config, node: keyof Config) {
   }
 }
 
-export function validateConfig(config: Config) {
-  const majorVersion = getMajorVersion()
+function getEnvValue(name: any) {
+  const value = process.env[String(name)]
+  if (value === "true" || value === "false") {
+    return value === "true"
+  }
+  return value
+}
 
-  if (majorVersion < 5) {
-    throw new Error("This plugin requires verdaccio 5 or above")
+function getConfigValue<T>(config: Config, key: string, predicate: any): T {
+  let valueOrEnvName =
+    get(config, ["middlewares", pluginName, key]) ??
+    get(config, ["auth", pluginName, key])
+
+  const value = getEnvValue(valueOrEnvName) ?? valueOrEnvName
+
+  try {
+    assert(value, predicate)
+  } catch (error) {
+    logger.error(
+      chalk.red(
+        `[${pluginName}] ERR: Invalid configuration at "auth.${pluginName}.${key}": ${error.message}`,
+      ),
+    )
+    throw new Error("Please check your verdaccio config.")
   }
 
-  ensureObjectNotEmpty(config, "auth")
-  ensureObjectNotEmpty(config, "middlewares")
+  return value as T
+}
 
-  validateProp(config, "client-id", ow.string.nonEmpty)
-  validateProp(config, "client-secret", ow.string.nonEmpty)
-  validateProp(
-    config,
-    "org",
-    ow.any(
-      ow.string.nonEmpty.not.startsWith(publicGitHubOrigin),
-      ow.boolean.false,
-    ),
+//
+// Access
+//
+
+export class ParsedPluginConfig {
+  public readonly packages = this.config.packages ?? {}
+  public readonly url_prefix = this.config.url_prefix ?? ""
+
+  public readonly org =
+    getConfigValue<string | false>(
+      this.config,
+      "org",
+      assert.any(
+        assert.string.nonEmpty.not.startsWith(publicGitHubOrigin),
+        assert.boolean.false,
+      ),
+    ) ?? false
+
+  public readonly clientId = getConfigValue<string>(
+    this.config,
+    "client-id",
+    assert.string.nonEmpty,
   )
-  validateProp(
-    config,
-    "enterprise-origin",
-    ow.any(
-      ow.undefined,
-      ow.string.url.nonEmpty.not.startsWith(publicGitHubOrigin),
-      ow.boolean.false,
-    ),
+
+  public readonly clientSecret = getConfigValue<string>(
+    this.config,
+    "client-secret",
+    assert.string.nonEmpty,
   )
-  validateProp(config, "repository-access", ow.optional.boolean)
+
+  public readonly enterpriseOrigin =
+    getConfigValue<string | false>(
+      this.config,
+      "enterprise-origin",
+      assert.any(
+        assert.undefined,
+        assert.string.url.nonEmpty.not.startsWith(publicGitHubOrigin),
+        assert.boolean.false,
+      ),
+    ) ?? false
+
+  public readonly repositoryAccess =
+    getConfigValue<boolean>(
+      this.config,
+      "repository-access",
+      assert.optional.boolean,
+    ) ?? true
+
+  constructor(public readonly config: Config) {
+    validateVersion()
+
+    validateNodeExists(config, "middlewares")
+    validateNodeExists(config, "auth")
+  }
 }
