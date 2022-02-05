@@ -25,7 +25,6 @@ export class GitHubAuthProvider implements AuthProvider {
   }
 
   getLoginUrl(callbackUrl: string) {
-    console.log(JSON.stringify(this.config, null, 2))
     const queryParams = stringify({
       client_id: this.config.clientId,
       redirect_uri: callbackUrl,
