@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`Shared buildStatusPage access denied page matches the snapshot 1`] = `
+exports[`Shared > buildStatusPage > access denied page matches the snapshot 1`] = `
 "<!DOCTYPE html>
 <html lang=\\"en\\">
   <head>
@@ -43,7 +43,7 @@ exports[`Shared buildStatusPage access denied page matches the snapshot 1`] = `
 </html>"
 `;
 
-exports[`Shared buildStatusPage error page matches the snapshot 1`] = `
+exports[`Shared > buildStatusPage > error page matches the snapshot 1`] = `
 "<!DOCTYPE html>
 <html lang=\\"en\\">
   <head>
@@ -86,7 +86,7 @@ exports[`Shared buildStatusPage error page matches the snapshot 1`] = `
 </html>"
 `;
 
-exports[`Shared buildStatusPage generic page matches the snapshot 1`] = `
+exports[`Shared > buildStatusPage > generic page matches the snapshot 1`] = `
 "<!DOCTYPE html>
 <html lang=\\"en\\">
   <head>

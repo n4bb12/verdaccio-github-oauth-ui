@@ -1,4 +1,3 @@
-import { delay } from "lodash"
 import { AuthProvider } from "src/server/plugin/AuthProvider"
 import { Cache } from "src/server/plugin/Cache"
 import {
@@ -7,6 +6,7 @@ import {
   testOAuthToken,
 } from "test/utils"
 import timekeeper from "timekeeper"
+import { describe, expect, it, vi } from "vitest"
 
 describe("Cache", () => {
   describe("getGroups", () => {
@@ -18,15 +18,15 @@ describe("Cache", () => {
       getGroups: (token: string) => string[],
     ) {
       provider = createTestAuthProvider()
-      provider.getGroups = jest.fn((token) => Promise.resolve(getGroups(token)))
+      provider.getGroups = vi.fn((token) => Promise.resolve(getGroups(token)))
       cache = new Cache(provider, cacheTTLms)
     }
 
     function configureFailingProvider() {
       provider = createTestAuthProvider()
-      jest
-        .spyOn(provider, "getGroups")
-        .mockRejectedValue(new Error(testErrorMessage))
+      vi.spyOn(provider, "getGroups").mockRejectedValue(
+        new Error(testErrorMessage),
+      )
       cache = new Cache(provider, cacheTTLms)
     }
 

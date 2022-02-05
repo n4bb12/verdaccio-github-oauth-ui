@@ -9,6 +9,7 @@ import {
   testUsername,
   unrelatedOrgGroup,
 } from "test/utils"
+import { beforeEach, describe, expect, it } from "vitest"
 
 describe("AuthCore", () => {
   describe("authenticate", () => {

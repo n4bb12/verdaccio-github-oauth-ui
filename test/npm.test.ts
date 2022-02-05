@@ -1,4 +1,5 @@
 import { getNpmConfigFile, getNpmSaveCommands, getRegistryUrl } from "src/npm"
+import { describe, expect, it } from "vitest"
 
 export const testRegistryBaseUrl = "http://localhost:4873"
 export const testNpmToken = "test-npm-token"
@@ -7,41 +8,47 @@ describe("npm", () => {
   const argv = process.argv
 
   it("successfully finds the npm configuration", () => {
-    expect(getRegistryUrl()).toBeTruthy()
-    expect(getNpmConfigFile()).toBeTruthy()
+    expect(getRegistryUrl()).toMatchInlineSnapshot(
+      '"https://registry.yarnpkg.com"',
+    )
+    expect(getNpmConfigFile()).toContain(".npmrc")
   })
 
   it("uses the correct registry", () => {
     process.argv = argv
-    const first = getRegistryUrl()
-    process.argv = [...argv, "--registry", testRegistryBaseUrl]
-    const second = getRegistryUrl()
+    const url1 = getRegistryUrl()
 
-    expect(first).toBeTruthy()
-    expect(second).toBe(testRegistryBaseUrl)
-    expect(first).not.toBe(second)
+    process.argv = [...argv, "--registry", testRegistryBaseUrl]
+    const url2 = getRegistryUrl()
+
+    expect(url1).toMatchInlineSnapshot('"https://registry.yarnpkg.com"')
+    expect(url2).toBe(testRegistryBaseUrl)
   })
 
   it("removes trailing slashes", () => {
     process.argv = [...argv, "--registry", "https://my.registry.com/"]
-    expect(getRegistryUrl()).toBe("https://my.registry.com")
+
+    expect(getRegistryUrl()).toMatchInlineSnapshot('"https://my.registry.com"')
   })
 
   it("save commands match the snapshot", () => {
-    expect(getNpmSaveCommands(testRegistryBaseUrl, testNpmToken))
-      .toMatchInlineSnapshot(`
-      Array [
-        "npm config set //localhost:4873/:always-auth true",
-        "npm config set //localhost:4873/:_authToken \\"test-npm-token\\"",
-      ]
-    `)
+    const commands1 = getNpmSaveCommands(testRegistryBaseUrl, testNpmToken)
+    expect(commands1).toMatchInlineSnapshot(`
+        [
+          "npm config set //localhost:4873/:always-auth true",
+          "npm config set //localhost:4873/:_authToken \\"test-npm-token\\"",
+        ]
+      `)
 
-    expect(getNpmSaveCommands(testRegistryBaseUrl + "/", testNpmToken))
-      .toMatchInlineSnapshot(`
-      Array [
-        "npm config set //localhost:4873/:always-auth true",
-        "npm config set //localhost:4873/:_authToken \\"test-npm-token\\"",
-      ]
-    `)
+    const commands2 = getNpmSaveCommands(
+      testRegistryBaseUrl + "/",
+      testNpmToken,
+    )
+    expect(commands2).toMatchInlineSnapshot(`
+        [
+          "npm config set //localhost:4873/:always-auth true",
+          "npm config set //localhost:4873/:_authToken \\"test-npm-token\\"",
+        ]
+      `)
   })
 })
