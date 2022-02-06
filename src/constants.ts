@@ -3,6 +3,8 @@ export const publicRoot = __dirname + "/../browser"
 export const staticPath = "/-/static/" + pluginName
 export const authorizePath = "/-/oauth/authorize"
 export const callbackPath = "/-/oauth/callback"
+export const loginHref = authorizePath
+export const logoutHref = "/"
 
 export const cliPort = 8239
 export const cliProviderId = "cli"

@@ -1,4 +1,4 @@
-import { loginHref, logoutHref } from "../config"
+import { loginHref, logoutHref } from "../../constants"
 import {
   clearCredentials,
   Credentials,
