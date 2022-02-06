@@ -33,7 +33,7 @@ const logo = `<svg class="img" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="h
 
 export function buildStatusPage(body: string, withBackButton: boolean) {
   const backButton = withBackButton
-    ? `<p><button onclick="window.history.back()">Go back</button></p>`
+    ? `<p><button onclick="history.back()">Go back</button></p>`
     : ""
 
   return `<!DOCTYPE html>

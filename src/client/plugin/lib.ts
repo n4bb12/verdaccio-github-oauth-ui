@@ -4,7 +4,7 @@ import { parse } from "query-string"
  * Returns `?a=b&c` as `{ a: b, c: true }`.
  */
 export function parseQueryParams() {
-  return parse(window.location.search || "?")
+  return parse(location.search || "?")
 }
 
 export function retry(action: () => void) {
