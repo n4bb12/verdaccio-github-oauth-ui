@@ -1,4 +1,4 @@
-import { pluginName } from "src/constants"
+import { pluginKey } from "src/constants"
 import {
   Config,
   ParsedPluginConfig,
@@ -29,18 +29,18 @@ describe("Config", () => {
     }
 
     const fooConfig: Config = {
-      middlewares: { [pluginName]: enabledPluginConfig },
-      auth: { [pluginName]: fooPluginConfig },
+      middlewares: { [pluginKey]: enabledPluginConfig },
+      auth: { [pluginKey]: fooPluginConfig },
     } as any
 
     const barConfig: Config = {
-      middlewares: { [pluginName]: barPluginConfig },
-      auth: { [pluginName]: enabledPluginConfig },
+      middlewares: { [pluginKey]: barPluginConfig },
+      auth: { [pluginKey]: enabledPluginConfig },
     } as any
 
     const minimalConfig: Config = {
-      middlewares: { [pluginName]: enabledPluginConfig },
-      auth: { [pluginName]: minimalPluginConfig },
+      middlewares: { [pluginKey]: enabledPluginConfig },
+      auth: { [pluginKey]: minimalPluginConfig },
     } as any
 
     it("from auth", () => {

@@ -1,4 +1,4 @@
-import { pluginName } from "src/constants"
+import { pluginKey } from "src/constants"
 import {
   createTestAuthCore,
   testProviderGroups,
@@ -57,7 +57,7 @@ describe("AuthCore", () => {
       const providerGroups = []
       const core = createTestAuthCore({
         auth: {
-          [pluginName]: {
+          [pluginKey]: {
             org,
             "client-id": "_",
             "client-secret": "_",

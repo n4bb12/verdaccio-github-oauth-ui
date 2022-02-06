@@ -1,4 +1,4 @@
-import { pluginName } from "../constants"
+import { cliName } from "../constants"
 import { logger } from "../logger"
 import { getRegistryUrl } from "../npm"
 
@@ -11,7 +11,7 @@ export function getUsageInfo() {
     "",
     "or by using the registry argument",
     "",
-    `npx verdaccio-${pluginName} --registry <URL>`,
+    `npx ${cliName} --registry <URL>`,
   ]
 }
 

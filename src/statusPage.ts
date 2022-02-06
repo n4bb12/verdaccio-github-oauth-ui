@@ -1,4 +1,4 @@
-import { pluginName } from "./constants"
+import { pluginKey } from "./constants"
 
 const styles = `
 html,
@@ -39,7 +39,7 @@ export function buildStatusPage(body: string, withBackButton: boolean) {
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>${pluginName}</title>
+    <title>${pluginKey}</title>
     <style>${styles}</style>
   </head>
   <body>

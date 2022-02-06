@@ -30,7 +30,7 @@ pluginDir=plugins/verdaccio-github-oauth-ui
 # Remove the plugin from node_modules
 #
 clean() {
-  run clean rm -rf .parcel-cache/ dist/ $pluginDir/
+  run clean rm -rf .parcel-cache/ dist/ package/ plugins/
 }
 
 #

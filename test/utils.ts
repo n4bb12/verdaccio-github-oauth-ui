@@ -1,6 +1,6 @@
 import { AllowAccess, RemoteUser } from "@verdaccio/types"
 import { Request } from "express"
-import { authenticatedUserGroups, pluginName } from "src/constants"
+import { authenticatedUserGroups, pluginKey } from "src/constants"
 import { AuthCore } from "src/server/plugin/AuthCore"
 import { AuthProvider } from "src/server/plugin/AuthProvider"
 import {
@@ -83,10 +83,10 @@ export function createTestPluginConfig(
 export function createTestConfig(config: Partial<Config> = {}) {
   return {
     auth: {
-      [pluginName]: createTestPluginConfig(),
+      [pluginKey]: createTestPluginConfig(),
     },
     middlewares: {
-      [pluginName]: {
+      [pluginKey]: {
         enabled: true,
       },
     },

@@ -7,7 +7,7 @@ import get from "lodash/get"
 import assert from "ow"
 import process from "process"
 import { PartialDeep, RemoveIndexSignature } from "type-fest"
-import { pluginName, publicGitHubOrigin } from "../../constants"
+import { pluginKey, publicGitHubOrigin } from "../../constants"
 import { logger } from "../../logger"
 
 //
@@ -37,8 +37,8 @@ export interface PluginConfig {
 }
 
 export interface Config extends VerdaccioConfig {
-  middlewares: { [pluginName]: PluginConfig }
-  auth: { [pluginName]: PluginConfig }
+  middlewares: { [key: string]: PluginConfig }
+  auth: { [key: string]: PluginConfig }
 }
 
 /**
@@ -62,11 +62,11 @@ function validateVersion() {
 }
 
 function validateNodeExists(config: Config, node: keyof Config) {
-  const path = `[${node}][${pluginName}]`
+  const path = `[${node}][${pluginKey}]`
   const obj = get(config, path, {})
 
   if (!Object.keys(obj).length) {
-    throw new Error(`"${node}.${pluginName}" must be enabled`)
+    throw new Error(`"${node}.${pluginKey}" must be enabled`)
   }
 }
 
@@ -80,8 +80,8 @@ function getEnvValue(name: any) {
 
 function getConfigValue<T>(config: Config, key: string, predicate: any): T {
   let valueOrEnvName =
-    get(config, ["middlewares", pluginName, key]) ??
-    get(config, ["auth", pluginName, key])
+    get(config, ["auth", pluginKey, key]) ??
+    get(config, ["middlewares", pluginKey, key])
 
   const value = getEnvValue(valueOrEnvName) ?? valueOrEnvName
 
@@ -89,7 +89,7 @@ function getConfigValue<T>(config: Config, key: string, predicate: any): T {
     assert(value, predicate)
   } catch (error) {
     logger.error(
-      `Invalid configuration at "auth.${pluginName}.${key}": ${error.message} — Please check your verdaccio config.`,
+      `Invalid configuration at "auth.${pluginKey}.${key}": ${error.message} — Please check your verdaccio config.`,
     )
     process.exit(1)
   }
