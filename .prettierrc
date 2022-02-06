@@ -1,5 +1,6 @@
 {
-  "semi": false,
+  "$schema": "https://json.schemastore.org/prettierrc",
   "printWidth": 80,
+  "semi": false,
   "trailingComma": "all"
 }

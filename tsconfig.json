@@ -1,14 +1,17 @@
 {
-  "extends": "@tsconfig/node14/tsconfig.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "baseUrl": ".",
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "lib": ["ES2020"],
     "module": "CommonJS",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "noEmit": true,
     "noImplicitAny": false,
+    "skipLibCheck": true,
+    "strict": true,
     "target": "ES5",
     "types": ["node"],
     "useUnknownInCatchVariables": false

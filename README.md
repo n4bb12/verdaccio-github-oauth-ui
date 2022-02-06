@@ -20,6 +20,12 @@
 
 ## About
 
+This plugin integrates with Verdaccio and re-exposes a new authentication plugin API that makes authentication more extensible and combinable, including suppport for modications to the default UI.
+
+The result is a more consistent login experience and support for long-requested authentication features, such as: configurable setup instructions, multiple authentication methods, fine-grained permissions, reverse proxy authentication, 2FA, WebAuthn, and more.
+
+See the [Related Verdaccio Issues](https://github.com/n4bb12/verdaccio-auth/projects/1) project board.
+
 <img src="screenshots/authorize.png" align="right" width="270"/>
 
 This is a Verdaccio plugin that offers GitHub OAuth integration for both the browser and the command line.
