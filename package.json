@@ -37,7 +37,7 @@
     "format:check": "prettier --check \"**/*.{ts,js,css,scss,html,json}\"",
     "prepack": "bash run clean && bash run build",
     "start": "verdaccio -c verdaccio.yaml",
-    "test": "vitest",
+    "test": "vitest --watch false",
     "test:cli": "bash run test-cli",
     "test:coverage": "vitest --coverage",
     "test:docker": "bash run test-docker",
