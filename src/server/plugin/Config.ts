@@ -3,7 +3,6 @@ import {
   PackageAccess as IncorrectVerdaccioPackageAccess,
   Security,
 } from "@verdaccio/types"
-import chalk from "chalk"
 import get from "lodash/get"
 import assert from "ow"
 import process from "process"
@@ -90,11 +89,9 @@ function getConfigValue<T>(config: Config, key: string, predicate: any): T {
     assert(value, predicate)
   } catch (error) {
     logger.error(
-      chalk.red(
-        `[${pluginName}] ERR: Invalid configuration at "auth.${pluginName}.${key}": ${error.message}`,
-      ),
+      `Invalid configuration at "auth.${pluginName}.${key}": ${error.message} — Please check your verdaccio config.`,
     )
-    throw new Error("Please check your verdaccio config.")
+    process.exit(1)
   }
 
   return value as T

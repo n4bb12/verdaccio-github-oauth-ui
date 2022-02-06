@@ -9,4 +9,7 @@ export default defineConfig({
       { find: "test", replacement: path.resolve(__dirname, "test") },
     ],
   },
+  test: {
+    setupFiles: ["./vitest.setup.ts"],
+  },
 })
