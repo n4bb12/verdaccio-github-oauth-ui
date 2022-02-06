@@ -1,7 +1,21 @@
-import { JWTSignOptions } from "@verdaccio/types"
+import {
+  Config,
+  IBasicAuth,
+  JWTSignOptions,
+  RemoteUser,
+} from "@verdaccio/types"
+import { NextFunction } from "express"
 import merge from "lodash/merge"
 import { getMajorVersion, VerdaccioConfig } from "../plugin/Config"
-import { Auth, User } from "../verdaccio"
+
+export interface Auth extends IBasicAuth<Config> {
+  config: Config
+  apiJWTmiddleware(): NextFunction
+  jwtEncrypt(user: RemoteUser, signOptions: JWTSignOptions): Promise<string>
+  webUIJWTmiddleware(): NextFunction
+}
+
+export type User = RemoteUser
 
 // Most of this is duplicated Verdaccio code because it is unfortunately not availabel via API.
 // https://github.com/verdaccio/verdaccio/blob/master/src/lib/auth-utils.ts#L129

@@ -2,8 +2,8 @@ import uniq from "lodash/uniq"
 import { stringify } from "querystring"
 import { authenticatedUserGroups } from "../../constants"
 import { logger } from "../../logger"
-import { User, Verdaccio } from "../verdaccio"
 import { ParsedPluginConfig } from "./Config"
+import { User, Verdaccio } from "./Verdaccio"
 
 export class AuthCore {
   private readonly requiredGroup = this.config.org

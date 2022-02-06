@@ -1,13 +1,12 @@
 import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler } from "express"
 import qs from "query-string"
-
 import { cliPort, cliProviderId } from "../../constants"
 import { logger } from "../../logger"
 import { getCallbackPath } from "../../redirect"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
-import { Verdaccio } from "../verdaccio"
+import { Verdaccio } from "../plugin/Verdaccio"
 
 const pluginCallbackeUrl = getCallbackPath(cliProviderId)
 

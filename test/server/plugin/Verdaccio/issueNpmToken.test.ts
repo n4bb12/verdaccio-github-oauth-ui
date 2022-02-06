@@ -1,4 +1,4 @@
-import { Verdaccio } from "src/server/verdaccio"
+import { Verdaccio } from "src/server/plugin/Verdaccio"
 import {
   createRealVerdaccioAuth,
   createTestConfig,

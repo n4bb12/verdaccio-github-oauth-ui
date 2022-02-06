@@ -1,9 +1,8 @@
 import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler } from "express"
 import { readFileSync } from "fs"
-
 import { publicRoot, staticPath } from "../../constants"
-import { Verdaccio } from "../verdaccio"
+import { Verdaccio } from "./Verdaccio"
 
 /**
  * Injects additional static imports into the DOM with code from the client folder

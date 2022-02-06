@@ -10,7 +10,7 @@ import {
   PluginConfig,
 } from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
-import { Verdaccio } from "src/server/verdaccio/Verdaccio"
+import { Verdaccio } from "src/server/plugin/Verdaccio"
 import timekeeper from "timekeeper"
 import Auth from "verdaccio/build/lib/auth"
 import { afterEach, beforeEach, vi } from "vitest"
