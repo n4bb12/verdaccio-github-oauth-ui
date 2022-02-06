@@ -1,13 +1,15 @@
 import {
   Config as IncorrectVerdaccioConfig,
   PackageAccess as IncorrectVerdaccioPackageAccess,
+  Security,
 } from "@verdaccio/types"
 import chalk from "chalk"
 import get from "lodash/get"
-import { pluginName, publicGitHubOrigin } from "../../constants"
-import { logger } from "../../logger"
 import assert from "ow"
 import process from "process"
+import { PartialDeep, RemoveIndexSignature } from "type-fest"
+import { pluginName, publicGitHubOrigin } from "../../constants"
+import { logger } from "../../logger"
 
 //
 // Types
@@ -19,8 +21,12 @@ export interface PackageAccess extends IncorrectVerdaccioPackageAccess {
   unpublish?: string[]
 }
 
-export type VerdaccioConfig = Omit<IncorrectVerdaccioConfig, "packages"> & {
+export type VerdaccioConfig = Omit<
+  RemoveIndexSignature<IncorrectVerdaccioConfig>,
+  "packages" | "security"
+> & {
   packages?: Record<string, PackageAccess>
+  security?: PartialDeep<Security>
 }
 
 export interface PluginConfig {
