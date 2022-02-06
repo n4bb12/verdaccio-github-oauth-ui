@@ -4,6 +4,8 @@ import { URL } from "url"
 
 import { logger } from "./logger"
 
+let npmConfig: any
+
 function parseCliArgs() {
   return minimist(process.argv.slice(2))
 }
@@ -14,7 +16,10 @@ function runCommand(command: string) {
 }
 
 function getNpmConfig() {
-  return JSON.parse(runCommand("npm config list --json").toString())
+  if (!npmConfig) {
+    npmConfig = JSON.parse(runCommand("npm config list --json").toString())
+  }
+  return npmConfig
 }
 
 function removeTrailingSlash(input: string) {
@@ -27,17 +32,14 @@ function ensureTrailingSlash(input: string) {
 
 export function getRegistryUrl() {
   const cliArgs = parseCliArgs()
-  const npmConfig = getNpmConfig()
 
-  const registry = cliArgs.registry || npmConfig.registry
+  const registry = cliArgs.registry || getNpmConfig().registry
 
   return removeTrailingSlash(registry)
 }
 
 export function getNpmConfigFile() {
-  const npmConfig = getNpmConfig()
-
-  return npmConfig.userconfig
+  return getNpmConfig().userconfig
 }
 
 export function getNpmSaveCommands(registry: string, token: string) {
