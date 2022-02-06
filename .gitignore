@@ -1,5 +1,5 @@
-.cache/
 .env
+.parcel-cache/
 .vscode
 *.log
 *.stackdump

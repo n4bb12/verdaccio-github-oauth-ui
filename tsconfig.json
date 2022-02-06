@@ -1,13 +1,16 @@
 {
+  "extends": "@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "module": "es2020",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "lib": ["ES2020"],
+    "module": "CommonJS",
     "moduleResolution": "node",
     "noEmit": true,
     "noImplicitAny": false,
-    "esModuleInterop": true,
+    "target": "ES5",
     "types": ["node"],
     "useUnknownInCatchVariables": false
-  },
-  "extends": "@tsconfig/node14/tsconfig.json"
+  }
 }

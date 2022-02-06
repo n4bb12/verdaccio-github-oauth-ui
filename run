@@ -27,31 +27,28 @@ fail() {
 pluginDir=plugins/verdaccio-github-oauth-ui
 
 #
+# Remove the plugin from node_modules
+#
+clean() {
+  run clean rm -rf .parcel-cache/ dist/ $pluginDir/
+}
+
+#
 # Build server, config and client
 #
 build() {
   # copy assets
-  run build mkdir -p dist/public/
-  run build cp -R src/client/*.css dist/public/
+  run build mkdir -p dist/browser/
+  run build cp -R src/client/*.css dist/browser/
 
-  # build with parcel
-  export NODE_ENV=production
-  run build yarn -s parcel build src/client/verdaccio-5.ts --target browser --experimental-scope-hoisting --out-dir dist/public
-  run build yarn -s parcel build src/server/index.ts       --target node --no-minify --out-file server.js
-  run build yarn -s parcel build src/cli/index.ts          --target node --no-minify --out-file cli.js
+  # bundle with parcel
+  run build yarn -s parcel build --target browser
+  run build yarn -s parcel build --target server
+  run build yarn -s parcel build --target cli
 
   # add node shebang
-  printf '%s\n%s\n' '#!/usr/bin/env node' "$(cat dist/cli.js)" > dist/cli.js
+  printf '%s\n%s\n' '#!/usr/bin/env node' "$(cat dist/cli/index.js)" > dist/cli/index.js
 }
-
-#
-# Remove the plugin from node_modules
-#
-clean() {
-  run clean rm -rf dist
-  run clean rm -rf $pluginDir
-}
-
 
 #
 # Copy the built plugin to node_modules
@@ -95,7 +92,7 @@ test-publish() {
 
 test-cli() {
   # npx verdaccio-github-oauth-ui --registry http://localhost:4873
-  run test-cli ./dist/cli.js --registry http://localhost:4873
+  run test-cli ./dist/cli/index.js --registry http://localhost:4873
 
   test-publish
 }

@@ -9,5 +9,5 @@ export const logger = {
   error: console.error.bind(console, prefix),
 }
 
-const plugin = require(__dirname + "/../package.json")
+const plugin = require("../package.json")
 logger.log(`Version: ${plugin.name}@${plugin.version}`)
