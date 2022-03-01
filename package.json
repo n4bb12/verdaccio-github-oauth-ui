@@ -97,7 +97,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "targets": {
-    "browser": {
+    "client": {
       "source": "src/client/verdaccio-5.ts",
       "context": "browser",
       "includeNodeModules": true

@@ -42,7 +42,7 @@ build() {
   run build cp -R src/client/*.css dist/browser/
 
   # bundle with parcel
-  run build yarn -s parcel build --target browser
+  run build yarn -s parcel build --target client
   run build yarn -s parcel build --target server
   run build yarn -s parcel build --target cli
 
