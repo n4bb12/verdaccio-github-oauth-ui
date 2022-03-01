@@ -1,90 +1,59 @@
-import { getUsageInfo, init, isLoggedIn } from "./plugin"
+import { copyToClipboard, getUsageInfo, init, isLoggedIn } from "./plugin"
 
-const helpCardUsageInfoSelector = "#help-card .MuiCardContent-root span"
-const dialogUsageInfoSelector =
-  "#registryInfo--dialog-container .MuiDialogContent-root .MuiTypography-root span"
-const randomClass = "Os1waV6BSoZQKfFwNlIwS"
+const loginButtonSelector = `[data-testid="header--button-login"]`
+const logoutButtonSelector = `[data-testid="header--button-logout"]`
+const tabSelector = `[data-testid="tab-content"]`
 
-async function copyToClipboard(text: string) {
-  await navigator.clipboard.writeText(text)
-}
-
-function modifyUsageInfoNodes(
-  selector: string,
-  findPredicate: (node: HTMLElement) => boolean,
-): void {
-  const usageInfo = getUsageInfo()
+function updateUsageInfo(): void {
   const loggedIn = isLoggedIn()
+  if (!loggedIn) return
 
-  const infoElements: NodeListOf<HTMLSpanElement> =
-    document.querySelectorAll(selector)
-  const firstUsageInfoEl = Array.prototype.find.call(
-    infoElements,
-    findPredicate,
-  )
-  const hasInjectedElement = !!Array.prototype.find.call(
-    infoElements,
-    (node: HTMLElement) => node.parentElement!.classList.contains(randomClass),
-  )
+  const tabs = document.querySelectorAll(tabSelector)
+  if (!tabs) return
 
-  // We can't find any element related to usage instructions,
-  // or we have already injected elements
-  if (!firstUsageInfoEl || hasInjectedElement) {
-    return
-  }
+  const usageInfoLines = getUsageInfo().split("\n").reverse()
 
-  const cachedParent: HTMLDivElement | null = firstUsageInfoEl.parentElement
-  if (cachedParent) {
-    usageInfo
-      .split("\n")
-      .reverse()
-      .forEach((info) => {
-        const clonedNode = cachedParent.cloneNode(true) as HTMLDivElement
-        const textElem = clonedNode.querySelector("span")!
-        const copyEl = clonedNode.querySelector("button")!
+  tabs.forEach((tab) => {
+    const alreadyReplaced = tab.getAttribute("replaced") === "true"
+    if (alreadyReplaced) return
 
-        clonedNode.classList.add(randomClass)
-        textElem.innerText = info
-        copyEl.style.visibility = loggedIn ? "visible" : "hidden"
-        copyEl.onclick = (e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          copyToClipboard(info)
-        }
+    const commands = Array.from<HTMLElement>(tab.querySelectorAll("button"))
+      .map((node) => node.parentElement!)
+      .filter((node) => !!node.innerText.match(/^(npm|pnpm|yarn)/))
+    if (!commands.length) return
 
-        cachedParent.insertAdjacentElement("afterend", clonedNode)
-      })
-  }
+    usageInfoLines.forEach((info) => {
+      const cloned = commands[0].cloneNode(true) as HTMLElement
+      const textEl = cloned.querySelector("span")!
+      textEl.innerText = info
 
-  infoElements.forEach((node) => {
-    if (
-      // We only match lines related to bundler commands
-      !!node.innerText.match(/^(npm|pnpm|yarn)/) &&
-      // And only commands that we want to remove
-      (node.innerText.includes("adduser") ||
-        node.innerText.includes("set password"))
-    ) {
-      node.parentElement!.parentElement!.removeChild(node.parentElement!)
-    }
+      const copyEl = cloned.querySelector("button")!
+      copyEl.style.visibility = loggedIn ? "visible" : "hidden"
+      copyEl.onclick = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        copyToClipboard(info)
+      }
+
+      commands[0].parentElement!.appendChild(cloned)
+      tab.setAttribute("replaced", "true")
+    })
+
+    // Remove commands that don't work with oauth
+    commands.forEach((node) => {
+      if (
+        node.innerText.includes("adduser") ||
+        node.innerText.includes("set password")
+      ) {
+        node.parentElement!.removeChild(node)
+        tab.setAttribute("replaced", "true")
+      }
+    })
   })
 }
 
-function updateUsageInfo() {
-  modifyUsageInfoNodes(helpCardUsageInfoSelector, (node) =>
-    node.innerText.includes("adduser"),
-  )
-  modifyUsageInfoNodes(
-    dialogUsageInfoSelector,
-    (node) =>
-      !!node.innerText.match(
-        // This checks for an element showing instructions to set the registry URL
-        /((npm|pnpm) set|(yarn) config set)/,
-      ),
-  )
-}
-
 init({
-  loginButton: `[data-testid="header--button-login"]`,
-  logoutButton: `[data-testid="header--button-logout"]`,
+  loginButton: loginButtonSelector,
+  logoutButton: logoutButtonSelector,
   updateUsageInfo,
 })
