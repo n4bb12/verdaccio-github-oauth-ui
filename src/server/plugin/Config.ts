@@ -42,11 +42,10 @@ export interface Config extends VerdaccioConfig {
 }
 
 /**
- * e.g. "5.0.4" --> 5
+ * e.g. "5.0.4"
  */
-export function getMajorVersion() {
-  const version = require("verdaccio/package.json").version
-  return +version.replace(/^(\d+).\d+.\d+$/, "$1")
+export function getVersion(): string {
+  return require("verdaccio/package.json").version
 }
 
 //
@@ -54,9 +53,9 @@ export function getMajorVersion() {
 //
 
 function validateVersion() {
-  const majorVersion = getMajorVersion()
+  const version = getVersion()
 
-  if (majorVersion < 5) {
+  if (version < "5") {
     throw new Error("This plugin requires verdaccio 5 or above")
   }
 }

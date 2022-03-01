@@ -6,7 +6,7 @@ import {
 } from "@verdaccio/types"
 import { NextFunction } from "express"
 import merge from "lodash/merge"
-import { getMajorVersion, VerdaccioConfig } from "../plugin/Config"
+import { getVersion, VerdaccioConfig } from "../plugin/Config"
 
 export interface Auth extends IBasicAuth<Config> {
   config: Config
@@ -42,7 +42,6 @@ function getSecurity(config: VerdaccioConfig) {
  * Abstract Verdaccio version differences and usage of all Verdaccio objects.
  */
 export class Verdaccio {
-  readonly majorVersion = getMajorVersion()
   readonly security = getSecurity(this.config)
 
   private auth!: Auth
