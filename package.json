@@ -99,11 +99,13 @@
   "targets": {
     "client": {
       "source": "src/client/verdaccio-5.ts",
+      "distDir": "dist/client",
       "context": "browser",
       "includeNodeModules": true
     },
     "server": {
       "source": "src/server/index.ts",
+      "distDir": "dist/server",
       "context": "node",
       "outputFormat": "commonjs",
       "optimize": false,
@@ -111,6 +113,7 @@
     },
     "cli": {
       "source": "src/cli/index.ts",
+      "distDir": "dist/cli",
       "context": "node",
       "outputFormat": "commonjs",
       "optimize": false
