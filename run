@@ -37,10 +37,6 @@ clean() {
 # Build server, config and client
 #
 build() {
-  # copy assets
-  run build mkdir -p dist/browser/
-  run build cp -R src/client/*.css dist/browser/
-
   # bundle with parcel
   run build yarn -s parcel build --target client
   run build yarn -s parcel build --target server
