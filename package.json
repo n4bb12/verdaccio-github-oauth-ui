@@ -63,8 +63,8 @@
     "query-string": "^7.1.1"
   },
   "devDependencies": {
-    "@parcel/config-default": "^2.2.1",
-    "@parcel/transformer-typescript-tsc": "^2.2.1",
+    "@parcel/config-default": "~2.4.0",
+    "@parcel/transformer-typescript-tsc": "~2.4.0",
     "@types/express": "^4.17.9",
     "@types/global-agent": "^2.1.0",
     "@types/lodash": "^4.14.178",
@@ -76,7 +76,7 @@
     "c8": "^7.11.0",
     "core-js": "^3.21.0",
     "nodemon": "^2.0.6",
-    "parcel": "^2.2.1",
+    "parcel": "~2.4.0",
     "prettier": "^2.5.1",
     "release-it": "^15.0.0",
     "timekeeper": "^2.2.0",
