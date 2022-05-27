@@ -21,35 +21,35 @@ describe("Plugin", () => {
       plugin = createTestPlugin()
     })
 
-    it("user with empty username cannot authenticate", (done) => {
-      plugin.authenticate("", testOAuthToken, (err, groups) => {
+    it("user with empty username cannot authenticate", async () => {
+      await plugin.authenticate("", testOAuthToken, (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toBe(false)
-        done()
       })
     })
 
-    it("user with empty token cannot authenticate", (done) => {
-      plugin.authenticate(testUsername, "", (err, groups) => {
+    it("user with empty token cannot authenticate", async () => {
+      await plugin.authenticate(testUsername, "", (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toBe(false)
-        done()
       })
     })
 
-    it("user with invalid token throws error", (done) => {
-      plugin.authenticate(testUsername, "invalid_token", (err, groups) => {
-        expect(err).toBeTruthy()
-        expect(groups).toBeFalsy()
-        done()
-      })
+    it("user with invalid token throws error", async () => {
+      await plugin.authenticate(
+        testUsername,
+        "invalid_token",
+        (err, groups) => {
+          expect(err).toBeTruthy()
+          expect(groups).toBeFalsy()
+        },
+      )
     })
 
-    it("user with valid token can authenticate", (done) => {
-      plugin.authenticate(testUsername, testOAuthToken, (err, groups) => {
+    it("user with valid token can authenticate", async () => {
+      await plugin.authenticate(testUsername, testOAuthToken, (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toBeTruthy()
-        done()
       })
     })
   })
