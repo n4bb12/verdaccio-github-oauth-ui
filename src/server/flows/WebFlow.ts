@@ -53,7 +53,7 @@ export class WebFlow implements IPluginMiddleware<any> {
    * automatically reversed by verdaccio before passing it to the plugin.
    */
   callback: Handler = async (req, res) => {
-    const withBackButton = true
+    const withBackLink = true
 
     try {
       const code = this.provider.getCode(req)
@@ -68,12 +68,12 @@ export class WebFlow implements IPluginMiddleware<any> {
 
         res.redirect(ui)
       } else {
-        res.status(401).send(buildAccessDeniedPage(withBackButton))
+        res.status(401).send(buildAccessDeniedPage(withBackLink))
       }
     } catch (error) {
       logger.error(error)
 
-      res.status(500).send(buildErrorPage(error, withBackButton))
+      res.status(500).send(buildErrorPage(error, withBackLink))
     }
   }
 
