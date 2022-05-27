@@ -34,7 +34,7 @@ This is a Verdaccio plugin that offers GitHub OAuth integration for both the bro
 
 ### Compatibility
 
-- Verdaccio 5
+- Verdaccio 5.0 - 5.10
 - Node 14, 16
 - Chrome, Firefox, Firefox ESR, Edge, Safari
 
@@ -80,6 +80,7 @@ auth:
 The plugin options can be actual values or the names of environment variables containing the values.
 
 For example, either of the below will work:
+
 - `client-id: abc`
 - `client-id: GITHUB_CLIENT_ID` and set an environment variable `GITHUB_CLIENT_ID=abc`.
 
@@ -93,20 +94,20 @@ These values can be obtained from the GitHub OAuth app page at https://github.co
 
 The name of a GitHub org, for example, `n4bb12-oauth-test`.
 
-If set to a `string`, it limits the ability to log in to Verdaccio to members of 
+If set to a `string`, it limits the ability to log in to Verdaccio to members of
 this GitHub org.
 
 If set to `false`, everybody with a GitHub account can log in. Permissions are
 then purely determined by the [package access configuration](https://verdaccio.org/docs/packages/).
 
-Note that setting this to `false` changes the semantics of `$authenticated` 
-since everybody can have a GitHub account. To limit package access based on 
-GitHub orgs, teams, repos, and users, you can use one of the `github/`-prefixed 
+Note that setting this to `false` changes the semantics of `$authenticated`
+since everybody can have a GitHub account. To limit package access based on
+GitHub orgs, teams, repos, and users, you can use one of the `github/`-prefixed
 group names as described below.
 
-For example, to limit package access to members of a GitHub org, you can use 
+For example, to limit package access to members of a GitHub org, you can use
 `github/owner/ORG_NAME` as a permission group. This effectively results in the
-same access restrictions as using `$authenticated` with this option set to a 
+same access restrictions as using `$authenticated` with this option set to a
 string, except that every GitHub user can log in (but not see or use anything).
 
 #### `enterprise-origin` (optional, string | false)
@@ -127,7 +128,7 @@ The following groups are added during login and can be used to configure package
 - `github/owner/GITHUB_ORG/team/GITHUB_TEAM` — for every GitHub team the user is a member of
 - `github/owner/GITHUB_ORG/repo/GITHUB_REPO` — for every GitHub repository the user has access to (including outside collaborators)
 
-Note that visibility to orgs, org teams, and org repositories requires 
+Note that visibility to orgs, org teams, and org repositories requires
 
 Additionally, the following deprecated groups are added:
 
@@ -171,10 +172,10 @@ See the [global-agent](https://github.com/gajus/global-agent#environment-variabl
 ### Verdaccio UI
 
 - Click the login button and get redirected to GitHub.
-- Authorize the registry to access your GitHub user and org info. 
-You only need to do this once. If your org is private, make sure to click the 
-<kbd>Request</kbd> or <kbd>Grant</kbd> button to get `read:org` access when 
-prompted to authorize Verdaccio.
+- Authorize the registry to access your GitHub user and org info.
+  You only need to do this once. If your org is private, make sure to click the
+  <kbd>Request</kbd> or <kbd>Grant</kbd> button to get `read:org` access when
+  prompted to authorize Verdaccio.
 - Once completed, you'll be redirected back to Verdaccio.
 - You are now logged in 🎉.
 
@@ -210,7 +211,7 @@ $ npm whoami --registry http://localhost:4873
 n4bb12
 ```
 
-If you see your GitHub username, you are ready to start installing and 
+If you see your GitHub username, you are ready to start installing and
 publishing packages.
 
 ## Logout
@@ -221,12 +222,12 @@ Click the <kbd>Logout</kbd> button as per usual.
 
 ### Command Line
 
-Unless OAuth access is revoked in the GitHub settings, the token is valid 
+Unless OAuth access is revoked in the GitHub settings, the token is valid
 indefinitely.
 
 ## Revoke Tokens
 
-To invalidate your active login tokens you need to revoke access on the GitHub 
+To invalidate your active login tokens you need to revoke access on the GitHub
 OAuth app:
 
 - Go to https://github.com/settings/applications
@@ -235,7 +236,7 @@ OAuth app:
 
 ![](screenshots/revoke.png)
 
-If you have created the GitHub OAuth app, you can also revoke access for all 
+If you have created the GitHub OAuth app, you can also revoke access for all
 users:
 
 - Go to https://github.com/settings/applications
@@ -247,50 +248,50 @@ users:
 
 ### Missing permission groups after logging in
 
-If the GitHub org or some of its contents are private, users will need to grant 
+If the GitHub org or some of its contents are private, users will need to grant
 `read:org` permission during login to allow Verdaccio to see this information.
 
-Users can request or grant this permission during the OAuth flow (i.e. during 
-first login) by clicking on the <kbd>Request</kbd> or <kbd>Grant</kbd> button 
+Users can request or grant this permission during the OAuth flow (i.e. during
+first login) by clicking on the <kbd>Request</kbd> or <kbd>Grant</kbd> button
 next to each org when prompted to authorize Verdaccio to access GitHub information.
 
-If users accidentally skipped this step, go to https://github.com/settings/applications, 
+If users accidentally skipped this step, go to https://github.com/settings/applications,
 find the Verdaccio app, and grant `read:org` access from there.
 
 ### Error: "verdaccio-github-oauth-ui plugin not found"
 
-Avoid using a global installation of Verdaccio. Despite what Verdaccio examples 
+Avoid using a global installation of Verdaccio. Despite what Verdaccio examples
 or documentation suggest, globally installed plugins may not work.
 
 Verdaccio loads plugins by requiring them from various locations.
-Global `node_modules` are NOT included in this search because they are NOT part 
-of the Node.js resolve algorithm. See 
-[#13](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/13#issuecomment-435296117) 
+Global `node_modules` are NOT included in this search because they are NOT part
+of the Node.js resolve algorithm. See
+[#13](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/13#issuecomment-435296117)
 for more info.
 
 Solutions that worked for others:
 
 - Add your global `node_modules` folder to the `NODE_PATH` environment variable.
-This hints to Node.js where else to search in addition to default locations.
+  This hints to Node.js where else to search in addition to default locations.
 - Create a `package.json` and install Verdaccio + plugins locally.
-- If you are using npm, try using yarn classic. Yarn installs modules a bit 
-differently such that globally installed plugins are found.
-- Deploy Verdaccio by extending the official docker image. It uses a local 
-Verdaccio installation by default. See `Dockerfile` and `docker.sh` in 
-[this example](https://gist.github.com/n4bb12/523e8347a580f596cbf14d0d791b5927).
+- If you are using npm, try using yarn classic. Yarn installs modules a bit
+  differently such that globally installed plugins are found.
+- Deploy Verdaccio by extending the official docker image. It uses a local
+  Verdaccio installation by default. See `Dockerfile` and `docker.sh` in
+  [this example](https://gist.github.com/n4bb12/523e8347a580f596cbf14d0d791b5927).
 
 ### Error: "Failed requesting GitHub user info"
 
 - Double-check that your configured client id and client secret are correct.
-- If you are behind a proxy, make sure you are also passing through the query 
-parameters to Verdaccio. See 
-[#47](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/47#issuecomment-643814163) 
-for an example using `nginx`.
+- If you are behind a proxy, make sure you are also passing through the query
+  parameters to Verdaccio. See
+  [#47](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/47#issuecomment-643814163)
+  for an example using `nginx`.
 
 ### Error: "Your auth token is no longer valid. Please log in again."
 
-If login access is restricted to a certain GitHub org, please see 
-[missing orgs, teams, repos](missing-orgs-teams-repos) and 
+If login access is restricted to a certain GitHub org, please see
+[missing orgs, teams, repos](missing-orgs-teams-repos) and
 [#5](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/5#issuecomment-417371679).
 
 ### Error: "Access denied: User "..." is not a member of "..."
@@ -300,5 +301,5 @@ error meaning that the user trying to log in is not a member of the required org
 
 See the related [org](#org-required-string-false) plugin option.
 
-If you see this error despite being a member of the configured org, please see 
+If you see this error despite being a member of the configured org, please see
 [missing orgs, teams, repos](missing-orgs-teams-repos).
