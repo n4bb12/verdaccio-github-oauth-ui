@@ -22,9 +22,7 @@
   "license": "MIT",
   "author": "Abraham Schilling",
   "main": "dist/server/index.js",
-  "bin": {
-    "verdaccio-github-oauth-ui": "dist/cli/index.js"
-  },
+  "bin": "dist/cli/index.js",
   "files": [
     "dist"
   ],
@@ -118,5 +116,6 @@
       "outputFormat": "commonjs",
       "optimize": false
     }
-  }
+  },
+  "packageManager": "yarn@3.2.1"
 }

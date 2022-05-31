@@ -38,9 +38,9 @@ clean() {
 #
 build() {
   # bundle with parcel
-  run build yarn -s parcel build --target client
-  run build yarn -s parcel build --target server
-  run build yarn -s parcel build --target cli
+  run build yarn parcel build --target client
+  run build yarn parcel build --target server
+  run build yarn parcel build --target cli
 
   # add node shebang
   printf '%s\n%s\n' '#!/usr/bin/env node' "$(cat dist/cli/index.js)" > dist/cli/index.js
@@ -64,10 +64,10 @@ read-env() {
 }
 
 typecheck() {
-  run typecheck yarn -s tsc --noEmit --project src/client/tsconfig.json &
-  run typecheck yarn -s tsc --noEmit --project src/server/tsconfig.json &
-  run typecheck yarn -s tsc --noEmit --project src/cli/tsconfig.json &
-  run typecheck yarn -s tsc --noEmit --project test/tsconfig.json &
+  run typecheck yarn tsc --noEmit --project src/client/tsconfig.json &
+  run typecheck yarn tsc --noEmit --project src/server/tsconfig.json &
+  run typecheck yarn tsc --noEmit --project src/cli/tsconfig.json &
+  run typecheck yarn tsc --noEmit --project test/tsconfig.json &
   wait
 }
 
