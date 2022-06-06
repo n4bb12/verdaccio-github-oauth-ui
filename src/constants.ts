@@ -2,7 +2,7 @@ import plugin from "../package.json"
 
 export { plugin }
 
-export const cliName = Object.keys(plugin.bin)[0]
+export const cliName = plugin.name
 export const pluginKey = plugin.name.replace("verdaccio-", "")
 export const authorizePath = "/-/oauth/authorize"
 export const callbackPath = "/-/oauth/callback"
