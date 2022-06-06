@@ -1,6 +1,6 @@
 import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler } from "express"
-import { staticPath } from "../../constants"
+import { staticPath } from "../constants"
 
 /**
  * Injects additional static imports into the DOM with code from the client folder

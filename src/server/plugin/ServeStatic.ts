@@ -1,7 +1,6 @@
 import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, static as expressServeStatic } from "express"
-
-import { publicRoot, staticPath } from "../../constants"
+import { staticPath, publicRoot } from "../constants"
 
 /**
  * Serves additional static assets required to modify the login button.
