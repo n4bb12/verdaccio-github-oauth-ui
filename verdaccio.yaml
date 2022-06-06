@@ -31,10 +31,10 @@ security:
 packages:
   "@*/*":
     access: github/owner/n4bb12-oauth-testing
-    publish: github/owner/n4bb12-oauth-testing
-    unpublish: github/owner/n4bb12-oauth-testing
+    publish: github/owner/n4bb12-oauth-testing/team/test-team
+    unpublish: github/owner/n4bb12-oauth-testing/team/test-team-with-spaces
 
   "**":
     access: github/owner/n4bb12-oauth-testing
-    publish: github/owner/n4bb12-oauth-testing
-    unpublish: github/owner/n4bb12-oauth-testing
+    publish: github/owner/n4bb12-oauth-testing/repo/test-repo
+    unpublish: github/owner/n4bb12-oauth-testing/repo/test-repo

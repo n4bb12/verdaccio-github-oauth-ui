@@ -21,6 +21,7 @@ export class AuthCore {
    */
   getConfiguredGroups() {
     const configuredGroups: Record<string, true> = {}
+
     Object.values(this.config.packages || {}).forEach((packageConfig) => {
       ;["access", "publish", "unpublish"]
         .flatMap((key) => packageConfig[key])
@@ -29,6 +30,7 @@ export class AuthCore {
           configuredGroups[group] = true
         })
     })
+
     return configuredGroups
   }
 

@@ -83,7 +83,7 @@ export class GitHubAuthProvider implements AuthProvider {
 
     const orgGroups = orgs.map((org) => this.createOwnerGroup(org.login))
     const teamGroups = teams.map((team) =>
-      this.createTeamGroup(team.organization?.login, team.name),
+      this.createTeamGroup(team.organization.login, team.slug),
     )
     const repoGroups = repos.map((repo) =>
       this.createRepoGroup(repo.owner.login, repo.name),
@@ -93,7 +93,7 @@ export class GitHubAuthProvider implements AuthProvider {
       this.createLegacyOrgGroup(org.login),
     )
     const legacyTeamGroups = teams.map((team) =>
-      this.createLegacyTeamGroup(team.organization.login, team.name),
+      this.createLegacyTeamGroup(team.organization.login, team.slug),
     )
 
     return [
