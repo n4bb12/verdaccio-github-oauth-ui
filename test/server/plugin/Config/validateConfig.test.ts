@@ -39,17 +39,6 @@ describe("Config", () => {
       })
     })
 
-    it("treats 'repository-access' as optional", () => {
-      createConfig({
-        auth: {
-          [pluginKey]: { ...pluginConfig, "repository-access": undefined },
-        },
-        middlewares: {
-          [pluginKey]: enabledPluginConfig,
-        },
-      })
-    })
-
     it.fails("throws an error if the major version is below 5", () => {
       require("verdaccio/package.json").version = "4.3.2"
       createConfig({
@@ -92,21 +81,10 @@ describe("Config", () => {
       })
     })
 
-    it.fails("throws an error if 'org' is missing", () => {
+    it.fails("throws an error if 'token' is missing", () => {
       createConfig({
         auth: {
-          [pluginKey]: { ...pluginConfig, ["org"]: undefined },
-        },
-        middlewares: {
-          [pluginKey]: { enabled: true },
-        },
-      })
-    })
-
-    it.fails("throws an error if 'org' is true", () => {
-      createConfig({
-        auth: {
-          [pluginKey]: { ...pluginConfig, ["org"]: true },
+          [pluginKey]: { ...pluginConfig, ["token"]: undefined },
         },
         middlewares: {
           [pluginKey]: { enabled: true },

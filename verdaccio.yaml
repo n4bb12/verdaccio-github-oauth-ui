@@ -6,6 +6,11 @@
 storage: ./storage
 plugins: ./plugins
 
+log:
+  type: stdout
+  format: pretty
+  level: info
+
 middlewares:
   github-oauth-ui:
     enabled: true
@@ -14,10 +19,10 @@ auth:
   github-oauth-ui:
     client-id: GITHUB_CLIENT_ID
     client-secret: GITHUB_CLIENT_SECRET
-    org: false
-    enterprise-origin: false
+    token: GITHUB_TOKEN
   htpasswd:
     file: ./htpasswd
+    algorithm: bcrypt
 
 security:
   api:
@@ -29,12 +34,33 @@ security:
       expiresIn: 7d
 
 packages:
-  "@*/*":
-    access: github/owner/n4bb12-oauth-testing
-    publish: github/owner/n4bb12-oauth-testing/team/test-team
-    unpublish: github/owner/n4bb12-oauth-testing/team/test-team-with-spaces
-
   "**":
-    access: github/owner/n4bb12-oauth-testing
-    publish: github/owner/n4bb12-oauth-testing/repo/test-repo
-    unpublish: github/owner/n4bb12-oauth-testing/repo/test-repo
+    access: github/org/n4bb12-oauth-testing
+    publish: github/org/n4bb12-oauth-testing
+
+  package1:
+    # Limit access to signed-in users.
+    # This works in tandem with other plugins that also add the `$authenticated` group, such as `htpasswd`.
+    # Note that every GitHub user can sign in, so this is not a restrictive group.
+    # If you want to limit access, use one of the other
+    access: $authenticated
+
+  package2:
+    # Limit access to users:
+    access: github/user/n4bb12
+
+  package3:
+    # Limit actions to user repository collaborators:
+    access: github/user/n4bb12/repo/dotfiles
+
+  package4:
+    # Limit access to organization members:
+    access: github/org/n4bb12-oauth-testing
+
+  package5:
+    # Limit actions to team members:
+    access: github/org/n4bb12-oauth-testing/team/test-team
+
+  package6:
+    # Limit actions to organization repository collaborators:
+    access: github/org/n4bb12-oauth-testing/repo/test-repo

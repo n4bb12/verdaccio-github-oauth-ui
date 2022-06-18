@@ -1,6 +1,7 @@
 import { exchangeWebFlowCode } from "@octokit/oauth-methods"
 import { request } from "@octokit/request"
 import { Octokit } from "octokit"
+import { logger } from "../../logger"
 
 export class GitHubClient {
   constructor(
@@ -40,7 +41,7 @@ export class GitHubClient {
   /**
    * `GET /user`
    *
-   * [Get the authenticated user](https://developer.github.com/v3/users/#get-the-authenticated-user)
+   * https://developer.github.com/v3/users/#get-the-authenticated-user
    */
   requestUser = async (accessToken: string) => {
     try {
@@ -52,55 +53,81 @@ export class GitHubClient {
   }
 
   /**
-   * `GET /user/orgs`
+   * `GET /orgs/{org}/members/{username}`
    *
-   * [List your organizations](https://developer.github.com/v3/orgs/#list-your-organizations)
+   * https://docs.github.com/en/rest/orgs/members#check-organization-membership-for-a-user
    */
-  requestUserOrgs = async (accessToken: string) => {
+  requestOrganizationMembershipStatus = async (
+    accessToken: string,
+    org: string,
+    username: string,
+  ) => {
     try {
       const oktokit = this.createOktokit(accessToken)
-      return await oktokit.paginate(
-        oktokit.rest.orgs.listForAuthenticatedUser,
-        { per_page: 100 },
-      )
+      const response = await oktokit.rest.orgs.checkMembershipForUser({
+        org,
+        username,
+      })
+      return (response.status as number) === 204
     } catch (error) {
-      throw new Error("Failed requesting GitHub user orgs: " + error.message)
+      logger.log(
+        `Failed requesting GitHub organization "${org}" membership status of user "${username}": ${error.message}`,
+      )
+      return false
     }
   }
 
   /**
-   * `GET /user/teams`
+   * `GET /orgs/{org}/teams/{team}/memberships/{username}`
    *
-   * [List your teams](https://docs.github.com/en/rest/reference/teams#list-teams-for-the-authenticated-user)
+   * https://docs.github.com/en/rest/teams/members#get-team-membership-for-a-user
    */
-  requestUserTeams = async (accessToken: string) => {
+  requestTeamMembershipStatus = async (
+    accessToken: string,
+    org: string,
+    team_slug: string,
+    username: string,
+  ) => {
     try {
       const oktokit = this.createOktokit(accessToken)
-      return await oktokit.paginate(
-        oktokit.rest.teams.listForAuthenticatedUser,
-        { per_page: 100 },
-      )
+      const response = await oktokit.rest.teams.getMembershipForUserInOrg({
+        org,
+        team_slug,
+        username,
+      })
+      return response.status === 200
     } catch (error) {
-      throw new Error("Failed requesting GitHub user teams: " + error.message)
+      logger.log(
+        `Failed requesting GitHub team "${org}/${team_slug}" membership status of user "${username}": ${error.message}`,
+      )
+      return false
     }
   }
 
   /**
-   * `GET /user/repos`
+   * `GET /repos/{owner}/{repo}/collaborators/{username}
    *
-   * [List your repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-the-authenticated-user)
+   * https://docs.github.com/en/rest/collaborators/collaborators#check-if-a-user-is-a-repository-collaborator
    */
-  requestUserRepos = async (accessToken: string) => {
+  requestRepositoryCollaboratorStatus = async (
+    accessToken: string,
+    owner: string,
+    repo: string,
+    username: string,
+  ) => {
     try {
       const oktokit = this.createOktokit(accessToken)
-      return await oktokit.paginate(
-        oktokit.rest.repos.listForAuthenticatedUser,
-        { per_page: 100 },
-      )
+      const response = await oktokit.rest.repos.checkCollaborator({
+        owner,
+        repo,
+        username,
+      })
+      return response.status === 204
     } catch (error) {
-      throw new Error(
-        "Failed requesting GitHub user repositories: " + error.message,
+      logger.log(
+        `Failed requesting GitHub repository "${owner}/${repo}" membership status of user "${username}": ${error.message}`,
       )
+      return false
     }
   }
 }

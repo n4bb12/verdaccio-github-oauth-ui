@@ -6,6 +6,6 @@ export interface AuthProvider {
   getCode(req: Request): string
 
   getToken(code: string): Promise<string>
-  getUsername(token: string): Promise<string>
-  getGroups(token: string): Promise<string[]>
+  getUserName(token: string): Promise<string>
+  getGroups(userName: string): Promise<string[]>
 }

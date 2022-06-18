@@ -1,5 +1,3 @@
-## Contributing
+# Contributing
 
-PRs are welcome! ⚗
-
-Please see [`package.scripts`](package.json) for some handy development tasks.
+See [docs/contributing.md](docs/contributing.md)

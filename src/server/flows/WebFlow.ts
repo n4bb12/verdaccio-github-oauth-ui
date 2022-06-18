@@ -4,7 +4,7 @@ import { getPublicUrl } from "verdaccio/build/lib/utils"
 
 import { logger } from "../../logger"
 import { getAuthorizePath, getCallbackPath } from "../../redirect"
-import { buildAccessDeniedPage, buildErrorPage } from "../../statusPage"
+import { buildErrorPage } from "../../statusPage"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { ParsedPluginConfig } from "../plugin/Config"
@@ -57,19 +57,15 @@ export class WebFlow implements IPluginMiddleware<any> {
 
     try {
       const code = this.provider.getCode(req)
-      const token = await this.provider.getToken(code)
-      const [username, groups] = await Promise.all([
-        this.provider.getUsername(token),
-        this.provider.getGroups(token),
-      ])
-
-      if (this.core.authenticate(username, groups)) {
-        const ui = await this.core.createUiCallbackUrl(username, token, groups)
-
-        res.redirect(ui)
-      } else {
-        res.status(401).send(buildAccessDeniedPage(withBackLink))
-      }
+      const userToken = await this.provider.getToken(code)
+      const userName = await this.provider.getUserName(userToken)
+      const userGroups = await this.provider.getGroups(userName)
+      const uiCallbackUrl = await this.core.createUiCallbackUrl(
+        userName,
+        userGroups,
+        userToken,
+      )
+      res.redirect(uiCallbackUrl)
     } catch (error) {
       logger.error(error)
 

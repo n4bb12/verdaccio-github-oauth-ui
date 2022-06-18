@@ -1,7 +1,7 @@
 import { getNpmConfigFile, getNpmSaveCommands, getRegistryUrl } from "src/npm"
 import { describe, expect, it } from "vitest"
 
-export const testRegistryBaseUrl = "http://localhost:4873"
+export const testRegistryUrl = "http://localhost:4873"
 export const testNpmToken = "test-npm-token"
 
 describe("npm", () => {
@@ -18,11 +18,11 @@ describe("npm", () => {
     process.argv = argv
     const url1 = getRegistryUrl()
 
-    process.argv = [...argv, "--registry", testRegistryBaseUrl]
+    process.argv = [...argv, "--registry", testRegistryUrl]
     const url2 = getRegistryUrl()
 
     expect(url1).toMatchInlineSnapshot('"https://registry.yarnpkg.com"')
-    expect(url2).toBe(testRegistryBaseUrl)
+    expect(url2).toBe(testRegistryUrl)
   })
 
   it("removes trailing slashes", () => {
@@ -32,7 +32,7 @@ describe("npm", () => {
   })
 
   it("save commands match the snapshot", () => {
-    const commands1 = getNpmSaveCommands(testRegistryBaseUrl, testNpmToken)
+    const commands1 = getNpmSaveCommands(testRegistryUrl, testNpmToken)
     expect(commands1).toMatchInlineSnapshot(`
         [
           "npm config set //localhost:4873/:always-auth true",
@@ -40,10 +40,7 @@ describe("npm", () => {
         ]
       `)
 
-    const commands2 = getNpmSaveCommands(
-      testRegistryBaseUrl + "/",
-      testNpmToken,
-    )
+    const commands2 = getNpmSaveCommands(testRegistryUrl + "/", testNpmToken)
     expect(commands2).toMatchInlineSnapshot(`
         [
           "npm config set //localhost:4873/:always-auth true",

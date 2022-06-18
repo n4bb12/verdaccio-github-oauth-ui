@@ -15,23 +15,23 @@ import { AuthProvider } from "./AuthProvider"
  */
 export class Cache {
   private readonly cache = new MemoryCache<string, string[]>()
-  private readonly namespace = this.authProvider.getId()
+  private readonly providerId = this.authProvider.getId()
 
   constructor(
     private readonly authProvider: AuthProvider,
     private readonly cacheTTLms = 10_000, // 10s
   ) {}
 
-  async getGroups(token: string): Promise<string[]> {
+  async getGroups(userName: string): Promise<string[]> {
     let groups: string[] | null = null
 
     try {
-      const key = [this.namespace, token].join("_")
+      const key = `${this.providerId}/${userName}`
 
       groups = this.cache.get(key)
 
       if (!groups) {
-        groups = await this.authProvider.getGroups(token)
+        groups = await this.authProvider.getGroups(userName)
       }
 
       this.cache.put(key, groups || [], this.cacheTTLms)

@@ -57,11 +57,3 @@ export function buildErrorPage(error: any, withBackLink: boolean) {
     withBackLink,
   )
 }
-
-export function buildAccessDeniedPage(withBackLink: boolean) {
-  return buildStatusPage(
-    `<h1>Access Denied</h1>
-    <p>You are not a member of the required access group.</p>`,
-    withBackLink,
-  )
-}

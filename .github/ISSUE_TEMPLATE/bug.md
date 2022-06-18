@@ -15,7 +15,7 @@ Please fill out the sections below. -->
 | ----------- | ------- |
 | Verdaccio   |         |
 | This plugin |         |
-| Node.js     |         |
+| Node        |         |
 
 ### Environment
 

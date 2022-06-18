@@ -53,7 +53,7 @@ export class Verdaccio {
     return this
   }
 
-  async issueNpmToken(token: string, user: User) {
+  async issueNpmToken(user: User, token: string) {
     const jwtSignOptions = this.security?.api?.jwt?.sign
 
     if (jwtSignOptions) {

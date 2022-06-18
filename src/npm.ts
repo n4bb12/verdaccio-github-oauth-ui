@@ -26,10 +26,6 @@ function removeTrailingSlash(input: string) {
   return input.trim().replace(/\/?$/, "")
 }
 
-function ensureTrailingSlash(input: string) {
-  return input.endsWith("/") ? input : `${input}/`
-}
-
 export function getRegistryUrl() {
   const cliArgs = parseCliArgs()
 
@@ -44,8 +40,7 @@ export function getNpmConfigFile() {
 
 export function getNpmSaveCommands(registry: string, token: string) {
   const url = new URL(registry)
-  const pathname = ensureTrailingSlash(url.pathname)
-  const baseUrl = url.host + pathname
+  const baseUrl = url.host + url.pathname
 
   return [
     `npm config set //${baseUrl}:always-auth true`,
