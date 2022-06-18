@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "lib": ["ES2018", "DOM"],
-    "target": "ES2018",
+    "lib": ["ES2021", "DOM"],
+    "target": "ES2021",
     "types": []
   }
 }

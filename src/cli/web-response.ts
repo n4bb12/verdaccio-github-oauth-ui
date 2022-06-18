@@ -1,11 +1,7 @@
 import { Response } from "express"
 import { getNpmConfigFile } from "../npm"
 
-import {
-  buildAccessDeniedPage,
-  buildErrorPage,
-  buildStatusPage,
-} from "../statusPage"
+import { buildErrorPage, buildStatusPage } from "../statusPage"
 
 const withBackLink = false
 
@@ -27,11 +23,6 @@ export function respondWithWebPage(
     case "success":
       res.status(200)
       res.send(successPage)
-      break
-
-    case "denied":
-      res.status(401)
-      res.send(buildAccessDeniedPage(withBackLink))
       break
 
     default:

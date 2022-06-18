@@ -6,98 +6,173 @@ import {
 } from "src/server/plugin/Config"
 import { describe, expect, it } from "vitest"
 
-describe("Config", () => {
-  describe("ParsedPluginConfig", () => {
-    const enabledPluginConfig = { enabled: true } as any
+describe("ParsedPluginConfig", () => {
+  const enabledPluginConfig = {
+    enabled: true,
+  } as any
 
-    const fooPluginConfig: PluginConfig = {
-      "client-id": "clientId",
-      "client-secret": "clientSecret",
-      org: "FOO_ORG",
-    }
-
-    const barPluginConfig: PluginConfig = {
-      "client-id": "clientId",
-      "client-secret": "clientSecret",
-      org: "BAR_ORG",
-    }
-
-    const minimalPluginConfig: PluginConfig = {
-      "client-id": "clientId",
-      "client-secret": "clientSecret",
-      org: false,
-    }
-
-    const fooConfig: Config = {
-      middlewares: { [pluginKey]: enabledPluginConfig },
-      auth: { [pluginKey]: fooPluginConfig },
-    } as any
-
-    const barConfig: Config = {
-      middlewares: { [pluginKey]: barPluginConfig },
+  const minimalPluginConfig: PluginConfig = {
+    "client-id": "clientId",
+    "client-secret": "clientSecret",
+    token: "token",
+  }
+  it.fails("middlewares key is required", () => {
+    const invalidConfig: Config = {
       auth: { [pluginKey]: enabledPluginConfig },
     } as any
 
-    const minimalConfig: Config = {
+    new ParsedPluginConfig(invalidConfig)
+  })
+
+  it.fails("auth key is required", () => {
+    const invalidConfig: Config = {
+      middlewares: { [pluginKey]: minimalPluginConfig },
+    } as any
+
+    new ParsedPluginConfig(invalidConfig)
+  })
+
+  it("accepts the minimal configuration and uses the documented defaults", () => {
+    const config: Config = {
       middlewares: { [pluginKey]: enabledPluginConfig },
       auth: { [pluginKey]: minimalPluginConfig },
     } as any
 
-    it("from auth", () => {
-      const pluginConfig = new ParsedPluginConfig(fooConfig)
-      expect(pluginConfig.org).toBe("FOO_ORG")
-    })
+    const parsedPluginConfig = new ParsedPluginConfig(config)
 
-    it("from middlewares", () => {
-      const pluginConfig = new ParsedPluginConfig(barConfig)
-      expect(pluginConfig.org).toBe("BAR_ORG")
-    })
-
-    it("from auth as environment variable", () => {
-      process.env.FOO_ORG = "foo-org"
-      const pluginConfig = new ParsedPluginConfig(fooConfig)
-      expect(pluginConfig.org).toBe("foo-org")
-    })
-
-    it("from middlewares as environment variable", () => {
-      process.env.BAR_ORG = "bar-org"
-      const pluginConfig = new ParsedPluginConfig(barConfig)
-      expect(pluginConfig.org).toBe("bar-org")
-    })
-
-    it("parses boolean environment variables", () => {
-      process.env.BAR_ORG = "false"
-      const pluginConfig = new ParsedPluginConfig(barConfig)
-      expect(pluginConfig.org).toBe(false)
-    })
-
-    it("uses the documented defaults", () => {
-      const pluginConfig = new ParsedPluginConfig(minimalConfig)
-      expect(pluginConfig).toMatchInlineSnapshot(`
-        ParsedPluginConfig {
-          "clientId": "clientId",
-          "clientSecret": "clientSecret",
-          "config": {
-            "auth": {
-              "github-oauth-ui": {
-                "client-id": "clientId",
-                "client-secret": "clientSecret",
-                "org": false,
-              },
-            },
-            "middlewares": {
-              "github-oauth-ui": {
-                "enabled": true,
-              },
+    expect(parsedPluginConfig).toMatchInlineSnapshot(`
+      ParsedPluginConfig {
+        "clientId": "clientId",
+        "clientSecret": "clientSecret",
+        "config": {
+          "auth": {
+            "github-oauth-ui": {
+              "client-id": "clientId",
+              "client-secret": "clientSecret",
+              "token": "token",
             },
           },
-          "enterpriseOrigin": false,
-          "org": false,
-          "packages": {},
-          "repositoryAccess": true,
-          "url_prefix": "",
-        }
-      `)
-    })
+          "middlewares": {
+            "github-oauth-ui": {
+              "enabled": true,
+            },
+          },
+        },
+        "configuredGroupsMap": {},
+        "enterpriseOrigin": undefined,
+        "parsedOrgs": [],
+        "parsedRepos": [],
+        "parsedTeams": [],
+        "parsedUsers": [],
+        "token": "token",
+        "url_prefix": "",
+      }
+    `)
+  })
+
+  it("parses the configuration as expected", () => {
+    const enabledPluginConfig = {
+      enabled: true,
+    } as any
+
+    const minimalPluginConfig: PluginConfig = {
+      "client-id": "clientId",
+      "client-secret": "clientSecret",
+      token: "token",
+      "enterprise-origin": "enterpriseOrigin",
+    }
+
+    const config: Config = {
+      middlewares: { [pluginKey]: enabledPluginConfig },
+      auth: { [pluginKey]: minimalPluginConfig },
+      url_prefix: "/verdaccio/",
+      packages: {
+        // valid groups
+        package1: { access: "$authenticated" },
+        package2: { access: "github/user/TEST_USER" },
+        package3: { access: "github/user/TEST_USER/repo/TEST_REPO" },
+        package4: { access: "github/org/TEST_ORG" },
+        package5: { access: "github/org/TEST_ORG/team/TEST_TEAM" },
+        package6: { access: "github/org/TEST_ORG/repo/TEST_REPO" },
+
+        // invalid groups
+        invalidPackage1: { access: "$X" },
+
+        invalidPackage2: { access: "X/user/TEST_USER" },
+        invalidPackage3: { access: "X/user/TEST_USER/repo/TEST_REPO" },
+        invalidPackage4: { access: "X/org/TEST_ORG" },
+        invalidPackage5: { access: "X/org/TEST_ORG/team/TEST_TEAM" },
+        invalidPackage6: { access: "X/org/TEST_ORG/repo/TEST_REPO" },
+
+        invalidPackage7: { access: "github/X/TEST_USER" },
+        invalidPackage8: { access: "github/X/TEST_USER/repo/TEST_REPO" },
+        invalidPackage9: { access: "github/X/TEST_ORG" },
+        invalidPackage10: { access: "github/X/TEST_ORG/team/TEST_TEAM" },
+        invalidPackage11: { access: "github/X/TEST_ORG/repo/TEST_REPO" },
+
+        invalidPackage12: { access: "github/user/TEST_USER/X/TEST_REPO" },
+        invalidPackage13: { access: "github/org/TEST_ORG/X/TEST_TEAM" },
+        invalidPackage14: { access: "github/org/TEST_ORG/X/TEST_REPO" },
+
+        invalidPackage15: { access: "github/user/TEST_USER/X" },
+        invalidPackage16: { access: "github/user/TEST_USER/repo/TEST_REPO/X" },
+        invalidPackage17: { access: "github/org/TEST_ORG/X" },
+        invalidPackage18: { access: "github/org/TEST_ORG/team/TEST_TEAM/X" },
+        invalidPackage19: { access: "github/org/TEST_ORG/repo/TEST_REPO/X" },
+      },
+    } as any
+
+    const parsedPluginConfig = new ParsedPluginConfig(config)
+
+    // Don't snapshot constructor properties
+    const { config: _, ...result } = parsedPluginConfig
+
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "clientId": "clientId",
+        "clientSecret": "clientSecret",
+        "configuredGroupsMap": {
+          "github/org/TEST_ORG": true,
+          "github/org/TEST_ORG/repo/TEST_REPO": true,
+          "github/org/TEST_ORG/team/TEST_TEAM": true,
+          "github/user/TEST_USER": true,
+          "github/user/TEST_USER/repo/TEST_REPO": true,
+        },
+        "enterpriseOrigin": "enterpriseOrigin",
+        "parsedOrgs": [
+          {
+            "group": "github/org/TEST_ORG",
+            "org": "TEST_ORG",
+          },
+        ],
+        "parsedRepos": [
+          {
+            "group": "github/user/TEST_USER/repo/TEST_REPO",
+            "owner": "TEST_USER",
+            "repo": "TEST_REPO",
+          },
+          {
+            "group": "github/org/TEST_ORG/repo/TEST_REPO",
+            "owner": "TEST_ORG",
+            "repo": "TEST_REPO",
+          },
+        ],
+        "parsedTeams": [
+          {
+            "group": "github/org/TEST_ORG/team/TEST_TEAM",
+            "org": "TEST_ORG",
+            "team": "TEST_TEAM",
+          },
+        ],
+        "parsedUsers": [
+          {
+            "group": "github/user/TEST_USER",
+            "user": "TEST_USER",
+          },
+        ],
+        "token": "token",
+        "url_prefix": "/verdaccio/",
+      }
+    `)
   })
 })

@@ -15,87 +15,75 @@ import timekeeper from "timekeeper"
 import Auth from "verdaccio/build/lib/auth"
 import { afterEach, beforeEach, vi } from "vitest"
 
-export const testLoginOrgName = "TEST_LOGIN_ORG"
-export const testLoginOrgGroup = `github/owner/${testLoginOrgName}`
-export const testOrgGroup = `github/owner/TEST_ORG`
-export const testTeamGroup = `${testOrgGroup}/team/TEST_TEAM`
-export const testRepoGroup = `${testOrgGroup}/repo/TEST_REPO`
+export const testOrgGroup = `github/org/TEST_ORG`
+export const testOrgTeamGroup = `github/org/TEST_ORG/team/TEST_TEAM`
+export const testOrgRepoGroup = `github/org/TEST_ORG/repo/TEST_REPO`
 export const testUserName = "TEST_USER"
-export const testUserGroup = `github/owner/${testUserName}`
-export const testLegacyOrgGroup = "github/TEST_LEGACY_ORG"
-export const testLegacyTeamGroup = "github/TEST_LEGACY_ORG/TEST_LEGACY_TEAM"
-
-export const unrelatedOrgGroup = "github/owner/another_org"
-export const unrelatedTeamGroup = `${unrelatedOrgGroup}/team/another_team`
-export const unrelatedRepoGroup = `${unrelatedOrgGroup}/repo/another_repo`
-export const unrelatedLegacyOrgGroup = "github/another_legacy_org"
-export const unrelatedLegacyTeamGroup =
-  "github/another_legacy_org/another_legacy_team"
+export const testUserGroup = `github/user/TEST_USER`
+export const testUserRepoGroup = `github/user/TEST_USER/repo/TEST_REPO`
 
 export const testProviderGroups = [
   // regular groups
-  testLoginOrgGroup,
   testOrgGroup,
-  testTeamGroup,
-  testRepoGroup,
+  testOrgTeamGroup,
+  testOrgRepoGroup,
   testUserGroup,
-
-  // legacy groups
-  testLegacyOrgGroup,
-  testLegacyTeamGroup,
-
-  // unrelated regular groups
-  unrelatedOrgGroup,
-  unrelatedTeamGroup,
-  unrelatedRepoGroup,
-
-  // unrelated legacy groups
-  unrelatedLegacyOrgGroup,
-  unrelatedLegacyTeamGroup,
+  testUserRepoGroup,
 ]
 
-export const testClientId = "TEST_CLIENT_ID"
-export const testClientSecret = "TEST_CLIENT_SECRET"
-export const testUsername = "test-username"
-export const testProviderId = "test-auth-provider"
-export const testLoginUrl = "test-login-url"
-export const testOAuthCode = "test-code"
-export const testOAuthToken = "test-token"
+export const testClientId = "CLIENT_ID"
+export const testClientSecret = "CLIENT_SECRET"
+export const testToken = "TOKEN"
+export const testEnterpriseOrigin = "TEST_ENTERPRISE_ORIGIN"
+export const testProviderId = "AUTH_PROVIDER"
+export const testLoginUrl = "LOGIN_URL"
+export const testOAuthCode = "OAUTH_CODE"
+export const testOAuthToken = "OAUTH_TOKEN"
+export const testRegistryToken = "REGISTRY_TOKEN"
 export const testMajorVersion = 4
-export const testUiToken = "test-ui-token"
-export const testNpmToken = "test-npm-token"
-export const testErrorMessage = "expected-error"
+export const testUiToken = "UI_TOKEN"
+export const testNpmToken = "NPM_TOKEN"
+export const testErrorMessage = "EXPECTED_ERROR"
 
 export const testUser = createTestUser(testProviderGroups)
 
 export function createTestPluginConfig(
-  config?: Partial<PluginConfig>,
+  pluginConfig?: Partial<PluginConfig>,
 ): PluginConfig {
   return {
     "client-id": testClientId,
     "client-secret": testClientSecret,
-    org: false,
-    "repository-access": true,
-    ...config,
+    token: testToken,
+    ...pluginConfig,
   }
 }
 
-export function createTestConfig(config: Partial<Config> = {}) {
+export function createTestVerdaccioConfig(
+  verdaccioConfig: Partial<Config> = {},
+  pluginConfig: Partial<PluginConfig> = {},
+) {
   return {
     auth: {
-      [pluginKey]: createTestPluginConfig(),
+      [pluginKey]: createTestPluginConfig(pluginConfig),
     },
     middlewares: {
       [pluginKey]: {
         enabled: true,
       },
     },
-    ...config,
+    ...verdaccioConfig,
   } as Config
 }
 
+export function createTestParsedPluginConfig(
+  pluginConfig?: Partial<PluginConfig>,
+): ParsedPluginConfig {
+  const verdaccioConfig = createTestVerdaccioConfig({}, pluginConfig)
+  return new ParsedPluginConfig(verdaccioConfig)
+}
+
 export function createTestVerdaccio(config: Partial<Config> = {}) {
-  const verdaccio = new Verdaccio(createTestConfig(config))
+  const verdaccio = new Verdaccio(createTestVerdaccioConfig(config))
   verdaccio.issueUiToken = vi.fn(() => Promise.resolve(testUiToken))
   verdaccio.issueNpmToken = vi.fn(() => Promise.resolve(testNpmToken))
   return verdaccio
@@ -115,11 +103,11 @@ export function createTestAuthProvider() {
     async getToken(code: string) {
       return code === testOAuthCode ? testOAuthToken : ""
     },
-    async getUsername(token: string) {
-      return token === testOAuthToken ? testUsername : ""
+    async getUserName(token: string) {
+      return token === testOAuthToken ? testUserName : ""
     },
-    async getGroups(token: string) {
-      if (token !== testOAuthToken) {
+    async getGroups(userName: string) {
+      if (userName !== testUserName) {
         throw new Error("Invalid token")
       }
       return testProviderGroups
@@ -131,17 +119,17 @@ export function createTestAuthProvider() {
 export function createTestAuthCore(config: Partial<Config> = {}) {
   return new AuthCore(
     createTestVerdaccio(config),
-    new ParsedPluginConfig(createTestConfig(config)),
+    new ParsedPluginConfig(createTestVerdaccioConfig(config)),
   )
 }
 
 export function createTestPlugin(config: Partial<Config> = {}) {
-  return new Plugin(createTestConfig(config))
+  return new Plugin(createTestVerdaccioConfig(config))
 }
 
 export function createTestUser(groups: string[]): RemoteUser {
   return {
-    name: testUsername,
+    name: testUserName,
     groups: [...authenticatedUserGroups, ...groups],
     real_groups: [...groups],
   }

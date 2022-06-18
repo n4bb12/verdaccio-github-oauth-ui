@@ -1,4 +1,3 @@
-import uniq from "lodash/uniq"
 import { stringify } from "querystring"
 import { authenticatedUserGroups } from "../../constants"
 import { logger } from "../../logger"
@@ -6,87 +5,43 @@ import { ParsedPluginConfig } from "./Config"
 import { User, Verdaccio } from "./Verdaccio"
 
 export class AuthCore {
-  private readonly requiredGroup = this.config.org
-    ? "github/owner/" + this.config.org
-    : null
-  private readonly configuredGroups = this.getConfiguredGroups()
-
   constructor(
     private readonly verdaccio: Verdaccio,
     private readonly config: ParsedPluginConfig,
   ) {}
 
-  /**
-   * Returns all permission groups used in the Verdacio config.
-   */
-  getConfiguredGroups() {
-    const configuredGroups: Record<string, true> = {}
-
-    Object.values(this.config.packages || {}).forEach((packageConfig) => {
-      ;["access", "publish", "unpublish"]
-        .flatMap((key) => packageConfig[key])
-        .filter(Boolean)
-        .forEach((group: string) => {
-          configuredGroups[group] = true
-        })
-    })
-
-    return configuredGroups
-  }
-
   async createAuthenticatedUser(
-    username: string,
-    groups: string[],
+    userName: string,
+    userGroups: string[],
   ): Promise<User> {
-    const relevantGroups = groups.filter(
-      (group) => group in this.configuredGroups,
-    )
-
-    relevantGroups.push(username)
-
-    if (this.requiredGroup) {
-      relevantGroups.push(this.requiredGroup)
-    }
+    const relevantGroups = userGroups
+      .filter((group) => this.config.isGroupConfigured(group))
+      .filter(Boolean)
+      .sort()
 
     const user: User = {
-      name: username,
+      name: userName,
       groups: [...authenticatedUserGroups],
-      real_groups: uniq(relevantGroups.filter(Boolean).sort()),
+      real_groups: relevantGroups,
     }
-    logger.log("Created authenticated user", user)
 
+    logger.log("User successfuly authenticated:", user)
     return user
   }
 
   async createUiCallbackUrl(
-    username: string,
-    token: string,
-    groups: string[],
+    userName: string,
+    userGroups: string[],
+    userToken: string,
   ): Promise<string> {
-    const user = await this.createAuthenticatedUser(username, groups)
+    const user = await this.createAuthenticatedUser(userName, userGroups)
 
     const uiToken = await this.verdaccio.issueUiToken(user)
-    const npmToken = await this.verdaccio.issueNpmToken(token, user)
+    const npmToken = await this.verdaccio.issueNpmToken(user, userToken)
 
-    const query = { username, uiToken, npmToken }
+    const query = { username: userName, uiToken, npmToken }
     const url = "/?" + stringify(query)
 
     return url
-  }
-
-  authenticate(username: string, groups: string[]): boolean {
-    if (this.requiredGroup && !groups.includes(this.requiredGroup)) {
-      logger.error(
-        `Access denied: User "${username}" is not a member of "${this.requiredGroup}"`,
-      )
-      return false
-    }
-
-    if (!groups.length) {
-      logger.error(`Access denied: User "${username}" does not have any groups`)
-      return false
-    }
-
-    return true
   }
 }

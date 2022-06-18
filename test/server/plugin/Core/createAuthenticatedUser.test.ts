@@ -1,30 +1,28 @@
-import { pluginKey } from "src/constants"
 import {
   createTestAuthCore,
   testProviderGroups,
-  testUsername,
+  testUserName,
 } from "test/utils"
 import { describe, expect, it } from "vitest"
 
 describe("AuthCore", () => {
   describe("createAuthenticatedUser", () => {
     it("the name is correct", async () => {
-      const username = "test-username"
       const core = createTestAuthCore()
 
       const user = await core.createAuthenticatedUser(
-        username,
+        testUserName,
         testProviderGroups,
       )
 
-      expect(user.name).toMatchInlineSnapshot(`"test-username"`)
+      expect(user.name).toEqual(testUserName)
     })
 
     it("groups contain the correct tokens", async () => {
       const core = createTestAuthCore()
 
       const user = await core.createAuthenticatedUser(
-        testUsername,
+        testUserName,
         testProviderGroups,
       )
 
@@ -38,79 +36,48 @@ describe("AuthCore", () => {
       `)
     })
 
-    it("real_groups always contain the username", async () => {
-      const username = "test-username"
-      const providerGroups = []
-      const core = createTestAuthCore()
-
-      const user = await core.createAuthenticatedUser(username, providerGroups)
-
-      expect(user.real_groups).toMatchInlineSnapshot(`
-        [
-          "test-username",
-        ]
-      `)
-    })
-
-    it("real_groups contains the required login org if configured", async () => {
-      const org = "test-org"
-      const providerGroups = []
+    it("real_groups contains groups used in the packages config, but nothing else", async () => {
+      const providerGroups = [
+        "github/user/a",
+        "github/user/b",
+        "github/user/c",
+        "github/user/d",
+        "github/user/e",
+        "github/user/f",
+        "github/user/g",
+      ]
       const core = createTestAuthCore({
-        auth: {
-          [pluginKey]: {
-            org,
-            "client-id": "_",
-            "client-secret": "_",
+        packages: {
+          foo: {
+            access: ["github/user/a"],
+            publish: ["github/user/b"],
+            unpublish: ["github/user/c"],
+            proxy: ["_"],
+            storage: "_",
+          },
+          bar: {
+            access: ["github/user/d"],
+            publish: ["github/user/e"],
+            unpublish: ["github/user/f"],
+            proxy: ["_"],
+            storage: "_",
           },
         },
       })
 
       const user = await core.createAuthenticatedUser(
-        testUsername,
+        testUserName,
         providerGroups,
       )
 
       expect(user.real_groups).toMatchInlineSnapshot(`
         [
-          "github/owner/test-org",
-          "test-username",
-        ]
-      `)
-    })
-
-    it("real_groups contain groups used in the package access and publish config, but nothing else", async () => {
-      const username = "test-username"
-      const providerGroups = ["a", "b", "c", "d", "e", "f", "g"]
-      const core = createTestAuthCore({
-        packages: {
-          foo: {
-            access: ["a"],
-            publish: ["b"],
-            unpublish: ["c"],
-            proxy: ["_"],
-            storage: "_",
-          },
-          bar: {
-            access: ["d"],
-            publish: ["e"],
-            unpublish: ["f"],
-            proxy: ["_"],
-            storage: "_",
-          },
-        },
-      })
-
-      const user = await core.createAuthenticatedUser(username, providerGroups)
-
-      expect(user.real_groups).toMatchInlineSnapshot(`
-        [
-          "a",
-          "b",
-          "c",
-          "d",
-          "e",
-          "f",
-          "test-username",
+          "github/user/a",
+          "github/user/b",
+          "github/user/c",
+          "github/user/d",
+          "github/user/e",
+          "github/user/f",
         ]
       `)
     })

@@ -3,7 +3,7 @@ import {
   createTestAuthProvider,
   createTestPlugin,
   testOAuthToken,
-  testUsername,
+  testUserName,
 } from "test/utils"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -29,7 +29,7 @@ describe("Plugin", () => {
     })
 
     it("user with empty token cannot authenticate", async () => {
-      await plugin.authenticate(testUsername, "", (err, groups) => {
+      await plugin.authenticate(testUserName, "", (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toBe(false)
       })
@@ -37,7 +37,7 @@ describe("Plugin", () => {
 
     it("user with invalid token throws error", async () => {
       await plugin.authenticate(
-        testUsername,
+        testUserName,
         "invalid_token",
         (err, groups) => {
           expect(err).toBeTruthy()
@@ -47,7 +47,7 @@ describe("Plugin", () => {
     })
 
     it("user with valid token can authenticate", async () => {
-      await plugin.authenticate(testUsername, testOAuthToken, (err, groups) => {
+      await plugin.authenticate(testUserName, testOAuthToken, (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toBeTruthy()
       })

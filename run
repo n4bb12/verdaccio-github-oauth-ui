@@ -38,9 +38,10 @@ clean() {
 #
 build() {
   # bundle with parcel
-  run build yarn parcel build --target client
-  run build yarn parcel build --target server
-  run build yarn parcel build --target cli
+  run build yarn parcel build --target client &
+  run build yarn parcel build --target server &
+  run build yarn parcel build --target cli &
+  wait
 
   # add node shebang
   printf '%s\n%s\n' '#!/usr/bin/env node' "$(cat dist/cli/index.js)" > dist/cli/index.js
@@ -55,14 +56,6 @@ copy() {
   run copy cp package.json $pluginDir/
 }
 
-read-env() {
-  if [ -f .env ]; then
-    set -a
-    source .env
-    set +a
-  fi
-}
-
 typecheck() {
   run typecheck yarn tsc --noEmit --project src/client/tsconfig.json &
   run typecheck yarn tsc --noEmit --project src/server/tsconfig.json &
@@ -71,34 +64,45 @@ typecheck() {
   wait
 }
 
-test-whoami() {
-  run whoami npm whoami --registry http://localhost:4873
+read-env() {
+  if [ -f .env ]; then
+    set -a
+    source .env
+    set +a
+  fi
 }
 
-test-publish() {
+cli-login() {
+  # npx verdaccio-github-oauth-ui --registry http://localhost:4873
+  run cli-login ./dist/cli/index.js --registry http://localhost:4873
+}
+
+cli-whoami() {
+  run cli-whoami npm whoami --registry http://localhost:4873
+}
+
+cli-publish() {
   packageName="0.0.0-$(date +%Y%m%d%H%M%S)"
   directory="package/$packageName"
 
-  mkdir -p "$directory"
+  run cli-publish mkdir -p "$directory"
   echo "{\"name\":\"oauth-cli-test\",\"version\":\"$packageName\",\"license\":\"UNLICENSED\"}" > "$directory/package.json"
-
-  run test-publish cd "$directory"
-  run test-publish npm publish --registry http://localhost:4873
+  run cli-publish cd "$directory"
+  run cli-publish npm publish --registry http://localhost:4873
 }
 
-test-cli() {
-  # npx verdaccio-github-oauth-ui --registry http://localhost:4873
-  run test-cli ./dist/cli/index.js --registry http://localhost:4873
-
-  test-publish
+cli() {
+  cli-login
+  cli-whoami
+  cli-publish
 }
 
-test-docker() {
+docker_() {
   read-env
 
-  run test-docker docker rm --force verdaccio || true
-  run test-docker docker build --tag verdaccio .
-  run test-docker docker run \
+  run docker docker rm --force verdaccio || true
+  run docker docker build --tag verdaccio .
+  run docker docker run \
     --publish 4873:4873 \
     --env "GITHUB_ORG=$GITHUB_ORG" \
     --env "GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID" \
