@@ -30,14 +30,10 @@ describe("Plugin", () => {
     })
 
     it("invalid token cannot authenticate", async () => {
-      await plugin.authenticate(
-        testUserName,
-        "invalidToken",
-        (err, groups) => {
-          expect(err).toBeNull()
-          expect(groups).toBe(false)
-        },
-      )
+      await plugin.authenticate(testUserName, "invalidToken", (err, groups) => {
+        expect(err).toBeNull()
+        expect(groups).toBe(false)
+      })
     })
 
     it("valid user name and token can authenticate", async () => {
