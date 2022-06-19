@@ -27,6 +27,7 @@ Solutions that worked for others:
 ### Error: "Failed requesting GitHub user info"
 
 - Double-check that your configured client id and client secret are correct.
+- You might be using this plugin in combination with another auth plugin that allows users to register without having a corresponding GitHub account.
 - If you are behind a proxy, make sure you are also passing through the query
   parameters to Verdaccio. See
   [#47](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/47#issuecomment-643814163)
