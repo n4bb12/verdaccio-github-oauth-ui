@@ -7,6 +7,7 @@ import {
   RemoteUser,
 } from "@verdaccio/types"
 import { Application } from "express"
+import { logger } from "../../logger"
 import { CliFlow, WebFlow } from "../flows"
 import { GitHubAuthProvider } from "../github"
 import { AuthCore } from "./AuthCore"
@@ -49,6 +50,23 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
     }
   }
 
+  private async userNameAndTokenMatch(
+    userName: string,
+    userToken: string,
+  ): Promise<boolean> {
+    try {
+      const userNameForToken = await this.provider.getUserName(userToken)
+      if (userNameForToken !== userName) {
+        logger.error("The token does not match the user name")
+        return false
+      }
+      return true
+    } catch (error) {
+      logger.error(error)
+      return false
+    }
+  }
+
   /**
    * IPluginAuth
    */
@@ -58,13 +76,17 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
     callback: AuthCallback,
   ): Promise<void> {
     try {
-      if (!userName || !userToken) {
+      if (
+        !userName ||
+        !userToken ||
+        !(await this.userNameAndTokenMatch(userName, userToken))
+      ) {
         callback(null, false)
         return
       }
 
-      const groups = await this.cache.getGroups(userName)
-      const user = await this.core.createAuthenticatedUser(userName, groups)
+      const userGroups = await this.cache.getGroups(userName)
+      const user = await this.core.createAuthenticatedUser(userName, userGroups)
 
       callback(null, user.real_groups)
     } catch (error) {

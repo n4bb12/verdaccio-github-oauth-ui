@@ -1,19 +1,8 @@
 import { AllowAccess, RemoteUser } from "@verdaccio/types"
 import { PackageAccess } from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
-import {
-  createTestAuthProvider,
-  createTestPackage,
-  createTestPlugin,
-  createTestUser,
-} from "test/utils"
-import { beforeEach, describe, expect, it, vi } from "vitest"
-
-vi.mock("src/server/github/AuthProvider", () => ({
-  GitHubAuthProvider: vi
-    .fn()
-    .mockImplementation(() => createTestAuthProvider()),
-}))
+import { createTestPackage, createTestPlugin, createTestUser } from "test/utils"
+import { beforeEach, describe, expect, it } from "vitest"
 
 describe("Plugin", () => {
   describe("allow_access", () => {

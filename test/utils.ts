@@ -15,6 +15,12 @@ import timekeeper from "timekeeper"
 import Auth from "verdaccio/build/lib/auth"
 import { afterEach, beforeEach, vi } from "vitest"
 
+vi.mock("src/server/github/AuthProvider", () => ({
+  GitHubAuthProvider: vi
+    .fn()
+    .mockImplementation(() => createTestAuthProvider()),
+}))
+
 export const testOrgGroup = `github/org/TEST_ORG`
 export const testOrgTeamGroup = `github/org/TEST_ORG/team/TEST_TEAM`
 export const testOrgRepoGroup = `github/org/TEST_ORG/repo/TEST_REPO`
@@ -30,6 +36,14 @@ export const testProviderGroups = [
   testUserGroup,
   testUserRepoGroup,
 ]
+
+export const testPackagesConfig = {
+  testPackage1: { access: testOrgGroup },
+  testPackage2: { access: testOrgTeamGroup },
+  testPackage3: { access: testOrgRepoGroup },
+  testPackage4: { access: testUserGroup },
+  testPackage5: { access: testUserRepoGroup },
+}
 
 export const testClientId = "CLIENT_ID"
 export const testClientSecret = "CLIENT_SECRET"
@@ -65,11 +79,17 @@ export function createTestVerdaccioConfig(
   return {
     auth: {
       [pluginKey]: createTestPluginConfig(pluginConfig),
+      ...verdaccioConfig.auth,
     },
     middlewares: {
       [pluginKey]: {
         enabled: true,
       },
+      ...verdaccioConfig.middlewares,
+    },
+    packages: {
+      ...testPackagesConfig,
+      ...verdaccioConfig.packages,
     },
     ...verdaccioConfig,
   } as Config
@@ -103,14 +123,17 @@ export function createTestAuthProvider() {
     async getToken(code: string) {
       return code === testOAuthCode ? testOAuthToken : ""
     },
-    async getUserName(token: string) {
-      return token === testOAuthToken ? testUserName : ""
+    async getUserName(userToken: string) {
+      if (userToken === testOAuthToken) {
+        return testUserName
+      }
+      throw new Error(testErrorMessage)
     },
     async getGroups(userName: string) {
-      if (userName !== testUserName) {
-        throw new Error("Invalid token")
+      if (userName === testUserName) {
+        return [...testProviderGroups]
       }
-      return testProviderGroups
+      return []
     },
   }
   return provider

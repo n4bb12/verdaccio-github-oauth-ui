@@ -1,17 +1,11 @@
 import { Plugin } from "src/server/plugin/Plugin"
 import {
-  createTestAuthProvider,
   createTestPlugin,
   testOAuthToken,
+  testProviderGroups,
   testUserName,
 } from "test/utils"
-import { beforeEach, describe, expect, it, vi } from "vitest"
-
-vi.mock("src/server/github/AuthProvider", () => ({
-  GitHubAuthProvider: vi
-    .fn()
-    .mockImplementation(() => createTestAuthProvider()),
-}))
+import { beforeEach, describe, expect, it } from "vitest"
 
 describe("Plugin", () => {
   describe("authenticate", () => {
@@ -21,35 +15,35 @@ describe("Plugin", () => {
       plugin = createTestPlugin()
     })
 
-    it("user with empty username cannot authenticate", async () => {
+    it("empty user name cannot authenticate", async () => {
       await plugin.authenticate("", testOAuthToken, (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toBe(false)
       })
     })
 
-    it("user with empty token cannot authenticate", async () => {
+    it("empty token cannot authenticate", async () => {
       await plugin.authenticate(testUserName, "", (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toBe(false)
       })
     })
 
-    it("user with invalid token throws error", async () => {
+    it("invalid token cannot authenticate", async () => {
       await plugin.authenticate(
         testUserName,
-        "invalid_token",
+        "invalidToken",
         (err, groups) => {
-          expect(err).toBeTruthy()
-          expect(groups).toBeFalsy()
+          expect(err).toBeNull()
+          expect(groups).toBe(false)
         },
       )
     })
 
-    it("user with valid token can authenticate", async () => {
+    it("valid user name and token can authenticate", async () => {
       await plugin.authenticate(testUserName, testOAuthToken, (err, groups) => {
         expect(err).toBeNull()
-        expect(groups).toBeTruthy()
+        expect(groups).toEqual(expect.arrayContaining(testProviderGroups))
       })
     })
   })
