@@ -40,24 +40,13 @@ describe("ParsedPluginConfig", () => {
 
     const parsedPluginConfig = new ParsedPluginConfig(config)
 
-    expect(parsedPluginConfig).toMatchInlineSnapshot(`
-      ParsedPluginConfig {
+    // Don't snapshot constructor properties
+    const { config: _, ...result } = parsedPluginConfig
+
+    expect(result).toMatchInlineSnapshot(`
+      {
         "clientId": "clientId",
         "clientSecret": "clientSecret",
-        "config": {
-          "auth": {
-            "github-oauth-ui": {
-              "client-id": "clientId",
-              "client-secret": "clientSecret",
-              "token": "token",
-            },
-          },
-          "middlewares": {
-            "github-oauth-ui": {
-              "enabled": true,
-            },
-          },
-        },
         "configuredGroupsMap": {},
         "enterpriseOrigin": undefined,
         "parsedOrgs": [],
