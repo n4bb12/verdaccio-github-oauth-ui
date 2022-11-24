@@ -15,9 +15,13 @@
 
 <img src="screenshots/authorize.png" width="398" />
 
-- Click the login button. You get redirected to GitHub and prompted to authorize the registry to access your public information.
-- If the registry requires private org membership, click the <kbd>Request</kbd> or <kbd>Grant</kbd> button next to the org to get `read:org` access to the registry.
-- Authorize the registry to access your GitHub user and org info. You only need to do this once.
+- Click the login button. You get redirected to GitHub and prompted to authorize
+  the registry to access your public information.
+- If the registry requires private org membership, click the <kbd>Request</kbd>
+  or <kbd>Grant</kbd> button next to the org to get `read:org` access to the
+  registry.
+- Authorize the registry to access your GitHub user and org info. You only need
+  to do this once.
 - Once completed, you'll be redirected back to Verdaccio.
 - You are now logged in 🎉.
 

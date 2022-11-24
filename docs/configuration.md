@@ -36,15 +36,20 @@ npm install verdaccio-github-oauth-ui
 
 See the [Dockerfile](../Dockerfile) for a simple example.
 
-Verdaccio also has various [Docker examples](https://github.com/verdaccio/verdaccio/tree/master/docker-examples).
+Verdaccio also has various [Docker
+examples](https://github.com/verdaccio/verdaccio/tree/master/docker-examples).
 
 ### Global Installation
 
-Avoid installing plugins globally. See the [troubleshooting](./troubleshooting.md#error-verdaccio-github-oauth-ui-plugin-not-found) guide for more information on why this is likely to cause problems.
+Avoid installing plugins globally. See the
+[troubleshooting](./troubleshooting.md#error-verdaccio-github-oauth-ui-plugin-not-found)
+guide for more information on why this is likely to cause problems.
 
 ## Registering a GitHub OAuth Application
 
-- Register a new OAuth application at https://github.com/settings/applications/new, or, if it should be owned by an organization, https://github.com/organizations/ORG_NAME/settings/apps/new
+- Register a new OAuth application at
+  https://github.com/settings/applications/new, or, if it should be owned by an
+  organization, https://github.com/organizations/ORG_NAME/settings/apps/new
 - The callback URL should be `YOUR_REGISTRY_URL/-/oauth/callback`
 
 Example:
@@ -70,40 +75,49 @@ auth:
 
 ### `client-id` and `client-secret` (required, string)
 
-These values are used to perform OAuth authorization code flows on behalf of your GitHub OAuth app.
+These values are used to perform OAuth authorization code flows on behalf of
+your GitHub OAuth app.
 
-You can find these values on the settings page of the GitHub app you previously created.
+You can find these values on the settings page of the GitHub app you previously
+created.
 
 ### `token` (required, string)
 
-This token needs to be created by a registry owner with access to all organizations, teams, and repositories configured in your package access rules.
+This token needs to be created by a registry owner with access to all
+organizations, teams, and repositories configured in your package access rules.
 
-It is used to decide whether your users are able to access, publish, or unpublish packages.
+It is used to decide whether your users are able to access, publish, or
+unpublish packages.
 
-To create the token, go to https://github.com/settings/tokens/new and select `repo` and `read:org`. The expiration time is up to you.
+To create the token, go to https://github.com/settings/tokens/new and select
+`repo` and `read:org`. The expiration time is up to you.
 
 <img src="screenshots/github-token.png" width="570" />
 
 ### `enterprise-origin` (optional, string)
 
-If using a GitHub Enterprise instance, set this to the base URL of your instance, for example: `https://github.example.com`.
+If using a GitHub Enterprise instance, set this to the base URL of your
+instance, for example: `https://github.example.com`.
 
 If using the public GitHub instance, don't configure this option.
 
 ### Using Environment Variables
 
-The plugin options can be actual values or the names of environment variables containing the values.
+The plugin options can be actual values or the names of environment variables
+containing the values.
 
 For example, either of the below will work:
 
 - `client-id: abc`
-- `client-id: GITHUB_CLIENT_ID` and set an environment variable `GITHUB_CLIENT_ID=abc`.
+- `client-id: GITHUB_CLIENT_ID` and set an environment variable
+  `GITHUB_CLIENT_ID=abc`.
 
 The environment variable names can be chosen freely. These are just examples.
 
 ## Configuring Package Access
 
-The following groups can be used to configure package permissions (access, publish, unpublish) as shown below:
+The following groups can be used to configure package permissions (access,
+publish, unpublish) as shown below:
 
 ```yml
 packages:
@@ -139,14 +153,17 @@ See [Package Access](https://verdaccio.org/docs/en/packages) for more examples.
 
 ## Configuring a Proxy
 
-If you are behind a proxy, the plugin needs to know the proxy server URL to make requests to the GitHub API.
-You can do that by configuring [global-agent](https://github.com/gajus/global-agent) environment variables:
+If you are behind a proxy, the plugin needs to know the proxy server URL to make
+requests to the GitHub API. You can do that by configuring
+[global-agent](https://github.com/gajus/global-agent) environment variables:
 
 ```bash
 export GLOBAL_AGENT_HTTP_PROXY=http://127.0.0.1:8080
 ```
 
-See the [global-agent](https://github.com/gajus/global-agent#environment-variables) docs for detailed configuration instrcutions.
+See the
+[global-agent](https://github.com/gajus/global-agent#environment-variables) docs
+for detailed configuration instrcutions.
 
 ## Revoking Tokens
 
@@ -160,7 +177,8 @@ See the [global-agent](https://github.com/gajus/global-agent#environment-variabl
 
 ### As a Registry Owner
 
-- Go to https://github.com/settings/applications, or, if owned by an org, https://github.com/organizations/ORG_NAME/settings/applications
+- Go to https://github.com/settings/applications, or, if owned by an org,
+  https://github.com/organizations/ORG_NAME/settings/applications
 - Find the OAuth app for your registry
 - Open the OAuth app settings
 - On the settings page click the <kbd>Revoke all user tokens</kbd> button

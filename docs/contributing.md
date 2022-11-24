@@ -1,10 +1,15 @@
 # Contributing
 
-All contributions, are welcome. If you have a feature idea, please open an issue first.
+All contributions, are welcome. If you have a feature idea, please open an issue
+first.
 
 ## Prerequisites
 
-- You'll need these tools: [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) &middot; [Bash](https://www.google.de/search?q=install+bash) &middot; [Node LTS](https://nodejs.org/en/download) &middot; [Yarn Berry](https://yarnpkg.com/lang/en/docs/install)
+- You'll need these tools:
+  [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) &middot;
+  [Bash](https://www.google.de/search?q=install+bash) &middot; [Node
+  LTS](https://nodejs.org/en/download) &middot; [Yarn
+  Berry](https://yarnpkg.com/lang/en/docs/install)
 - Install dependencies: `yarn install`
 
 ## Development Commands
