@@ -9,7 +9,8 @@
    1. [`client-id` and `client-secret` (required, string)](#client-id-and-client-secret-required-string)
    2. [`token` (required, string)](#token-required-string)
    3. [`enterprise-origin` (optional, string)](#enterprise-origin-optional-string)
-   4. [Using Environment Variables](#using-environment-variables)
+   4. [API Security](#api-security)
+   5. [Using Environment Variables](#using-environment-variables)
 4. [Configuring Package Access](#configuring-package-access)
 5. [Configuring a Proxy](#configuring-a-proxy)
 6. [Revoking Tokens](#revoking-tokens)
@@ -18,7 +19,7 @@
 
 ### Compatibility
 
-- Verdaccio 5.0 - 5.13
+- Verdaccio 5.0 - 5.18
 - Node 16
 - Browsers: See [browserslist](../.browserslistrc)
 
@@ -41,9 +42,10 @@ examples](https://github.com/verdaccio/verdaccio/tree/master/docker-examples).
 
 ### Global Installation
 
-Avoid installing plugins globally. See the
+Avoid installing plugins globally, it is likely to cause problems (in general,
+not just this plugin). See the
 [troubleshooting](./troubleshooting.md#error-verdaccio-github-oauth-ui-plugin-not-found)
-guide for more information on why this is likely to cause problems.
+guide for more information on alternatives.
 
 ## Registering a GitHub OAuth Application
 
@@ -100,6 +102,13 @@ If using a GitHub Enterprise instance, set this to the base URL of your
 instance, for example: `https://github.example.com`.
 
 If using the public GitHub instance, don't configure this option.
+
+### API Security
+
+This plugin doesn't support Verdaccio's legacy token encryption. Please use
+the newer JWT configuration. See the corresponding [Verdaccio
+docs](https://verdaccio.org/docs/configuration/#security) for instructions on
+how to configure it.
 
 ### Using Environment Variables
 

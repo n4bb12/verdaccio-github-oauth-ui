@@ -3,6 +3,7 @@
 1. [Troubleshooting](#troubleshooting)
    1. [Error: "verdaccio-github-oauth-ui plugin not found"](#error-verdaccio-github-oauth-ui-plugin-not-found)
    2. [Error: "Failed requesting GitHub user info"](#error-failed-requesting-github-user-info)
+   3. [Error: "npm ERR! Unable to authenticate, your authentication token seems to be invalid." or "error--- undefined is forbidden publish for"](#error-npm-err-unable-to-authenticate-your-authentication-token-seems-to-be-invalid-or-error----undefined-is-forbidden-publish-for)
 
 ### Error: "verdaccio-github-oauth-ui plugin not found"
 
@@ -35,3 +36,21 @@ Solutions that worked for others:
   parameters to Verdaccio. See
   [#47](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/47#issuecomment-643814163)
   for an example using `nginx`.
+
+### Error: "npm ERR! Unable to authenticate, your authentication token seems to be invalid." or "error--- undefined is forbidden publish for"
+
+You can run into this problem if you're using Verdaccio's legacy token
+encryption of Verdaccio (which is inconveniently the default).
+
+In that case, if authentication succeeds but the user does not have any groups,
+the user is treated as anonymous.
+
+This is different from how Verdaccio acts when using JWT API security. In that
+case, the user does not need to have any groups as long as authentication
+succeeds.
+
+For more context, please see:
+
+- https://verdaccio.org/docs/configuration/#security
+- https://verdaccio.org/blog/2019/04/19/diving-into-jwt-support-for-verdaccio-4/
+- https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/164
