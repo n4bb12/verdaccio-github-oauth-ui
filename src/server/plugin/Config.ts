@@ -173,59 +173,73 @@ export class ParsedPluginConfig {
    * Returns all permission groups used in the Verdacio config.
    */
   private parseConfiguredPackageGroups() {
-    Object.values(this.config.packages || {}).forEach((packageConfig) => {
-      ;["access", "publish", "unpublish"]
-        .flatMap((key) => packageConfig[key])
-        .forEach((group) => {
-          if (typeof group !== "string") {
-            return
+    const configuredGroups = Object.values(this.config.packages || {}).flatMap(
+      (packageConfig) => {
+        return ["access", "publish", "unpublish"].flatMap((action) => {
+          const allowedGroups = packageConfig[action]
+
+          if (typeof allowedGroups === "string") {
+            return allowedGroups
           }
 
-          const [providerId, key1, value1, key2, value2, key3] =
-            group.split("/")
-
-          if (providerId !== "github") {
-            return null
+          if (
+            Array.isArray(allowedGroups) &&
+            allowedGroups.every((group) => typeof group === "string")
+          ) {
+            return allowedGroups as string[]
           }
 
-          if (key1 === "user" && !key2) {
-            const parsedUser: ParsedUser = {
-              group,
-              user: value1,
-            }
-            this.parsedUsers.push(parsedUser)
-            this.configuredGroupsMap[group] = true
-          }
-
-          if (key1 === "org" && key2 === "team" && !key3) {
-            const parsedTeam: ParsedTeam = {
-              group,
-              org: value1,
-              team: value2,
-            }
-            this.parsedTeams.push(parsedTeam)
-            this.configuredGroupsMap[group] = true
-          }
-
-          if ((key1 === "org" || key1 === "user") && key2 === "repo" && !key3) {
-            const parsedRepo: ParsedRepo = {
-              group,
-              owner: value1,
-              repo: value2,
-            }
-            this.parsedRepos.push(parsedRepo)
-            this.configuredGroupsMap[group] = true
-          }
-
-          if (key1 === "org" && !key2) {
-            const parsedOrg: ParsedOrg = {
-              group,
-              org: value1,
-            }
-            this.parsedOrgs.push(parsedOrg)
-            this.configuredGroupsMap[group] = true
-          }
+          return []
         })
+      },
+    )
+
+    const configuredGroupsDeduped = [...new Set(configuredGroups)]
+
+    configuredGroupsDeduped.forEach((group) => {
+      const [providerId, key1, value1, key2, value2, key3] = group.split("/")
+
+      if (providerId !== "github") {
+        return null
+      }
+
+      if (key1 === "user" && !key2) {
+        const parsedUser: ParsedUser = {
+          group,
+          user: value1,
+        }
+        this.parsedUsers.push(parsedUser)
+        this.configuredGroupsMap[group] = true
+      }
+
+      if (key1 === "org" && key2 === "team" && !key3) {
+        const parsedTeam: ParsedTeam = {
+          group,
+          org: value1,
+          team: value2,
+        }
+        this.parsedTeams.push(parsedTeam)
+        this.configuredGroupsMap[group] = true
+      }
+
+      if ((key1 === "org" || key1 === "user") && key2 === "repo" && !key3) {
+        const parsedRepo: ParsedRepo = {
+          group,
+          owner: value1,
+          repo: value2,
+        }
+        this.parsedRepos.push(parsedRepo)
+        this.configuredGroupsMap[group] = true
+      }
+
+      if (key1 === "org" && !key2) {
+        const parsedOrg: ParsedOrg = {
+          group,
+          org: value1,
+        }
+        this.parsedOrgs.push(parsedOrg)
+        this.configuredGroupsMap[group] = true
+      }
     })
   }
 }

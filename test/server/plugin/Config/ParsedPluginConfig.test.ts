@@ -164,4 +164,93 @@ describe("ParsedPluginConfig", () => {
       }
     `)
   })
+
+  it("deduplicates package groups", () => {
+    const enabledPluginConfig = {
+      enabled: true,
+    } as any
+
+    const minimalPluginConfig: PluginConfig = {
+      "client-id": "clientId",
+      "client-secret": "clientSecret",
+      token: "token",
+      "enterprise-origin": "enterpriseOrigin",
+    }
+
+    const config: Config = {
+      middlewares: { [pluginKey]: enabledPluginConfig },
+      auth: { [pluginKey]: minimalPluginConfig },
+      url_prefix: "/verdaccio/",
+      packages: {
+        package1a: { access: "$authenticated" },
+        package1b: { access: "$authenticated" },
+
+        package2a: { access: "github/user/TEST_USER" },
+        package2b: { access: "github/user/TEST_USER" },
+
+        package3a: { access: "github/user/TEST_USER/repo/TEST_REPO" },
+        package3b: { access: "github/user/TEST_USER/repo/TEST_REPO" },
+
+        package4a: { access: "github/org/TEST_ORG" },
+        package4b: { access: "github/org/TEST_ORG" },
+
+        package5a: { access: "github/org/TEST_ORG/team/TEST_TEAM" },
+        package5b: { access: "github/org/TEST_ORG/team/TEST_TEAM" },
+
+        package6a: { access: "github/org/TEST_ORG/repo/TEST_REPO" },
+        package6b: { access: "github/org/TEST_ORG/repo/TEST_REPO" },
+      },
+    } as any
+
+    const parsedPluginConfig = new ParsedPluginConfig(config)
+
+    expect(parsedPluginConfig.configuredGroupsMap).toMatchInlineSnapshot(`
+      {
+        "github/org/TEST_ORG": true,
+        "github/org/TEST_ORG/repo/TEST_REPO": true,
+        "github/org/TEST_ORG/team/TEST_TEAM": true,
+        "github/user/TEST_USER": true,
+        "github/user/TEST_USER/repo/TEST_REPO": true,
+      }
+    `)
+    expect(parsedPluginConfig.parsedOrgs).toMatchInlineSnapshot(`
+      [
+        {
+          "group": "github/org/TEST_ORG",
+          "org": "TEST_ORG",
+        },
+      ]
+    `)
+    expect(parsedPluginConfig.parsedRepos).toMatchInlineSnapshot(`
+      [
+        {
+          "group": "github/user/TEST_USER/repo/TEST_REPO",
+          "owner": "TEST_USER",
+          "repo": "TEST_REPO",
+        },
+        {
+          "group": "github/org/TEST_ORG/repo/TEST_REPO",
+          "owner": "TEST_ORG",
+          "repo": "TEST_REPO",
+        },
+      ]
+    `)
+    expect(parsedPluginConfig.parsedTeams).toMatchInlineSnapshot(`
+      [
+        {
+          "group": "github/org/TEST_ORG/team/TEST_TEAM",
+          "org": "TEST_ORG",
+          "team": "TEST_TEAM",
+        },
+      ]
+    `)
+    expect(parsedPluginConfig.parsedUsers).toMatchInlineSnapshot(`
+      [
+        {
+          "group": "github/user/TEST_USER",
+          "user": "TEST_USER",
+        },
+      ]
+    `)
+  })
 })
