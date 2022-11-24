@@ -1,5 +1,4 @@
 import { GitHubAuthProvider } from "src/server/github/AuthProvider"
-import { ParsedPluginConfig } from "src/server/plugin/Config"
 import { createTestParsedPluginConfig } from "test/utils"
 import { describe, expect, it } from "vitest"
 
@@ -7,7 +6,7 @@ describe("GitHubAuthProvider", () => {
   describe("getLoginUrl", () => {
     it("Public GitHub", () => {
       const config = createTestParsedPluginConfig()
-      const provider = new GitHubAuthProvider(config as ParsedPluginConfig)
+      const provider = new GitHubAuthProvider(config)
       const loginUrl = provider.getLoginUrl("callbackUrl")
 
       expect(loginUrl).toMatchInlineSnapshot(
@@ -20,7 +19,7 @@ describe("GitHubAuthProvider", () => {
         "enterprise-origin": "https://example.github.com",
       })
 
-      const provider = new GitHubAuthProvider(config as ParsedPluginConfig)
+      const provider = new GitHubAuthProvider(config)
       const loginUrl = provider.getLoginUrl("callbackUrl")
 
       expect(loginUrl).toMatchInlineSnapshot(
