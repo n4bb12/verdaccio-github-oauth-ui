@@ -37,6 +37,9 @@ clean() {
 # Build server, config and client
 #
 build() {
+  # https://github.com/parcel-bundler/parcel/issues/8005#issuecomment-1120149358
+  export NODE_OPTIONS=--no-experimental-fetch
+
   # bundle with parcel
   run build yarn parcel build --target client &
   run build yarn parcel build --target server &
