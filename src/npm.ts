@@ -42,9 +42,7 @@ export function getNpmSaveCommands(registry: string, token: string) {
   const url = new URL(registry)
   const baseUrl = url.host + url.pathname
 
-  return [
-    `npm config set //${baseUrl}:_authToken "${token}"`,
-  ]
+  return [`npm config set //${baseUrl}:_authToken "${token}"`]
 }
 
 export function saveNpmToken(token: string) {
