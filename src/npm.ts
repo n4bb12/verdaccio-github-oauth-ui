@@ -43,7 +43,6 @@ export function getNpmSaveCommands(registry: string, token: string) {
   const baseUrl = url.host + url.pathname
 
   return [
-    `npm config set //${baseUrl}:always-auth true`,
     `npm config set //${baseUrl}:_authToken "${token}"`,
   ]
 }

@@ -19,8 +19,9 @@
 
 ### Compatibility
 
-- Verdaccio 5.0 - 5.18
+- Verdaccio 5.0 - 5.19
 - Node 16
+- npm 7+
 - Browsers: See [browserslist](../.browserslistrc)
 
 ## Installing the Plugin

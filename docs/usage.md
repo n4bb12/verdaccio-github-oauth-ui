@@ -50,7 +50,6 @@ Open the "Configuration" dialog and click "Copy to clipboard":
 - Run the copied commands on your terminal:
 
 ```bash
-npm config set //localhost:4873/:always-auth true
 npm config set //localhost:4873/:_authToken "SECRET_TOKEN"
 ```
 

@@ -35,7 +35,6 @@ describe("npm", () => {
     const commands1 = getNpmSaveCommands(testRegistryUrl, testNpmToken)
     expect(commands1).toMatchInlineSnapshot(`
         [
-          "npm config set //localhost:4873/:always-auth true",
           "npm config set //localhost:4873/:_authToken \\"test-npm-token\\"",
         ]
       `)
@@ -43,7 +42,6 @@ describe("npm", () => {
     const commands2 = getNpmSaveCommands(testRegistryUrl + "/", testNpmToken)
     expect(commands2).toMatchInlineSnapshot(`
         [
-          "npm config set //localhost:4873/:always-auth true",
           "npm config set //localhost:4873/:_authToken \\"test-npm-token\\"",
         ]
       `)
