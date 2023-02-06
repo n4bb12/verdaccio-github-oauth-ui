@@ -31,7 +31,7 @@ describe("Config", () => {
     it("treats 'domain' as optional", () => {
       createConfig({
         auth: {
-          [pluginKey]: { ...pluginConfig, "domain": undefined },
+          [pluginKey]: { ...pluginConfig, domain: undefined },
         },
         middlewares: {
           [pluginKey]: enabledPluginConfig,
