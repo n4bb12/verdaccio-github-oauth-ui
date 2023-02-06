@@ -15,8 +15,8 @@ import timekeeper from "timekeeper"
 import Auth from "verdaccio/build/lib/auth"
 import { afterEach, beforeEach, vi } from "vitest"
 
-vi.mock("src/server/github/AuthProvider", () => ({
-  GitHubAuthProvider: vi
+vi.mock("src/server/google/AuthProvider", () => ({
+  GoogleAuthProvider: vi
     .fn()
     .mockImplementation(() => createTestAuthProvider()),
 }))
@@ -67,7 +67,6 @@ export function createTestPluginConfig(
   return {
     "client-id": testClientId,
     "client-secret": testClientSecret,
-    token: testToken,
     ...pluginConfig,
   }
 }

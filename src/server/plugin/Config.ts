@@ -31,7 +31,7 @@ export type VerdaccioConfig = Omit<
 export interface PluginConfig {
   "client-id": string
   "client-secret": string
-  "domain"?: string
+  domain?: string
 }
 
 export interface Config extends VerdaccioConfig {
@@ -137,10 +137,7 @@ export class ParsedPluginConfig {
   readonly domain = getConfigValue<string | undefined>(
     this.config,
     "domain",
-    assert.any(
-      assert.undefined,
-      assert.string.url.nonEmpty,
-    ),
+    assert.any(assert.undefined, assert.string.url.nonEmpty),
   )
 
   constructor(readonly config: Config) {

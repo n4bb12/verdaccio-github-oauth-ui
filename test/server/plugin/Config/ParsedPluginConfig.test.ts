@@ -14,7 +14,6 @@ describe("ParsedPluginConfig", () => {
   const minimalPluginConfig: PluginConfig = {
     "client-id": "clientId",
     "client-secret": "clientSecret",
-    token: "token",
   }
   it.fails("middlewares key is required", () => {
     const invalidConfig: Config = {
@@ -67,8 +66,7 @@ describe("ParsedPluginConfig", () => {
     const minimalPluginConfig: PluginConfig = {
       "client-id": "clientId",
       "client-secret": "clientSecret",
-      token: "token",
-      "enterprise-origin": "enterpriseOrigin",
+      domain: "enterpriseOrigin",
     }
 
     const config: Config = {
@@ -173,8 +171,7 @@ describe("ParsedPluginConfig", () => {
     const minimalPluginConfig: PluginConfig = {
       "client-id": "clientId",
       "client-secret": "clientSecret",
-      token: "token",
-      "enterprise-origin": "enterpriseOrigin",
+      domain: "enterpriseOrigin",
     }
 
     const config: Config = {
