@@ -9,7 +9,7 @@ export class AuthCore {
     private readonly verdaccio: Verdaccio,
     private readonly config: ParsedPluginConfig,
   ) {}
-
+  
   async createAuthenticatedUser(
     userName: string,
     userGroups: string[],

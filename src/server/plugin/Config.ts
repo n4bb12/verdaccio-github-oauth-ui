@@ -31,8 +31,7 @@ export type VerdaccioConfig = Omit<
 export interface PluginConfig {
   "client-id": string
   "client-secret": string
-  token: string
-  "enterprise-origin"?: string
+  "domain"?: string
 }
 
 export interface Config extends VerdaccioConfig {
@@ -135,18 +134,12 @@ export class ParsedPluginConfig {
     assert.string.nonEmpty,
   )
 
-  readonly token = getConfigValue<string>(
+  readonly domain = getConfigValue<string | undefined>(
     this.config,
-    "token",
-    assert.string.nonEmpty,
-  )
-
-  readonly enterpriseOrigin = getConfigValue<string | undefined>(
-    this.config,
-    "enterprise-origin",
+    "domain",
     assert.any(
       assert.undefined,
-      assert.string.url.nonEmpty.not.startsWith(publicGitHubOrigin),
+      assert.string.url.nonEmpty,
     ),
   )
 

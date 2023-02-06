@@ -31,7 +31,7 @@ Some recommended ways to install the plugin:
 ### Installing It Locally
 
 ```bash
-npm install verdaccio-github-oauth-ui
+npm install verdaccio-google-oauth-ui
 ```
 
 ### Extending the Verdaccio Docker Image
@@ -48,7 +48,7 @@ not just this plugin). See the
 [troubleshooting](./troubleshooting.md#error-verdaccio-github-oauth-ui-plugin-not-found)
 guide for more information on alternatives.
 
-## Registering a GitHub OAuth Application
+## Registering a Google OAuth Application
 
 - Register a new OAuth application at
   https://github.com/settings/applications/new, or, if it should be owned by an
@@ -65,44 +65,27 @@ Merge the below options with your existing Verdaccio config:
 
 ```yml
 middlewares:
-  github-oauth-ui:
+  google-oauth-ui:
     enabled: true
 
 auth:
-  github-oauth-ui:
-    client-id: GITHUB_CLIENT_ID
-    client-secret: GITHUB_CLIENT_SECRET
-    token: GITHUB_TOKEN
-    enterprise-origin: GITHUB_ENTERPRISE_ORIGIN
+  google-oauth-ui:
+    client-id: GOOGLE_CLIENT_ID
+    client-secret: GOOGLE_CLIENT_SECRET
+    domain: GOOGLE_DOMAIN
 ```
 
 ### `client-id` and `client-secret` (required, string)
 
 These values are used to perform OAuth authorization code flows on behalf of
-your GitHub OAuth app.
+your Google OAuth app.
 
 You can find these values on the settings page of the GitHub app you previously
 created.
 
-### `token` (required, string)
+### `domain` (optional, string)
 
-This token needs to be created by a registry owner with access to all
-organizations, teams, and repositories configured in your package access rules.
-
-It is used to decide whether your users are able to access, publish, or
-unpublish packages.
-
-To create the token, go to https://github.com/settings/tokens/new and select
-`repo` and `read:org`. The expiration time is up to you.
-
-<img src="screenshots/github-token.png" width="570" />
-
-### `enterprise-origin` (optional, string)
-
-If using a GitHub Enterprise instance, set this to the base URL of your
-instance, for example: `https://github.example.com`.
-
-If using the public GitHub instance, don't configure this option.
+The domain that's allowed to login
 
 ### API Security
 
@@ -119,8 +102,8 @@ containing the values.
 For example, either of the below will work:
 
 - `client-id: abc`
-- `client-id: GITHUB_CLIENT_ID` and set an environment variable
-  `GITHUB_CLIENT_ID=abc`.
+- `client-id: GOOGLE_CLIENT_ID` and set an environment variable
+  `GOOGLE_CLIENT_ID=abc`.
 
 The environment variable names can be chosen freely. These are just examples.
 
@@ -134,7 +117,7 @@ packages:
   package1:
     # Limit access to signed-in users.
     # This works in tandem with other plugins that also add the `$authenticated` group, such as `htpasswd`.
-    # Note that every GitHub user can sign in, so this is not a restrictive group.
+    # Note that every Google user can sign in, so this is not a restrictive group.
     # If you want to limit access, use one of the other
     access: $authenticated
 

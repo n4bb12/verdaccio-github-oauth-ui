@@ -1,9 +1,9 @@
 <h1 align="center">
-  📦🔐 Verdaccio GitHub OAuth
+  📦🔐 Verdaccio Google OAuth
 </h1>
 
 <p align="center">
-  A Verdaccio auth plugin for GitHub OAuth — With UI and command line integration — <a href="https://www.verdaccio.org">https://www.verdaccio.org</a>
+  A Verdaccio auth plugin for Google OAuth — With UI and command line integration — <a href="https://www.verdaccio.org">https://www.verdaccio.org</a>
 </p>
 
 <p align="center">
@@ -20,12 +20,12 @@
 
 ## About
 
-This Verdaccio plugin offers GitHub OAuth integration with the Verdaccio UI and the `npm` CLI.
+This Verdaccio plugin offers Google OAuth integration with the Verdaccio UI and the `npm` CLI.
 
 ## Features
 
-- The login button redirects you to GitHub instead of showing a login form.
-- Usage info on the Verdaccio UI is updated for use with GitHub OAuth.
+- The login button redirects you to Google instead of showing a login form.
+- Usage info on the Verdaccio UI is updated for use with Google OAuth.
 - The plugin offers a command-line tool that configures `npm` in a single command.
 - Package access and publish/unpublish permission can be limited to specific GitHub
   - users

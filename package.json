@@ -1,10 +1,10 @@
 {
   "$schema": "http://json.schemastore.org/package",
   "name": "verdaccio-github-oauth-ui",
-  "version": "6.0.0",
+  "version": "1.0.0",
   "keywords": [
     "authentication",
-    "github",
+    "google",
     "login",
     "npm",
     "oauth",
@@ -16,9 +16,9 @@
     "verdaccio-auth-plugin",
     "verdaccio-plugin"
   ],
-  "homepage": "https://github.com/n4bb12/verdaccio-github-oauth-ui/blob/master/README.md",
-  "bugs": "https://github.com/n4bb12/verdaccio-github-oauth-ui/issues",
-  "repository": "github:n4bb12/verdaccio-github-oauth-ui",
+  "homepage": "https://github.com/Bryllyant/verdaccio-google-oauth-ui/blob/master/README.md",
+  "bugs": "https://github.com/Bryllyant/verdaccio-google-oauth-ui/issues",
+  "repository": "github:bryllyant/verdaccio-google-oauth-ui",
   "license": "MIT",
   "author": "Abraham Schilling",
   "main": "dist/server/index.js",
@@ -93,7 +93,7 @@
     "verdaccio": ">=5"
   },
   "engines": {
-    "node": "^16"
+    "node": ">=16"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"

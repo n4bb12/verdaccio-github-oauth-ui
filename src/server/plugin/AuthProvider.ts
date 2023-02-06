@@ -5,7 +5,7 @@ export interface AuthProvider {
   getLoginUrl(callbackUrl: string): string
   getCode(req: Request): string
 
-  getToken(code: string): Promise<string>
+  getToken(code: string, redirectUrl: string): Promise<string>
   getUserName(token: string): Promise<string>
   getGroups(userName: string): Promise<string[]>
 }

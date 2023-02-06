@@ -16,10 +16,10 @@ middlewares:
     enabled: true
 
 auth:
-  github-oauth-ui:
-    client-id: GITHUB_CLIENT_ID
-    client-secret: GITHUB_CLIENT_SECRET
-    token: GITHUB_TOKEN
+  google-oauth-ui:
+    client-id: GOOGLE_CLIENT_ID
+    client-secret: GOOGLE_CLIENT_SECRET
+    domain: GOOGLE_DOMAIN_NAME
   htpasswd:
     file: ./htpasswd
     algorithm: bcrypt

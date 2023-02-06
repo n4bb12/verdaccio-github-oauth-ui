@@ -9,7 +9,7 @@ import {
 import { Application } from "express"
 import { logger } from "../../logger"
 import { CliFlow, WebFlow } from "../flows"
-import { GitHubAuthProvider } from "../github"
+import { GoogleAuthProvider } from "../google"
 import { AuthCore } from "./AuthCore"
 import { Cache } from "./Cache"
 import { Config, PackageAccess, ParsedPluginConfig } from "./Config"
@@ -23,7 +23,7 @@ import { Auth, Verdaccio } from "./Verdaccio"
  */
 export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   private readonly parsedConfig = new ParsedPluginConfig(this.config)
-  private readonly provider = new GitHubAuthProvider(this.parsedConfig)
+  private readonly provider = new GoogleAuthProvider(this.parsedConfig)
   private readonly cache = new Cache(this.provider)
   private readonly verdaccio = new Verdaccio(this.config)
   private readonly core = new AuthCore(this.verdaccio, this.parsedConfig)
