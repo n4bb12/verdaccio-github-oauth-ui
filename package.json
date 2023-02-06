@@ -50,6 +50,7 @@
   "dependencies": {
     "@octokit/oauth-methods": "^2.0.4",
     "@octokit/request": "^6.2.3",
+    "@parcel/core": "^2.4.1",
     "chalk": "^4.1.2",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
@@ -93,7 +94,7 @@
     "verdaccio": ">=5"
   },
   "engines": {
-    "node": ">=16"
+    "node": "^16"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
