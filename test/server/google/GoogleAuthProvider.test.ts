@@ -10,7 +10,7 @@ describe("GoogleAuthProvider", () => {
       const loginUrl = provider.getLoginUrl("callbackUrl")
 
       expect(loginUrl).toMatchInlineSnapshot(
-        '"https://github.com/login/oauth/authorize?client_id=CLIENT_ID&redirect_uri=callbackUrl"',
+        '"https://accounts.google.com/o/oauth2/v2/auth?client_id=CLIENT_ID&redirect_uri=callbackUrl&scope=openid%20email%20profile&response_type=code&hd="',
       )
     })
   })

@@ -47,12 +47,11 @@ describe("ParsedPluginConfig", () => {
         "clientId": "clientId",
         "clientSecret": "clientSecret",
         "configuredGroupsMap": {},
-        "enterpriseOrigin": undefined,
+        "domain": undefined,
         "parsedOrgs": [],
         "parsedRepos": [],
         "parsedTeams": [],
         "parsedUsers": [],
-        "token": "token",
         "url_prefix": "",
       }
     `)
@@ -125,7 +124,7 @@ describe("ParsedPluginConfig", () => {
           "github/user/TEST_USER": true,
           "github/user/TEST_USER/repo/TEST_REPO": true,
         },
-        "enterpriseOrigin": "enterpriseOrigin",
+        "domain": "enterpriseOrigin",
         "parsedOrgs": [
           {
             "group": "github/org/TEST_ORG",
@@ -157,7 +156,6 @@ describe("ParsedPluginConfig", () => {
             "user": "TEST_USER",
           },
         ],
-        "token": "token",
         "url_prefix": "/verdaccio/",
       }
     `)

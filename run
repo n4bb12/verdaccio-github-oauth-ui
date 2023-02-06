@@ -107,9 +107,8 @@ docker_() {
   run docker docker build --tag verdaccio .
   run docker docker run \
     --publish 4873:4873 \
-    --env "GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID" \
-    --env "GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET" \
-    --env "GITHUB_TOKEN=$GITHUB_TOKEN" \
+    --env "GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" \
+    --env "GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET" \
     --name verdaccio verdaccio
 }
 

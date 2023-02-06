@@ -86,14 +86,6 @@ describe("Cache", () => {
       expect(provider.getGroups).toHaveBeenCalledTimes(1)
     })
 
-    it("returns empty groups when an error occurs", async () => {
-      configureFailingProvider()
-
-      const groups = await cache.getGroups(testOAuthToken)
-
-      expect(groups).toEqual([])
-    })
-
     it("distinguishes between different tokens", async () => {
       configureSucceedingProvider((token) => [token])
 

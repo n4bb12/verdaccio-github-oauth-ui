@@ -7,7 +7,7 @@ import get from "lodash/get"
 import assert from "ow"
 import process from "process"
 import { PartialDeep, RemoveIndexSignature } from "type-fest"
-import { pluginKey, publicGitHubOrigin } from "../../constants"
+import { pluginKey } from "../../constants"
 import { logger } from "../../logger"
 
 //

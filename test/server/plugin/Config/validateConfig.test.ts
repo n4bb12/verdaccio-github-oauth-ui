@@ -28,10 +28,10 @@ describe("Config", () => {
       })
     })
 
-    it("treats 'enterprise-origin' as optional", () => {
+    it("treats 'domain' as optional", () => {
       createConfig({
         auth: {
-          [pluginKey]: { ...pluginConfig, "enterprise-origin": undefined },
+          [pluginKey]: { ...pluginConfig, "domain": undefined },
         },
         middlewares: {
           [pluginKey]: enabledPluginConfig,

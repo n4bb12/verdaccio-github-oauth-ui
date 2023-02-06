@@ -12,7 +12,7 @@ log:
   level: info
 
 middlewares:
-  github-oauth-ui:
+  google-oauth-ui:
     enabled: true
 
 auth:

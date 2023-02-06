@@ -9411,9 +9411,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"verdaccio-github-oauth-ui@workspace:.":
+"verdaccio-google-oauth-ui@workspace:.":
   version: 0.0.0-use.local
-  resolution: "verdaccio-github-oauth-ui@workspace:."
+  resolution: "verdaccio-google-oauth-ui@workspace:."
   dependencies:
     "@octokit/oauth-methods": ^2.0.4
     "@octokit/request": ^6.2.3
@@ -9457,7 +9457,7 @@ __metadata:
   peerDependencies:
     verdaccio: ">=5"
   bin:
-    verdaccio-github-oauth-ui: dist/cli/index.js
+    verdaccio-google-oauth-ui: dist/cli/index.js
   languageName: unknown
   linkType: soft
 
