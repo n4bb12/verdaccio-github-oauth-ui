@@ -13,15 +13,7 @@
 
 ### On the Verdaccio UI
 
-<img src="screenshots/authorize.png" width="398" />
-
-- Click the login button. You get redirected to GitHub and prompted to authorize
-  the registry to access your public information.
-- If the registry requires private org membership, click the <kbd>Request</kbd>
-  or <kbd>Grant</kbd> button next to the org to get `read:org` access to the
-  registry.
-- Authorize the registry to access your GitHub user and org info. You only need
-  to do this once.
+- Click the login button. You get redirected to Google
 - Once completed, you'll be redirected back to Verdaccio.
 - You are now logged in 🎉.
 
@@ -32,7 +24,7 @@
 The easiest way to configure npm is to use this short command:
 
 ```bash
-npx verdaccio-github-oauth-ui --registry http://localhost:4873
+npx verdaccio-google-oauth-ui-2 --registry http://localhost:4873
 ```
 
 On success you should see this page in your browser:
@@ -59,7 +51,7 @@ npm config set //localhost:4873/:_authToken "SECRET_TOKEN"
 npm whoami --registry http://localhost:4873
 ```
 
-If you see your GitHub username, you are ready to start installing and
+If you see your Google username, you are ready to start installing and
 publishing packages.
 
 ## Signing Out
@@ -70,5 +62,5 @@ Click the <kbd>Logout</kbd> button as per usual.
 
 ### On the Command Line
 
-Unless OAuth access is revoked in the GitHub settings, the token is valid
+Unless OAuth access is revoked in the Google settings, the token is valid
 indefinitely.

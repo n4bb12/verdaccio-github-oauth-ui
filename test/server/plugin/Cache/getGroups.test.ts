@@ -15,10 +15,10 @@ describe("Cache", () => {
     let cache: Cache
 
     function configureSucceedingProvider(
-      getGroups: (token: string) => string[],
+      getGroups: (token: string, userName: string) => string[],
     ) {
       provider = createTestAuthProvider()
-      provider.getGroups = vi.fn((token) => Promise.resolve(getGroups(token)))
+      provider.getGroups = vi.fn((token, user) => Promise.resolve(getGroups(token, user)))
       cache = new Cache(provider, cacheTTLms)
     }
 
@@ -34,17 +34,17 @@ describe("Cache", () => {
       const expectedGroups = ["some-group"]
       configureSucceedingProvider(() => expectedGroups)
 
-      const groups = await cache.getGroups(testOAuthToken)
+      const groups = await cache.getGroups(testOAuthToken, "user")
 
-      expect(provider.getGroups).toHaveBeenCalledWith(testOAuthToken)
+      expect(provider.getGroups).toHaveBeenCalledWith(testOAuthToken, "user")
       expect(groups).toEqual(expectedGroups)
     })
 
     it("caches groups", async () => {
       configureSucceedingProvider(() => [])
 
-      await cache.getGroups(testOAuthToken)
-      await cache.getGroups(testOAuthToken)
+      await cache.getGroups(testOAuthToken, "user")
+      await cache.getGroups(testOAuthToken, "user")
 
       expect(provider.getGroups).toHaveBeenCalledTimes(1)
     })
@@ -55,7 +55,7 @@ describe("Cache", () => {
       const timeFirstCall = new Date("2021-11-27T00:00:00.000Z")
       timekeeper.freeze(timeFirstCall)
 
-      await cache.getGroups(testOAuthToken)
+      await cache.getGroups(testOAuthToken, "user")
 
       // multiply by 1.5 to avoid flake
       const timeSecondCall = new Date(
@@ -63,7 +63,7 @@ describe("Cache", () => {
       )
       timekeeper.travel(timeSecondCall)
 
-      await cache.getGroups(testOAuthToken)
+      await cache.getGroups(testOAuthToken, "user")
 
       timekeeper.reset()
 
@@ -78,7 +78,7 @@ describe("Cache", () => {
       for (let i = 0; i < 5; i++) {
         const time = new Date(`2021-11-27T00:00:00.${cacheTTLms * 0.5 * i}Z`)
         timekeeper.travel(time)
-        await cache.getGroups(testOAuthToken)
+        await cache.getGroups(testOAuthToken, "user")
       }
 
       timekeeper.reset()
@@ -89,8 +89,8 @@ describe("Cache", () => {
     it("distinguishes between different tokens", async () => {
       configureSucceedingProvider((token) => [token])
 
-      const aGroups = await cache.getGroups("goat")
-      const bGroups = await cache.getGroups("cheese")
+      const aGroups = await cache.getGroups("goat", "user1")
+      const bGroups = await cache.getGroups("cheese", "user2")
 
       expect(provider.getGroups).toHaveBeenCalledTimes(2)
       expect(aGroups).toEqual(["goat"])

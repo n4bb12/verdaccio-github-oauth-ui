@@ -13,7 +13,7 @@ describe("CLI", () => {
           "",
           "or by using the registry argument",
           "",
-          "npx verdaccio-google-oauth-ui --registry <URL>",
+          "npx verdaccio-google-oauth-ui-2 --registry <URL>",
         ]
       `)
     })

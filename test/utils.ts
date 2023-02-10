@@ -21,34 +21,12 @@ vi.mock("src/server/google/AuthProvider", () => ({
     .mockImplementation(() => createTestAuthProvider()),
 }))
 
-export const testOrgGroup = `github/org/TEST_ORG`
-export const testOrgTeamGroup = `github/org/TEST_ORG/team/TEST_TEAM`
-export const testOrgRepoGroup = `github/org/TEST_ORG/repo/TEST_REPO`
 export const testUserName = "TEST_USER"
-export const testUserGroup = `github/user/TEST_USER`
-export const testUserRepoGroup = `github/user/TEST_USER/repo/TEST_REPO`
-
-export const testProviderGroups = [
-  // regular groups
-  testOrgGroup,
-  testOrgTeamGroup,
-  testOrgRepoGroup,
-  testUserGroup,
-  testUserRepoGroup,
-]
-
-export const testPackagesConfig = {
-  testPackage1: { access: testOrgGroup },
-  testPackage2: { access: testOrgTeamGroup },
-  testPackage3: { access: testOrgRepoGroup },
-  testPackage4: { access: testUserGroup },
-  testPackage5: { access: testUserRepoGroup },
-}
 
 export const testClientId = "CLIENT_ID"
 export const testClientSecret = "CLIENT_SECRET"
 export const testToken = "TOKEN"
-export const testEnterpriseOrigin = "TEST_ENTERPRISE_ORIGIN"
+export const testDomain = "TEST_DOMAIN"
 export const testProviderId = "AUTH_PROVIDER"
 export const testLoginUrl = "LOGIN_URL"
 export const testOAuthCode = "OAUTH_CODE"
@@ -59,7 +37,19 @@ export const testUiToken = "UI_TOKEN"
 export const testNpmToken = "NPM_TOKEN"
 export const testErrorMessage = "EXPECTED_ERROR"
 
-export const testUser = createTestUser(testProviderGroups)
+export const testGroups = [
+  "verdaccio",
+  "verdaccio-publish",
+  "verdaccio-unpublish",
+]
+
+export const testPackagesConfig = {
+  testPackage1: { access: "veraddio" },
+  testPackage2: { access: "verdaccio-publish" },
+  testPackage3: { access: "verdaccio-unpublish" },
+}
+
+export const testUser = createTestUser(testGroups)
 
 export function createTestPluginConfig(
   pluginConfig?: Partial<PluginConfig>,
@@ -130,7 +120,7 @@ export function createTestAuthProvider() {
     },
     async getGroups(userName: string) {
       if (userName === testUserName) {
-        return [...testProviderGroups]
+        return [...testGroups]
       }
       return []
     },

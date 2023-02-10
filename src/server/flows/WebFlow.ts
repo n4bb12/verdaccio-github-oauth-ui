@@ -1,6 +1,6 @@
 import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler, Request } from "express"
-import { getPublicUrl } from "verdaccio/build/lib/utils"
+import { getPublicUrl } from "@verdaccio/url"
 
 import { logger } from "../../logger"
 import { getAuthorizePath, getCallbackPath } from "../../redirect"
@@ -57,9 +57,9 @@ export class WebFlow implements IPluginMiddleware<any> {
 
     try {
       const code = this.provider.getCode(req)
-      const userToken = await this.provider.getToken(code)
+      const userToken = await this.provider.getToken(code, this.getRedirectUrl(req))
       const userName = await this.provider.getUserName(userToken)
-      const userGroups = await this.provider.getGroups(userName)
+      const userGroups = await this.provider.getGroups(userToken, userName)
       const uiCallbackUrl = await this.core.createUiCallbackUrl(
         userName,
         userGroups,
@@ -74,7 +74,11 @@ export class WebFlow implements IPluginMiddleware<any> {
   }
 
   private getRedirectUrl(req: Request): string {
-    const baseUrl = getPublicUrl(this.config.url_prefix, req).replace(/\/$/, "")
+    const baseUrl = getPublicUrl(this.config.url_prefix, {
+      host: req.hostname,
+      headers: req.headers as any,
+      protocol: req.protocol
+    }).replace(/\/$/, "")
     const path = getCallbackPath(req.params.id)
     const redirectUrl = baseUrl + path
 

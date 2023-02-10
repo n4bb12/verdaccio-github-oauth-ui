@@ -10,7 +10,7 @@ describe("GoogleAuthProvider", () => {
       const loginUrl = provider.getLoginUrl("callbackUrl")
 
       expect(loginUrl).toMatchInlineSnapshot(
-        '"https://accounts.google.com/o/oauth2/v2/auth?client_id=CLIENT_ID&redirect_uri=callbackUrl&scope=openid%20email%20profile&response_type=code&hd="',
+        '"https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&client_id=CLIENT_ID&hd=&prompt=&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20openid&response_type=code&redirect_uri=callbackUrl"',
       )
     })
   })

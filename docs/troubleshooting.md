@@ -1,11 +1,11 @@
 ## Troubleshooting
 
 1. [Troubleshooting](#troubleshooting)
-   1. [Error: "verdaccio-github-oauth-ui plugin not found"](#error-verdaccio-github-oauth-ui-plugin-not-found)
-   2. [Error: "Failed requesting GitHub user info"](#error-failed-requesting-github-user-info)
+   1. [Error: "verdaccio-google-oauth-ui-2 plugin not found"](#error-verdaccio-google-oauth-ui-2-plugin-not-found)
+   2. [Error: "Failed requesting Google user info"](#error-failed-requesting-google-user-info)
    3. [Error: "npm ERR! Unable to authenticate, your authentication token seems to be invalid." or "error--- undefined is forbidden publish for"](#error-npm-err-unable-to-authenticate-your-authentication-token-seems-to-be-invalid-or-error----undefined-is-forbidden-publish-for)
 
-### Error: "verdaccio-github-oauth-ui plugin not found"
+### Error: "verdaccio-google-oauth-ui-2 plugin not found"
 
 Avoid using a global installation of Verdaccio. Despite what Verdaccio examples
 or documentation suggest, globally installed plugins may not work.
@@ -27,15 +27,11 @@ Solutions that worked for others:
 - Extend the official Docker image. It uses a local Verdaccio installation by
   default.
 
-### Error: "Failed requesting GitHub user info"
+### Error: "Failed requesting Google user info"
 
 - Double-check that your configured client id and client secret are correct.
 - You might be using this plugin in combination with another auth plugin that
-  allows users to register without having a corresponding GitHub account.
-- If you are behind a proxy, make sure you are also passing through the query
-  parameters to Verdaccio. See
-  [#47](https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/47#issuecomment-643814163)
-  for an example using `nginx`.
+  allows users to register without having a corresponding Google account.
 
 ### Error: "npm ERR! Unable to authenticate, your authentication token seems to be invalid." or "error--- undefined is forbidden publish for"
 

@@ -13,9 +13,6 @@ export const cliPort = 8239
 export const cliProviderId = "cli"
 export const cliAuthorizeUrl = "/oauth/authorize"
 
-export const publicGitHubOrigin = "https://github.com"
-export const publicGitHubApiOrigin = "https://api.github.com"
-
 /**
  * See https://verdaccio.org/docs/en/packages
  */

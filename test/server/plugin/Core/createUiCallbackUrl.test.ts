@@ -2,7 +2,7 @@ import { AuthCore } from "src/server/plugin/AuthCore"
 import {
   createTestAuthCore,
   testOAuthToken,
-  testProviderGroups,
+  testGroups,
   testUserName,
 } from "test/utils"
 import { beforeEach, describe, expect, it } from "vitest"
@@ -18,7 +18,7 @@ describe("AuthCore", () => {
     it("contains username, uiToken and npmToken", async () => {
       const url = await core.createUiCallbackUrl(
         testUserName,
-        testProviderGroups,
+        testGroups,
         testOAuthToken,
       )
 

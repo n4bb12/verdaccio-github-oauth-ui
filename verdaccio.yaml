@@ -9,20 +9,29 @@ plugins: ./plugins
 log:
   type: stdout
   format: pretty
-  level: info
+  level: debug
 
 middlewares:
-  google-oauth-ui:
+  google-oauth-ui-2:
     enabled: true
 
 auth:
-  google-oauth-ui:
+  google-oauth-ui-2:
     client-id: GOOGLE_CLIENT_ID
     client-secret: GOOGLE_CLIENT_SECRET
     domain: GOOGLE_DOMAIN_NAME
+    group-config:
+      key-info: GOOGLE_KEY_INFO
+      impersonation-account: admin.account@bryllyant.com
+      allowed-groups:
+        - verdaccio
   htpasswd:
     file: ./htpasswd
     algorithm: bcrypt
+    rounds: 10
+    # Maximum amount of users allowed to register, defaults to "+inf".
+    # You can set this to -1 to disable registration.
+    # max_users: -1
 
 security:
   api:
@@ -34,33 +43,29 @@ security:
       expiresIn: 7d
 
 packages:
-  "**":
-    access: github/org/n4bb12-oauth-testing
-    publish: github/org/n4bb12-oauth-testing
+  '@*/*':
+    # scoped packages
+    access: $authenticated
+    publish: $authenticated
+    unpublish: $authenticated
+    proxy: npmjs
 
-  package1:
-    # Limit access to signed-in users.
-    # This works in tandem with other plugins that also add the `$authenticated` group, such as `htpasswd`.
-    # Note that every GitHub user can sign in, so this is not a restrictive group.
-    # If you want to limit access, use one of the other
+  '**':
+    # allow all users (including non-authenticated users) to read and
+    # publish all packages
+    #
+    # you can specify usernames/groupnames (depending on your auth plugin)
+    # and three keywords: "$all", "$anonymous", "$authenticated"
+    #
+    # NOTE: if set to $authenticated, must include `always-auth=true` in `~/.npmrc` for yarn to work
+    # https://github.com/verdaccio/verdaccio/issues/74#issuecomment-323735278
+    #
     access: $authenticated
 
-  package2:
-    # Limit access to users:
-    access: github/user/n4bb12
+    # allow all known users to publish/publish packages
+    # (anyone can register by default, remember?)
+    publish: $authenticated
+    unpublish: $authenticated
 
-  package3:
-    # Limit actions to user repository collaborators:
-    access: github/user/n4bb12/repo/dotfiles
-
-  package4:
-    # Limit access to organization members:
-    access: github/org/n4bb12-oauth-testing
-
-  package5:
-    # Limit actions to team members:
-    access: github/org/n4bb12-oauth-testing/team/test-team
-
-  package6:
-    # Limit actions to organization repository collaborators:
-    access: github/org/n4bb12-oauth-testing/repo/test-repo
+    # if package is not available locally, proxy requests to 'npmjs' registry
+    proxy: npmjs

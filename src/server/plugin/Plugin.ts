@@ -4,7 +4,9 @@ import {
   AuthCallback,
   IPluginAuth,
   IPluginMiddleware,
+  PluginOptions,
   RemoteUser,
+  Callback
 } from "@verdaccio/types"
 import { Application } from "express"
 import { logger } from "../../logger"
@@ -21,15 +23,15 @@ import { Auth, Verdaccio } from "./Verdaccio"
 /**
  * Implements the verdaccio plugin interfaces.
  */
-export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
+export class Plugin implements IPluginAuth<any> {
   private readonly parsedConfig = new ParsedPluginConfig(this.config)
   private readonly provider = new GoogleAuthProvider(this.parsedConfig)
   private readonly cache = new Cache(this.provider)
   private readonly verdaccio = new Verdaccio(this.config)
   private readonly core = new AuthCore(this.verdaccio, this.parsedConfig)
 
-  constructor(private readonly config: Config) {
-    registerGlobalProxyAgent()
+  constructor(private readonly config: Config, options: PluginOptions<Config>) {
+    // registerGlobalProxyAgent()
   }
 
   /**
@@ -42,7 +44,7 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
       new ServeStatic(),
       new PatchHtml(),
       new WebFlow(this.parsedConfig, this.core, this.provider),
-      new CliFlow(this.verdaccio, this.core, this.provider),
+      new CliFlow(this.parsedConfig, this.verdaccio, this.core, this.provider),
     ]
 
     for (const child of children) {
@@ -85,10 +87,10 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
         return
       }
 
-      const userGroups = await this.cache.getGroups(userName)
+      const userGroups = await this.cache.getGroups(userToken, userName)
       const user = await this.core.createAuthenticatedUser(userName, userGroups)
 
-      callback(null, user.real_groups)
+      callback(null, user.groups)
     } catch (error) {
       callback(error, false)
     }
@@ -103,6 +105,7 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
     callback: AuthAccessCallback,
   ): void {
     if (config.access) {
+      console.log(config.access)
       const grant = config.access.some((group) => user.groups.includes(group))
       callback(null, grant)
     } else {

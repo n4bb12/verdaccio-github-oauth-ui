@@ -7,5 +7,5 @@ export interface AuthProvider {
 
   getToken(code: string, redirectUrl: string): Promise<string>
   getUserName(token: string): Promise<string>
-  getGroups(userName: string): Promise<string[]>
+  getGroups(token: string, userName: string): Promise<string[]>
 }

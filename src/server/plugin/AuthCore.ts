@@ -14,16 +14,22 @@ export class AuthCore {
     userName: string,
     userGroups: string[],
   ): Promise<User> {
-    const relevantGroups = userGroups
-      .filter((group) => this.config.isGroupConfigured(group))
-      .filter(Boolean)
-      .sort()
+
+    const allowedGroupAuth = this.config.groupsConfig?.["allowed-groups"] ?? [];
+    console.log(allowedGroupAuth)
+
+    const authAllowed = allowedGroupAuth.some(allowedGroup => userGroups.includes(allowedGroup))
+
+    if (allowedGroupAuth.length > 0 && !authAllowed) {
+      throw new Error('the user does not have enough privileges')
+    }
 
     const user: User = {
       name: userName,
-      groups: [...authenticatedUserGroups],
-      real_groups: relevantGroups,
+      groups: [...authenticatedUserGroups, ...userGroups],
+      real_groups: userGroups,
     }
+
 
     logger.log("User successfuly authenticated:", user)
     return user
@@ -34,6 +40,7 @@ export class AuthCore {
     userGroups: string[],
     userToken: string,
   ): Promise<string> {
+
     const user = await this.createAuthenticatedUser(userName, userGroups)
 
     const uiToken = await this.verdaccio.issueUiToken(user)
