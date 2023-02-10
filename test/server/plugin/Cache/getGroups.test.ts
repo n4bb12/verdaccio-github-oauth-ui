@@ -18,7 +18,9 @@ describe("Cache", () => {
       getGroups: (token: string, userName: string) => string[],
     ) {
       provider = createTestAuthProvider()
-      provider.getGroups = vi.fn((token, user) => Promise.resolve(getGroups(token, user)))
+      provider.getGroups = vi.fn((token, user) =>
+        Promise.resolve(getGroups(token, user)),
+      )
       cache = new Cache(provider, cacheTTLms)
     }
 

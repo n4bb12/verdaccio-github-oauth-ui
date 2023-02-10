@@ -13,11 +13,10 @@ export class GoogleAuthProvider implements AuthProvider {
     this.client = new GoogleClient(config)
   }
 
-
   getId(): string {
     return this.id
   }
-  
+
   getLoginUrl(callbackUrl: string): string {
     return this.client.getLoginUrl(callbackUrl)
   }
@@ -27,10 +26,7 @@ export class GoogleAuthProvider implements AuthProvider {
     return req.query.code as string
   }
   async getToken(code: string, redirectUrl: string): Promise<string> {
-    const auth = await this.client.requestAccessToken(
-      code,
-      redirectUrl,
-    )
+    const auth = await this.client.requestAccessToken(code, redirectUrl)
     return auth.tokens.access_token ?? ""
   }
 
@@ -42,8 +38,10 @@ export class GoogleAuthProvider implements AuthProvider {
   async getGroups(token: string, userName: string): Promise<string[]> {
     const groupsResponse = await this.client.requestGroups(token, userName)
 
-    const groups = groupsResponse.data.groups?.flatMap(g => !!g.name ? [g.name] : []) ?? []
-    
+    const groups =
+      groupsResponse.data.groups?.flatMap((g) => (!!g.name ? [g.name] : [])) ??
+      []
+
     return groups
   }
 }

@@ -6,7 +6,7 @@ import {
   IPluginMiddleware,
   PluginOptions,
   RemoteUser,
-  Callback
+  Callback,
 } from "@verdaccio/types"
 import { Application } from "express"
 import { logger } from "../../logger"

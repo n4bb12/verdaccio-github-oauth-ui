@@ -37,8 +37,8 @@ export interface GroupsConfig {
 export interface PluginConfig {
   "client-id": string
   "client-secret": string
-  "domain"?: string
-  "consent"?: string
+  domain?: string
+  consent?: string
   "group-config"?: GroupsConfig
 }
 
@@ -76,7 +76,6 @@ function validateNodeExists(config: Config, node: keyof Config) {
 }
 
 function getConfigValue<T>(config: Config, key: string, predicate: any): T {
-
   let valueOrEnvName = get(config, ["auth", pluginKey, key])
 
   const value = process.env[String(valueOrEnvName)] ?? valueOrEnvName
@@ -93,7 +92,7 @@ function getConfigValue<T>(config: Config, key: string, predicate: any): T {
 
   // This is so we can check each object value for environment variables
   if (typeof v === "object") {
-    for (const i in v){
+    for (const i in v) {
       const val = v[i]
       valueOrEnvName = get(config, ["auth", pluginKey, key, i])
       v[i] = process.env[String(valueOrEnvName)] ?? valueOrEnvName
@@ -137,7 +136,7 @@ export class ParsedPluginConfig {
   readonly groupsConfig = getConfigValue<GroupsConfig | undefined>(
     this.config,
     "group-config",
-    assert.optional.object
+    assert.optional.object,
   )
 
   constructor(readonly config: Config) {
@@ -145,9 +144,5 @@ export class ParsedPluginConfig {
 
     validateNodeExists(config, "middlewares")
     validateNodeExists(config, "auth")
-
   }
-
-
-
 }

@@ -32,7 +32,10 @@ export class CliFlow implements IPluginMiddleware<any> {
 
     try {
       const code = this.provider.getCode(req)
-      const userToken = await this.provider.getToken(code, this.getRedirectUrl(req))
+      const userToken = await this.provider.getToken(
+        code,
+        this.getRedirectUrl(req),
+      )
       const userName = await this.provider.getUserName(userToken)
       const userGroups = await this.provider.getGroups(userToken, userName)
       const user = await this.core.createAuthenticatedUser(userName, userGroups)
@@ -57,7 +60,7 @@ export class CliFlow implements IPluginMiddleware<any> {
     const baseUrl = getPublicUrl(this.config.url_prefix, {
       host: req.hostname,
       headers: req.headers as any,
-      protocol: req.protocol
+      protocol: req.protocol,
     }).replace(/\/$/, "")
     const redirectUrl = baseUrl + pluginCallbackeUrl
 
