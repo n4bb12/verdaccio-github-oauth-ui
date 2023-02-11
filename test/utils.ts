@@ -136,7 +136,10 @@ export function createTestAuthCore(config: Partial<Config> = {}) {
 }
 
 export function createTestPlugin(config: Partial<Config> = {}) {
-  return new Plugin(createTestVerdaccioConfig(config), config as PluginOptions<Config>)
+  return new Plugin(
+    createTestVerdaccioConfig(config),
+    config as PluginOptions<Config>,
+  )
 }
 
 export function createTestUser(groups: string[]): RemoteUser {
