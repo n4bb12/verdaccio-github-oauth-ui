@@ -29,11 +29,7 @@ This Verdaccio plugin offers Google OAuth integration with the Verdaccio UI and 
 - The login button redirects you to Google instead of showing a login form.
 - Usage info on the Verdaccio UI is updated for use with Google OAuth.
 - The plugin offers a command-line tool that configures `npm` in a single command.
-- Package access and publish/unpublish permission can be limited to specific GitHub
-  - users
-  - organization members
-  - team members
-  - repository collaborators
+- Package access and publish/unpublish permission can be limited to specific Google groups
 
 ## Documentation
 
