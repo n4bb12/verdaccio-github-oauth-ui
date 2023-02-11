@@ -3,10 +3,8 @@ import {
   AuthAccessCallback,
   AuthCallback,
   IPluginAuth,
-  IPluginMiddleware,
   PluginOptions,
   RemoteUser,
-  Callback,
 } from "@verdaccio/types"
 import { Application } from "express"
 import { logger } from "../../logger"
@@ -31,7 +29,7 @@ export class Plugin implements IPluginAuth<any> {
   private readonly core = new AuthCore(this.verdaccio, this.parsedConfig)
 
   constructor(private readonly config: Config, options: PluginOptions<Config>) {
-    // registerGlobalProxyAgent()
+    registerGlobalProxyAgent()
   }
 
   /**
@@ -105,7 +103,6 @@ export class Plugin implements IPluginAuth<any> {
     callback: AuthAccessCallback,
   ): void {
     if (config.access) {
-      console.log(config.access)
       const grant = config.access.some((group) => user.groups.includes(group))
       callback(null, grant)
     } else {

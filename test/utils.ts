@@ -1,4 +1,4 @@
-import { AllowAccess, RemoteUser } from "@verdaccio/types"
+import { AllowAccess, PluginOptions, RemoteUser } from "@verdaccio/types"
 import { Request } from "express"
 import { authenticatedUserGroups, pluginKey } from "src/constants"
 import { AuthCore } from "src/server/plugin/AuthCore"
@@ -109,7 +109,7 @@ export function createTestAuthProvider() {
     getCode(req: Request) {
       return testOAuthCode
     },
-    async getToken(code: string) {
+    async getToken(code: string, redirect_uri: string) {
       return code === testOAuthCode ? testOAuthToken : ""
     },
     async getUserName(userToken: string) {
@@ -118,7 +118,7 @@ export function createTestAuthProvider() {
       }
       throw new Error(testErrorMessage)
     },
-    async getGroups(userName: string) {
+    async getGroups(userToken: string, userName: string) {
       if (userName === testUserName) {
         return [...testGroups]
       }
@@ -136,7 +136,7 @@ export function createTestAuthCore(config: Partial<Config> = {}) {
 }
 
 export function createTestPlugin(config: Partial<Config> = {}) {
-  return new Plugin(createTestVerdaccioConfig(config))
+  return new Plugin(createTestVerdaccioConfig(config), config as PluginOptions<Config>)
 }
 
 export function createTestUser(groups: string[]): RemoteUser {

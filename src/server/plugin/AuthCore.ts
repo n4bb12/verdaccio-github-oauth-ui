@@ -15,7 +15,6 @@ export class AuthCore {
     userGroups: string[],
   ): Promise<User> {
     const allowedGroupAuth = this.config.groupsConfig?.["allowed-groups"] ?? []
-    console.log(allowedGroupAuth)
 
     const authAllowed = allowedGroupAuth.some((allowedGroup) =>
       userGroups.includes(allowedGroup),
