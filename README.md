@@ -9,13 +9,13 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/verdaccio-github-oauth-ui">
-    <img alt="Version" src="https://flat.badgen.net/npm/v/verdaccio-github-oauth-ui?icon=npm">
+  <a href="https://www.npmjs.com/package/verdaccio-google-oauth-ui-2">
+    <img alt="Version" src="https://flat.badgen.net/npm/v/verdaccio-google-oauth-ui-2?icon=npm">
   </a>
-  <a href="https://raw.githubusercontent.com/n4bb12/verdaccio-github-oauth-ui/master/LICENSE">
+  <a href="https://raw.githubusercontent.com/Bryllyant/verdaccio-google-oauth-ui-2/master/LICENSE">
     <img alt="License" src="https://flat.badgen.net/github/license/n4bb12/verdaccio-github-oauth-ui?icon=github">
   </a>
-  <a href="https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/new/choose">
+  <a href="https://github.com/Bryllyant/verdaccio-github-google-ui-2/issues/new/choose">
     <img alt="Issues" src="https://flat.badgen.net/badge/github/Create Issue/blue?icon=github">
   </a>
 </p>
