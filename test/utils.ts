@@ -167,17 +167,20 @@ export function createTestPackage(
   }
 }
 
+// @ts-ignore ignore private method override error.
 class PatchedAuth extends Auth {
   constructor(config: any) {
     super(config)
   }
+
+  // Avoid actually trying to load plugins.
   _loadPlugin() {
     return []
   }
 }
 
 export function createRealVerdaccioAuth(config: Partial<Config> = {}): Auth {
-  return new PatchedAuth({ secret: "test-secret", ...config })
+  return new PatchedAuth({ secret: "test-secret", ...config }) as any
 }
 
 export function freezeTimeDuringTests(date: Date = new Date(0)) {
