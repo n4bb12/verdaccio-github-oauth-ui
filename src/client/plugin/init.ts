@@ -6,30 +6,25 @@ import {
   saveCredentials,
   validateCredentials,
 } from "./credentials"
-import { interruptClick, parseQueryParams, retry } from "./lib"
+import { interruptClick, parseCookies, retry } from "./lib"
 
-/**
- * Change the current URL to only the current pathname and reload.
- * We don't use `location.href` because we want the query params
- * to be excluded from the history.
- */
-function reloadToPathname() {
-  history.replaceState(null, "", location.pathname)
-  location.reload()
-}
-
-function saveAndRemoveQueryParams() {
+function saveAndRemoveCookies() {
   if (isLoggedIn()) {
     return
   }
 
-  const credentials: Credentials = parseQueryParams() as any
+  const credentials: Credentials = parseCookies(document.cookie) as any
   if (!validateCredentials(credentials)) {
     return
   }
 
   saveCredentials(credentials)
-  reloadToPathname()
+
+  Object.keys(credentials).forEach(
+    (key) => (document.cookie = `${key}=;expires=${new Date(0).toUTCString()}`),
+  )
+
+  location.reload()
 }
 
 //
@@ -48,7 +43,7 @@ export interface InitOptions {
 //
 
 export function init(options: InitOptions) {
-  saveAndRemoveQueryParams()
+  saveAndRemoveCookies()
 
   const { loginButton, logoutButton, updateUsageInfo } = options
 

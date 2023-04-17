@@ -1,10 +1,18 @@
-import { parse } from "query-string"
-
 /**
- * Returns `?a=b&c` as `{ a: b, c: true }`.
+ * Returns cookies as an object
  */
-export function parseQueryParams() {
-  return parse(location.search || "?")
+export function parseCookies(cookieStr: string) {
+  return cookieStr
+    .split(";")
+    .filter((str) => str.includes("="))
+    .map((str) => str.split("="))
+    .reduce(
+      (result, [key, value]) => ({
+        ...result,
+        [decodeURIComponent(key.trim())]: decodeURIComponent(value.trim()),
+      }),
+      {},
+    )
 }
 
 export function retry(action: () => void) {

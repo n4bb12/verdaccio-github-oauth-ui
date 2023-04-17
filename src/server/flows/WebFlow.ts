@@ -9,9 +9,17 @@ import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { ParsedPluginConfig } from "../plugin/Config"
 import { mapValues } from "lodash"
+import { Verdaccio } from "../plugin/Verdaccio"
+
+const COOKIE_OPTIONS = {
+  sameSite: true,
+  httpOnly: false, // Has to be visible to JS
+  maxAge: 1000 * 10, // Expire quickly as these get saved to localStorage anyway
+}
 
 export class WebFlow implements IPluginMiddleware<any> {
   constructor(
+    private readonly verdaccio: Verdaccio,
     private readonly config: ParsedPluginConfig,
     private readonly core: AuthCore,
     private readonly provider: AuthProvider,
@@ -45,7 +53,7 @@ export class WebFlow implements IPluginMiddleware<any> {
    * associated with the account.
    *
    * We issue a JWT using these values and pass them back to the frontend as
-   * query parameters so they can be stored in the browser.
+   * cookies accessible to JS so they can be stored in the browser.
    *
    * The username and token are encrypted and base64 encoded to form a token for
    * the npm CLI.
@@ -58,15 +66,18 @@ export class WebFlow implements IPluginMiddleware<any> {
 
     try {
       const code = this.provider.getCode(req)
-      const userToken = await this.provider.getToken(code)
-      const userName = await this.provider.getUserName(userToken)
+      const githubToken = await this.provider.getToken(code)
+      const userName = await this.provider.getUserName(githubToken)
       const userGroups = await this.provider.getGroups(userName)
-      const uiCallbackUrl = await this.core.createUiCallbackUrl(
-        userName,
-        userGroups,
-        userToken,
-      )
-      res.redirect(uiCallbackUrl)
+      const user = await this.core.createAuthenticatedUser(userName, userGroups)
+      const uiToken = await this.verdaccio.issueUiToken(user)
+      const npmToken = await this.verdaccio.issueNpmToken(user, githubToken)
+
+      res.cookie("username", userName, COOKIE_OPTIONS)
+      res.cookie("uiToken", uiToken, COOKIE_OPTIONS)
+      res.cookie("npmToken", npmToken, COOKIE_OPTIONS)
+
+      res.redirect("/")
     } catch (error) {
       logger.error(error)
 
