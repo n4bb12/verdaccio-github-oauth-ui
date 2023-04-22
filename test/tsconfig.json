@@ -4,5 +4,6 @@
     "lib": ["ES2021", "DOM"],
     "types": ["node", "vitest"]
   },
-  "extends": "../tsconfig.json"
+  "extends": "../tsconfig.json",
+  "include": [".", "../src"]
 }

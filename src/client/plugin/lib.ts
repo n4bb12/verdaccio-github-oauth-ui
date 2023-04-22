@@ -22,7 +22,7 @@ export function retry(action: () => void) {
 }
 
 function pathContainsElement(selector: string, e: MouseEvent): boolean {
-  const path = (e as any).path || e.composedPath?.()
+  const path = e.path || e.composedPath?.()
   const element = document.querySelector(selector)!
 
   return path.includes(element)
