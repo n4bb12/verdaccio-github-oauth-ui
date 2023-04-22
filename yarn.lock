@@ -3153,7 +3153,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.1.0, chalk@npm:^4.1.2":
+"chalk@npm:^4.1.0":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -9861,7 +9861,6 @@ __metadata:
     "@verdaccio/url": ^11.0.0-6-next.29
     browserslist: ^4.21.5
     c8: ^7.13.0
-    chalk: ^4.1.2
     core-js: ^3.30.1
     dotenv: ^16.0.3
     express: ^4.18.2
@@ -9874,6 +9873,7 @@ __metadata:
     open: ^8.4.2
     ow: ^0.28.2
     parcel: ~2.4.1
+    picocolors: ^1.0.0
     prettier: ^2.8.7
     process: ^0.11.10
     query-string: ^7.1.3

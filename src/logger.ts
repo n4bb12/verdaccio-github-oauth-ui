@@ -1,11 +1,11 @@
-import chalk from "chalk"
+import colors from "picocolors"
 import { plugin, pluginKey } from "./constants"
 
-const prefix = chalk.blue(`[${pluginKey}]`)
+const prefix = colors.blue(`[${pluginKey}]`)
 
 export const logger = {
   log: console.log.bind(console, prefix),
-  error: (...args: any[]) => console.error(prefix, chalk.red(args.join(" "))),
+  error: (...args: any[]) => console.error(prefix, colors.red(args.join(" "))),
 }
 
 logger.log(`Version: ${plugin.name}@${plugin.version}`)
