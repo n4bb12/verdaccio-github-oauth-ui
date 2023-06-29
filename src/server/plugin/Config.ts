@@ -6,7 +6,7 @@ import {
 import get from "lodash/get"
 import assert from "ow"
 import process from "process"
-import { PartialDeep, RemoveIndexSignature } from "type-fest"
+import { PartialDeep, OmitIndexSignature } from "type-fest"
 import { pluginKey, publicGitHubOrigin } from "../../constants"
 import { logger } from "../../logger"
 
@@ -21,7 +21,7 @@ export interface PackageAccess extends IncorrectVerdaccioPackageAccess {
 }
 
 export type VerdaccioConfig = Omit<
-  RemoveIndexSignature<IncorrectVerdaccioConfig>,
+  OmitIndexSignature<IncorrectVerdaccioConfig>,
   "packages" | "security"
 > & {
   packages?: Record<string, PackageAccess>
