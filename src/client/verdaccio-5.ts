@@ -1,7 +1,7 @@
 import { copyToClipboard, getUsageInfo, init, isLoggedIn } from "./plugin"
 
 const loginButtonSelector = `[data-testid="header--button-login"]`
-const logoutButtonSelector = `[data-testid="header--button-logout"]`
+const logoutButtonSelector = `[data-testid="header--button-logout"],[data-testid="logOutDialogIcon"]`
 const tabSelector = `[data-testid="tab-content"]`
 
 function updateUsageInfo(): void {
