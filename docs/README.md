@@ -35,8 +35,8 @@ This Verdaccio plugin offers GitHub OAuth integration with the Verdaccio UI and 
 
 ## Documentation
 
-- [Compatibility](docs/compatibility.md)
-- [Configuration](docs/configuration.md)
-- [Usage](docs/usage.md)
-- [Troubleshooting](docs/troubleshooting.md)
-- [Contributing](docs/contributing.md)
+- [Compatibility](compatibility.md)
+- [Configuration](configuration.md)
+- [Usage](usage.md)
+- [Troubleshooting](troubleshooting.md)
+- [Contributing](contributing.md)
