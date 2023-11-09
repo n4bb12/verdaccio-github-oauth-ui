@@ -14,13 +14,6 @@
 4. [Configuring Package Access](#configuring-package-access)
 5. [Configuring a Proxy](#configuring-a-proxy)
 
-### Compatibility
-
-- Verdaccio 5.0 - 5.24
-- Node 16
-- npm 7+
-- Browsers: See [browserslist](../.browserslistrc)
-
 ## Installing the Plugin
 
 Some recommended ways to install the plugin:
