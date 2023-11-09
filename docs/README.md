@@ -24,14 +24,10 @@ This Verdaccio plugin offers GitHub OAuth integration with the Verdaccio UI and 
 
 ## Features
 
-- The login button redirects you to GitHub instead of showing a login form.
-- Usage info on the Verdaccio UI is updated for use with GitHub OAuth.
-- The plugin offers a command-line tool that configures `npm` in a single command.
-- Package access and publish/unpublish permission can be limited to specific GitHub
-  - users
-  - organization members
-  - team members
-  - repository collaborators
+- ➡️ The login button [redirects you to GitHub](usage.md#on-the-verdaccio-ui) instead of showing a login form.
+- ℹ️ [Usage info on the Verdaccio UI](usage.md#option-b-using-the-commands-from-the-ui) is updated for use with GitHub OAuth.
+- 💻 The plugin lets you [configure npm with a single command](usage.md#on-the-command-line).
+- 🔐 Access, publish, unpublish [package permissions can be limited](configuration.md#configuring-package-access) to specific GitHub <kbd>users</kbd>, <kbd>organization members</kbd>, <kbd>team members</kbd>, and <kbd>repository collaborators</kbd>.
 
 ## Documentation
 
