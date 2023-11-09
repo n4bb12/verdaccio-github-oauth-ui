@@ -10,7 +10,7 @@
   <a href="https://www.npmjs.com/package/verdaccio-github-oauth-ui">
     <img alt="Version" src="https://img.shields.io/npm/v/verdaccio-github-oauth-ui?logo=npm">
   </a>
-  <a href="https://raw.githubusercontent.com/n4bb12/verdaccio-github-oauth-ui/master/LICENSE">
+  <a href="https://github.com/n4bb12/verdaccio-github-oauth-ui/blob/master/LICENSE">
     <img alt="License" src="https://img.shields.io/github/license/n4bb12/verdaccio-github-oauth-ui?logo=github&color=blue">
   </a>
   <a href="https://github.com/n4bb12/verdaccio-github-oauth-ui/issues/new/choose">
