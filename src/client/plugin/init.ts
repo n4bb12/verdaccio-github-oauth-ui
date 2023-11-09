@@ -53,7 +53,11 @@ export function init(options: InitOptions) {
 
   interruptClick(logoutButton, () => {
     clearCredentials()
-    location.href = logoutHref
+    if (location.pathname === logoutHref) {
+      location.reload()
+    } else {
+      location.href = logoutHref
+    }
   })
 
   document.addEventListener("click", () => retry(updateUsageInfo))
