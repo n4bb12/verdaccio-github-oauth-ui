@@ -15,12 +15,6 @@ import timekeeper from "timekeeper"
 import Auth from "verdaccio/build/lib/auth"
 import { afterEach, beforeEach, vi } from "vitest"
 
-vi.mock("src/server/github/AuthProvider", () => ({
-  GitHubAuthProvider: vi
-    .fn()
-    .mockImplementation(() => createTestAuthProvider()),
-}))
-
 export const testOrgGroup = `github/org/TEST_ORG`
 export const testOrgTeamGroup = `github/org/TEST_ORG/team/TEST_TEAM`
 export const testOrgRepoGroup = `github/org/TEST_ORG/repo/TEST_REPO`

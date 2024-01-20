@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "lib": ["ES2021", "DOM"],
-    "types": ["node", "vitest"]
+    "types": ["node", "vitest"],
   },
   "extends": "../tsconfig.json",
-  "include": [".", "../src"]
+  "include": [".", "../src"],
 }

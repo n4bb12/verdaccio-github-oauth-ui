@@ -9,6 +9,6 @@ export default defineConfig({
     ],
   },
   test: {
-    setupFiles: ["./vitest.setup.ts"],
+    setupFiles: ["./vitest.setup.mts"],
   },
 })

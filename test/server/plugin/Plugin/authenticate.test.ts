@@ -1,11 +1,13 @@
+import { afterEach } from "node:test"
 import { Plugin } from "src/server/plugin/Plugin"
 import {
+  createTestAuthProvider,
   createTestPlugin,
   testOAuthToken,
   testProviderGroups,
   testUserName,
 } from "test/utils"
-import { beforeEach, describe, expect, it } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 describe("Plugin", () => {
   describe("authenticate", () => {
@@ -13,6 +15,16 @@ describe("Plugin", () => {
 
     beforeEach(() => {
       plugin = createTestPlugin()
+
+      vi.mock("src/server/github/AuthProvider", () => ({
+        GitHubAuthProvider: vi
+          .fn()
+          .mockImplementation(() => createTestAuthProvider()),
+      }))
+    })
+
+    afterEach(() => {
+      vi.resetAllMocks()
     })
 
     it("empty user name cannot authenticate", async () => {
