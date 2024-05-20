@@ -1,7 +1,7 @@
 import { IPluginMiddleware } from "@verdaccio/types"
-import { getPublicUrl } from "@verdaccio/url"
 import { Application, Handler, Request } from "express"
 import { staticPath } from "../constants"
+import { getBaseUrl } from "../helpers"
 import { ParsedPluginConfig } from "./Config"
 
 /**
@@ -39,8 +39,7 @@ export class PatchHtml implements IPluginMiddleware<any> {
       return html
     }
 
-    const urlPrefix = this.config.url_prefix
-    const baseUrl = getPublicUrl(urlPrefix, req as any).replace(/\/$/, "")
+    const baseUrl = getBaseUrl(this.config, req)
     const basePath = `${baseUrl}${staticPath}`
     const scriptUrl = `${basePath}/verdaccio-5.js`
     const scriptTag = `<script defer="defer" src="${scriptUrl}"></script>`

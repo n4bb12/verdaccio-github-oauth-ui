@@ -42,7 +42,7 @@
     "format:check": "prettier --check \"**/*.{ts,js,css,scss,html,json}\"",
     "prepack": "bash run clean && bash run build",
     "start": "verdaccio -c verdaccio.yaml",
-    "test": "vitest --watch false",
+    "test": "vitest",
     "typecheck": "bash run typecheck",
     "update": "yarn prepack && yarn copy",
     "watch": "nodemon --watch src --watch verdaccio.yaml --ext ts,css,yaml --exec \"yarn dev\""
@@ -50,7 +50,7 @@
   "dependencies": {
     "@octokit/oauth-methods": "^4.1.0",
     "@octokit/request": "^8.4.0",
-    "@verdaccio/url": "^11.0.0-6-next.42",
+    "@verdaccio/url": "^11.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "global-agent": "^3.0.0",
