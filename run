@@ -48,6 +48,9 @@ build() {
 
   # add node shebang
   printf '%s\n%s\n' '#!/usr/bin/env node' "$(cat dist/cli/index.js)" > dist/cli/index.js
+
+  # make executable
+  chmod +x dist/cli/index.js
 }
 
 #
