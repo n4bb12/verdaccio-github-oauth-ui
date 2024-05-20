@@ -3,6 +3,8 @@
 # https://github.com/verdaccio/verdaccio/tree/master/conf
 #
 
+# url_prefix: /verdaccio/
+
 storage: ./storage
 plugins: ./plugins
 

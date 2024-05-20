@@ -40,7 +40,7 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
 
     const children = [
       new ServeStatic(),
-      new PatchHtml(),
+      new PatchHtml(this.parsedConfig),
       new WebFlow(this.verdaccio, this.parsedConfig, this.core, this.provider),
       new CliFlow(this.verdaccio, this.core, this.provider),
     ]
