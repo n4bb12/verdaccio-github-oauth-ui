@@ -15,12 +15,19 @@ export function parseCookies(cookieStr: string) {
     )
 }
 
+// This parseJWT implementation is taken from https://stackoverflow.com/a/38552302/1935971
 export function parseJwt(token: string) {
+  // JWT has 3 parts separated by ".", the payload is the base64url-encoded part in the middle
   const base64Url = token.split(".")[1]
+  // base64url replaced '+' and '/' with '-' and '_', so we undo it here
   const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/")
   const jsonPayload = decodeURIComponent(
     atob(base64)
       .split("")
+      // atob decoded the base64 string, but multi-byte characters (emojis for example)
+      // are not decoded properly. For example, "🍀" looks like "ð\x9F\x8D\x80". The next
+      // line converts bytes into URI-percent-encoded format, for example "%20" for space.
+      // Lastly, the decodeURIComponent wrapping this can correctly get a UTF-8 string.
       .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
       .join(""),
   )
