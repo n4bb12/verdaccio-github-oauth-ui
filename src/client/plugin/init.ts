@@ -3,12 +3,17 @@ import {
   clearCredentials,
   Credentials,
   isLoggedIn,
+  isTokenExpired,
   saveCredentials,
   validateCredentials,
 } from "./credentials"
 import { interruptClick, parseCookies, retry } from "./lib"
 
 function saveAndRemoveCookies() {
+  if (isTokenExpired()) {
+    clearCredentials()
+  }
+
   if (isLoggedIn()) {
     return
   }
