@@ -12,12 +12,13 @@ function parseCliArgs() {
 
 function runCommand(command: string) {
   logger.log(`Running command: ${command}`)
-  return execSync(command)
+  return execSync(command).toString()
 }
 
 function getNpmConfig() {
   if (!npmConfig) {
-    npmConfig = JSON.parse(runCommand("npm config list --json").toString())
+    const npmConfigJson = runCommand("npm config list --json")
+    npmConfig = JSON.parse(npmConfigJson)
   }
   return npmConfig
 }
@@ -38,16 +39,16 @@ export function getNpmConfigFile() {
   return getNpmConfig().userconfig
 }
 
-export function getNpmSaveCommands(registry: string, token: string) {
+export function getNpmSaveCommand(registry: string, token: string) {
   const url = new URL(registry)
   const baseUrl = url.host + url.pathname
 
-  return [`npm config set //${baseUrl}:_authToken "${token}"`]
+  return `npm config set //${baseUrl}:_authToken "${token}"`
 }
 
 export function saveNpmToken(token: string) {
   const registry = getRegistryUrl()
-  const commands = getNpmSaveCommands(registry, token)
+  const command = getNpmSaveCommand(registry, token)
 
-  commands.forEach((command) => runCommand(command))
+  runCommand(command)
 }
