@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/package",
   "name": "verdaccio-github-oauth-ui",
-  "version": "6.0.8",
+  "version": "6.0.9",
   "keywords": [
     "authentication",
     "github",
@@ -87,7 +87,6 @@
     "typescript": "^5.4.5",
     "verdaccio": "~5.30.3",
     "verdaccio-htpasswd": "^10.5.5",
-    "vite": "^5.2.11",
     "vitest": "^1.6.0"
   },
   "peerDependencies": {

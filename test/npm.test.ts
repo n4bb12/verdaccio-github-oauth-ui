@@ -1,4 +1,4 @@
-import { getNpmConfigFile, getNpmSaveCommands, getRegistryUrl } from "src/npm"
+import { getNpmConfigFile, getNpmSaveCommand, getRegistryUrl } from "src/npm"
 import { describe, expect, it } from "vitest"
 
 export const testRegistryUrl = "http://localhost:4873"
@@ -32,18 +32,14 @@ describe("npm", () => {
   })
 
   it("save commands match the snapshot", () => {
-    const commands1 = getNpmSaveCommands(testRegistryUrl, testNpmToken)
-    expect(commands1).toMatchInlineSnapshot(`
-      [
-        "npm config set //localhost:4873/:_authToken "test-npm-token"",
-      ]
-    `)
+    const command1 = getNpmSaveCommand(testRegistryUrl, testNpmToken)
+    expect(command1).toMatchInlineSnapshot(
+      `"npm config set //localhost:4873/:_authToken "test-npm-token""`,
+    )
 
-    const commands2 = getNpmSaveCommands(testRegistryUrl + "/", testNpmToken)
-    expect(commands2).toMatchInlineSnapshot(`
-      [
-        "npm config set //localhost:4873/:_authToken "test-npm-token"",
-      ]
-    `)
+    const command2 = getNpmSaveCommand(testRegistryUrl + "/", testNpmToken)
+    expect(command2).toMatchInlineSnapshot(
+      `"npm config set //localhost:4873/:_authToken "test-npm-token""`,
+    )
   })
 })

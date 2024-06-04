@@ -2,6 +2,7 @@ import express from "express"
 import open from "open"
 
 import { cliPort, cliProviderId } from "../constants"
+import { logger } from "../logger"
 import { saveNpmToken } from "../npm"
 import { getAuthorizePath } from "../redirect"
 import { respondWithCliMessage } from "./cli-response"
@@ -30,6 +31,7 @@ const server = express()
     } catch (error) {
       status = "error"
       message = error.message
+      logger.error(message)
     }
 
     respondWithWebPage(status, message, res)
