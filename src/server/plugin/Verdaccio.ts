@@ -68,6 +68,7 @@ export class Verdaccio {
   }
 
   private encrypt(text: string) {
+    // @ts-expect-error: Argument of type 'Buffer<ArrayBuffer>' is not assignable to parameter of type 'string'.ts(2345)
     return this.auth.aesEncrypt(Buffer.from(text)).toString("base64")
   }
 }
