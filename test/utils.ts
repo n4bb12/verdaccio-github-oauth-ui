@@ -174,7 +174,10 @@ class PatchedAuth extends Auth {
 }
 
 export function createRealVerdaccioAuth(config: Partial<Config> = {}): Auth {
-  return new PatchedAuth({ secret: "test-secret", ...config }) as any
+  return new PatchedAuth({
+    secret: "a".repeat(32 /* TOKEN_VALID_LENGTH */),
+    ...config,
+  }) as any
 }
 
 export function freezeTimeDuringTests(date: Date = new Date(0)) {

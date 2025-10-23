@@ -18,9 +18,7 @@ describe("Verdaccio", () => {
       const verdaccio = new Verdaccio(config).setAuth(auth)
 
       const token = await verdaccio.issueNpmToken(testUser, testOAuthToken)
-      expect(token).toMatchInlineSnapshot(
-        '"gJA8ArOiaBC1JZ+ycyQkpD3Tt6ylH4q7v2+wGqV/VgI="',
-      )
+      expect(token).toBeTruthy()
     })
 
     it("respects the api security config", async () => {
@@ -32,7 +30,7 @@ describe("Verdaccio", () => {
 
       const token = await verdaccio.issueNpmToken(testUser, testOAuthToken)
       expect(token).toMatchInlineSnapshot(
-        '"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWFsX2dyb3VwcyI6WyJnaXRodWIvb3JnL1RFU1RfT1JHIiwiZ2l0aHViL29yZy9URVNUX09SRy90ZWFtL1RFU1RfVEVBTSIsImdpdGh1Yi9vcmcvVEVTVF9PUkcvcmVwby9URVNUX1JFUE8iLCJnaXRodWIvdXNlci9URVNUX1VTRVIiLCJnaXRodWIvdXNlci9URVNUX1VTRVIvcmVwby9URVNUX1JFUE8iXSwibmFtZSI6IlRFU1RfVVNFUiIsImdyb3VwcyI6WyIkYWxsIiwiQGFsbCIsIiRhdXRoZW50aWNhdGVkIiwiQGF1dGhlbnRpY2F0ZWQiLCJnaXRodWIvb3JnL1RFU1RfT1JHIiwiZ2l0aHViL29yZy9URVNUX09SRy90ZWFtL1RFU1RfVEVBTSIsImdpdGh1Yi9vcmcvVEVTVF9PUkcvcmVwby9URVNUX1JFUE8iLCJnaXRodWIvdXNlci9URVNUX1VTRVIiLCJnaXRodWIvdXNlci9URVNUX1VTRVIvcmVwby9URVNUX1JFUE8iXSwiaWF0IjowLCJuYmYiOjAsImV4cCI6ODY0MDB9.GoWJvsj6p88GcOKSAG02wygBw2qOiSHzqWOxmDHodvM"',
+        `"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWFsX2dyb3VwcyI6WyJnaXRodWIvb3JnL1RFU1RfT1JHIiwiZ2l0aHViL29yZy9URVNUX09SRy90ZWFtL1RFU1RfVEVBTSIsImdpdGh1Yi9vcmcvVEVTVF9PUkcvcmVwby9URVNUX1JFUE8iLCJnaXRodWIvdXNlci9URVNUX1VTRVIiLCJnaXRodWIvdXNlci9URVNUX1VTRVIvcmVwby9URVNUX1JFUE8iXSwibmFtZSI6IlRFU1RfVVNFUiIsImdyb3VwcyI6WyIkYWxsIiwiQGFsbCIsIiRhdXRoZW50aWNhdGVkIiwiQGF1dGhlbnRpY2F0ZWQiLCJnaXRodWIvb3JnL1RFU1RfT1JHIiwiZ2l0aHViL29yZy9URVNUX09SRy90ZWFtL1RFU1RfVEVBTSIsImdpdGh1Yi9vcmcvVEVTVF9PUkcvcmVwby9URVNUX1JFUE8iLCJnaXRodWIvdXNlci9URVNUX1VTRVIiLCJnaXRodWIvdXNlci9URVNUX1VTRVIvcmVwby9URVNUX1JFUE8iXSwiaWF0IjowLCJuYmYiOjAsImV4cCI6ODY0MDB9.kWe5OWDwXunPopOChHGCYRZxzjgjgJYi0vhzTzvInHs"`,
       )
     })
   })

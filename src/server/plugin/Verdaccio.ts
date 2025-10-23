@@ -45,7 +45,6 @@ export class Verdaccio {
 
   async issueNpmToken(user: User, token: string) {
     const jwtSignOptions = this.security?.api?.jwt?.sign
-
     if (jwtSignOptions) {
       return this.issueVerdaccio4PlusJWT(user, jwtSignOptions)
     } else {
@@ -67,8 +66,17 @@ export class Verdaccio {
     return this.auth.jwtEncrypt(user, jwtSignOptions)
   }
 
-  private encrypt(text: string) {
-    // @ts-expect-error: Argument of type 'Buffer<ArrayBuffer>' is not assignable to parameter of type 'string'.ts(2345)
-    return this.auth.aesEncrypt(Buffer.from(text)).toString("base64")
+  private encrypt(text: string): string {
+    try {
+      // @ts-expect-error: Argument of type 'Buffer<ArrayBuffer>' is not assignable to parameter of type 'string'.ts(2345)
+      return this.auth.aesEncrypt(Buffer.from(text)).toString("base64")
+    } catch (error) {
+      if (String(error).includes("TypeError")) {
+        // Newer versions of Verdaccio accept a string instead of a buffer and
+        // output base64. I don't get why these APIs keep changing.
+        return this.auth.aesEncrypt(text) ?? ""
+      }
+      throw error
+    }
   }
 }
