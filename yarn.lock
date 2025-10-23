@@ -9884,7 +9884,7 @@ __metadata:
     typescript: "npm:^5.9.3"
     verdaccio: "npm:~5.33.0"
     verdaccio-htpasswd: "npm:^10.5.5"
-    vitest: "npm:^3.0.9"
+    vitest: "npm:^3.2.4"
   peerDependencies:
     verdaccio: ">=5"
   bin:
@@ -10051,7 +10051,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest@npm:^3.0.9":
+"vitest@npm:^3.2.4":
   version: 3.2.4
   resolution: "vitest@npm:3.2.4"
   dependencies:
