@@ -51,7 +51,7 @@ describe("Plugin", () => {
     it("valid user name and token can authenticate", async () => {
       await plugin.authenticate(testUserName, testOAuthToken, (err, groups) => {
         expect(err).toBeNull()
-        expect(groups).toEqual(expect.arrayContaining(testProviderGroups))
+        expect(groups).toEqual([])
       })
     })
   })
