@@ -1,5 +1,5 @@
 import { AllowAccess, PackageAccess, RemoteUser } from "@verdaccio/types"
-import { pluginUtils } from "@verdaccio/core"
+import { pluginUtils, errorUtils } from "@verdaccio/core"
 import { Application } from "express"
 import { logger } from "../../logger"
 import { CliFlow, WebFlow } from "../flows"
@@ -28,7 +28,7 @@ export class Plugin
     this.parsedConfig.cacheTTLms,
   )
   private readonly verdaccio = new Verdaccio(this.config)
-  private readonly core = new AuthCore(this.verdaccio, this.parsedConfig)
+  private readonly core = new AuthCore()
 
   constructor(
     readonly config: VerdaccioGithubOauthConfig,
@@ -91,8 +91,7 @@ export class Plugin
         return
       }
 
-      const userGroups = await this.cache.getGroups(userName)
-      const user = await this.core.createAuthenticatedUser(userName, userGroups)
+      const user = await this.core.createAuthenticatedUser(userName)
 
       callback(null, user.real_groups)
     } catch (error) {
@@ -103,18 +102,85 @@ export class Plugin
   /**
    * pluginUtils.Auth
    */
-  allow_access(
+  async allow_access(
     user: RemoteUser,
     pkg:
       | (VerdaccioGithubOauthConfig & PackageAccess)
       | (AllowAccess & PackageAccess),
     callback: pluginUtils.AccessCallback,
-  ): void {
-    if (pkg.access) {
-      const grant = pkg.access.some((group) => user.groups.includes(group))
-      callback(null, grant)
-    } else {
-      callback(null, true)
+  ): Promise<void> {
+    if (!user.name) {
+      // let other auth plugins and verdaccio's default handler deal with unauthenticated users
+      callback(null, false)
+      return
     }
+
+    const userGroups = await this.cache.getGroups(user.name)
+
+    // pkg.access cannot be undefined here due to normalisePackageAccess() in @verdaccio/config
+    const grant = pkg.access!.some((group) => userGroups.includes(group))
+    callback(null, grant)
+  }
+
+  /**
+   * IPluginAuth
+   */
+  async allow_publish(
+    user: RemoteUser,
+    pkg:
+      | (VerdaccioGithubOauthConfig & PackageAccess)
+      | (AllowAccess & PackageAccess),
+    callback: pluginUtils.AccessCallback,
+  ): Promise<void> {
+    if (!user.name) {
+      // let other auth plugins and verdaccio's default handler deal with unauthenticated users
+      callback(null, false)
+      return
+    }
+
+    const userGroups = await this.cache.getGroups(user.name)
+
+    // pkg.publish cannot be undefined here due to normalisePackageAccess() in @verdaccio/config
+    const grant = pkg.publish!.some((group) => userGroups.includes(group))
+    callback(null, grant)
+  }
+
+  /**
+   * IPluginAuth
+   */
+  async allow_unpublish(
+    user: RemoteUser,
+    pkg:
+      | (VerdaccioGithubOauthConfig & PackageAccess)
+      | (AllowAccess & PackageAccess),
+    callback: pluginUtils.AccessCallback,
+  ): Promise<void> {
+    if (!user.name) {
+      // let other auth plugins and verdaccio's default handler deal with unauthenticated users
+      callback(null, false)
+      return
+    }
+
+    if (pkg.unpublish === false) {
+      // let verdaccio's default behavior call allow_publish() for authentication
+      callback(null, undefined)
+      return
+    }
+
+    if (pkg.unpublish === true) {
+      // `true` is not a valid value - this should never happen - Verdaccio shouldn't even allow us to end up here
+      // this here mostly to satisfy TypeScript and avoid an `as string[]` cast below
+      callback(
+        errorUtils.getInternalError("Invalid package unpublish configuration"),
+        false,
+      )
+      return
+    }
+
+    const userGroups = await this.cache.getGroups(user.name)
+
+    // pkg.unpublish cannot be undefined here due to normalisePackageAccess() in @verdaccio/config
+    const grant = pkg.unpublish!.some((group) => userGroups.includes(group))
+    callback(null, grant)
   }
 }

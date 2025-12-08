@@ -1,28 +1,15 @@
-import { stringify } from "querystring"
 import { authenticatedUserGroups } from "../../constants"
 import { logger } from "../../logger"
-import { ParsedPluginConfig } from "./Config"
-import { User, Verdaccio } from "./Verdaccio"
+import { User } from "./Verdaccio"
 
 export class AuthCore {
-  constructor(
-    private readonly verdaccio: Verdaccio,
-    private readonly config: ParsedPluginConfig,
-  ) {}
-
-  async createAuthenticatedUser(
-    userName: string,
-    userGroups: string[],
-  ): Promise<User> {
-    const relevantGroups = userGroups
-      .filter((group) => this.config.isGroupConfigured(group))
-      .filter(Boolean)
-      .sort()
-
+  async createAuthenticatedUser(userName: string): Promise<User> {
     const user: User = {
       name: userName,
       groups: [...authenticatedUserGroups],
-      real_groups: relevantGroups,
+      // groups returned by GH are not used here and not saved in the JWT token
+      // to avoid Verdaccio granting access based on the outdated groups
+      real_groups: [],
     }
 
     logger.log("User successfully authenticated:", user)
