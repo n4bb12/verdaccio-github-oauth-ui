@@ -24,7 +24,10 @@ import { Verdaccio } from "./Verdaccio"
 export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   private readonly parsedConfig = new ParsedPluginConfig(this.config)
   private readonly provider = new GitHubAuthProvider(this.parsedConfig)
-  private readonly cache = new Cache(this.provider)
+  private readonly cache = new Cache(
+    this.provider,
+    this.parsedConfig.cacheTTLms,
+  )
   private readonly verdaccio = new Verdaccio(this.config)
   private readonly core = new AuthCore(this.verdaccio, this.parsedConfig)
 

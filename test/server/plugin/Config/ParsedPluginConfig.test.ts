@@ -45,6 +45,7 @@ describe("ParsedPluginConfig", () => {
 
     expect(result).toMatchInlineSnapshot(`
       {
+        "cacheTTLms": undefined,
         "clientId": "clientId",
         "clientSecret": "clientSecret",
         "configuredGroupsMap": {},
@@ -69,6 +70,7 @@ describe("ParsedPluginConfig", () => {
       "client-secret": "clientSecret",
       token: "token",
       "enterprise-origin": "enterpriseOrigin",
+      "cache-ttl-ms": 60 * 60 * 1000, // 1 hour
     }
 
     const config: Config = {
@@ -118,6 +120,7 @@ describe("ParsedPluginConfig", () => {
 
     expect(result).toMatchInlineSnapshot(`
       {
+        "cacheTTLms": 3600000,
         "clientId": "clientId",
         "clientSecret": "clientSecret",
         "configuredGroupsMap": {
