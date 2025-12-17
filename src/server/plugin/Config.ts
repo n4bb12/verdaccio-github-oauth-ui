@@ -33,6 +33,7 @@ export interface PluginConfig {
   "client-secret": string
   token: string
   "enterprise-origin"?: string
+  "cache-ttl-ms"?: number
 }
 
 export interface Config extends VerdaccioConfig {
@@ -148,6 +149,12 @@ export class ParsedPluginConfig {
       assert.undefined,
       assert.string.url.nonEmpty.not.startsWith(publicGitHubOrigin),
     ),
+  )
+
+  readonly cacheTTLms = getConfigValue<number>(
+    this.config,
+    "cache-ttl-ms",
+    assert.any(assert.undefined, assert.number.positive),
   )
 
   constructor(readonly config: Config) {
