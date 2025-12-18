@@ -1,18 +1,12 @@
-import {
-  AllowAccess,
-  AuthAccessCallback,
-  AuthCallback,
-  IPluginAuth,
-  IPluginMiddleware,
-  RemoteUser,
-} from "@verdaccio/types"
+import { AllowAccess, PackageAccess, RemoteUser } from "@verdaccio/types"
+import { pluginUtils } from "@verdaccio/core"
 import { Application } from "express"
 import { logger } from "../../logger"
 import { CliFlow, WebFlow } from "../flows"
 import { GitHubAuthProvider } from "../github"
 import { AuthCore } from "./AuthCore"
 import { Cache } from "./Cache"
-import { Config, PackageAccess, ParsedPluginConfig } from "./Config"
+import { VerdaccioGithubOauthConfig, ParsedPluginConfig } from "./Config"
 import { PatchHtml } from "./PatchHtml"
 import { registerGlobalProxyAgent } from "./ProxyAgent"
 import { ServeStatic } from "./ServeStatic"
@@ -21,7 +15,12 @@ import { Verdaccio } from "./Verdaccio"
 /**
  * Implements the verdaccio plugin interfaces.
  */
-export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
+export class Plugin
+  extends pluginUtils.Plugin<VerdaccioGithubOauthConfig>
+  implements
+    pluginUtils.ExpressMiddleware<VerdaccioGithubOauthConfig, any, any>,
+    pluginUtils.Auth<VerdaccioGithubOauthConfig>
+{
   private readonly parsedConfig = new ParsedPluginConfig(this.config)
   private readonly provider = new GitHubAuthProvider(this.parsedConfig)
   private readonly cache = new Cache(
@@ -31,12 +30,16 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   private readonly verdaccio = new Verdaccio(this.config)
   private readonly core = new AuthCore(this.verdaccio, this.parsedConfig)
 
-  constructor(private readonly config: Config) {
+  constructor(
+    readonly config: VerdaccioGithubOauthConfig,
+    options?: any,
+  ) {
+    super(config, options)
     registerGlobalProxyAgent()
   }
 
   /**
-   * IPluginMiddleware
+   * pluginUtils.ExpressMiddleware
    */
   register_middlewares(app: Application, auth: any) {
     this.verdaccio.setAuth(auth)
@@ -71,12 +74,12 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   }
 
   /**
-   * IPluginAuth
+   * pluginUtils.Auth
    */
   async authenticate(
     userName: string,
     userToken: string,
-    callback: AuthCallback,
+    callback: pluginUtils.AuthCallback,
   ): Promise<void> {
     try {
       if (
@@ -98,15 +101,17 @@ export class Plugin implements IPluginMiddleware<any>, IPluginAuth<any> {
   }
 
   /**
-   * IPluginAuth
+   * pluginUtils.Auth
    */
   allow_access(
     user: RemoteUser,
-    config: AllowAccess & PackageAccess,
-    callback: AuthAccessCallback,
+    pkg:
+      | (VerdaccioGithubOauthConfig & PackageAccess)
+      | (AllowAccess & PackageAccess),
+    callback: pluginUtils.AccessCallback,
   ): void {
-    if (config.access) {
-      const grant = config.access.some((group) => user.groups.includes(group))
+    if (pkg.access) {
+      const grant = pkg.access.some((group) => user.groups.includes(group))
       callback(null, grant)
     } else {
       callback(null, true)

@@ -1,13 +1,13 @@
 import { JWTSignOptions, RemoteUser } from "@verdaccio/types"
 import merge from "lodash/merge"
-import { VerdaccioConfig } from "../plugin/Config"
+import { VerdaccioGithubOauthConfig } from "./Config"
 
 import type Auth from "verdaccio/build/lib/auth"
 
 export type User = RemoteUser
 export { Auth }
 
-// Most of this is duplicated Verdaccio code because it is unfortunately not availabel via API.
+// Most of this is duplicated Verdaccio code because it is unfortunately not available via API.
 // https://github.com/verdaccio/verdaccio/blob/master/src/lib/auth-utils.ts#L129
 
 const TIME_EXPIRATION_7D = "7d" as const
@@ -24,7 +24,7 @@ const defaultSecurity = {
   },
 } as const
 
-function getSecurity(config: VerdaccioConfig) {
+function getSecurity(config: VerdaccioGithubOauthConfig) {
   return merge({}, defaultSecurity, config.security)
 }
 
@@ -36,7 +36,7 @@ export class Verdaccio {
 
   private auth!: Auth
 
-  constructor(private readonly config: VerdaccioConfig) {}
+  constructor(private readonly config: VerdaccioGithubOauthConfig) {}
 
   setAuth(auth: Auth): Verdaccio {
     this.auth = auth

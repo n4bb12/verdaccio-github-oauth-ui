@@ -1,11 +1,11 @@
-import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, static as expressServeStatic } from "express"
 import { staticPath, publicRoot } from "../constants"
+import { IPluginMiddleware } from "../helpers"
 
 /**
  * Serves additional static assets required to modify the login button.
  */
-export class ServeStatic implements IPluginMiddleware<any> {
+export class ServeStatic implements IPluginMiddleware {
   /**
    * IPluginMiddleware
    */
