@@ -9,8 +9,9 @@
    1. [`client-id` and `client-secret` (required, string)](#client-id-and-client-secret-required-string)
    2. [`token` (required, string)](#token-required-string)
    3. [`enterprise-origin` (optional, string)](#enterprise-origin-optional-string)
-   4. [API Security](#api-security)
-   5. [Using Environment Variables](#using-environment-variables)
+   4. [`cache-ttl-ms` (optional, number)](#cache-ttl-ms-optional-number) 
+   5. [API Security](#api-security)
+   6. [Using Environment Variables](#using-environment-variables)
 4. [Configuring Package Access](#configuring-package-access)
 5. [Configuring a Proxy](#configuring-a-proxy)
 
@@ -93,6 +94,11 @@ If using a GitHub Enterprise instance, set this to the base URL of your
 instance, for example: `https://github.example.com`.
 
 If using the public GitHub instance, don't configure this option.
+
+### `cache-ttl-ms` (optional, number)
+
+By default, requests to get user's groups from Github API are cached for 10s. 
+You can change this value (in milliseconds) to adjust the cache duration.
 
 ### API Security
 
