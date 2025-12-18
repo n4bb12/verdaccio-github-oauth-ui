@@ -1,6 +1,6 @@
 # Compatibility
 
-- Verdaccio 5.0 - 5.33
-- Node 16, 18, 20
-- npm 7+
+- Verdaccio 6.x
+- Node 20
+- npm 10
 - Browsers: See [browserslist](../.browserslistrc)

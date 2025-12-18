@@ -1,6 +1,6 @@
 import { pluginKey } from "src/constants"
 import {
-  Config,
+  VerdaccioGithubOauthConfig,
   ParsedPluginConfig,
   PluginConfig,
 } from "src/server/plugin/Config"
@@ -17,7 +17,7 @@ describe("ParsedPluginConfig", () => {
     token: "token",
   }
   it.fails("middlewares key is required", () => {
-    const invalidConfig: Config = {
+    const invalidConfig: VerdaccioGithubOauthConfig = {
       auth: { [pluginKey]: enabledPluginConfig },
     } as any
 
@@ -25,7 +25,7 @@ describe("ParsedPluginConfig", () => {
   })
 
   it.fails("auth key is required", () => {
-    const invalidConfig: Config = {
+    const invalidConfig: VerdaccioGithubOauthConfig = {
       middlewares: { [pluginKey]: minimalPluginConfig },
     } as any
 
@@ -33,7 +33,7 @@ describe("ParsedPluginConfig", () => {
   })
 
   it("accepts the minimal configuration and uses the documented defaults", () => {
-    const config: Config = {
+    const config: VerdaccioGithubOauthConfig = {
       middlewares: { [pluginKey]: enabledPluginConfig },
       auth: { [pluginKey]: minimalPluginConfig },
     } as any
@@ -73,7 +73,7 @@ describe("ParsedPluginConfig", () => {
       "cache-ttl-ms": 60 * 60 * 1000, // 1 hour
     }
 
-    const config: Config = {
+    const config: VerdaccioGithubOauthConfig = {
       middlewares: { [pluginKey]: enabledPluginConfig },
       auth: { [pluginKey]: minimalPluginConfig },
       url_prefix: "/verdaccio/",
@@ -180,7 +180,7 @@ describe("ParsedPluginConfig", () => {
       "enterprise-origin": "enterpriseOrigin",
     }
 
-    const config: Config = {
+    const config: VerdaccioGithubOauthConfig = {
       middlewares: { [pluginKey]: enabledPluginConfig },
       auth: { [pluginKey]: minimalPluginConfig },
       url_prefix: "/verdaccio/",

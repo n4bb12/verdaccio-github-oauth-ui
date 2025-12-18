@@ -1,4 +1,3 @@
-import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler } from "express"
 import qs from "query-string"
 import { cliPort, cliProviderId } from "../../constants"
@@ -7,10 +6,11 @@ import { getCallbackPath } from "../../redirect"
 import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { Verdaccio } from "../plugin/Verdaccio"
+import { IPluginMiddleware } from "../helpers"
 
 const pluginCallbackeUrl = getCallbackPath(cliProviderId)
 
-export class CliFlow implements IPluginMiddleware<any> {
+export class CliFlow implements IPluginMiddleware {
   constructor(
     private readonly verdaccio: Verdaccio,
     private readonly core: AuthCore,

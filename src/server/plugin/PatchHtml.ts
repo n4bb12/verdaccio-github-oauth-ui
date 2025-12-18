@@ -1,14 +1,13 @@
-import { IPluginMiddleware } from "@verdaccio/types"
 import { Application, Handler, Request } from "express"
 import { staticPath } from "../constants"
-import { getBaseUrl } from "../helpers"
+import { getBaseUrl, IPluginMiddleware } from "../helpers"
 import { ParsedPluginConfig } from "./Config"
 
 /**
  * Injects additional static imports into the DOM with code from the client folder
  * that modifies the login button.
  */
-export class PatchHtml implements IPluginMiddleware<any> {
+export class PatchHtml implements IPluginMiddleware {
   constructor(private readonly config: ParsedPluginConfig) {}
 
   /**
@@ -41,7 +40,7 @@ export class PatchHtml implements IPluginMiddleware<any> {
 
     const baseUrl = getBaseUrl(this.config, req)
     const basePath = `${baseUrl}${staticPath}`
-    const scriptUrl = `${basePath}/verdaccio-5.js`
+    const scriptUrl = `${basePath}/verdaccio-6.js`
     const scriptTag = `<script defer="defer" src="${scriptUrl}"></script>`
 
     return html.replace(/<\/body>/, [scriptTag, "</body>"].join(""))

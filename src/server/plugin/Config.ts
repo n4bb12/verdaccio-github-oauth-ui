@@ -1,32 +1,13 @@
-import {
-  Config as IncorrectVerdaccioConfig,
-  PackageAccess as IncorrectVerdaccioPackageAccess,
-  Security,
-} from "@verdaccio/types"
+import { Config as VerdaccioConfig } from "@verdaccio/types"
 import get from "lodash/get"
 import assert from "ow"
 import process from "process"
-import { PartialDeep, OmitIndexSignature } from "type-fest"
 import { pluginKey, publicGitHubOrigin } from "../../constants"
 import { logger } from "../../logger"
 
 //
 // Types
 //
-
-// Verdaccio incorrectly types some of these as string arrays
-// although they are all strings.
-export interface PackageAccess extends IncorrectVerdaccioPackageAccess {
-  unpublish?: string[]
-}
-
-export type VerdaccioConfig = Omit<
-  OmitIndexSignature<IncorrectVerdaccioConfig>,
-  "packages" | "security"
-> & {
-  packages?: Record<string, PackageAccess>
-  security?: PartialDeep<Security>
-}
 
 export interface PluginConfig {
   "client-id": string
@@ -36,18 +17,9 @@ export interface PluginConfig {
   "cache-ttl-ms"?: number
 }
 
-export interface Config extends VerdaccioConfig {
+export interface VerdaccioGithubOauthConfig extends VerdaccioConfig {
   middlewares: { [key: string]: PluginConfig }
   auth: { [key: string]: PluginConfig }
-}
-
-export interface GroupParts {
-  providerId?: string
-  key1?: string
-  value1?: string
-  key2?: string
-  value2?: string
-  key3?: string
 }
 
 export type ParsedUser = {
@@ -91,7 +63,10 @@ function validateVersion() {
   }
 }
 
-function validateNodeExists(config: Config, node: keyof Config) {
+function validateNodeExists(
+  config: VerdaccioGithubOauthConfig,
+  node: keyof VerdaccioGithubOauthConfig,
+) {
   const path = `[${node}][${pluginKey}]`
   const obj = get(config, path, {})
 
@@ -100,7 +75,11 @@ function validateNodeExists(config: Config, node: keyof Config) {
   }
 }
 
-function getConfigValue<T>(config: Config, key: string, predicate: any): T {
+function getConfigValue<T>(
+  config: VerdaccioGithubOauthConfig,
+  key: string,
+  predicate: any,
+): T {
   let valueOrEnvName = get(config, ["auth", pluginKey, key])
 
   const value = process.env[String(valueOrEnvName)] ?? valueOrEnvName
@@ -157,7 +136,7 @@ export class ParsedPluginConfig {
     assert.any(assert.undefined, assert.number.positive),
   )
 
-  constructor(readonly config: Config) {
+  constructor(readonly config: VerdaccioGithubOauthConfig) {
     validateVersion()
 
     validateNodeExists(config, "middlewares")

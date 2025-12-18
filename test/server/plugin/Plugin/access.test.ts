@@ -1,5 +1,4 @@
-import { AllowAccess, RemoteUser } from "@verdaccio/types"
-import { PackageAccess } from "src/server/plugin/Config"
+import { AllowAccess, PackageAccess, RemoteUser } from "@verdaccio/types"
 import { Plugin } from "src/server/plugin/Plugin"
 import { createTestPackage, createTestPlugin, createTestUser } from "test/utils"
 import { beforeEach, describe, expect, it } from "vitest"
