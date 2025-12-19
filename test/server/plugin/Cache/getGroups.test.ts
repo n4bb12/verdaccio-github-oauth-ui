@@ -83,7 +83,12 @@ describe("Cache", () => {
 
       timekeeper.reset()
 
-      expect(provider.getGroups).toHaveBeenCalledTimes(1)
+      // iteration 0: 2021-11-27T00:00:00.000 -> nothing in the cache -> call service
+      // iteration 1: 2021-11-27T00:00:00.100 -> cache hit
+      // iteration 2: 2021-11-27T00:00:00.200 -> cache hit
+      // iteration 3: 2021-11-27T00:00:00.300 -> cache expired -> call service
+      // iteration 4: 2021-11-27T00:00:00.400 -> cache hit
+      expect(provider.getGroups).toHaveBeenCalledTimes(2)
     })
 
     it("returns empty groups when an error occurs", async () => {

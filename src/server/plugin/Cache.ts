@@ -32,9 +32,8 @@ export class Cache {
 
       if (!groups) {
         groups = await this.authProvider.getGroups(userName)
+        this.cache.put(key, groups || [], this.cacheTTLms)
       }
-
-      this.cache.put(key, groups || [], this.cacheTTLms)
     } catch (error) {
       logger.error(error)
     }
