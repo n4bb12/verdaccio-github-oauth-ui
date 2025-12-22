@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@octokit/oauth-methods": "^4.1.0",
-    "@octokit/request": "^8.4.1",
+    "@octokit/request": "^9.2.1",
     "@verdaccio/url": "^11.0.0-6-next.42",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
