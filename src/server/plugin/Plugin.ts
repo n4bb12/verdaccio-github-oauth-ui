@@ -99,6 +99,23 @@ export class Plugin
     }
   }
 
+  async _allow(
+    user: RemoteUser,
+    pkgAccess: string[],
+    callback: pluginUtils.AccessCallback,
+  ) {
+    if (!user.name) {
+      // let other auth plugins and verdaccio's default handler deal with unauthenticated users
+      callback(null, false)
+      return
+    }
+
+    const userGroups = await this.cache.getGroups(user.name)
+
+    const grant = pkgAccess.some((group) => userGroups.includes(group))
+    callback(null, grant)
+  }
+
   /**
    * pluginUtils.Auth
    */
@@ -109,17 +126,8 @@ export class Plugin
       | (AllowAccess & PackageAccess),
     callback: pluginUtils.AccessCallback,
   ): Promise<void> {
-    if (!user.name) {
-      // let other auth plugins and verdaccio's default handler deal with unauthenticated users
-      callback(null, false)
-      return
-    }
-
-    const userGroups = await this.cache.getGroups(user.name)
-
     // pkg.access cannot be undefined here due to normalisePackageAccess() in @verdaccio/config
-    const grant = pkg.access!.some((group) => userGroups.includes(group))
-    callback(null, grant)
+    await this._allow(user, pkg.access!, callback)
   }
 
   /**
@@ -132,17 +140,8 @@ export class Plugin
       | (AllowAccess & PackageAccess),
     callback: pluginUtils.AccessCallback,
   ): Promise<void> {
-    if (!user.name) {
-      // let other auth plugins and verdaccio's default handler deal with unauthenticated users
-      callback(null, false)
-      return
-    }
-
-    const userGroups = await this.cache.getGroups(user.name)
-
     // pkg.publish cannot be undefined here due to normalisePackageAccess() in @verdaccio/config
-    const grant = pkg.publish!.some((group) => userGroups.includes(group))
-    callback(null, grant)
+    await this._allow(user, pkg.publish!, callback)
   }
 
   /**
@@ -155,12 +154,6 @@ export class Plugin
       | (AllowAccess & PackageAccess),
     callback: pluginUtils.AccessCallback,
   ): Promise<void> {
-    if (!user.name) {
-      // let other auth plugins and verdaccio's default handler deal with unauthenticated users
-      callback(null, false)
-      return
-    }
-
     if (pkg.unpublish === false) {
       // let verdaccio's default behavior call allow_publish() for authentication
       callback(null, undefined)
@@ -177,10 +170,7 @@ export class Plugin
       return
     }
 
-    const userGroups = await this.cache.getGroups(user.name)
-
     // pkg.unpublish cannot be undefined here due to normalisePackageAccess() in @verdaccio/config
-    const grant = pkg.unpublish!.some((group) => userGroups.includes(group))
-    callback(null, grant)
+    await this._allow(user, pkg.unpublish!, callback)
   }
 }
