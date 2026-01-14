@@ -94,7 +94,7 @@ cli-publish() {
   run cli-publish mkdir -p "$directory"
   echo "{\"name\":\"oauth-cli-test\",\"version\":\"$packageName\",\"license\":\"UNLICENSED\"}" > "$directory/package.json"
   run cli-publish cd "$directory"
-  run cli-publish npm publish --registry http://localhost:4873
+  run cli-publish npm publish --registry http://localhost:4873 --tag test
 }
 
 cli() {
