@@ -59,7 +59,7 @@
     "memory-cache": "^0.2.0",
     "minimist": "^1.2.8",
     "octokit": "^3.2.2",
-    "open": "^8.4.2",
+    "open": "^11.0.0",
     "ow": "^0.28.2",
     "picocolors": "^1.1.1",
     "query-string": "^7.1.3"
