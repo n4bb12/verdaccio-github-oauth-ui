@@ -3,7 +3,7 @@
 | Requirement   | Details                                   |
 | ------------- | ----------------------------------------- |
 | **Verdaccio** | 6.x                                       |
-| **Node.js**   | 20, 22                                    |
+| **Node.js**   | 20, 22, 24                                |
 | **npm**       | 10                                        |
 | **Browsers**  | See [.browserslistrc](../.browserslistrc) |
 
