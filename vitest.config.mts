@@ -1,13 +1,8 @@
-import path from "path"
+import tsconfigPaths from "vite-tsconfig-paths"
 import { defineConfig } from "vitest/config"
 
 export default defineConfig({
-  resolve: {
-    alias: [
-      { find: "src", replacement: path.resolve(__dirname, "src") },
-      { find: "test", replacement: path.resolve(__dirname, "test") },
-    ],
-  },
+  plugins: [tsconfigPaths()],
   test: {
     setupFiles: ["./vitest.setup.mts"],
   },
