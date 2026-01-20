@@ -34,7 +34,7 @@ This Verdaccio plugin offers GitHub OAuth integration with the Verdaccio UI and 
 | **CLI Configuration**      | The plugin lets you [configure npm with a single command](docs/usage.md#on-the-command-line).                                                                                                                                                             |
 | **Granular Authorization** | Access, publish, unpublish [package permissions can be limited](docs/configuration.md#configuring-package-access) to specific GitHub <kbd>users</kbd>, <kbd>organization members</kbd>, <kbd>team members</kbd>, and <kbd>repository collaborators</kbd>. |
 | **Enterprise Support**     | Compatible with [GitHub Enterprise](docs/configuration.md#enterprise-origin-optional-string) instances.                                                                                                                                                   |
-| **Proxy Support**          | Supports [proxy configuration](docs/configuration.md#-configuring-a-proxy) via `global-agent`.                                                                                                                                                            |
+| **Proxy Support**          | Supports [proxy configuration](docs/configuration.md#-configuring-a-proxy) via standard proxy environment variables.                                                                                                                                      |
 
 ## � Documentation
 

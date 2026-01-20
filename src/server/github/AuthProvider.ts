@@ -59,7 +59,7 @@ export class GitHubAuthProvider implements AuthProvider {
 
     const groups: string[] = []
     const promises: Promise<void>[] = []
-    const registryToken = String(this.config.token)
+    const registryToken = this.config.token
 
     if (configuredUser) {
       groups.push(configuredUser.group)

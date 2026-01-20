@@ -8,7 +8,6 @@ import { AuthCore } from "./AuthCore"
 import { Cache } from "./Cache"
 import { VerdaccioGithubOauthConfig, ParsedPluginConfig } from "./Config"
 import { PatchHtml } from "./PatchHtml"
-import { registerGlobalProxyAgent } from "./ProxyAgent"
 import { ServeStatic } from "./ServeStatic"
 import { Verdaccio } from "./Verdaccio"
 
@@ -32,7 +31,6 @@ export class Plugin
     options?: any,
   ) {
     super(config, options)
-    registerGlobalProxyAgent()
 
     this.parsedConfig = new ParsedPluginConfig(this.config)
     this.provider = new GitHubAuthProvider(this.parsedConfig)
