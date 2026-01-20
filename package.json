@@ -94,6 +94,9 @@
     "verdaccio": ">=6"
   },
   "packageManager": "yarn@4.8.1",
+  "engines": {
+    "node": ">=20"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
