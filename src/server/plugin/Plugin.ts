@@ -99,9 +99,9 @@ export class Plugin
     }
   }
 
-  async _allow(
+  private async _allow(
     user: RemoteUser,
-    pkgAccess: string[],
+    pkgAccess: string[] | undefined,
     callback: pluginUtils.AccessCallback,
   ) {
     if (!user.name) {
@@ -112,7 +112,7 @@ export class Plugin
 
     const userGroups = await this.cache.getGroups(user.name)
 
-    const grant = pkgAccess.some((group) => userGroups.includes(group))
+    const grant = pkgAccess?.some((group) => userGroups.includes(group))
     callback(null, grant)
   }
 
@@ -121,13 +121,10 @@ export class Plugin
    */
   async allow_access(
     user: RemoteUser,
-    pkg:
-      | (VerdaccioGithubOauthConfig & PackageAccess)
-      | (AllowAccess & PackageAccess),
+    pkg: PackageAccess & (AllowAccess | VerdaccioGithubOauthConfig),
     callback: pluginUtils.AccessCallback,
   ): Promise<void> {
-    // pkg.access cannot be undefined here due to normalisePackageAccess() in @verdaccio/config
-    await this._allow(user, pkg.access!, callback)
+    await this._allow(user, pkg.access, callback)
   }
 
   /**
@@ -135,13 +132,10 @@ export class Plugin
    */
   async allow_publish(
     user: RemoteUser,
-    pkg:
-      | (VerdaccioGithubOauthConfig & PackageAccess)
-      | (AllowAccess & PackageAccess),
+    pkg: PackageAccess & (AllowAccess | VerdaccioGithubOauthConfig),
     callback: pluginUtils.AccessCallback,
   ): Promise<void> {
-    // pkg.publish cannot be undefined here due to normalisePackageAccess() in @verdaccio/config
-    await this._allow(user, pkg.publish!, callback)
+    await this._allow(user, pkg.publish, callback)
   }
 
   /**
@@ -149,9 +143,7 @@ export class Plugin
    */
   async allow_unpublish(
     user: RemoteUser,
-    pkg:
-      | (VerdaccioGithubOauthConfig & PackageAccess)
-      | (AllowAccess & PackageAccess),
+    pkg: PackageAccess & (AllowAccess | VerdaccioGithubOauthConfig),
     callback: pluginUtils.AccessCallback,
   ): Promise<void> {
     if (pkg.unpublish === false) {
@@ -170,7 +162,6 @@ export class Plugin
       return
     }
 
-    // pkg.unpublish cannot be undefined here due to normalisePackageAccess() in @verdaccio/config
-    await this._allow(user, pkg.unpublish!, callback)
+    await this._allow(user, pkg.unpublish, callback)
   }
 }
