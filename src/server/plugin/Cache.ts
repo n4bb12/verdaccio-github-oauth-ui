@@ -15,18 +15,23 @@ import { AuthProvider } from "./AuthProvider"
  */
 export class Cache {
   private readonly cache = new MemoryCache<string, string[]>()
-  private readonly providerId = this.authProvider.getId()
+  private readonly authProvider: AuthProvider
+  private readonly cacheTTLms: number
 
   constructor(
-    private readonly authProvider: AuthProvider,
-    private readonly cacheTTLms = 10_000, // 10s
-  ) {}
+    authProvider: AuthProvider,
+    cacheTTLms = 10_000, // 10s
+  ) {
+    this.authProvider = authProvider
+    this.cacheTTLms = cacheTTLms
+  }
 
   async getGroups(userName: string): Promise<string[]> {
     let groups: string[] | null = null
 
     try {
-      const key = `${this.providerId}/${userName}`
+      const providerId = this.authProvider.getId()
+      const key = `${providerId}/${userName}`
 
       groups = this.cache.get(key)
 

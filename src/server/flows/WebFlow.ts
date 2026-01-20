@@ -16,12 +16,22 @@ const COOKIE_OPTIONS = {
 }
 
 export class WebFlow implements IPluginMiddleware {
+  private readonly verdaccio: Verdaccio
+  private readonly config: ParsedPluginConfig
+  private readonly core: AuthCore
+  private readonly provider: AuthProvider
+
   constructor(
-    private readonly verdaccio: Verdaccio,
-    private readonly config: ParsedPluginConfig,
-    private readonly core: AuthCore,
-    private readonly provider: AuthProvider,
-  ) {}
+    verdaccio: Verdaccio,
+    config: ParsedPluginConfig,
+    core: AuthCore,
+    provider: AuthProvider,
+  ) {
+    this.verdaccio = verdaccio
+    this.config = config
+    this.core = core
+    this.provider = provider
+  }
 
   /**
    * IPluginMiddleware

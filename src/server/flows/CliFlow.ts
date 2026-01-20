@@ -11,11 +11,15 @@ import { IPluginMiddleware } from "../helpers"
 const pluginCallbackeUrl = getCallbackPath(cliProviderId)
 
 export class CliFlow implements IPluginMiddleware {
-  constructor(
-    private readonly verdaccio: Verdaccio,
-    private readonly core: AuthCore,
-    private readonly provider: AuthProvider,
-  ) {}
+  private readonly verdaccio: Verdaccio
+  private readonly core: AuthCore
+  private readonly provider: AuthProvider
+
+  constructor(verdaccio: Verdaccio, core: AuthCore, provider: AuthProvider) {
+    this.verdaccio = verdaccio
+    this.core = core
+    this.provider = provider
+  }
 
   /**
    * IPluginMiddleware

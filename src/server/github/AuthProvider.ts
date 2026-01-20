@@ -8,17 +8,19 @@ import { GitHubClient } from "./Client"
 
 export class GitHubAuthProvider implements AuthProvider {
   private readonly id = "github"
+  private readonly config: ParsedPluginConfig
+  private readonly webBaseUrl: string
+  private readonly apiBaseUrl: string
+  private readonly client: GitHubClient
 
-  private readonly webBaseUrl =
-    this.config.enterpriseOrigin || publicGitHubOrigin
-
-  private readonly apiBaseUrl = this.config.enterpriseOrigin
-    ? this.config.enterpriseOrigin.replace(/\/?$/, "") + "/api/v3"
-    : publicGitHubApiOrigin
-
-  private readonly client = new GitHubClient(this.webBaseUrl, this.apiBaseUrl)
-
-  constructor(private readonly config: ParsedPluginConfig) {}
+  constructor(config: ParsedPluginConfig) {
+    this.config = config
+    this.webBaseUrl = config.enterpriseOrigin || publicGitHubOrigin
+    this.apiBaseUrl = config.enterpriseOrigin
+      ? config.enterpriseOrigin.replace(/\/?$/, "") + "/api/v3"
+      : publicGitHubApiOrigin
+    this.client = new GitHubClient(this.webBaseUrl, this.apiBaseUrl)
+  }
 
   getId() {
     return this.id

@@ -4,10 +4,13 @@ import { Octokit } from "octokit"
 import { logger } from "../../logger"
 
 export class GitHubClient {
-  constructor(
-    private readonly webBaseUrl: string,
-    private readonly apiBaseUrl: string,
-  ) {}
+  private readonly webBaseUrl: string
+  private readonly apiBaseUrl: string
+
+  constructor(webBaseUrl: string, apiBaseUrl: string) {
+    this.webBaseUrl = webBaseUrl
+    this.apiBaseUrl = apiBaseUrl
+  }
 
   private createOktokit(accessToken: string) {
     return new Octokit({ auth: accessToken, baseUrl: this.apiBaseUrl })

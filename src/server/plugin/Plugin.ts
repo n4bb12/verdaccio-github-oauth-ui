@@ -21,13 +21,10 @@ export class Plugin
     pluginUtils.ExpressMiddleware<VerdaccioGithubOauthConfig, any, any>,
     pluginUtils.Auth<VerdaccioGithubOauthConfig>
 {
-  private readonly parsedConfig = new ParsedPluginConfig(this.config)
-  private readonly provider = new GitHubAuthProvider(this.parsedConfig)
-  private readonly cache = new Cache(
-    this.provider,
-    this.parsedConfig.cacheTTLms,
-  )
-  private readonly verdaccio = new Verdaccio(this.config)
+  private readonly parsedConfig: ParsedPluginConfig
+  private readonly provider: GitHubAuthProvider
+  private readonly cache: Cache
+  private readonly verdaccio: Verdaccio
   private readonly core = new AuthCore()
 
   constructor(
@@ -36,6 +33,11 @@ export class Plugin
   ) {
     super(config, options)
     registerGlobalProxyAgent()
+
+    this.parsedConfig = new ParsedPluginConfig(this.config)
+    this.provider = new GitHubAuthProvider(this.parsedConfig)
+    this.cache = new Cache(this.provider, this.parsedConfig.cacheTTLms)
+    this.verdaccio = new Verdaccio(this.config)
   }
 
   /**
