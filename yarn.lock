@@ -2830,12 +2830,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.19.29":
-  version: 20.19.29
-  resolution: "@types/node@npm:20.19.29"
+"@types/node@npm:^22.19.7":
+  version: 22.19.7
+  resolution: "@types/node@npm:22.19.7"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10/c0d6f3ad09f5cde74544afca26652de346d84f0922d67951d473566b0bc571913b1d8b49fb796f5fee36b404c8aaa933513e79a074fd54cf49c76f026825a399
+  checksum: 10/0a5c9cc3bdd2a2d8105735b136e280a2dec90136679adfe82faa7e4de375dcc6b4cebaa6b2de35cc6b37e5e135cdc9486373d574782a4ca22f5eeab299111aa6
   languageName: node
   linkType: hard
 
@@ -9867,7 +9867,7 @@ __metadata:
     "@types/lodash": "npm:^4.17.23"
     "@types/memory-cache": "npm:^0.2.6"
     "@types/minimist": "npm:^1.2.5"
-    "@types/node": "npm:^20.19.29"
+    "@types/node": "npm:^22.19.7"
     "@types/query-string": "npm:^6.3.0"
     "@verdaccio/core": "npm:^8.0.0-next-8.28"
     "@verdaccio/types": "npm:^13.0.0-next-8.10"
