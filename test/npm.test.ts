@@ -9,7 +9,7 @@ describe("npm", () => {
 
   it("successfully finds the npm configuration", () => {
     expect(getRegistryUrl()).toMatchInlineSnapshot(
-      '"https://registry.yarnpkg.com"',
+      `"https://registry.npmjs.org"`,
     )
     expect(getNpmConfigFile()).toContain(".npmrc")
   })
@@ -21,7 +21,7 @@ describe("npm", () => {
     process.argv = [...argv, "--registry", testRegistryUrl]
     const url2 = getRegistryUrl()
 
-    expect(url1).toMatchInlineSnapshot('"https://registry.yarnpkg.com"')
+    expect(url1).toMatchInlineSnapshot(`"https://registry.npmjs.org"`)
     expect(url2).toBe(testRegistryUrl)
   })
 

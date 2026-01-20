@@ -38,9 +38,9 @@ clean() {
 #
 build() {
   # bundle with parcel
-  run build yarn parcel build --target client &
-  run build yarn parcel build --target server &
-  run build yarn parcel build --target cli &
+  run build bun parcel build --target client &
+  run build bun parcel build --target server &
+  run build bun parcel build --target cli &
   wait
 
   # add node shebang
@@ -60,10 +60,10 @@ copy() {
 }
 
 typecheck() {
-  run typecheck yarn tsc --noEmit --project src/client/tsconfig.json &
-  run typecheck yarn tsc --noEmit --project src/server/tsconfig.json &
-  run typecheck yarn tsc --noEmit --project src/cli/tsconfig.json &
-  run typecheck yarn tsc --noEmit --project test/tsconfig.json &
+  run typecheck bun tsc --noEmit --project src/client/tsconfig.json &
+  run typecheck bun tsc --noEmit --project src/server/tsconfig.json &
+  run typecheck bun tsc --noEmit --project src/cli/tsconfig.json &
+  run typecheck bun tsc --noEmit --project test/tsconfig.json &
   wait
 }
 

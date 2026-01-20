@@ -1,6 +1,7 @@
 # directories
 .parcel-cache/
 .vscode/
+.yarn/
 coverage/
 dist/
 node_modules/
@@ -13,11 +14,3 @@ storage/
 *.log
 *.stackdump
 htpasswd
-
-# yarn
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions

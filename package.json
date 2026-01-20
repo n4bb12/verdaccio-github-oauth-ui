@@ -35,17 +35,17 @@
     "cli:whoami": "bash run cli-whoami",
     "copy": "bash run copy",
     "coverage": "vitest --coverage",
-    "dev": "yarn update && yarn start",
+    "dev": "run-s update start",
     "docker": "bash run docker_",
-    "fix": "yarn format && yarn typecheck",
+    "fix": "run-s format typecheck",
     "format": "prettier --write \"**/*.{ts,js,css,scss,html,json}\"",
     "format:check": "prettier --check \"**/*.{ts,js,css,scss,html,json}\"",
     "prepack": "bash run clean && bash run build",
     "start": "verdaccio -c verdaccio.yaml",
     "test": "vitest",
     "typecheck": "bash run typecheck",
-    "update": "yarn prepack && yarn copy",
-    "watch": "nodemon --watch src --watch verdaccio.yaml --ext ts,css,yaml --exec \"yarn dev\""
+    "update": "run-s prepack copy",
+    "watch": "nodemon --watch src --watch verdaccio.yaml --ext ts,css,yaml --exec \"bun dev\""
   },
   "dependencies": {
     "@octokit/oauth-methods": "^6.0.2",
@@ -78,6 +78,7 @@
     "browserslist": "^4.28.1",
     "core-js": "^3.47.0",
     "nodemon": "^3.1.11",
+    "npm-run-all2": "^8.0.4",
     "parcel": "^2.16.3",
     "prettier": "^3.8.0",
     "process": "^0.11.10",
@@ -93,7 +94,6 @@
   "peerDependencies": {
     "verdaccio": ">=6"
   },
-  "packageManager": "yarn@4.8.1",
   "engines": {
     "node": ">=20"
   },
