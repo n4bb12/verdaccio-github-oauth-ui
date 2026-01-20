@@ -48,8 +48,8 @@
     "watch": "nodemon --watch src --watch verdaccio.yaml --ext ts,css,yaml --exec \"yarn dev\""
   },
   "dependencies": {
-    "@octokit/oauth-methods": "^4.1.0",
-    "@octokit/request": "^9.2.4",
+    "@octokit/oauth-methods": "^6.0.2",
+    "@octokit/request": "^10.0.7",
     "@verdaccio/core": "^8.0.0-next-8.28",
     "@verdaccio/url": "^13.0.0-next-8.28",
     "dotenv": "^16.6.1",
@@ -58,7 +58,7 @@
     "lodash": "^4.17.21",
     "memory-cache": "^0.2.0",
     "minimist": "^1.2.8",
-    "octokit": "^3.2.2",
+    "octokit": "^5.0.5",
     "open": "^11.0.0",
     "ow": "^0.28.2",
     "picocolors": "^1.1.1",
