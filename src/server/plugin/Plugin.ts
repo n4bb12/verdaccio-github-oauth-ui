@@ -11,6 +11,23 @@ import { PatchHtml } from "./PatchHtml"
 import { ServeStatic } from "./ServeStatic"
 import { Verdaccio } from "./Verdaccio"
 
+type Package = PackageAccess & (AllowAccess | VerdaccioGithubOauthConfig)
+type Action = "access" | "publish" | "unpublish"
+
+function logAccess(
+  user: RemoteUser,
+  pkg: Package,
+  action: Action,
+  grant: boolean,
+) {
+  logger.debug({
+    package: pkg.name,
+    action: action,
+    user: user.name,
+    grant: grant,
+  })
+}
+
 /**
  * Implements the verdaccio plugin interfaces.
  */
@@ -101,18 +118,22 @@ export class Plugin
 
   private async _allow(
     user: RemoteUser,
-    pkgAccess: string[] | undefined,
+    pkg: Package,
+    action: Action,
     callback: pluginUtils.AccessCallback,
   ) {
     if (!user.name) {
       // let other auth plugins and verdaccio's default handler deal with unauthenticated users
+      logAccess(user, pkg, action, false)
       callback(null, false)
       return
     }
 
+    const requiredGroups = pkg[action] as string[] | undefined
     const userGroups = await this.cache.getGroups(user.name)
+    const grant = !!requiredGroups?.some((group) => userGroups.includes(group))
 
-    const grant = pkgAccess?.some((group) => userGroups.includes(group))
+    logAccess(user, pkg, action, grant)
     callback(null, grant)
   }
 
@@ -121,10 +142,10 @@ export class Plugin
    */
   async allow_access(
     user: RemoteUser,
-    pkg: PackageAccess & (AllowAccess | VerdaccioGithubOauthConfig),
+    pkg: Package,
     callback: pluginUtils.AccessCallback,
   ): Promise<void> {
-    await this._allow(user, pkg.access, callback)
+    await this._allow(user, pkg, "access", callback)
   }
 
   /**
@@ -132,10 +153,10 @@ export class Plugin
    */
   async allow_publish(
     user: RemoteUser,
-    pkg: PackageAccess & (AllowAccess | VerdaccioGithubOauthConfig),
+    pkg: Package,
     callback: pluginUtils.AccessCallback,
   ): Promise<void> {
-    await this._allow(user, pkg.publish, callback)
+    await this._allow(user, pkg, "publish", callback)
   }
 
   /**
@@ -143,11 +164,12 @@ export class Plugin
    */
   async allow_unpublish(
     user: RemoteUser,
-    pkg: PackageAccess & (AllowAccess | VerdaccioGithubOauthConfig),
+    pkg: Package,
     callback: pluginUtils.AccessCallback,
   ): Promise<void> {
     if (pkg.unpublish === false) {
       // let verdaccio's default behavior call allow_publish() for authentication
+      logAccess(user, pkg, "unpublish", false)
       callback(null, undefined)
       return
     }
@@ -155,6 +177,7 @@ export class Plugin
     if (pkg.unpublish === true) {
       // `true` is not a valid value - this should never happen - Verdaccio shouldn't even allow us to end up here
       // this here mostly to satisfy TypeScript and avoid an `as string[]` cast below
+      logAccess(user, pkg, "unpublish", false)
       callback(
         errorUtils.getInternalError("Invalid package unpublish configuration"),
         false,
@@ -162,6 +185,6 @@ export class Plugin
       return
     }
 
-    await this._allow(user, pkg.unpublish, callback)
+    await this._allow(user, pkg, "unpublish", callback)
   }
 }
