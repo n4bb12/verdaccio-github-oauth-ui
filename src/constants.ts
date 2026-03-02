@@ -17,7 +17,7 @@ export const publicGitHubOrigin = "https://github.com"
 export const publicGitHubApiOrigin = "https://api.github.com"
 
 /**
- * See https://verdaccio.org/docs/en/packages
+ * See https://verdaccio.org/docs/packages
  */
 export const authenticatedUserGroups = [
   "$all",
