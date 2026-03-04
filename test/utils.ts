@@ -1,7 +1,6 @@
 import { AllowAccess, PackageAccess, RemoteUser } from "@verdaccio/types"
 import { Request } from "express"
 import { authenticatedUserGroups, pluginKey } from "src/constants"
-import { AuthCore } from "src/server/plugin/AuthCore"
 import { AuthProvider } from "src/server/plugin/AuthProvider"
 import {
   VerdaccioGithubOauthConfig,
@@ -133,10 +132,6 @@ export function createTestAuthProvider() {
     },
   }
   return provider
-}
-
-export function createTestAuthCore() {
-  return new AuthCore()
 }
 
 export function createTestPlugin(

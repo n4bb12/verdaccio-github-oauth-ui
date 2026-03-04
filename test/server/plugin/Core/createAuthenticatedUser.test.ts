@@ -1,29 +1,20 @@
-import { createTestAuthCore, testUserName } from "test/utils"
-import { describe, expect, it } from "vitest"
+import { testUserName } from "test/utils"
+import { expect, it } from "vitest"
+import { createAuthenticatedUser } from "src/server/helpers"
 
-describe("AuthCore", () => {
-  describe("createAuthenticatedUser", () => {
-    it("the name is correct", async () => {
-      const core = createTestAuthCore()
+it("createAuthenticatedUser", () => {
+  const user = createAuthenticatedUser(testUserName)
 
-      const user = await core.createAuthenticatedUser(testUserName)
-
-      expect(user.name).toEqual(testUserName)
-    })
-
-    it("groups contain the correct tokens", async () => {
-      const core = createTestAuthCore()
-
-      const user = await core.createAuthenticatedUser(testUserName)
-
-      expect(user.groups).toMatchInlineSnapshot(`
-        [
-          "\$all",
-          "@all",
-          "\$authenticated",
-          "@authenticated",
-        ]
-      `)
-    })
-  })
+  expect(user).toMatchInlineSnapshot(`
+    {
+      "groups": [
+        "$all",
+        "@all",
+        "$authenticated",
+        "@authenticated",
+      ],
+      "name": "TEST_USER",
+      "real_groups": [],
+    }
+  `)
 })

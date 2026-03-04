@@ -3,11 +3,14 @@ import { Application, Handler, Request } from "express"
 import { logger } from "../../logger"
 import { getAuthorizePath, getCallbackPath } from "../../redirect"
 import { buildErrorPage } from "../../statusPage"
-import { AuthCore } from "../plugin/AuthCore"
 import { AuthProvider } from "../plugin/AuthProvider"
 import { ParsedPluginConfig } from "../plugin/Config"
 import { Verdaccio } from "../plugin/Verdaccio"
-import { getBaseUrl, IPluginMiddleware } from "../helpers"
+import {
+  createAuthenticatedUser,
+  getBaseUrl,
+  IPluginMiddleware,
+} from "../helpers"
 
 const COOKIE_OPTIONS = {
   sameSite: true,
@@ -18,18 +21,15 @@ const COOKIE_OPTIONS = {
 export class WebFlow implements IPluginMiddleware {
   private readonly verdaccio: Verdaccio
   private readonly config: ParsedPluginConfig
-  private readonly core: AuthCore
   private readonly provider: AuthProvider
 
   constructor(
     verdaccio: Verdaccio,
     config: ParsedPluginConfig,
-    core: AuthCore,
     provider: AuthProvider,
   ) {
     this.verdaccio = verdaccio
     this.config = config
-    this.core = core
     this.provider = provider
   }
 
@@ -76,7 +76,7 @@ export class WebFlow implements IPluginMiddleware {
       const code = this.provider.getCode(req)
       const githubToken = await this.provider.getToken(code)
       const userName = await this.provider.getUserName(githubToken)
-      const user = await this.core.createAuthenticatedUser(userName)
+      const user = createAuthenticatedUser(userName)
       const uiToken = await this.verdaccio.issueUiToken(user)
       const npmToken = await this.verdaccio.issueNpmToken(user, githubToken)
 

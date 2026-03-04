@@ -4,12 +4,12 @@ import { Application } from "express"
 import { logger } from "../../logger"
 import { CliFlow, WebFlow } from "../flows"
 import { GitHubAuthProvider } from "../github"
-import { AuthCore } from "./AuthCore"
 import { Cache } from "./Cache"
 import { VerdaccioGithubOauthConfig, ParsedPluginConfig } from "./Config"
 import { PatchHtml } from "./PatchHtml"
 import { ServeStatic } from "./ServeStatic"
 import { Verdaccio } from "./Verdaccio"
+import { createAuthenticatedUser } from "../helpers"
 
 type Package = PackageAccess & (AllowAccess | VerdaccioGithubOauthConfig)
 type Action = "access" | "publish" | "unpublish"
@@ -41,7 +41,6 @@ export class Plugin
   private readonly provider: GitHubAuthProvider
   private readonly cache: Cache
   private readonly verdaccio: Verdaccio
-  private readonly core = new AuthCore()
 
   constructor(
     readonly config: VerdaccioGithubOauthConfig,
@@ -64,8 +63,8 @@ export class Plugin
     const children = [
       new ServeStatic(),
       new PatchHtml(this.parsedConfig),
-      new WebFlow(this.verdaccio, this.parsedConfig, this.core, this.provider),
-      new CliFlow(this.verdaccio, this.core, this.provider),
+      new WebFlow(this.verdaccio, this.parsedConfig, this.provider),
+      new CliFlow(this.verdaccio, this.provider),
     ]
 
     for (const child of children) {
@@ -108,7 +107,7 @@ export class Plugin
         return
       }
 
-      const user = await this.core.createAuthenticatedUser(userName)
+      const user = createAuthenticatedUser(userName)
 
       callback(null, user.real_groups)
     } catch (error) {
