@@ -39,6 +39,7 @@ packages:
   "**":
     access: github/org/n4bb12-oauth-testing
     publish: github/org/n4bb12-oauth-testing
+    unpublish: github/org/n4bb12-oauth-testing
 
   package1:
     # Limit access to signed-in users.
