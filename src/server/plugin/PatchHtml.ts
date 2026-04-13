@@ -34,7 +34,10 @@ export class PatchHtml implements IPluginMiddleware {
   private insertTags = (req: Request, html: string | Buffer): string => {
     html = String(html)
 
-    if (!html.includes("__VERDACCIO_BASENAME_UI_OPTIONS")) {
+    if (
+      !html.includes("__VERDACCIO_BASENAME_UI_OPTIONS") &&
+      !html.includes("ui-options.js")
+    ) {
       return html
     }
 
