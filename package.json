@@ -48,6 +48,7 @@
     "watch": "nodemon --watch src --watch verdaccio.yaml --ext ts,css,yaml --exec \"bun dev\""
   },
   "dependencies": {
+    "@npmcli/config": "^10.12.0",
     "@octokit/oauth-methods": "^6.0.2",
     "@octokit/request": "^10.0.8",
     "@verdaccio/core": "^8.0.0-next-8.31",
@@ -72,6 +73,7 @@
     "@types/memory-cache": "^0.2.6",
     "@types/minimist": "^1.2.5",
     "@types/node": "^24.12.0",
+    "@types/npmcli__config": "^6.0.4",
     "@types/query-string": "^6.3.0",
     "@verdaccio/types": "^13.0.0-next-8.11",
     "@vitest/coverage-v8": "^4.0.18",

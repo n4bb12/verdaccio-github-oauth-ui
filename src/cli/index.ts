@@ -13,7 +13,7 @@ const registry = validateRegistry()
 const authorizeUrl = registry + getAuthorizePath(cliProviderId)
 
 const server = express()
-  .get("/", (req, res) => {
+  .get("/", async (req, res) => {
     let status = req.query.status as string
     let message = req.query.message as string
     const token = decodeURIComponent(req.query.token as string)
@@ -26,7 +26,7 @@ const server = express()
 
     try {
       if (status === "success") {
-        saveNpmToken(token)
+        await saveNpmToken(token)
       }
     } catch (error) {
       status = "error"
