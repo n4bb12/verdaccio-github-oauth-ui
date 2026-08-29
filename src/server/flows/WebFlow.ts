@@ -94,7 +94,8 @@ export class WebFlow implements IPluginMiddleware {
 
   private getRedirectUrl(req: Request): string {
     const baseUrl = getBaseUrl(this.config, req)
-    const path = getCallbackPath(req.params.id)
+    const id = req.params.id
+    const path = getCallbackPath(typeof id === "string" ? id : undefined)
     const redirectUrl = baseUrl + path
 
     return redirectUrl
