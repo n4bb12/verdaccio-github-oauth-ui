@@ -1,11 +1,10 @@
+import type { Auth } from "@verdaccio/auth"
 import { JWTSignOptions, RemoteUser } from "@verdaccio/types"
 import merge from "lodash/merge"
 import { VerdaccioGithubOauthConfig } from "./Config"
 
-import type Auth from "verdaccio/build/lib/auth"
-
 export type User = RemoteUser
-export { Auth }
+export type { Auth }
 
 // Most of this is duplicated Verdaccio code because it is unfortunately not available via API.
 // https://github.com/verdaccio/verdaccio/blob/master/src/lib/auth-utils.ts#L129
@@ -72,13 +71,12 @@ export class Verdaccio {
 
   private encrypt(text: string): string {
     try {
-      // @ts-expect-error: Argument of type 'Buffer<ArrayBuffer>' is not assignable to parameter of type 'string'.ts(2345)
-      return this.auth.aesEncrypt(Buffer.from(text)).toString("base64")
+      return this.auth.aesEncrypt(text) ?? ""
     } catch (error) {
       if (String(error).includes("TypeError")) {
-        // Newer versions of Verdaccio accept a string instead of a buffer and
-        // output base64. I don't get why these APIs keep changing.
-        return this.auth.aesEncrypt(text) ?? ""
+        // Older versions of Verdaccio accept a buffer and return a buffer.
+        // @ts-expect-error Buffer was the previous aesEncrypt argument type
+        return this.auth.aesEncrypt(Buffer.from(text)).toString("base64")
       }
       throw error
     }

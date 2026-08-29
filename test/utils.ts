@@ -10,7 +10,7 @@ import {
 import { Plugin } from "src/server/plugin/Plugin"
 import { Verdaccio } from "src/server/plugin/Verdaccio"
 import timekeeper from "timekeeper"
-import Auth from "verdaccio/build/lib/auth"
+import { Auth } from "@verdaccio/auth"
 import { afterEach, beforeEach, vi } from "vitest"
 import { PartialDeep } from "type-fest"
 
