@@ -75,6 +75,10 @@ read-env() {
   fi
 }
 
+cli-clear-auth() {
+  run cli-clear-auth npm config delete "//localhost:4873/:_authToken" --location user || true
+}
+
 cli-login() {
   # npx verdaccio-github-oauth-ui --registry http://localhost:4873
   run cli-login ./dist/cli/index.js --registry http://localhost:4873
@@ -99,6 +103,7 @@ cli-unpublish() {
 }
 
 cli() {
+  cli-clear-auth
   cli-login
   cli-whoami
   cli-publish
