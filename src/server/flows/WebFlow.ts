@@ -38,6 +38,7 @@ export class WebFlow implements IPluginMiddleware {
    */
   register_middlewares(app: Application) {
     app.get(getAuthorizePath(), this.authorize)
+    app.get(getAuthorizePath(":id"), this.authorize)
     app.get(getCallbackPath(), this.callback)
   }
 
