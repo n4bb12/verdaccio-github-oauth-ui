@@ -54,9 +54,9 @@ describe("Config", () => {
       })
     })
 
-    it("throws an error if the major version is below 5", () => {
-      expect(() => assertSupportedVerdaccioVersion("4.3.2")).toThrow(
-        "This plugin requires verdaccio 5 or above",
+    it("throws an error if the major version is below 6", () => {
+      expect(() => assertSupportedVerdaccioVersion("5.33.0")).toThrow(
+        "This plugin requires verdaccio 6 or above",
       )
     })
 

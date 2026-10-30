@@ -93,7 +93,7 @@
     "vitest": "^4.1.11"
   },
   "peerDependencies": {
-    "verdaccio": ">=5"
+    "verdaccio": ">=6"
   },
   "engines": {
     "node": ">=20"

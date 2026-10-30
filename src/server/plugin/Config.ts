@@ -51,7 +51,7 @@ export type ParsedRepo = {
  * e.g. "5.0.4"
  *
  * Verdaccio 7 does not export `verdaccio/package.json`. Resolve the package
- * entry and read the manifest from disk so 5, 6, and 7 all work.
+ * entry and read the manifest from disk so 6 and 7 both work.
  */
 export function getVersion(): string {
   const filename = eval("__filename") as string
@@ -91,17 +91,17 @@ export function readVerdaccioVersion(entry: string): string {
 
 export function isSupportedVerdaccioVersion(version: string): boolean {
   const major = Number.parseInt(version, 10)
-  return Number.isFinite(major) && major >= 5
+  return Number.isFinite(major) && major >= 6
 }
 
 export function assertSupportedVerdaccioVersion(version: string): void {
   if (!isSupportedVerdaccioVersion(version)) {
-    throw new Error("This plugin requires verdaccio 5 or above")
+    throw new Error("This plugin requires verdaccio 6 or above")
   }
 }
 
 /**
- * Verdaccio 5 and 6 merge the whole config into the first constructor argument.
+ * Verdaccio 6 merges the whole config into the first constructor argument.
  * Verdaccio 7 passes only this plugin's section there, and the whole config as
  * `options.config`. Tests construct the plugin with the merged config and no
  * options, so the first argument stays the fallback.

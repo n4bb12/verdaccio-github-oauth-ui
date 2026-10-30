@@ -33,7 +33,7 @@ describe("Plugin.register_middlewares", () => {
     expect(location).toContain(encodeURIComponent("/-/oauth/callback"))
   }
 
-  it("redirects when constructed with the verdaccio 5 and 6 config", async () => {
+  it("redirects when constructed with the verdaccio 6 config", async () => {
     expectAuthorizeRedirect(
       await authorizeLocation(new Plugin(createTestVerdaccioConfig())),
     )

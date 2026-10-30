@@ -11,14 +11,13 @@ describe("verdaccio config compatibility", () => {
   const authSection = fullConfig.auth[pluginKey]
   const middlewareSection = fullConfig.middlewares[pluginKey]
 
-  it("accepts verdaccio 5, 6, and 7", () => {
-    expect(isSupportedVerdaccioVersion("5.33.0")).toBe(true)
+  it("accepts verdaccio 6 and 7", () => {
     expect(isSupportedVerdaccioVersion("6.10.1")).toBe(true)
     expect(isSupportedVerdaccioVersion("7.0.2")).toBe(true)
-    expect(isSupportedVerdaccioVersion("4.13.2")).toBe(false)
+    expect(isSupportedVerdaccioVersion("5.33.0")).toBe(false)
   })
 
-  it("keeps the merged config verdaccio 5 and 6 pass as the first argument", () => {
+  it("keeps the merged config verdaccio 6 passes as the first argument", () => {
     expect(resolveVerdaccioConfig(fullConfig)).toBe(fullConfig)
     expect(resolveVerdaccioConfig(fullConfig, { config: fullConfig })).toBe(
       fullConfig,
