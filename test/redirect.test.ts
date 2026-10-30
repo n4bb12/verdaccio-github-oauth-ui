@@ -3,9 +3,7 @@ import { describe, expect, it } from "vitest"
 
 describe("redirect", () => {
   it("getAuthorizePath", () => {
-    expect(getAuthorizePath()).toMatchInlineSnapshot(
-      `"/-/oauth/authorize/:id?"`,
-    )
+    expect(getAuthorizePath()).toMatchInlineSnapshot(`"/-/oauth/authorize"`)
     expect(getAuthorizePath("auth-id")).toMatchInlineSnapshot(
       `"/-/oauth/authorize/auth-id"`,
     )
