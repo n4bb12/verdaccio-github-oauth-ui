@@ -24,7 +24,7 @@ an issue first.
 | bun dev         | Groups `update` and `start`.                                                                            |
 | bun watch       | Runs `dev` with automatic restart when source files change.                                             |
 | bun format      | Format code using `prettier`.                                                                           |
-| bun typecheck   | Run `tsc` to verify TypeScript compiles.                                                                |
+| bun typecheck   | Typecheck the client, server, CLI, and tests with `bun check`.                                          |
 | bun fix         | Groups `format` and `typecheck`.                                                                        |
 | bun run test    | Run unit tests with `bun test`.                                                                         |
 | bun coverage    | Run unit tests with `bun test` and a coverage report.                                                   |

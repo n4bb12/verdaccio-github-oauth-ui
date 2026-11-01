@@ -43,7 +43,7 @@
     "prepack": "bash run clean && bash run build",
     "start": "verdaccio -c verdaccio.yaml",
     "test": "bun test --isolate",
-    "typecheck": "bash run typecheck",
+    "typecheck": "bun check",
     "update": "bun run prepack && bun run copy",
     "watch": "nodemon --watch src --watch verdaccio.yaml --ext ts,css,yaml --exec \"bun dev\""
   },

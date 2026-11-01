@@ -19,5 +19,12 @@
       "src/*": ["./src/*"],
       "test/*": ["./test/*"]
     }
-  }
+  },
+  "files": [],
+  "references": [
+    { "path": "./src/client" },
+    { "path": "./src/server" },
+    { "path": "./src/cli" },
+    { "path": "./test" }
+  ]
 }
