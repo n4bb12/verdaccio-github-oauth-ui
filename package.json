@@ -38,8 +38,8 @@
     "dev": "bun run update && bun run start",
     "docker": "bash run docker_",
     "fix": "bun run format && bun run typecheck",
-    "format": "prettier --write \"**/*.{ts,js,css,scss,html,json}\"",
-    "format:check": "prettier --check \"**/*.{ts,js,css,scss,html,json}\"",
+    "format": "bun fmt \"**/*.{ts,js,css,scss,html,json}\"",
+    "format:check": "bun fmt --check \"**/*.{ts,js,css,scss,html,json}\"",
     "prepack": "bash run clean && bash run build",
     "start": "verdaccio -c verdaccio.yaml",
     "test": "bun test --isolate",
@@ -76,7 +76,6 @@
     "@types/query-string": "^6.3.0",
     "@verdaccio/types": "^13.0.6",
     "nodemon": "^3.1.14",
-    "prettier": "^3.9.6",
     "release-it": "^21.0.2",
     "timekeeper": "^2.3.1",
     "type-fest": "^5.8.0",
@@ -87,6 +86,7 @@
   "peerDependencies": {
     "verdaccio": ">=6"
   },
+  "packageManager": "bun@1.4.4",
   "engines": {
     "node": ">=20"
   },

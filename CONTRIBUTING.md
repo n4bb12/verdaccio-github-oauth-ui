@@ -23,7 +23,7 @@ an issue first.
 | bun run update  | Groups `prepack` and `copy`.                                                                            |
 | bun dev         | Groups `update` and `start`.                                                                            |
 | bun watch       | Runs `dev` with automatic restart when source files change.                                             |
-| bun format      | Format code using `prettier`.                                                                           |
+| bun format      | Format code with `bun fmt`, using the Prettier config.                                                  |
 | bun typecheck   | Typecheck the client, server, CLI, and tests with `bun check`.                                          |
 | bun fix         | Groups `format` and `typecheck`.                                                                        |
 | bun run test    | Run unit tests with `bun test`.                                                                         |
