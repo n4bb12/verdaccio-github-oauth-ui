@@ -4,7 +4,7 @@ import path from "node:path"
 import { Config as VerdaccioConfig } from "@verdaccio/types"
 import get from "lodash/get"
 import assert from "ow"
-import process from "process"
+import process from "node:process"
 import { pluginKey, publicGitHubOrigin } from "../../constants"
 import { logger } from "../../logger"
 
@@ -57,7 +57,7 @@ export type ParsedRepo = {
 export function getVersion(): string {
   const filename = eval("__filename") as string
   const require = createRequire(filename)
-  // A variable keeps Parcel from baking this into the build-time install.
+  // A variable keeps the bundler from resolving this in the build-time install.
   const packageName = "verdaccio"
   let dir = path.dirname(require.resolve(packageName))
 

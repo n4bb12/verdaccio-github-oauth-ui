@@ -35,16 +35,16 @@
     "cli:whoami": "bash run cli-whoami",
     "copy": "bash run copy",
     "coverage": "vitest --coverage",
-    "dev": "run-s update start",
+    "dev": "bun run update && bun run start",
     "docker": "bash run docker_",
-    "fix": "run-s format typecheck",
+    "fix": "bun run format && bun run typecheck",
     "format": "prettier --write \"**/*.{ts,js,css,scss,html,json}\"",
     "format:check": "prettier --check \"**/*.{ts,js,css,scss,html,json}\"",
     "prepack": "bash run clean && bash run build",
     "start": "verdaccio -c verdaccio.yaml",
     "test": "vitest",
     "typecheck": "bash run typecheck",
-    "update": "run-s prepack copy",
+    "update": "bun run prepack && bun run copy",
     "watch": "nodemon --watch src --watch verdaccio.yaml --ext ts,css,yaml --exec \"bun dev\""
   },
   "dependencies": {
@@ -66,7 +66,6 @@
     "undici": "^8.10.0"
   },
   "devDependencies": {
-    "@parcel/config-default": "^2.16.4",
     "@types/express": "^5.0.6",
     "@types/lodash": "^4.17.25",
     "@types/memory-cache": "^0.2.6",
@@ -76,13 +75,8 @@
     "@types/query-string": "^6.3.0",
     "@verdaccio/types": "^13.0.6",
     "@vitest/coverage-v8": "^4.1.11",
-    "browserslist": "^4.28.8",
-    "core-js": "^3.50.0",
     "nodemon": "^3.1.14",
-    "npm-run-all2": "^9.0.3",
-    "parcel": "^2.16.4",
     "prettier": "^3.9.6",
-    "process": "^0.11.10",
     "release-it": "^21.0.2",
     "timekeeper": "^2.3.1",
     "type-fest": "^5.8.0",
@@ -100,28 +94,5 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
-  },
-  "targets": {
-    "client": {
-      "source": "src/client/verdaccio-6.ts",
-      "distDir": "dist/client",
-      "context": "browser",
-      "includeNodeModules": true
-    },
-    "server": {
-      "source": "src/server/index.ts",
-      "distDir": "dist/server",
-      "context": "node",
-      "outputFormat": "commonjs",
-      "optimize": false,
-      "isLibrary": true
-    },
-    "cli": {
-      "source": "src/cli/index.ts",
-      "distDir": "dist/cli",
-      "context": "node",
-      "outputFormat": "commonjs",
-      "optimize": false
-    }
   }
 }

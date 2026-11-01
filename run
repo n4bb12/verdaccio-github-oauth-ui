@@ -11,8 +11,8 @@ reset="\e[39m"
 run() {
   task=${1}
   shift
-  echo -e [${task}] ${@}
-  ${@}
+  printf '[%s] %s\n' "$task" "$*"
+  "$@"
 }
 
 fail() {
@@ -37,16 +37,48 @@ clean() {
 # Build server, config and client
 #
 build() {
-  # bundle with parcel
-  run build bun parcel build --target client &
-  run build bun parcel build --target server &
-  run build bun parcel build --target cli &
-  wait
+  # client: browser script injected into the Verdaccio UI
+  # server: CommonJS library, dependencies external (package main)
+  # cli: CommonJS bin, dependencies external
+  local pids=()
 
-  # add node shebang
-  printf '%s\n%s\n' '#!/usr/bin/env node' "$(cat dist/cli/index.js)" > dist/cli/index.js
+  run build bun build src/client/verdaccio-6.ts \
+    --outdir=dist/client \
+    --target=browser \
+    --format=iife \
+    --minify \
+    --sourcemap=external \
+    --entry-naming='[name].[ext]' &
+  pids+=($!)
 
-  # make executable
+  run build bun build src/server/index.ts \
+    --outdir=dist/server \
+    --target=node \
+    --format=cjs \
+    --packages=external \
+    --sourcemap=external \
+    --entry-naming='[name].[ext]' &
+  pids+=($!)
+
+  run build bun build src/cli/index.ts \
+    --outdir=dist/cli \
+    --target=node \
+    --format=cjs \
+    --packages=external \
+    --sourcemap=external \
+    --banner='#!/usr/bin/env node' \
+    --entry-naming='[name].[ext]' &
+  pids+=($!)
+
+  local status=0
+  for pid in "${pids[@]}"; do
+    wait "$pid" || status=1
+  done
+
+  if [ "$status" -ne 0 ]; then
+    fail "build failed"
+  fi
+
   chmod +x dist/cli/index.js
 }
 
