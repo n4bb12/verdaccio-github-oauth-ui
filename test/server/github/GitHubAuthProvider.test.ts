@@ -1,6 +1,6 @@
 import { GitHubAuthProvider } from "src/server/github/AuthProvider"
 import { createTestParsedPluginConfig } from "test/utils"
-import { describe, expect, it, vi } from "vitest"
+import { describe, expect, it } from "bun:test"
 
 describe("GitHubAuthProvider", () => {
   describe("getLoginUrl", () => {

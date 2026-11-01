@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "bun:test"
 import { parseCookies } from "src/client/plugin/lib"
 
 const MOCK_COOKIE = "uiToken=UI_TOKEN; npmToken=NPM_TOKEN; username=TEST_USER"

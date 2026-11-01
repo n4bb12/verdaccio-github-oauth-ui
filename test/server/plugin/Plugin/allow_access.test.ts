@@ -2,7 +2,7 @@ import { AllowAccess, PackageAccess, RemoteUser } from "@verdaccio/types"
 import { Cache } from "src/server/plugin/Cache"
 import { Plugin } from "src/server/plugin/Plugin"
 import { createTestPackage, createTestPlugin, createTestUser } from "test/utils"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, mock } from "bun:test"
 
 describe("Plugin", () => {
   let plugin: Plugin
@@ -16,7 +16,7 @@ describe("Plugin", () => {
 
       // Create a mock implementation of Cache
       mockCache = {
-        getGroups: vi.fn().mockResolvedValue([]),
+        getGroups: mock().mockResolvedValue([]),
       } as any
 
       // Replace the plugin's cache with our mock
@@ -54,7 +54,7 @@ describe("Plugin", () => {
     })
 
     it("protected packages can be accessed with the required permission group", async () => {
-      mockCache.getGroups = vi.fn().mockResolvedValue(["required-group"])
+      mockCache.getGroups = mock().mockResolvedValue(["required-group"])
       user = createTestUser()
       pkg = createTestPackage({ access: ["required-group"] })
 

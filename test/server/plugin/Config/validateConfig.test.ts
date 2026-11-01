@@ -4,7 +4,7 @@ import {
   ParsedPluginConfig,
 } from "src/server/plugin/Config"
 import { createTestPluginConfig } from "test/utils"
-import { describe, expect, it, vi } from "vitest"
+import { describe, expect, it, spyOn } from "bun:test"
 
 describe("Config", () => {
   describe("validate config", () => {
@@ -16,7 +16,7 @@ describe("Config", () => {
     }
 
     function expectConfigExit(config: any) {
-      const exit = vi.spyOn(process, "exit").mockImplementation(((
+      const exit = spyOn(process, "exit").mockImplementation(((
         code?: number,
       ) => {
         throw new Error(`exit ${code}`)
@@ -60,13 +60,13 @@ describe("Config", () => {
       )
     })
 
-    it.fails("throws an error if 'auth' node is not enabled", () => {
+    it.failing("throws an error if 'auth' node is not enabled", () => {
       createConfig({
         middlewares: { [pluginKey]: pluginConfig },
       })
     })
 
-    it.fails("throws an error if 'middlewares' node is not enabled", () => {
+    it.failing("throws an error if 'middlewares' node is not enabled", () => {
       createConfig({
         auth: { [pluginKey]: pluginConfig },
       })

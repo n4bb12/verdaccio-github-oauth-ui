@@ -1,5 +1,5 @@
 import { getUsageInfo, printUsage } from "src/cli/usage"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "bun:test"
 
 describe("CLI", () => {
   describe("usage", () => {

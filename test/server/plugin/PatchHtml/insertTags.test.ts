@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "bun:test"
 import { PatchHtml } from "src/server/plugin/PatchHtml"
 
 const scriptPattern = /verdaccio-6\.js/

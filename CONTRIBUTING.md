@@ -26,8 +26,8 @@ an issue first.
 | bun format      | Format code using `prettier`.                                                                           |
 | bun typecheck   | Run `tsc` to verify TypeScript compiles.                                                                |
 | bun fix         | Groups `format` and `typecheck`.                                                                        |
-| bun run test    | Run unit tests with `vitest`.                                                                           |
-| bun coverage    | Run unit tests with `vitest` and coverage report.                                                       |
+| bun run test    | Run unit tests with `bun test`.                                                                         |
+| bun coverage    | Run unit tests with `bun test` and a coverage report.                                                   |
 | bun cli:login   | Sign in using the plugin CLI.                                                                           |
 | bun cli:whoami  | Verify you are signed in in with npm.                                                                   |
 | bun cli:publish | Perform an npm publish against a running local Verdaccio instance.                                      |

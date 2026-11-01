@@ -4,7 +4,7 @@ import {
   ParsedPluginConfig,
   PluginConfig,
 } from "src/server/plugin/Config"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "bun:test"
 
 describe("ParsedPluginConfig", () => {
   const enabledPluginConfig = {
@@ -16,7 +16,7 @@ describe("ParsedPluginConfig", () => {
     "client-secret": "clientSecret",
     token: "token",
   }
-  it.fails("middlewares key is required", () => {
+  it.failing("middlewares key is required", () => {
     const invalidConfig: VerdaccioGithubOauthConfig = {
       auth: { [pluginKey]: enabledPluginConfig },
     } as any
@@ -24,7 +24,7 @@ describe("ParsedPluginConfig", () => {
     new ParsedPluginConfig(invalidConfig)
   })
 
-  it.fails("auth key is required", () => {
+  it.failing("auth key is required", () => {
     const invalidConfig: VerdaccioGithubOauthConfig = {
       middlewares: { [pluginKey]: minimalPluginConfig },
     } as any

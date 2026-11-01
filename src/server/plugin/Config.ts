@@ -7,6 +7,7 @@ import assert from "ow"
 import process from "node:process"
 import { pluginKey, publicGitHubOrigin } from "../../constants"
 import { logger } from "../../logger"
+import { runtimeFilename } from "../runtime-path"
 
 //
 // Types
@@ -55,7 +56,7 @@ export type ParsedRepo = {
  * on Verdaccio 6 and `build/cjs/index.cjs` on Verdaccio 7.
  */
 export function getVersion(): string {
-  const filename = eval("__filename") as string
+  const filename = runtimeFilename()
   const require = createRequire(filename)
   // A variable keeps the bundler from resolving this in the build-time install.
   const packageName = "verdaccio"

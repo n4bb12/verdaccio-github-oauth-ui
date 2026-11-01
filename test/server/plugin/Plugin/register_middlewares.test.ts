@@ -3,7 +3,7 @@ import { AddressInfo } from "node:net"
 import { Server } from "node:http"
 import { cliPort, pluginKey } from "src/constants"
 import { Plugin } from "src/server/plugin/Plugin"
-import { afterEach, describe, expect, it } from "vitest"
+import { afterEach, describe, expect, it } from "bun:test"
 import { createTestVerdaccioConfig, testClientId } from "test/utils"
 
 describe("Plugin.register_middlewares", () => {

@@ -6,7 +6,7 @@ import {
   testOAuthToken,
 } from "test/utils"
 import timekeeper from "timekeeper"
-import { describe, expect, it, vi } from "vitest"
+import { describe, expect, it, mock, spyOn } from "bun:test"
 
 describe("Cache", () => {
   describe("getGroups", () => {
@@ -18,13 +18,13 @@ describe("Cache", () => {
       getGroups: (token: string) => string[],
     ) {
       provider = createTestAuthProvider()
-      provider.getGroups = vi.fn((token) => Promise.resolve(getGroups(token)))
+      provider.getGroups = mock((token) => Promise.resolve(getGroups(token)))
       cache = new Cache(provider, cacheTTLms)
     }
 
     function configureFailingProvider() {
       provider = createTestAuthProvider()
-      vi.spyOn(provider, "getGroups").mockRejectedValue(
+      spyOn(provider, "getGroups").mockRejectedValue(
         new Error(testErrorMessage),
       )
       cache = new Cache(provider, cacheTTLms)

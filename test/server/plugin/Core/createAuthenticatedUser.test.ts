@@ -1,5 +1,5 @@
 import { testUserName } from "test/utils"
-import { expect, it } from "vitest"
+import { expect, it } from "bun:test"
 import { createAuthenticatedUser } from "src/server/helpers"
 
 it("createAuthenticatedUser", () => {

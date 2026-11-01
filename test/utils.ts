@@ -11,7 +11,7 @@ import { Plugin } from "src/server/plugin/Plugin"
 import { Verdaccio } from "src/server/plugin/Verdaccio"
 import timekeeper from "timekeeper"
 import { Auth } from "@verdaccio/auth"
-import { afterEach, beforeEach, vi } from "vitest"
+import { afterEach, beforeEach, mock } from "bun:test"
 import { PartialDeep } from "type-fest"
 
 export const testOrgGroup = `github/org/TEST_ORG`
@@ -99,8 +99,8 @@ export function createTestVerdaccio(
   config: Partial<VerdaccioGithubOauthConfig> = {},
 ) {
   const verdaccio = new Verdaccio(createTestVerdaccioConfig(config))
-  verdaccio.issueUiToken = vi.fn(() => Promise.resolve(testUiToken))
-  verdaccio.issueNpmToken = vi.fn(() => Promise.resolve(testNpmToken))
+  verdaccio.issueUiToken = mock(() => Promise.resolve(testUiToken))
+  verdaccio.issueNpmToken = mock(() => Promise.resolve(testNpmToken))
   return verdaccio
 }
 

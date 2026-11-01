@@ -4,7 +4,7 @@ import {
   resolveVerdaccioConfig,
 } from "src/server/plugin/Config"
 import { createTestVerdaccioConfig } from "test/utils"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "bun:test"
 
 describe("verdaccio config compatibility", () => {
   const fullConfig = createTestVerdaccioConfig()

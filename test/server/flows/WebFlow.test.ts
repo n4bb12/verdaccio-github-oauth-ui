@@ -2,7 +2,7 @@ import express from "express"
 import { AddressInfo } from "node:net"
 import { Server } from "node:http"
 import { WebFlow } from "src/server/flows"
-import { afterEach, describe, expect, it, vi } from "vitest"
+import { afterEach, describe, expect, it, spyOn } from "bun:test"
 import {
   createTestAuthProvider,
   createTestParsedPluginConfig,
@@ -22,7 +22,7 @@ describe("WebFlow", () => {
 
   async function startApp() {
     const provider = createTestAuthProvider()
-    const getLoginUrl = vi.spyOn(provider, "getLoginUrl")
+    const getLoginUrl = spyOn(provider, "getLoginUrl")
     const webFlow = new WebFlow(
       createTestVerdaccio(),
       createTestParsedPluginConfig(),

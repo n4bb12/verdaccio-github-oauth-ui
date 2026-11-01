@@ -1,32 +1,30 @@
-import { afterEach } from "node:test"
-import { Plugin } from "src/server/plugin/Plugin"
-import {
-  createTestAuthProvider,
-  createTestPlugin,
-  testOAuthToken,
-  testUserName,
-} from "test/utils"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, mock } from "bun:test"
 
-vi.mock("src/server/github/AuthProvider", () => ({
-  GitHubAuthProvider: vi.fn().mockImplementation(function () {
+mock.module("src/server/github/AuthProvider", () => ({
+  GitHubAuthProvider: mock(function () {
+    // Loaded lazily so this mock is in place before the plugin module evaluates.
+    const { createTestAuthProvider } = require("../../../utils")
     return createTestAuthProvider()
   }),
 }))
 
 describe("Plugin", () => {
   describe("authenticate", () => {
-    let plugin: Plugin
+    let plugin: {
+      authenticate: (
+        userName: string,
+        userToken: string,
+        callback: (err: unknown, groups: unknown) => void,
+      ) => Promise<void>
+    }
 
     beforeEach(() => {
+      const { createTestPlugin } = require("../../../utils")
       plugin = createTestPlugin()
     })
 
-    afterEach(() => {
-      vi.resetAllMocks()
-    })
-
     it("empty user name cannot authenticate", async () => {
+      const { testOAuthToken } = require("../../../utils")
       await plugin.authenticate("", testOAuthToken, (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toBe(false)
@@ -34,6 +32,7 @@ describe("Plugin", () => {
     })
 
     it("empty token cannot authenticate", async () => {
+      const { testOAuthToken, testUserName } = require("../../../utils")
       await plugin.authenticate(testUserName, "", (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toBe(false)
@@ -41,6 +40,7 @@ describe("Plugin", () => {
     })
 
     it("invalid token cannot authenticate", async () => {
+      const { testUserName } = require("../../../utils")
       await plugin.authenticate(testUserName, "invalidToken", (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toBe(false)
@@ -48,6 +48,7 @@ describe("Plugin", () => {
     })
 
     it("valid user name and token can authenticate", async () => {
+      const { testOAuthToken, testUserName } = require("../../../utils")
       await plugin.authenticate(testUserName, testOAuthToken, (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toEqual([])

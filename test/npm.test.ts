@@ -3,7 +3,7 @@ import { tmpdir } from "os"
 import { join } from "path"
 
 import { getNpmConfigFile, getRegistryUrl, saveNpmToken } from "src/npm"
-import { afterEach, describe, expect, it } from "vitest"
+import { afterEach, describe, expect, it } from "bun:test"
 
 export const testRegistryUrl = "http://localhost:4873"
 export const testNpmToken = "test-npm-token"
@@ -74,7 +74,10 @@ describe("npm", () => {
     await saveNpmToken(testNpmToken)
 
     expect(readFileSync(npmrc, "utf8")).toMatchInlineSnapshot(
-      `"//localhost:4873/:_authToken=test-npm-token\n"`,
+      `
+        "//localhost:4873/:_authToken=test-npm-token
+        "
+      `,
     )
   })
 
@@ -86,7 +89,10 @@ describe("npm", () => {
     await saveNpmToken(testNpmToken)
 
     expect(readFileSync(npmrc, "utf8")).toMatchInlineSnapshot(
-      `"//localhost:4873/:_authToken=test-npm-token\n"`,
+      `
+        "//localhost:4873/:_authToken=test-npm-token
+        "
+      `,
     )
   })
 
