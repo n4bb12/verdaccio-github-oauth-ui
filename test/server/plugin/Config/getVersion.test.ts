@@ -1,10 +1,19 @@
+import fs from "node:fs"
+import path from "node:path"
 import { getVersion } from "src/server/plugin/Config"
 import { describe, expect, it } from "vitest"
 
 describe("Verdaccio", () => {
-  describe("getMajorVersion", () => {
-    it("correctly parses the user agent", () => {
-      expect(getVersion()[0]).toBe("6")
+  describe("getVersion", () => {
+    it("reads the installed verdaccio version from disk", () => {
+      const installed = JSON.parse(
+        fs.readFileSync(
+          path.join(process.cwd(), "node_modules/verdaccio/package.json"),
+          "utf8",
+        ),
+      ).version
+
+      expect(getVersion()).toBe(installed)
     })
   })
 })

@@ -1,3 +1,6 @@
+import { createRequire } from "node:module"
+import fs from "node:fs"
+import path from "node:path"
 import { Config as VerdaccioConfig } from "@verdaccio/types"
 import get from "lodash/get"
 import assert from "ow"
@@ -45,10 +48,58 @@ export type ParsedRepo = {
 }
 
 /**
- * e.g. "5.0.4"
+ * e.g. "6.10.1"
+ *
+ * Verdaccio 7 does not export `verdaccio/package.json`. Resolve the package
+ * entry and read the nearest manifest above it. That entry is `build/index.js`
+ * on Verdaccio 6 and `build/cjs/index.cjs` on Verdaccio 7.
  */
 export function getVersion(): string {
-  return require("verdaccio/package.json").version
+  const filename = eval("__filename") as string
+  const require = createRequire(filename)
+  // A variable keeps Parcel from baking this into the build-time install.
+  const packageName = "verdaccio"
+  let dir = path.dirname(require.resolve(packageName))
+
+  while (dir !== path.dirname(dir)) {
+    const manifestPath = path.join(dir, "package.json")
+    if (fs.existsSync(manifestPath)) {
+      const { version } = JSON.parse(fs.readFileSync(manifestPath, "utf8")) as {
+        version?: unknown
+      }
+      if (typeof version === "string") {
+        return version
+      }
+      break
+    }
+    dir = path.dirname(dir)
+  }
+
+  throw new Error("Unable to determine the Verdaccio version")
+}
+
+export function isSupportedVerdaccioVersion(version: string): boolean {
+  const major = Number.parseInt(version, 10)
+  return Number.isFinite(major) && major >= 6
+}
+
+export function assertSupportedVerdaccioVersion(version: string): void {
+  if (!isSupportedVerdaccioVersion(version)) {
+    throw new Error("This plugin requires verdaccio 6 or above")
+  }
+}
+
+/**
+ * Verdaccio 6 merges the whole config into the first constructor argument.
+ * Verdaccio 7 passes only this plugin's section there, and the whole config as
+ * `options.config`. Tests construct the plugin with the merged config and no
+ * options, so the first argument stays the fallback.
+ */
+export function resolveVerdaccioConfig(
+  config: VerdaccioGithubOauthConfig,
+  options?: { config?: VerdaccioGithubOauthConfig },
+): VerdaccioGithubOauthConfig {
+  return options?.config ?? config
 }
 
 //
@@ -56,11 +107,7 @@ export function getVersion(): string {
 //
 
 function validateVersion() {
-  const version = getVersion()
-
-  if (version < "5") {
-    throw new Error("This plugin requires verdaccio 5 or above")
-  }
+  assertSupportedVerdaccioVersion(getVersion())
 }
 
 function validateNodeExists(

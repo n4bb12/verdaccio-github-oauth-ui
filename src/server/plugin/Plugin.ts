@@ -5,7 +5,11 @@ import { logger } from "../../logger"
 import { CliFlow, WebFlow } from "../flows"
 import { GitHubAuthProvider } from "../github"
 import { Cache } from "./Cache"
-import { VerdaccioGithubOauthConfig, ParsedPluginConfig } from "./Config"
+import {
+  VerdaccioGithubOauthConfig,
+  ParsedPluginConfig,
+  resolveVerdaccioConfig,
+} from "./Config"
 import { PatchHtml } from "./PatchHtml"
 import { ServeStatic } from "./ServeStatic"
 import { Verdaccio } from "./Verdaccio"
@@ -48,10 +52,11 @@ export class Plugin
   ) {
     super(config, options)
 
-    this.parsedConfig = new ParsedPluginConfig(this.config)
+    const verdaccioConfig = resolveVerdaccioConfig(config, options)
+    this.parsedConfig = new ParsedPluginConfig(verdaccioConfig)
     this.provider = new GitHubAuthProvider(this.parsedConfig)
     this.cache = new Cache(this.provider, this.parsedConfig.cacheTTLms)
-    this.verdaccio = new Verdaccio(this.config)
+    this.verdaccio = new Verdaccio(verdaccioConfig)
   }
 
   /**
