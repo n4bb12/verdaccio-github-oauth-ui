@@ -48,39 +48,28 @@ export type ParsedRepo = {
 }
 
 /**
- * e.g. "5.0.4"
+ * e.g. "6.10.1"
  *
  * Verdaccio 7 does not export `verdaccio/package.json`. Resolve the package
- * entry and read the manifest from disk so 6 and 7 both work.
+ * entry and read the nearest manifest above it. That entry is `build/index.js`
+ * on Verdaccio 6 and `build/cjs/index.cjs` on Verdaccio 7.
  */
 export function getVersion(): string {
   const filename = eval("__filename") as string
   const require = createRequire(filename)
   // A variable keeps Parcel from baking this into the build-time install.
   const packageName = "verdaccio"
-  return readVerdaccioVersion(require.resolve(packageName))
-}
+  let dir = path.dirname(require.resolve(packageName))
 
-export function readVerdaccioVersion(entry: string): string {
-  let dir = path.dirname(entry)
-  const root = path.parse(dir).root
-
-  while (true) {
+  while (dir !== path.dirname(dir)) {
     const manifestPath = path.join(dir, "package.json")
     if (fs.existsSync(manifestPath)) {
-      const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8")) as {
-        name?: string
-        version?: string
+      const { version } = JSON.parse(fs.readFileSync(manifestPath, "utf8")) as {
+        version?: unknown
       }
-      if (
-        manifest.name === "verdaccio" &&
-        typeof manifest.version === "string"
-      ) {
-        return manifest.version
+      if (typeof version === "string") {
+        return version
       }
-    }
-
-    if (dir === root) {
       break
     }
     dir = path.dirname(dir)
