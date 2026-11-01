@@ -9,7 +9,7 @@ import { describe, expect, it } from "bun:test"
 describe("ParsedPluginConfig", () => {
   const enabledPluginConfig = {
     enabled: true,
-  } as any
+  } as unknown as PluginConfig
 
   const minimalPluginConfig: PluginConfig = {
     "client-id": "clientId",
@@ -19,7 +19,7 @@ describe("ParsedPluginConfig", () => {
   it.failing("middlewares key is required", () => {
     const invalidConfig: VerdaccioGithubOauthConfig = {
       auth: { [pluginKey]: enabledPluginConfig },
-    } as any
+    } as VerdaccioGithubOauthConfig
 
     new ParsedPluginConfig(invalidConfig)
   })
@@ -27,7 +27,7 @@ describe("ParsedPluginConfig", () => {
   it.failing("auth key is required", () => {
     const invalidConfig: VerdaccioGithubOauthConfig = {
       middlewares: { [pluginKey]: minimalPluginConfig },
-    } as any
+    } as VerdaccioGithubOauthConfig
 
     new ParsedPluginConfig(invalidConfig)
   })
@@ -36,7 +36,7 @@ describe("ParsedPluginConfig", () => {
     const config: VerdaccioGithubOauthConfig = {
       middlewares: { [pluginKey]: enabledPluginConfig },
       auth: { [pluginKey]: minimalPluginConfig },
-    } as any
+    } as VerdaccioGithubOauthConfig
 
     const parsedPluginConfig = new ParsedPluginConfig(config)
 
@@ -63,7 +63,7 @@ describe("ParsedPluginConfig", () => {
   it("parses the configuration as expected", () => {
     const enabledPluginConfig = {
       enabled: true,
-    } as any
+    } as unknown as PluginConfig
 
     const minimalPluginConfig: PluginConfig = {
       "client-id": "clientId",
@@ -111,7 +111,7 @@ describe("ParsedPluginConfig", () => {
         invalidPackage18: { access: "github/org/TEST_ORG/team/TEST_TEAM/X" },
         invalidPackage19: { access: "github/org/TEST_ORG/repo/TEST_REPO/X" },
       },
-    } as any
+    } as unknown as VerdaccioGithubOauthConfig
 
     const parsedPluginConfig = new ParsedPluginConfig(config)
 
@@ -171,7 +171,7 @@ describe("ParsedPluginConfig", () => {
   it("deduplicates package groups", () => {
     const enabledPluginConfig = {
       enabled: true,
-    } as any
+    } as unknown as PluginConfig
 
     const minimalPluginConfig: PluginConfig = {
       "client-id": "clientId",
@@ -203,7 +203,7 @@ describe("ParsedPluginConfig", () => {
         package6a: { access: "github/org/TEST_ORG/repo/TEST_REPO" },
         package6b: { access: "github/org/TEST_ORG/repo/TEST_REPO" },
       },
-    } as any
+    } as unknown as VerdaccioGithubOauthConfig
 
     const parsedPluginConfig = new ParsedPluginConfig(config)
 

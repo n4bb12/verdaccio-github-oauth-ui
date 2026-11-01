@@ -26,10 +26,15 @@ describe("verdaccio config compatibility", () => {
 
   it("uses options.config when verdaccio 7 passes only the plugin section", () => {
     expect(
-      resolveVerdaccioConfig(authSection as any, { config: fullConfig }),
+      resolveVerdaccioConfig(authSection as unknown as typeof fullConfig, {
+        config: fullConfig,
+      }),
     ).toBe(fullConfig)
     expect(
-      resolveVerdaccioConfig(middlewareSection as any, { config: fullConfig }),
+      resolveVerdaccioConfig(
+        middlewareSection as unknown as typeof fullConfig,
+        { config: fullConfig },
+      ),
     ).toBe(fullConfig)
   })
 

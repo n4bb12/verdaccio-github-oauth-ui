@@ -3,7 +3,7 @@ import fs from "node:fs"
 import path from "node:path"
 import { Config as VerdaccioConfig } from "@verdaccio/types"
 import get from "lodash/get"
-import assert from "ow"
+import assert, { type BasePredicate } from "ow"
 import process from "node:process"
 import { pluginKey, publicGitHubOrigin } from "../../constants"
 import { logger } from "../../logger"
@@ -126,9 +126,9 @@ function validateNodeExists(
 function getConfigValue<T>(
   config: VerdaccioGithubOauthConfig,
   key: string,
-  predicate: any,
+  predicate: BasePredicate<T>,
 ): T {
-  let valueOrEnvName = get(config, ["auth", pluginKey, key])
+  const valueOrEnvName = get(config, ["auth", pluginKey, key])
 
   const value = process.env[String(valueOrEnvName)] ?? valueOrEnvName
 
@@ -191,7 +191,7 @@ export class ParsedPluginConfig {
       ),
     )
 
-    this.cacheTTLms = getConfigValue<number>(
+    this.cacheTTLms = getConfigValue<number | undefined>(
       this.config,
       "cache-ttl-ms",
       assert.any(assert.undefined, assert.number.positive),

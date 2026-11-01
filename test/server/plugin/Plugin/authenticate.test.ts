@@ -32,7 +32,7 @@ describe("Plugin", () => {
     })
 
     it("empty token cannot authenticate", async () => {
-      const { testOAuthToken, testUserName } = require("../../../utils")
+      const { testUserName } = require("../../../utils")
       await plugin.authenticate(testUserName, "", (err, groups) => {
         expect(err).toBeNull()
         expect(groups).toBe(false)

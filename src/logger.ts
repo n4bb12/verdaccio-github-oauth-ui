@@ -18,13 +18,13 @@ function toString(arg: unknown) {
 }
 
 export const logger = {
-  log: (...args: any[]) => {
+  log: (...args: unknown[]) => {
     console.log(prefix, args.map(toString).join(" "))
   },
-  debug: (...args: any[]) => {
+  debug: (...args: unknown[]) => {
     console.debug(prefix, colors.gray(args.map(toString).join(" ")))
   },
-  error: (...args: any[]) => {
+  error: (...args: unknown[]) => {
     console.error(prefix, colors.red(args.map(toString).join(" ")))
   },
 }

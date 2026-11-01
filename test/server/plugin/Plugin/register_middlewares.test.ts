@@ -2,7 +2,9 @@ import express from "express"
 import { AddressInfo } from "node:net"
 import { Server } from "node:http"
 import { cliPort, pluginKey } from "src/constants"
+import { VerdaccioGithubOauthConfig } from "src/server/plugin/Config"
 import { Plugin } from "src/server/plugin/Plugin"
+import { type Auth } from "src/server/plugin/Verdaccio"
 import { afterEach, describe, expect, it } from "bun:test"
 import { createTestVerdaccioConfig, testClientId } from "test/utils"
 
@@ -18,7 +20,7 @@ describe("Plugin.register_middlewares", () => {
 
   async function start(plugin: Plugin) {
     const app = express()
-    plugin.register_middlewares(app, {})
+    plugin.register_middlewares(app, {} as unknown as Auth)
     app.get("/ui", (_req, res) => {
       res.send(
         '<html><body><script src="/-/static/ui-options.js"></script></body></html>',
@@ -75,9 +77,12 @@ describe("Plugin.register_middlewares", () => {
     const fullConfig = createTestVerdaccioConfig()
 
     await expectLoginSurface(
-      new Plugin(fullConfig.middlewares[pluginKey] as any, {
-        config: fullConfig,
-      }),
+      new Plugin(
+        fullConfig.middlewares[
+          pluginKey
+        ] as unknown as VerdaccioGithubOauthConfig,
+        { config: fullConfig },
+      ),
     )
   })
 })

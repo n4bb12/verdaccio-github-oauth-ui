@@ -50,10 +50,12 @@ export function buildStatusPage(body: string, withBackLink: boolean) {
 </html>`
 }
 
-export function buildErrorPage(error: any, withBackLink: boolean) {
+export function buildErrorPage(error: unknown, withBackLink: boolean) {
+  const message = error instanceof Error ? error.message : String(error)
+
   return buildStatusPage(
     `<h1>Sorry :(</h1>
-    <p>${error?.message || error}</p>`,
+    <p>${message}</p>`,
     withBackLink,
   )
 }

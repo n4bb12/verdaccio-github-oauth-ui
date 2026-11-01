@@ -1,18 +1,26 @@
+import { Request } from "express"
 import { describe, expect, it } from "bun:test"
 import { PatchHtml } from "src/server/plugin/PatchHtml"
+import { ParsedPluginConfig } from "src/server/plugin/Config"
 
 const scriptPattern = /verdaccio-6\.js/
 
 function createPatchHtml() {
-  const config = { url_prefix: "" } as any
+  const config = { url_prefix: "" } as ParsedPluginConfig
   return new PatchHtml(config)
 }
 
 function callInsertTags(html: string) {
   const patchHtml = createPatchHtml()
-  const req = { headers: { host: "localhost:4873" }, protocol: "http" } as any
-  // Access the private method via bracket notation
-  return (patchHtml as any).insertTags(req, html)
+  const req = {
+    headers: { host: "localhost:4873" },
+    protocol: "http",
+  } as Request
+  return (
+    patchHtml as unknown as {
+      insertTags(request: Request, body: string): string
+    }
+  ).insertTags(req, html)
 }
 
 // Verdaccio <=6.4 inlines the options in a <script> tag

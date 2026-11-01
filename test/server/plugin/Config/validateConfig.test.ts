@@ -2,20 +2,22 @@ import { pluginKey } from "src/constants"
 import {
   assertSupportedVerdaccioVersion,
   ParsedPluginConfig,
+  PluginConfig,
+  VerdaccioGithubOauthConfig,
 } from "src/server/plugin/Config"
 import { createTestPluginConfig } from "test/utils"
 import { describe, expect, it, spyOn } from "bun:test"
 
 describe("Config", () => {
   describe("validate config", () => {
-    const enabledPluginConfig = { enabled: true } as any
+    const enabledPluginConfig = { enabled: true } as unknown as PluginConfig
     const pluginConfig = createTestPluginConfig()
 
-    function createConfig(config: any) {
-      new ParsedPluginConfig(config)
+    function createConfig(config: object) {
+      new ParsedPluginConfig(config as unknown as VerdaccioGithubOauthConfig)
     }
 
-    function expectConfigExit(config: any) {
+    function expectConfigExit(config: object) {
       const exit = spyOn(process, "exit").mockImplementation(((
         code?: number,
       ) => {

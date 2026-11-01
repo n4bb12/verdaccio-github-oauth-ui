@@ -47,7 +47,11 @@ export class GitHubClient {
         }),
       })
     } catch (error) {
-      throw new Error("Failed requesting GitHub access token: " + error.message)
+      throw new Error(
+        "Failed requesting GitHub access token: " +
+          (error instanceof Error ? error.message : String(error)),
+        { cause: error },
+      )
     }
   }
 
@@ -61,7 +65,11 @@ export class GitHubClient {
       const oktokit = this.createOktokit(accessToken)
       return await oktokit.rest.users.getAuthenticated()
     } catch (error) {
-      throw new Error("Failed requesting GitHub user info: " + error.message)
+      throw new Error(
+        "Failed requesting GitHub user info: " +
+          (error instanceof Error ? error.message : String(error)),
+        { cause: error },
+      )
     }
   }
 

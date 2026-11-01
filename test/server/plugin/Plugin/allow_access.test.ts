@@ -17,10 +17,10 @@ describe("Plugin", () => {
       // Create a mock implementation of Cache
       mockCache = {
         getGroups: mock().mockResolvedValue([]),
-      } as any
+      } as unknown as Cache
 
       // Replace the plugin's cache with our mock
-      ;(plugin as any).cache = mockCache
+      ;(plugin as unknown as { cache: Cache }).cache = mockCache
     })
 
     it("does not grant access to unauthenticated users", async () => {

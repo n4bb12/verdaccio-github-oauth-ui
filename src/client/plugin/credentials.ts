@@ -49,8 +49,10 @@ export function isTokenExpired() {
   return Date.now() >= jsTimestamp
 }
 
-export function validateCredentials(credentials: Credentials) {
-  return (
-    true && credentials.username && credentials.uiToken && credentials.npmToken
+export function validateCredentials(
+  credentials: Partial<Credentials>,
+): credentials is Credentials {
+  return Boolean(
+    credentials.username && credentials.uiToken && credentials.npmToken,
   )
 }

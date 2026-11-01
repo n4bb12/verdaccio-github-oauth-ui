@@ -25,7 +25,8 @@ an issue first.
 | bun watch       | Runs `dev` with automatic restart when source files change.                                             |
 | bun format      | Format code with `bun fmt`, using the Prettier config.                                                  |
 | bun typecheck   | Typecheck the client, server, CLI, and tests with `bun check`.                                          |
-| bun fix         | Groups `format` and `typecheck`.                                                                        |
+| bun lint        | Lint JavaScript and TypeScript with `bun lint`.                                                         |
+| bun fix         | Groups `format`, `lint`, and `typecheck`.                                                               |
 | bun run test    | Run unit tests with `bun test`.                                                                         |
 | bun coverage    | Run unit tests with `bun test` and a coverage report.                                                   |
 | bun cli:login   | Sign in using the plugin CLI.                                                                           |
@@ -33,3 +34,5 @@ an issue first.
 | bun cli:publish | Perform an npm publish against a running local Verdaccio instance.                                      |
 | bun cli         | Groups `cli:login`, `cli:whoami`, and `cli:publish`.                                                    |
 | bun docker      | Starts a local Verdaccio using the local `Dockerfile` using the latest published version of the plugin. |
+
+`bun lint` is in the Bun canary (`bun upgrade --canary`). It is not in Bun 1.4.4 yet.

@@ -6,7 +6,7 @@ export function parseCookies(cookieStr: string) {
     .split(";")
     .filter((str) => str.includes("="))
     .map((str) => str.split("="))
-    .reduce(
+    .reduce<Record<string, string>>(
       (result, [key, value]) => ({
         ...result,
         [decodeURIComponent(key.trim())]: decodeURIComponent(value.trim()),

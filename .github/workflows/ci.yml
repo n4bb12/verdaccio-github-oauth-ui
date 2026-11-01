@@ -15,6 +15,16 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun format:check
 
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: canary
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
+
   compile:
     runs-on: ubuntu-latest
     steps:

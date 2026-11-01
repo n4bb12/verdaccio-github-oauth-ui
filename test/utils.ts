@@ -112,7 +112,7 @@ export function createTestAuthProvider() {
     getLoginUrl() {
       return testLoginUrl
     },
-    getCode(req: Request) {
+    getCode(_req: Request) {
       return testOAuthCode
     },
     async getToken(code: string) {
@@ -157,9 +157,12 @@ export function createTestPackage(
   }
 }
 
-// @ts-ignore ignore private method override error.
 class PatchedAuth extends Auth {
-  constructor(config: any, logger: any, options: any) {
+  constructor(
+    config: ConstructorParameters<typeof Auth>[0],
+    logger: ConstructorParameters<typeof Auth>[1],
+    options?: ConstructorParameters<typeof Auth>[2],
+  ) {
     super(config, logger, options)
   }
 
@@ -176,10 +179,9 @@ export function createRealVerdaccioAuth(
     {
       secret: "a".repeat(32 /* TOKEN_VALID_LENGTH */),
       ...config,
-    },
-    {},
-    {},
-  ) as any
+    } as ConstructorParameters<typeof Auth>[0],
+    {} as ConstructorParameters<typeof Auth>[1],
+  )
 }
 
 export function freezeTimeDuringTests(date: Date = new Date(0)) {

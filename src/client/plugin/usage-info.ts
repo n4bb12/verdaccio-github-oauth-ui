@@ -9,8 +9,8 @@ export function getUsageInfo() {
     return "Click the login button to authenticate with GitHub."
   }
 
-  const configBase = (window as any).VERDACCIO_API_URL
-    ? (window as any).VERDACCIO_API_URL.replace(/^https?:/, "").replace(
+  const configBase = window.VERDACCIO_API_URL
+    ? window.VERDACCIO_API_URL.replace(/^https?:/, "").replace(
         /-\/verdaccio\/$/,
         "",
       )

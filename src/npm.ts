@@ -10,7 +10,7 @@ import minimist from "minimist"
 
 import { logger } from "./logger"
 
-let npmConfig: any
+let npmConfig: { registry?: string; userconfig?: string } | undefined
 
 function parseCliArgs() {
   return minimist(process.argv.slice(2))
@@ -29,7 +29,7 @@ function getNpmConfig() {
     npmConfig = JSON.parse(npmConfigJson)
   }
 
-  return npmConfig
+  return npmConfig ?? {}
 }
 
 function removeTrailingSlash(input: string) {

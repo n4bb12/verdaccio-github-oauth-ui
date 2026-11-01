@@ -5,8 +5,8 @@ import { join } from "path"
 import { getNpmConfigFile, getRegistryUrl, saveNpmToken } from "src/npm"
 import { afterEach, describe, expect, it } from "bun:test"
 
-export const testRegistryUrl = "http://localhost:4873"
-export const testNpmToken = "test-npm-token"
+const testRegistryUrl = "http://localhost:4873"
+const testNpmToken = "test-npm-token"
 
 const argv = process.argv
 const originalUserconfig = process.env.NPM_CONFIG_USERCONFIG
