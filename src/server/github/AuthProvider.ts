@@ -1,5 +1,4 @@
 import { Request } from "express"
-import uniq from "lodash/uniq"
 import { stringify } from "querystring"
 import { publicGitHubApiOrigin, publicGitHubOrigin } from "../../constants"
 import { AuthProvider } from "../plugin/AuthProvider"
@@ -111,6 +110,6 @@ export class GitHubAuthProvider implements AuthProvider {
 
     await Promise.all(promises)
 
-    return uniq(groups).filter(Boolean).sort()
+    return [...new Set(groups)].filter(Boolean).sort()
   }
 }

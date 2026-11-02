@@ -1,6 +1,5 @@
 import type { Auth } from "@verdaccio/auth"
 import { JWTSignOptions, RemoteUser } from "@verdaccio/types"
-import merge from "lodash/merge"
 import { VerdaccioGithubOauthConfig } from "./Config"
 
 export type User = RemoteUser
@@ -23,8 +22,31 @@ const defaultSecurity = {
   },
 } as const
 
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function mergeObjects<Base extends object, Extra>(
+  base: Base,
+  extra: Extra,
+): Base & Extra {
+  const result: Record<string, unknown> = { ...base } as Record<string, unknown>
+  if (!isPlainObject(extra)) return result as Base & Extra
+
+  for (const [key, value] of Object.entries(extra)) {
+    if (value === undefined) continue
+    const current = result[key]
+    result[key] =
+      isPlainObject(current) && isPlainObject(value)
+        ? mergeObjects(current, value)
+        : value
+  }
+
+  return result as Base & Extra
+}
+
 function getSecurity(config: VerdaccioGithubOauthConfig) {
-  return merge({}, defaultSecurity, config.security)
+  return mergeObjects(defaultSecurity, config.security)
 }
 
 type Security = ReturnType<typeof getSecurity>

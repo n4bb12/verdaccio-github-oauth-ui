@@ -2,7 +2,6 @@ import { createRequire } from "node:module"
 import fs from "node:fs"
 import path from "node:path"
 import { Config as VerdaccioConfig } from "@verdaccio/types"
-import get from "lodash/get"
 import assert, { type BasePredicate } from "ow"
 import process from "node:process"
 import { pluginKey, publicGitHubOrigin } from "../../constants"
@@ -115,8 +114,12 @@ function validateNodeExists(
   config: VerdaccioGithubOauthConfig,
   node: keyof VerdaccioGithubOauthConfig,
 ) {
-  const path = `[${node}][${pluginKey}]`
-  const obj = get(config, path, {})
+  const section = config[node]
+  const value =
+    section && typeof section === "object"
+      ? (section as Record<string, unknown>)[pluginKey]
+      : undefined
+  const obj = value && typeof value === "object" ? value : {}
 
   if (!Object.keys(obj).length) {
     throw new Error(`"${node}.${pluginKey}" must be enabled`)
@@ -128,7 +131,7 @@ function getConfigValue<T>(
   key: string,
   predicate: BasePredicate<T>,
 ): T {
-  const valueOrEnvName = get(config, ["auth", pluginKey, key])
+  const valueOrEnvName = config.auth?.[pluginKey]?.[key as keyof PluginConfig]
 
   const value = process.env[String(valueOrEnvName)] ?? valueOrEnvName
 
