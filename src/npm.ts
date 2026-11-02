@@ -1,4 +1,5 @@
 import { execSync } from "child_process"
+import { parseArgs } from "node:util"
 
 import Config from "@npmcli/config"
 import {
@@ -6,14 +7,21 @@ import {
   flatten,
   shorthands,
 } from "@npmcli/config/lib/definitions"
-import minimist from "minimist"
 
 import { logger } from "./logger"
 
 let npmConfig: { registry?: string; userconfig?: string } | undefined
 
 function parseCliArgs() {
-  return minimist(process.argv.slice(2))
+  const { values } = parseArgs({
+    args: process.argv.slice(2),
+    strict: false,
+    options: {
+      registry: { type: "string" },
+    },
+  })
+
+  return values
 }
 
 function runCommand(command: string) {
@@ -39,7 +47,14 @@ function removeTrailingSlash(input: string) {
 export function getRegistryUrl() {
   const cliArgs = parseCliArgs()
 
-  const registry = cliArgs.registry || getNpmConfig().registry
+  const registry =
+    typeof cliArgs.registry === "string"
+      ? cliArgs.registry
+      : getNpmConfig().registry
+
+  if (typeof registry !== "string") {
+    throw new Error("No npm registry configured")
+  }
 
   return removeTrailingSlash(registry)
 }
