@@ -1,5 +1,4 @@
 import { Application, Handler } from "express"
-import qs from "query-string"
 import { cliPort, cliProviderId } from "../../constants"
 import { logger } from "../../logger"
 import { getCallbackPath } from "../../redirect"
@@ -44,8 +43,7 @@ export class CliFlow implements IPluginMiddleware {
       params.message = error.message || error
     }
 
-    const redirectUrl =
-      `http://localhost:${cliPort}` + "?" + qs.stringify(params)
+    const redirectUrl = `http://localhost:${cliPort}?${new URLSearchParams(params)}`
 
     res.redirect(redirectUrl)
   }

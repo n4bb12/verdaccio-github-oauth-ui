@@ -61,7 +61,6 @@
     "open": "^11.0.1",
     "ow": "^3.1.1",
     "picocolors": "^1.1.1",
-    "query-string": "^9.5.0",
     "undici": "^8.10.0"
   },
   "devDependencies": {
@@ -70,7 +69,6 @@
     "@types/memory-cache": "^0.2.6",
     "@types/node": "^26.4.0",
     "@types/npmcli__config": "^6.0.4",
-    "@types/query-string": "^6.3.0",
     "@verdaccio/types": "^13.0.6",
     "nodemon": "^3.1.14",
     "release-it": "^21.0.2",
