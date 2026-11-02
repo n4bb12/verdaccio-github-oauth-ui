@@ -3,7 +3,7 @@
 | Requirement   | Details                                                             |
 | ------------- | ------------------------------------------------------------------- |
 | **Verdaccio** | 6.x, 7.x                                                            |
-| **Node.js**   | 20, 22, 24                                                          |
+| **Node.js**   | 20.12+, 22, 24                                                      |
 | **npm**       | 10                                                                  |
 | **Browsers**  | Last 2 Chrome, Edge, Firefox, and Safari versions, plus Firefox ESR |
 

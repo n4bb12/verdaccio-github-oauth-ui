@@ -1,8 +1,8 @@
-import dotenv from "dotenv"
 import { ProxyAgent, fetch as undiciFetch } from "undici"
 import { logger } from "../logger"
+import { loadLocalEnv } from "./env"
 
-dotenv.config()
+loadLocalEnv()
 
 const proxy =
   process.env.https_proxy ||

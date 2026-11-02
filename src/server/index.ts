@@ -1,7 +1,7 @@
+import { loadLocalEnv } from "./env"
 import { Plugin } from "./plugin/Plugin"
-import dotenv from "dotenv"
 
-dotenv.config()
+loadLocalEnv()
 
 // plugins must be a default export
 export default Plugin
