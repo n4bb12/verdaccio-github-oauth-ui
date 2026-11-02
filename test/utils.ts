@@ -12,7 +12,6 @@ import { Verdaccio } from "src/server/plugin/Verdaccio"
 import timekeeper from "timekeeper"
 import { Auth } from "@verdaccio/auth"
 import { afterEach, beforeEach, mock } from "bun:test"
-import { PartialDeep } from "type-fest"
 
 export const testOrgGroup = `github/org/TEST_ORG`
 export const testOrgTeamGroup = `github/org/TEST_ORG/team/TEST_TEAM`
@@ -64,6 +63,10 @@ export function createTestPluginConfig(
     ...pluginConfig,
   }
 }
+
+type PartialDeep<T> = T extends object
+  ? { [K in keyof T]?: PartialDeep<T[K]> }
+  : T
 
 export function createTestVerdaccioConfig(
   verdaccioConfig: PartialDeep<VerdaccioGithubOauthConfig> = {},

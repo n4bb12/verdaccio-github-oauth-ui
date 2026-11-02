@@ -70,7 +70,6 @@
     "nodemon": "^3.1.14",
     "release-it": "^21.0.2",
     "timekeeper": "^2.3.1",
-    "type-fest": "^5.8.0",
     "typescript": "^7.0.2",
     "verdaccio": "^7.0.2",
     "verdaccio-htpasswd": "^13.1.3"
