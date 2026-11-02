@@ -1,5 +1,3 @@
-import { Cache as MemoryCache } from "memory-cache"
-
 import { logger } from "../../logger"
 import { AuthProvider } from "./AuthProvider"
 
@@ -14,7 +12,10 @@ import { AuthProvider } from "./AuthProvider"
  * has been made for a short period.
  */
 export class Cache {
-  private readonly cache = new MemoryCache<string, string[]>()
+  private readonly cache = new Map<
+    string,
+    { value: string[]; expire: number }
+  >()
   private readonly authProvider: AuthProvider
   private readonly cacheTTLms: number
 
@@ -33,11 +34,15 @@ export class Cache {
       const providerId = this.authProvider.getId()
       const key = `${providerId}/${userName}`
 
-      groups = this.cache.get(key)
-
-      if (!groups) {
-        groups = await this.authProvider.getGroups(userName)
-        this.cache.put(key, groups || [], this.cacheTTLms)
+      const hit = this.cache.get(key)
+      if (hit && hit.expire >= Date.now()) {
+        groups = hit.value
+      } else {
+        groups = (await this.authProvider.getGroups(userName)) || []
+        this.cache.set(key, {
+          value: groups,
+          expire: Date.now() + this.cacheTTLms,
+        })
       }
     } catch (error) {
       logger.error(error)
